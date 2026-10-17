@@ -115,15 +115,15 @@ export const mockClinics: Clinic[] = [
 ];
 
 export const mockProducts: Product[] = [
-  { id: 'urinary-wet', name: 'Urinary care wet food', brand: '[Brand · product name]' },
-  { id: 'joint-supplement', name: 'Joint supplement', brand: '[Brand · product name]' },
+  { id: 'urinary-wet', name: 'Urinary care wet food', brand: 'Vet Diet · Urinary S/O' },
+  { id: 'joint-supplement', name: 'Joint supplement', brand: 'FlexiPaw' },
 ];
 
 export const mockStores: Store[] = [
   {
     id: 'musti-centre',
     name: 'Pet store Centre',
-    chain: '[Chain A]',
+    chain: 'PetCorner',
     kind: 'petStore',
     address: 'Yliopistonkatu 20, Turku',
     phone: '+358400000011',
@@ -138,7 +138,7 @@ export const mockStores: Store[] = [
   {
     id: 'pharmacy-kauppatori',
     name: 'Pharmacy Kauppatori',
-    chain: '[Pharmacy]',
+    chain: 'Apteekki',
     kind: 'pharmacy',
     address: 'Kauppatori 1, Turku',
     phone: '+358400000012',
@@ -153,7 +153,7 @@ export const mockStores: Store[] = [
   {
     id: 'store-skanssi',
     name: 'Pet store Skanssi',
-    chain: '[Chain B]',
+    chain: 'Tassutori',
     kind: 'petStore',
     address: 'Skanssinkatu 10, Turku',
     phone: '+358400000013',
@@ -168,7 +168,7 @@ export const mockStores: Store[] = [
   {
     id: 'store-raisio',
     name: 'Pet store Mylly',
-    chain: '[Chain C]',
+    chain: 'Karvakaveri',
     kind: 'petStore',
     address: 'Myllynkatu 1, Raisio',
     phone: '+358400000014',

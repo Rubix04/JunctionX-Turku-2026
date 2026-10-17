@@ -1,7 +1,5 @@
 {
   "common": {
-    "appName": "TassuVahti",
-    "tagline": "Watching over your pet between vet visits.",
     "back": "Back",
     "close": "Close",
     "cancel": "Cancel",
@@ -11,8 +9,6 @@
     "errorTitle": "Something went wrong",
     "errorBody": "Check your connection and try again.",
     "tryAgain": "Try again",
-    "step": "Step {{step}} of {{total}}",
-    "notAVet": "TassuVahti is a support tool. It does not replace a veterinarian.",
     "language": "Language"
   },
   "tabs": {
@@ -23,21 +19,13 @@
   },
   "screens": {
     "home": "Home",
-    "map": "Vets and emergency clinics",
-    "knowledge": "Is it safe?",
-    "settings": "Account and settings",
     "insurance": "Insurance & claims",
-    "pet": "Pet page",
     "log": "Daily log",
-    "logResult": "Log result",
     "trends": "Trends",
     "carePlan": "Care plan",
     "reminders": "Reminders",
     "diet": "Diet & weight",
     "passport": "Health passport",
-    "sharePassport": "Share passport",
-    "photo": "Crop profile picture",
-    "firstAidGuide": "First aid guide",
     "clinic": "Clinic",
     "substance": "Knowledge base entry",
     "ateThis": "My pet ate this",
@@ -71,13 +59,6 @@
     "catPlural": "Cats",
     "dogPlural": "Dogs",
     "smallAnimalPlural": "Small animals"
-  },
-  "seasons": {
-    "winter": "Winter",
-    "spring": "Spring",
-    "summer": "Summer",
-    "autumn": "Autumn",
-    "holidays": "Christmas & New Year"
   },
   "weekday": {
     "mon": "Monday",
@@ -172,42 +153,58 @@
       "male": "Male",
       "maleNeutered": "Male, neutered"
     },
-    "watchListDay": "{{condition}} · watch list day {{day}} of {{total}}",
-    "noWatchList": "No active watch list",
-    "symptomLog": "Symptom log",
-    "watchListItems_one": "Watch list · {{count}} item",
-    "watchListItems_other": "Watch list · {{count}} items",
-    "dailyLog": "Daily log",
     "fromVisit": "From visit {{date}}",
     "noCarePlan": "No plan yet",
     "medication": "Medication",
     "nextDose": "Next {{time}}",
     "noMedication": "Reminders",
     "portionCalculator": "Portion calculator",
-    "vaccinesOk": "Vaccines up to date",
-    "vaccinesDue": "Vaccination due",
     "trendsHint": "Weight, water",
-    "visitHistory": "Visit history",
     "addVisit": "+ Add visit",
-    "addShort": "+ Add",
-    "draftVisit": "Draft · waiting for the clinic to check it",
     "noVisits": "No visits yet",
-    "noVisitsBody": "Add the notes from a vet visit to get a care plan.",
-    "speciesSection": {
-      "cat": "For cats",
-      "dog": "For dogs",
-      "smallAnimal": "For small animals"
-    },
-    "readMore": "Read more in the knowledge base",
-    "sharedWith": "Shared with {{names}} in your family account",
     "tabs": {
       "overview": "Overview",
-      "care": "Care",
-      "log": "Log",
+      "records": "Records",
       "passport": "Passport"
     },
     "logToday": "Log today · 30 s",
-    "shareHint": "Send a read-only link to a vet or pet sitter"
+    "records": {
+      "kind": {
+        "all": "All",
+        "allergies": "Allergies",
+        "conditions": "Conditions",
+        "surgeries": "Surgeries",
+        "medications": "Medication",
+        "labs": "Lab reports",
+        "visits": "Visits"
+      },
+      "severity": {
+        "mild": "Mild reaction",
+        "moderate": "Moderate reaction",
+        "severe": "Severe reaction"
+      },
+      "resolved": "Resolved",
+      "ongoing": "Ongoing",
+      "lab": {
+        "blood": "Blood test",
+        "urine": "Urine test",
+        "ultrasound": "Ultrasound",
+        "xray": "X-ray"
+      },
+      "empty": "No records in this category"
+    },
+    "passportTab": {
+      "title": "Digital passport",
+      "markings": "Colour and markings",
+      "registration": "Pedigree registration",
+      "sex": "Sex",
+      "summaryTitle": "{{name}} · health summary",
+      "validUntil": "valid until {{date}}",
+      "shareVet": "Share with a vet · QR code",
+      "shareVetHint": "The vet scans the code to see the full history. The link stops working after the time you choose.",
+      "export": "Export travel summary",
+      "full": "Full health passport"
+    }
   },
   "log": {
     "title": "{{name}} · today",
@@ -442,7 +439,6 @@
     }
   },
   "map": {
-    "title": "Vets & emergency",
     "youAreHere": "You",
     "filter": {
       "openNow": "Open now",
@@ -509,7 +505,6 @@
     "note": "Products come from your vet or the insurer's approved list, not from advertising. Prescription medicines go through the prescription, not the store map."
   },
   "knowledge": {
-    "title": "Is it safe?",
     "searchLabel": "Search foods, plants and substances",
     "searchPlaceholder": "e.g. raisins, lily, xylitol",
     "clear": "Clear search",
@@ -677,14 +672,6 @@
     "title": "This page doesn't exist",
     "body": "The link may be old. Go back home to continue."
   },
-  "placeholder": {
-    "notBuilt": "This screen is not built yet."
-  },
-  "languages": {
-    "en": "English",
-    "fi": "Suomi",
-    "sv": "Svenska"
-  },
   "splash": {
     "slogan": "Watching over the ones who watch over you."
   },
@@ -707,5 +694,14 @@
     "tryAgain": "Try again",
     "backToExplore": "Back to Explore",
     "readMore": "Read more in Is it safe?"
+  },
+  "watchList": {
+    "byVet": "Watch list from {{vet}}",
+    "noneBody": "There is no active watch list. Log how {{name}} is doing whenever something seems off.",
+    "latestLog": "Latest log · {{date}}",
+    "watching": "What we’re watching",
+    "notLogged": "Not logged",
+    "whatToDo": "What to do now",
+    "callVet": "When to call a vet: {{when}}"
   }
 }

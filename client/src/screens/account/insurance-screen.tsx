@@ -114,7 +114,7 @@ const InsuranceScreen = () => {
 
       <Button label={t('insurance.makeClaim')} icon="receipt" onPress={() => router.push('/add-visit')} />
 
-      <Pressable accessibilityRole="link" onPress={() => router.push('/(tabs)/(explore)')} style={styles.directNote}>
+      <Pressable accessibilityRole="link" onPress={() => router.push('/explore')} style={styles.directNote}>
         <Icon name="shieldCheck" size={20} color={colors.primary} />
         <AppText variant="bodySmall" color={colors.noteText} style={styles.flex}>
           {t('insurance.directPaymentNote')}

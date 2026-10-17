@@ -53,7 +53,7 @@ const SupportScreen = () => {
         label={t('explore.sections.vets')}
         icon="map"
         variant="dangerOutline"
-        onPress={() => router.push('/(tabs)/(explore)?mode=emergency')}
+        onPress={() => router.push('/explore?mode=emergency')}
       />
     </Screen>
   );

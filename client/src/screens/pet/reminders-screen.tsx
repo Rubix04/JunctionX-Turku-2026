@@ -128,7 +128,7 @@ const RemindersScreen = () => {
                     label={t('reminders.book')}
                     variant="tealOutline"
                     size="small"
-                    onPress={() => router.push('/(tabs)/(explore)')}
+                    onPress={() => router.push('/explore')}
                   />
                 ) : (
                   <View />

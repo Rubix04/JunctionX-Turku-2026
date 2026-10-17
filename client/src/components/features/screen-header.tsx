@@ -19,6 +19,9 @@ type ScreenHeaderProps = {
   trailing?: ReactNode;
 };
 
+/** Back to the previous screen, or Home when the screen was opened directly, e.g. from a link */
+const goBack = () => (router.canGoBack() ? router.back() : router.replace('/'));
+
 // Back button, title and an optional trailing element, as at the top of most screens.
 const ScreenHeader = ({
   title,
@@ -29,20 +32,17 @@ const ScreenHeader = ({
   trailing,
 }: ScreenHeaderProps) => {
   const { t } = useTranslation();
-  const canGoBack = Boolean(onBack) || router.canGoBack();
 
   return (
     <View style={styles.header}>
-      {canGoBack && (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={backIcon === 'close' ? t('common.close') : t('common.back')}
-          onPress={onBack ?? (() => router.back())}
-          style={[styles.back, onColor && styles.backOnColor]}
-        >
-          <Icon name={backIcon} size={22} />
-        </Pressable>
-      )}
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={backIcon === 'close' ? t('common.close') : t('common.back')}
+        onPress={onBack ?? goBack}
+        style={[styles.back, onColor && styles.backOnColor]}
+      >
+        <Icon name={backIcon} size={22} />
+      </Pressable>
       <View style={styles.titles}>
         {title ? (
           <AppText variant="h2" accessibilityRole="header" numberOfLines={1} style={styles.title}>

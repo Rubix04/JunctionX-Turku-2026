@@ -52,7 +52,7 @@ const ProfileScreen = () => {
           leading={<IconTile name="user" size={48} />}
           title={displayName ?? t('profile.myAccount')}
           subtitle={data ? `${t('profile.myAccount')} · ${t('profile.pets', { count: data.petCount })}` : t('profile.myAccount')}
-          href="/account"
+          href="/profile/account"
         />
       </ListGroup>
 
@@ -61,17 +61,17 @@ const ProfileScreen = () => {
           leading={<IconTile name="shieldCheck" />}
           title={t('screens.insurance')}
           subtitle={insuranceSummary}
-          href="/insurance"
+          href="/profile/insurance"
         />
         <ListRow leading={<IconTile name="globe" />} title={t('common.language')} trailing={<LanguageSwitcher />} />
       </ListGroup>
 
       <SectionLabel label={t('profile.aboutUs')} />
       <ListGroup>
-        <ListRow leading={<IconTile name="heartPulse" />} title={t('profile.team')} href="/team" />
-        <ListRow leading={<IconTile name="info" />} title={t('profile.faq')} href="/faq" />
-        <ListRow leading={<IconTile name="phone" />} title={t('profile.support')} href="/support" />
-        <ListRow leading={<IconTile name="users" />} title={t('profile.accessibility')} href="/accessibility" />
+        <ListRow leading={<IconTile name="heartPulse" />} title={t('profile.team')} href="/profile/team" />
+        <ListRow leading={<IconTile name="info" />} title={t('profile.faq')} href="/profile/faq" />
+        <ListRow leading={<IconTile name="phone" />} title={t('profile.support')} href="/profile/support" />
+        <ListRow leading={<IconTile name="users" />} title={t('profile.accessibility')} href="/profile/accessibility" />
       </ListGroup>
 
       <SectionLabel label={t('profile.referTitle')} />

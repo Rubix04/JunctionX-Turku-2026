@@ -1,4 +1,4 @@
-import { Link } from 'expo-router';
+import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet } from 'react-native';
 
@@ -46,11 +46,14 @@ const PetSwitcher = ({ pets, selectedId, onSelect, showAdd = true }: PetSwitcher
         );
       })}
       {showAdd && (
-        <Link href="/add-pet" asChild>
-          <Pressable accessibilityRole="button" accessibilityLabel={t('screens.addPet')} style={styles.add}>
-            <Icon name="plus" size={22} color={colors.primary} />
-          </Pressable>
-        </Link>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('screens.addPet')}
+          onPress={() => router.push('/add-pet')}
+          style={styles.add}
+        >
+          <Icon name="plus" size={22} color={colors.primary} />
+        </Pressable>
       )}
     </ScrollView>
   );
