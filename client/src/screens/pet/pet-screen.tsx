@@ -1,14 +1,17 @@
-import { type Href, Link, router, useLocalSearchParams } from 'expo-router';
+import { Link, router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import PetAvatar, { speciesTint } from '@/components/features/pet-avatar';
 import AppText from '@/components/ui/app-text';
-import Icon, { type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
+import IconTile from '@/components/ui/icon-tile';
 import { DateTile, ListGroup, ListRow } from '@/components/ui/list-group';
 import SectionLabel from '@/components/ui/section-label';
 import Screen, { ScreenSection } from '@/components/ui/screen';
+import SegmentedControl from '@/components/ui/segmented-control';
 import { EmptyView, ErrorView, LoadingView } from '@/components/ui/state-views';
 import { useAsync } from '@/hooks/use-async';
 import { useReloadOnFocus } from '@/hooks/use-reload-on-focus';
@@ -53,26 +56,16 @@ const dot: Record<TrafficLightLevel, { fill: string; border: string }> = {
   red: { fill: colors.red, border: colors.redText },
 };
 
-type TileProps = { icon: IconName; title: string; subtitle: string; href: Href };
+const petTabs = ['overview', 'care', 'log', 'passport'] as const;
+type PetTab = (typeof petTabs)[number];
 
-const Tile = ({ icon, title, subtitle, href }: TileProps) => (
-  <Link href={href} asChild>
-    <Pressable accessibilityRole="link" style={({ pressed }) => [styles.tile, pressed && styles.pressed]}>
-      <Icon name={icon} size={24} color={colors.primary} />
-      <AppText variant="label">{title}</AppText>
-      <AppText variant="caption" color={colors.muted}>
-        {subtitle}
-      </AppText>
-    </Pressable>
-  </Link>
-);
-
-// One page per pet (spec 11): status, shortcuts, visits and dog or cat content.
+// One page per pet (spec 11), split into overview, care, log and passport tabs.
 const PetScreen = () => {
   const { t } = useTranslation();
   const { petId } = useLocalSearchParams<{ petId: string }>();
   const { data, error, reload } = useAsync(() => loadPetPage(petId), [petId]);
   const [openTopic, setOpenTopic] = useState<string | null>(null);
+  const [tab, setTab] = useState<PetTab>('overview');
   useReloadOnFocus(reload);
 
   if (!data) {
@@ -133,143 +126,184 @@ const PetScreen = () => {
       </View>
 
       <ScreenSection>
-        <Link href={`/pet/${pet.id}/log-result?level=${status.level}`} asChild>
-          <Pressable accessibilityRole="link" style={styles.statusRow}>
-            <View
-              style={[styles.dot, { backgroundColor: dot[status.level].fill, borderColor: dot[status.level].border }]}
-            />
-            <View style={styles.flex}>
-              <AppText variant="label">{t(`trafficLight.${status.level}`)}</AppText>
-              <AppText variant="caption" color={colors.muted}>
-                {watchList
-                  ? t('pet.watchListDay', {
-                      condition: watchList.condition,
-                      day: Math.min(daysBetween(watchList.startDate, today) + 1, watchList.totalDays),
-                      total: watchList.totalDays,
-                    })
-                  : t('pet.noWatchList')}
-              </AppText>
-            </View>
-            <Icon name="chevronRight" size={18} color={colors.muted} />
-          </Pressable>
-        </Link>
-
-        <View style={styles.grid}>
-          <Tile
-            icon="list"
-            title={t('pet.symptomLog')}
-            subtitle={watchList ? t('pet.watchListItems', { count: watchList.questions.length }) : t('pet.dailyLog')}
-            href={`/pet/${pet.id}/log`}
-          />
-          <Tile
-            icon="clipboard"
-            title={t('screens.carePlan')}
-            subtitle={
-              carePlan
-                ? t('pet.fromVisit', {
-                    date: formatDayMonth(visits.find((v) => v.id === carePlan.visitId)?.date ?? today),
-                  })
-                : t('pet.noCarePlan')
-            }
-            href={`/pet/${pet.id}/care-plan`}
-          />
-          <Tile
-            icon="pill"
-            title={t('pet.medication')}
-            subtitle={nextDose ? t('pet.nextDose', { time: formatTime(nextDose.dueAt) }) : t('pet.noMedication')}
-            href={`/pet/${pet.id}/reminders`}
-          />
-          <Tile
-            icon="bowl"
-            title={t('screens.diet')}
-            subtitle={diet?.name.split(',')[0] ?? t('pet.portionCalculator')}
-            href={`/pet/${pet.id}/diet`}
-          />
-          <Tile
-            icon="passport"
-            title={t('screens.passport')}
-            subtitle={vaccinesOk ? t('pet.vaccinesOk') : t('pet.vaccinesDue')}
-            href={`/pet/${pet.id}/passport`}
-          />
-          <Tile icon="chart" title={t('screens.trends')} subtitle={t('pet.trendsHint')} href={`/pet/${pet.id}/trends`} />
-        </View>
-
-        <SectionLabel
-          label={t('pet.visitHistory')}
-          action={{ label: t('pet.addVisit'), href: `/add-visit?petId=${pet.id}` }}
+        <SegmentedControl
+          label={pet.name}
+          options={petTabs.map((value) => ({ value, label: t(`pet.tabs.${value}`) }))}
+          value={tab}
+          onChange={setTab}
         />
-        {visits.length ? (
-          <ListGroup>
-            {visits.map((visit) => (
-              <ListRow
-                key={visit.id}
-                leading={<DateTile day={String(parseDate(visit.date).getDate())} month={formatMonthShort(visit.date)} />}
-                title={visit.title}
-                subtitle={
-                  visit.draft
-                    ? t('pet.draftVisit')
-                    : [visit.clinicName, visit.vetName].filter(Boolean).join(' · ')
-                }
-                href={carePlan?.visitId === visit.id ? `/pet/${pet.id}/care-plan` : `/pet/${pet.id}/passport`}
-              />
-            ))}
-          </ListGroup>
-        ) : (
-          <EmptyView title={t('pet.noVisits')} body={t('pet.noVisitsBody')} />
-        )}
 
-        {topics.length > 0 && (
+        {tab === 'overview' && (
           <>
-            <SectionLabel label={t(`pet.speciesSection.${pet.species}`)} />
-            <View style={styles.topics}>
-              {topics.map((topic) => {
-                const open = openTopic === topic.id;
-                return (
-                  <Pressable
-                    key={topic.id}
-                    accessibilityRole="button"
-                    accessibilityState={{ expanded: open }}
-                    onPress={() => setOpenTopic(open ? null : topic.id)}
-                    style={[styles.topic, topic.danger && styles.topicDanger, open && styles.topicOpen]}
-                  >
-                    <View style={styles.topicTitle}>
-                      {topic.danger && <Icon name="alertTriangle" size={16} color={colors.redText} />}
-                      <AppText
-                        variant="bodySmall"
-                        color={topic.danger ? colors.redText : colors.text}
-                        style={styles.topicText}
+            <Link href={`/pet/${pet.id}/log-result?level=${status.level}`} asChild>
+              <Pressable accessibilityRole="link" style={styles.statusRow}>
+                <View
+                  style={[styles.dot, { backgroundColor: dot[status.level].fill, borderColor: dot[status.level].border }]}
+                />
+                <View style={styles.flex}>
+                  <AppText variant="label">{t(`trafficLight.${status.level}`)}</AppText>
+                  <AppText variant="caption" color={colors.muted}>
+                    {watchList
+                      ? t('pet.watchListDay', {
+                          condition: watchList.condition,
+                          day: Math.min(daysBetween(watchList.startDate, today) + 1, watchList.totalDays),
+                          total: watchList.totalDays,
+                        })
+                      : t('pet.noWatchList')}
+                  </AppText>
+                </View>
+                <Icon name="chevronRight" size={18} color={colors.muted} />
+              </Pressable>
+            </Link>
+
+            {topics.length > 0 && (
+              <>
+                <SectionLabel label={t(`pet.speciesSection.${pet.species}`)} />
+                <View style={styles.topics}>
+                  {topics.map((topic) => {
+                    const open = openTopic === topic.id;
+                    return (
+                      <Pressable
+                        key={topic.id}
+                        accessibilityRole="button"
+                        accessibilityState={{ expanded: open }}
+                        onPress={() => setOpenTopic(open ? null : topic.id)}
+                        style={[styles.topic, topic.danger && styles.topicDanger, open && styles.topicOpen]}
                       >
-                        {localize(topic.title)}
-                      </AppText>
-                    </View>
-                    {open && (
-                      <View style={styles.topicBody}>
-                        <AppText variant="bodySmall" color={colors.textSecondary}>
-                          {localize(topic.tip)}
-                        </AppText>
-                        {topic.substanceId && (
-                          <Link href={`/substance/${topic.substanceId}`} style={styles.topicLink}>
-                            <AppText variant="bodySmall" color={colors.primary} style={styles.bold}>
-                              {t('pet.readMore')}
+                        <View style={styles.topicTitle}>
+                          {topic.danger && <Icon name="alertTriangle" size={16} color={colors.redText} />}
+                          <AppText
+                            variant="bodySmall"
+                            color={topic.danger ? colors.redText : colors.text}
+                            style={styles.topicText}
+                          >
+                            {localize(topic.title)}
+                          </AppText>
+                        </View>
+                        {open && (
+                          <View style={styles.topicBody}>
+                            <AppText variant="bodySmall" color={colors.textSecondary}>
+                              {localize(topic.tip)}
                             </AppText>
-                          </Link>
+                            {topic.substanceId && (
+                              <Link href={`/substance/${topic.substanceId}`} style={styles.topicLink}>
+                                <AppText variant="bodySmall" color={colors.primary} style={styles.bold}>
+                                  {t('pet.readMore')}
+                                </AppText>
+                              </Link>
+                            )}
+                          </View>
                         )}
-                      </View>
-                    )}
-                  </Pressable>
-                );
-              })}
-            </View>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              </>
+            )}
+
+            {mockHousehold.members.length > 0 && (
+              <View style={styles.family}>
+                <Icon name="users" size={18} color={colors.muted} />
+                <AppText variant="caption" color={colors.muted}>
+                  {t('pet.sharedWith', { names: mockHousehold.members.map((m) => m.name).join(', ') })}
+                </AppText>
+              </View>
+            )}
           </>
         )}
 
-        {mockHousehold.members.length > 0 && (
-          <View style={styles.family}>
-            <Icon name="users" size={18} color={colors.muted} />
-            <AppText variant="caption" color={colors.muted}>
-              {t('pet.sharedWith', { names: mockHousehold.members.map((m) => m.name).join(', ') })}
-            </AppText>
-          </View>
+        {tab === 'care' && (
+          <>
+            <ListGroup>
+              <ListRow
+                leading={<IconTile name="clipboard" />}
+                title={t('screens.carePlan')}
+                subtitle={
+                  carePlan
+                    ? t('pet.fromVisit', {
+                        date: formatDayMonth(visits.find((v) => v.id === carePlan.visitId)?.date ?? today),
+                      })
+                    : t('pet.noCarePlan')
+                }
+                href={`/pet/${pet.id}/care-plan`}
+              />
+              <ListRow
+                leading={<IconTile name="pill" />}
+                title={t('pet.medication')}
+                subtitle={nextDose ? t('pet.nextDose', { time: formatTime(nextDose.dueAt) }) : t('pet.noMedication')}
+                href={`/pet/${pet.id}/reminders`}
+              />
+              <ListRow
+                leading={<IconTile name="bowl" />}
+                title={t('screens.diet')}
+                subtitle={diet?.name.split(',')[0] ?? t('pet.portionCalculator')}
+                href={`/pet/${pet.id}/diet`}
+              />
+            </ListGroup>
+
+            <SectionLabel
+              label={t('pet.visitHistory')}
+              action={{ label: t('pet.addVisit'), href: `/add-visit?petId=${pet.id}` }}
+            />
+            {visits.length ? (
+              <ListGroup>
+                {visits.map((visit) => (
+                  <ListRow
+                    key={visit.id}
+                    leading={
+                      <DateTile day={String(parseDate(visit.date).getDate())} month={formatMonthShort(visit.date)} />
+                    }
+                    title={visit.title}
+                    subtitle={
+                      visit.draft ? t('pet.draftVisit') : [visit.clinicName, visit.vetName].filter(Boolean).join(' · ')
+                    }
+                    href={carePlan?.visitId === visit.id ? `/pet/${pet.id}/care-plan` : `/pet/${pet.id}/passport`}
+                  />
+                ))}
+              </ListGroup>
+            ) : (
+              <EmptyView title={t('pet.noVisits')} body={t('pet.noVisitsBody')} />
+            )}
+          </>
+        )}
+
+        {tab === 'log' && (
+          <>
+            <Button label={t('pet.logToday')} icon="edit" onPress={() => router.push(`/pet/${pet.id}/log`)} />
+            <ListGroup>
+              <ListRow
+                leading={<IconTile name="list" />}
+                title={t('pet.symptomLog')}
+                subtitle={
+                  watchList ? t('pet.watchListItems', { count: watchList.questions.length }) : t('pet.dailyLog')
+                }
+                href={`/pet/${pet.id}/log-result?level=${status.level}`}
+              />
+              <ListRow
+                leading={<IconTile name="chart" />}
+                title={t('screens.trends')}
+                subtitle={t('pet.trendsHint')}
+                href={`/pet/${pet.id}/trends`}
+              />
+            </ListGroup>
+          </>
+        )}
+
+        {tab === 'passport' && (
+          <ListGroup>
+            <ListRow
+              leading={<IconTile name="passport" />}
+              title={t('screens.passport')}
+              subtitle={vaccinesOk ? t('pet.vaccinesOk') : t('pet.vaccinesDue')}
+              href={`/pet/${pet.id}/passport`}
+            />
+            <ListRow
+              leading={<IconTile name="share" />}
+              title={t('screens.sharePassport')}
+              subtitle={t('pet.shareHint')}
+              href={`/pet/${pet.id}/share-passport`}
+            />
+          </ListGroup>
         )}
       </ScreenSection>
     </Screen>
@@ -317,17 +351,6 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   dot: { width: 14, height: 14, borderRadius: 7, borderWidth: 2 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  tile: {
-    flexBasis: '47%',
-    flexGrow: 1,
-    padding: 14,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    gap: spacing.sm,
-  },
   pressed: { backgroundColor: colors.primaryTint },
   topics: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   topic: {
