@@ -20,6 +20,12 @@ export type SignInResponse = {
   user: User;
 };
 
+export type EmailSignUpInput = {
+  name: string;
+  email: string;
+  password: string;
+};
+
 /** A signed-in device, listed in Account (GET /auth/devices). */
 export type SignedInDevice = {
   id: string;

@@ -12,7 +12,8 @@
     "errorBody": "Tarkista yhteys ja yritä uudelleen.",
     "tryAgain": "Yritä uudelleen",
     "step": "Vaihe {{step}}/{{total}}",
-    "notAVet": "TassuVahti on tukityökalu. Se ei korvaa eläinlääkäriä."
+    "notAVet": "TassuVahti on tukityökalu. Se ei korvaa eläinlääkäriä.",
+    "language": "Kieli"
   },
   "tabs": {
     "home": "Koti",
@@ -89,8 +90,51 @@
     "sun": "Sunnuntai"
   },
   "auth": {
-    "title": "Kirjaudu sisään",
-    "continueWithBankId": "Jatka BankID:llä"
+    "landing": {
+      "bankId": "Jatka BankID:llä",
+      "emailSignIn": "Kirjaudu sähköpostilla",
+      "newHere": "Uusi TassuVahdissa?",
+      "createAccount": "Luo tili",
+      "terms": "Jatkamalla hyväksyt käyttöehdot ja tietosuojaselosteen."
+    },
+    "bankId": {
+      "title": "Kirjaudu BankID:llä",
+      "intro": "Valitse pankkisi. Vahvistat henkilöllisyytesi pankin sovelluksessa.",
+      "waiting": "Odotetaan vahvistusta pankin sovelluksessa…",
+      "loadError": "Pankkilistaa ei voitu ladata.",
+      "signInError": "Kirjautuminen ei onnistunut. Tarkista yhteys ja yritä uudelleen.",
+      "note": "TassuVahti ei koskaan näe pankkitunnuksiasi."
+    },
+    "signIn": {
+      "title": "Tervetuloa takaisin",
+      "intro": "Kirjaudu sähköpostilla ja salasanalla.",
+      "submit": "Kirjaudu sisään",
+      "noAccount": "Eikö sinulla ole tiliä?",
+      "signUpLink": "Luo tili",
+      "demoHint": "Demotili: demo@tassuvahti.fi / demo1234"
+    },
+    "signUp": {
+      "title": "Luo tili",
+      "intro": "Lemmikkisi vakuutus, hoito-ohjeet ja eläinlääkärikäynnit yhdessä paikassa.",
+      "name": "Koko nimi",
+      "confirmPassword": "Vahvista salasana",
+      "passwordHint": "Vähintään 8 merkkiä",
+      "submit": "Luo tili",
+      "haveAccount": "Onko sinulla jo tili?",
+      "signInLink": "Kirjaudu sisään"
+    },
+    "email": "Sähköposti",
+    "emailPlaceholder": "nimi@esimerkki.fi",
+    "password": "Salasana",
+    "errors": {
+      "required": "Täytä tämä kenttä.",
+      "invalidEmail": "Anna kelvollinen sähköpostiosoite.",
+      "passwordTooShort": "Käytä vähintään 8 merkkiä.",
+      "passwordMismatch": "Salasanat eivät täsmää.",
+      "invalidCredentials": "Sähköposti tai salasana on väärin.",
+      "emailTaken": "Tällä sähköpostilla on jo tili. Kirjaudu sisään.",
+      "generic": "Jokin meni vikaan. Yritä uudelleen."
+    }
   },
   "home": {
     "greeting": "Hei {{name}}",
@@ -591,8 +635,6 @@
     "sv": "Svenska"
   },
   "splash": {
-    "slogan": "Valvomme niitä, jotka valvovat sinua.",
-    "continue": "Napauta jatkaaksesi",
-    "by": "[Vakuutusyhtiö]"
+    "slogan": "Valvomme niitä, jotka valvovat sinua."
   }
 }

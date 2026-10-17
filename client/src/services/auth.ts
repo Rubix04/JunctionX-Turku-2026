@@ -1,9 +1,11 @@
+import * as Crypto from 'expo-crypto';
 import * as Device from 'expo-device';
 
 import { useMockData } from '@/constants/config';
 import { apiFetch } from '@/services/api-client';
 import { mockDelay } from '@/services/mock/delay';
-import type { Bank, SignedInDevice, SignInResponse } from '@/types/auth';
+import { getStoredItem, setStoredItem, storageKeys } from '@/services/secure-storage';
+import type { Bank, EmailSignUpInput, SignedInDevice, SignInResponse } from '@/types/auth';
 
 // Backend: server/src/modules/auth. Its bank provider is simulated: every bank
 // signs in a test person straight away. Uses mock data when no API URL is set.
@@ -21,11 +23,11 @@ const mockBanks: Bank[] = [
   { id: 'omasp', name: 'Oma Säästöpankki' },
 ];
 
-const mockSession = (): SignInResponse => ({
+const mockSession = (user = { id: 'mock-user', displayName: 'Aino Virtanen' }): SignInResponse => ({
   accessToken: 'mock-access-token',
   expiresIn: 900,
   refreshToken: `mock-refresh-${Date.now()}`,
-  user: { id: 'mock-user', displayName: 'Aino Virtanen', householdId: 'mock-household' },
+  user: { ...user, householdId: 'mock-household' },
 });
 
 // Shown in the list of signed-in devices in Account.
@@ -47,6 +49,70 @@ export const signInWithBank = async (bankId: string): Promise<SignInResponse> =>
     method: 'POST',
     body: { bankId, deviceName: deviceName() },
   });
+};
+
+export type EmailAuthErrorCode = 'invalidCredentials' | 'emailTaken';
+
+export class EmailAuthError extends Error {
+  constructor(public code: EmailAuthErrorCode) {
+    super(code);
+  }
+}
+
+// Email accounts are mock only for now: the server has no email sign-in yet.
+// Accounts live on this device, with a hash of the password instead of the password.
+type MockUser = { id: string; displayName: string; email: string; passwordHash: string };
+
+const normalizeEmail = (email: string) => email.trim().toLowerCase();
+
+const hashPassword = (email: string, password: string) =>
+  Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, `${normalizeEmail(email)}:${password}`);
+
+/** Demo account for presentations: demo@tassuvahti.fi / demo1234 */
+const demoUser = async (): Promise<MockUser> => ({
+  id: 'mock-user',
+  displayName: 'Aino Virtanen',
+  email: 'demo@tassuvahti.fi',
+  passwordHash: await hashPassword('demo@tassuvahti.fi', 'demo1234'),
+});
+
+const loadMockUsers = async (): Promise<MockUser[]> => {
+  const saved = await getStoredItem(storageKeys.mockUsers).catch(() => null);
+  const users: MockUser[] = saved ? JSON.parse(saved) : [];
+  return [await demoUser(), ...users];
+};
+
+const saveMockUser = async (user: MockUser) => {
+  const users = (await loadMockUsers()).filter((u) => u.id !== 'mock-user');
+  await setStoredItem(storageKeys.mockUsers, JSON.stringify([...users, user]));
+};
+
+export const signInWithEmail = async (email: string, password: string): Promise<SignInResponse> => {
+  const passwordHash = await hashPassword(email, password);
+  const user = (await loadMockUsers()).find(
+    (u) => u.email === normalizeEmail(email) && u.passwordHash === passwordHash,
+  );
+  if (!user) {
+    await mockDelay(undefined, 600);
+    throw new EmailAuthError('invalidCredentials');
+  }
+  return mockDelay(mockSession(user), 600);
+};
+
+export const signUpWithEmail = async ({ name, email, password }: EmailSignUpInput): Promise<SignInResponse> => {
+  const users = await loadMockUsers();
+  if (users.some((u) => u.email === normalizeEmail(email))) {
+    await mockDelay(undefined, 600);
+    throw new EmailAuthError('emailTaken');
+  }
+  const user: MockUser = {
+    id: Crypto.randomUUID(),
+    displayName: name.trim(),
+    email: normalizeEmail(email),
+    passwordHash: await hashPassword(email, password),
+  };
+  await saveMockUser(user);
+  return mockDelay(mockSession(user), 600);
 };
 
 /** Swaps the single-use refresh token for new tokens. */

@@ -44,7 +44,8 @@
           "microphonePermission": "TassuVahti records sound with videos of your pet for the vet."
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true,

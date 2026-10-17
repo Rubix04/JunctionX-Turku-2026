@@ -12,7 +12,8 @@
     "errorBody": "Kontrollera anslutningen och försök igen.",
     "tryAgain": "Försök igen",
     "step": "Steg {{step}} av {{total}}",
-    "notAVet": "TassuVahti är ett stödverktyg. Det ersätter inte en veterinär."
+    "notAVet": "TassuVahti är ett stödverktyg. Det ersätter inte en veterinär.",
+    "language": "Språk"
   },
   "tabs": {
     "home": "Hem",
@@ -89,8 +90,51 @@
     "sun": "Söndag"
   },
   "auth": {
-    "title": "Logga in",
-    "continueWithBankId": "Fortsätt med BankID"
+    "landing": {
+      "bankId": "Fortsätt med BankID",
+      "emailSignIn": "Logga in med e-post",
+      "newHere": "Ny på TassuVahti?",
+      "createAccount": "Skapa konto",
+      "terms": "Genom att fortsätta godkänner du användarvillkoren och integritetspolicyn."
+    },
+    "bankId": {
+      "title": "Logga in med BankID",
+      "intro": "Välj din bank. Du bekräftar din identitet i bankens app.",
+      "waiting": "Väntar på bekräftelse i bankappen…",
+      "loadError": "Det gick inte att ladda listan över banker.",
+      "signInError": "Inloggningen misslyckades. Kontrollera anslutningen och försök igen.",
+      "note": "TassuVahti ser aldrig dina bankuppgifter."
+    },
+    "signIn": {
+      "title": "Välkommen tillbaka",
+      "intro": "Logga in med e-post och lösenord.",
+      "submit": "Logga in",
+      "noAccount": "Har du inget konto?",
+      "signUpLink": "Skapa ett",
+      "demoHint": "Demokonto: demo@tassuvahti.fi / demo1234"
+    },
+    "signUp": {
+      "title": "Skapa ditt konto",
+      "intro": "Ditt husdjurs försäkring, vårdplan och veterinärbesök på ett ställe.",
+      "name": "Fullständigt namn",
+      "confirmPassword": "Bekräfta lösenord",
+      "passwordHint": "Minst 8 tecken",
+      "submit": "Skapa konto",
+      "haveAccount": "Har du redan ett konto?",
+      "signInLink": "Logga in"
+    },
+    "email": "E-post",
+    "emailPlaceholder": "namn@exempel.se",
+    "password": "Lösenord",
+    "errors": {
+      "required": "Fyll i det här fältet.",
+      "invalidEmail": "Ange en giltig e-postadress.",
+      "passwordTooShort": "Använd minst 8 tecken.",
+      "passwordMismatch": "Lösenorden matchar inte.",
+      "invalidCredentials": "Fel e-post eller lösenord.",
+      "emailTaken": "Det finns redan ett konto med den här e-postadressen. Logga in i stället.",
+      "generic": "Något gick fel. Försök igen."
+    }
   },
   "home": {
     "greeting": "Hej {{name}}",
@@ -591,8 +635,6 @@
     "sv": "Svenska"
   },
   "splash": {
-    "slogan": "Vi vakar över dem som vakar över dig.",
-    "continue": "Tryck för att fortsätta",
-    "by": "av [Försäkringsbolag]"
+    "slogan": "Vi vakar över dem som vakar över dig."
   }
 }
