@@ -12,6 +12,7 @@ import type { Db } from "./db/client.js";
 import { ApiError } from "./errors.js";
 import { type BankIdentityProvider, mockBankProvider } from "./modules/auth/bank-provider.js";
 import { authRoutes } from "./modules/auth/routes.js";
+import { dietRoutes } from "./modules/diet/routes.js";
 import { passportRoutes, sharedPassportRoutes } from "./modules/passport/routes.js";
 import { petPhotoRoutes } from "./modules/pet-photos/routes.js";
 import { petRoutes } from "./modules/pets/routes.js";
@@ -84,6 +85,7 @@ export const buildApp = async ({
   await app.register(petPhotoRoutes, { prefix: "/pets" });
   await app.register(passportRoutes, { prefix: "/pets" });
   await app.register(sharedPassportRoutes, { prefix: "/shared" });
+  await app.register(dietRoutes);
 
   return app;
 };
