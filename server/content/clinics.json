@@ -1,0 +1,163 @@
+{
+  "meta": {
+    "status": "sample",
+    "source": "Stand-in for the insurance company's registry of contracted clinics",
+    "updatedOn": "2026-10-17",
+    "notice": "SAMPLE DATA: the clinics, phone numbers and booking links are made up (the app's demo clinics around Turku). Coordinates are approximate positions of the street addresses. Replace with the insurer's registry before real use."
+  },
+  "defaultLocation": { "latitude": 60.4518, "longitude": 22.2666, "name": "Turku" },
+  "expertise": {
+    "surgery": { "fi": "Kirurgia", "sv": "Kirurgi", "en": "Surgery" },
+    "intensiveCare": { "fi": "Tehohoito", "sv": "Intensivvård", "en": "Intensive care" },
+    "imaging": { "fi": "Kuvantaminen", "sv": "Bilddiagnostik", "en": "Imaging" },
+    "internalMedicine": { "fi": "Sisätaudit", "sv": "Internmedicin", "en": "Internal medicine" },
+    "dentistry": { "fi": "Hammashoito", "sv": "Tandvård", "en": "Dentistry" },
+    "felineMedicine": { "fi": "Kissojen sairaudet", "sv": "Kattmedicin", "en": "Feline medicine" },
+    "kidneysThyroid": { "fi": "Munuaiset ja kilpirauhanen", "sv": "Njurar och sköldkörtel", "en": "Kidneys and thyroid" },
+    "smallMammals": { "fi": "Kanit ja jyrsijät", "sv": "Kaniner och gnagare", "en": "Rabbits and rodents" },
+    "exotics": { "fi": "Eksoottiset eläimet", "sv": "Exotiska djur", "en": "Exotics" },
+    "emergencyCare": { "fi": "Päivystys", "sv": "Akutvård", "en": "Emergency care" },
+    "orthopaedics": { "fi": "Ortopedia", "sv": "Ortopedi", "en": "Orthopaedics" },
+    "jointsLimping": { "fi": "Nivelet ja ontuminen", "sv": "Leder och hälta", "en": "Joints and limping" }
+  },
+  "clinics": [
+    {
+      "id": "meri",
+      "name": "Animal Hospital Meri",
+      "address": "Satamakatu 12, Turku",
+      "phone": "+358400000001",
+      "latitude": 60.4405,
+      "longitude": 22.2395,
+      "contracted": true,
+      "directPayment": true,
+      "emergency24h": true,
+      "species": ["dog", "cat", "smallAnimal"],
+      "expertise": ["surgery", "intensiveCare", "imaging"],
+      "hours": [
+        { "open": "00:00", "close": "24:00" },
+        { "open": "00:00", "close": "24:00" },
+        { "open": "00:00", "close": "24:00" },
+        { "open": "00:00", "close": "24:00" },
+        { "open": "00:00", "close": "24:00" },
+        { "open": "00:00", "close": "24:00" },
+        { "open": "00:00", "close": "24:00" }
+      ],
+      "bookingUrl": "https://example.com/book/meri"
+    },
+    {
+      "id": "aurora",
+      "name": "Pet Clinic Aurora",
+      "address": "Aurakatu 5, Turku",
+      "phone": "+358400000002",
+      "latitude": 60.4512,
+      "longitude": 22.2693,
+      "contracted": true,
+      "directPayment": true,
+      "emergency24h": false,
+      "species": ["dog", "cat"],
+      "expertise": ["internalMedicine", "dentistry"],
+      "hours": [
+        { "open": "08:00", "close": "20:00" },
+        { "open": "08:00", "close": "20:00" },
+        { "open": "08:00", "close": "20:00" },
+        { "open": "08:00", "close": "20:00" },
+        { "open": "08:00", "close": "20:00" },
+        { "open": "10:00", "close": "16:00" },
+        null
+      ],
+      "bookingUrl": "https://example.com/book/aurora"
+    },
+    {
+      "id": "kissaklinikka",
+      "name": "Cat Clinic Kehrä",
+      "address": "Hämeenkatu 30, Turku",
+      "phone": "+358400000003",
+      "latitude": 60.4566,
+      "longitude": 22.2862,
+      "contracted": true,
+      "directPayment": false,
+      "emergency24h": false,
+      "species": ["cat"],
+      "expertise": ["felineMedicine", "kidneysThyroid"],
+      "hours": [
+        { "open": "09:00", "close": "17:00" },
+        { "open": "09:00", "close": "17:00" },
+        { "open": "09:00", "close": "17:00" },
+        { "open": "09:00", "close": "17:00" },
+        { "open": "09:00", "close": "17:00" },
+        null,
+        null
+      ],
+      "bookingUrl": "https://example.com/book/kehra"
+    },
+    {
+      "id": "pikkueläin",
+      "name": "Small Animal Vet Pikku",
+      "address": "Uudenmaankatu 18, Turku",
+      "phone": "+358400000004",
+      "latitude": 60.4478,
+      "longitude": 22.2768,
+      "contracted": false,
+      "directPayment": false,
+      "emergency24h": false,
+      "species": ["smallAnimal", "cat", "dog"],
+      "expertise": ["smallMammals", "exotics"],
+      "hours": [
+        { "open": "08:00", "close": "16:00" },
+        { "open": "08:00", "close": "16:00" },
+        { "open": "08:00", "close": "16:00" },
+        { "open": "08:00", "close": "16:00" },
+        { "open": "08:00", "close": "16:00" },
+        null,
+        null
+      ],
+      "bookingUrl": null
+    },
+    {
+      "id": "raisio",
+      "name": "Raisio Emergency Vets",
+      "address": "Kauppakatu 3, Raisio",
+      "phone": "+358400000005",
+      "latitude": 60.4858,
+      "longitude": 22.1696,
+      "contracted": false,
+      "directPayment": false,
+      "emergency24h": true,
+      "species": ["dog", "cat"],
+      "expertise": ["emergencyCare"],
+      "hours": [
+        { "open": "00:00", "close": "24:00" },
+        { "open": "00:00", "close": "24:00" },
+        { "open": "00:00", "close": "24:00" },
+        { "open": "00:00", "close": "24:00" },
+        { "open": "00:00", "close": "24:00" },
+        { "open": "00:00", "close": "24:00" },
+        { "open": "00:00", "close": "24:00" }
+      ],
+      "bookingUrl": null
+    },
+    {
+      "id": "kaarina",
+      "name": "Kaarina Dog Clinic",
+      "address": "Piispanlähteentie 4, Kaarina",
+      "phone": "+358400000006",
+      "latitude": 60.4075,
+      "longitude": 22.3712,
+      "contracted": true,
+      "directPayment": true,
+      "emergency24h": false,
+      "species": ["dog"],
+      "expertise": ["orthopaedics", "jointsLimping"],
+      "hours": [
+        { "open": "08:00", "close": "18:00" },
+        { "open": "08:00", "close": "18:00" },
+        { "open": "08:00", "close": "18:00" },
+        { "open": "08:00", "close": "18:00" },
+        { "open": "08:00", "close": "18:00" },
+        { "open": "09:00", "close": "14:00" },
+        null
+      ],
+      "bookingUrl": "https://example.com/book/kaarina"
+    }
+  ]
+}
