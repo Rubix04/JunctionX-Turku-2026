@@ -2,6 +2,53 @@
   "common": {
     "appName": "TassuVahti",
     "tagline": "Watching over your pet between vet visits.",
-    "emergency": "Emergency"
+    "emergency": "Emergency",
+    "back": "Back"
+  },
+  "tabs": {
+    "home": "Home",
+    "map": "Map",
+    "knowledge": "Is it safe?",
+    "alerts": "Alerts",
+    "account": "Account"
+  },
+  "auth": {
+    "signInDemo": "Sign in (demo)",
+    "signOut": "Sign out"
+  },
+  "placeholder": {
+    "notBuilt": "This screen is not built yet."
+  },
+  "screens": {
+    "welcome": "Welcome",
+    "bankAuth": "Sign in with online banking",
+    "setLock": "Set device lock",
+    "unlock": "Unlock",
+    "home": "Home",
+    "map": "Vets and emergency clinics",
+    "knowledge": "Is it safe?",
+    "alerts": "Seasonal alerts",
+    "settings": "Account and settings",
+    "insurance": "Insurance and claims",
+    "pet": "Pet page",
+    "log": "Daily log",
+    "logResult": "Log result",
+    "trends": "Trends",
+    "carePlan": "Care plan",
+    "reminders": "Reminders",
+    "diet": "Diet and weight",
+    "passport": "Health passport",
+    "sharePassport": "Share passport",
+    "photo": "Crop profile picture",
+    "emergency": "Emergency",
+    "firstAid": "First aid",
+    "firstAidGuide": "First aid guide",
+    "clinic": "Clinic",
+    "substance": "Knowledge base entry",
+    "ateThis": "My pet ate this",
+    "findInStore": "Find in store",
+    "addPet": "Add a pet",
+    "addVisit": "Add a vet visit",
+    "notFound": "Page not found"
   }
 }
