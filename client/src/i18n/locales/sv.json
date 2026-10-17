@@ -740,6 +740,7 @@
     "entered": "{{count}} av {{total}} siffror angivna"
   },
   "splash": {
+    "slogan": "Vi vakar över dem som vakar över dig.",
     "continue": "Tryck för att fortsätta",
     "by": "av [Försäkringsbolag]"
   }

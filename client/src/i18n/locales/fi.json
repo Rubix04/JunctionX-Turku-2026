@@ -740,6 +740,7 @@
     "entered": "{{count}}/{{total}} numeroa annettu"
   },
   "splash": {
+    "slogan": "Valvomme niitä, jotka valvovat sinua.",
     "continue": "Napauta jatkaaksesi",
     "by": "[Vakuutusyhtiö]"
   }

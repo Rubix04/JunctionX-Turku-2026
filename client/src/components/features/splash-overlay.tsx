@@ -33,7 +33,7 @@ const SplashOverlay = ({ onContinue }: SplashOverlayProps) => {
               <AppText style={[styles.wordmark, styles.wordmarkAccent]}>Vahti</AppText>
             </AppText>
             <AppText variant="body" color={colors.onDark} style={styles.tagline}>
-              {t('common.tagline')}
+              {t('splash.slogan')}
             </AppText>
           </View>
 
