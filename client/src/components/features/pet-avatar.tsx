@@ -2,17 +2,16 @@ import { Image } from 'expo-image';
 import Svg, { Circle, Ellipse, Path } from 'react-native-svg';
 
 import { colors } from '@/theme';
-
-export type PetSpecies = 'cat' | 'dog' | 'small';
+import type { Species } from '@/types/pet';
 
 type PetAvatarProps = {
-  species: PetSpecies;
+  species: Species;
   photoUrl?: string | null;
   size?: number;
 };
 
 // Default pictures from the Brand board, shown until the owner adds a photo.
-const DefaultPicture = ({ species, size }: { species: PetSpecies; size: number }) => {
+const DefaultPicture = ({ species, size }: { species: Species; size: number }) => {
   const ink = colors.text;
 
   if (species === 'cat') {
