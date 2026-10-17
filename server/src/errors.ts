@@ -8,6 +8,8 @@ export class ApiError extends Error {
     public readonly statusCode: number,
     public readonly code: string,
     message: string,
+    /** Optional per-field problems, e.g. for VALIDATION_ERROR */
+    public readonly details?: Array<{ path: string; message: string }>,
   ) {
     super(message);
   }

@@ -12,6 +12,7 @@ import type { Db } from "./db/client.js";
 import { ApiError } from "./errors.js";
 import { type BankIdentityProvider, mockBankProvider } from "./modules/auth/bank-provider.js";
 import { authRoutes } from "./modules/auth/routes.js";
+import { passportRoutes, sharedPassportRoutes } from "./modules/passport/routes.js";
 import { petPhotoRoutes } from "./modules/pet-photos/routes.js";
 import { petRoutes } from "./modules/pets/routes.js";
 import { authPlugin } from "./plugins/auth.js";
@@ -46,7 +47,9 @@ export const buildApp = async ({
 
   app.setErrorHandler((error, request, reply) => {
     if (error instanceof ApiError) {
-      return reply.status(error.statusCode).send({ error: { code: error.code, message: error.message } });
+      return reply.status(error.statusCode).send({
+        error: { code: error.code, message: error.message, ...(error.details && { details: error.details }) },
+      });
     }
     if (hasZodFastifySchemaValidationErrors(error)) {
       return reply.status(400).send({
@@ -79,6 +82,8 @@ export const buildApp = async ({
   await app.register(authRoutes, { prefix: "/auth", bankProvider });
   await app.register(petRoutes, { prefix: "/pets" });
   await app.register(petPhotoRoutes, { prefix: "/pets" });
+  await app.register(passportRoutes, { prefix: "/pets" });
+  await app.register(sharedPassportRoutes, { prefix: "/shared" });
 
   return app;
 };
