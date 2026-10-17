@@ -433,6 +433,14 @@
     "aiNote": "Sovellus vain tiivistää, mitä eläinlääkäri kirjoitti. Se ei koskaan tee diagnoosia. Kunnes klinikka tarkistaa luonnoksen, se on merkitty \"Luonnos\".",
     "preview": "Esikatsele luonnosta"
   },
+  "explore": {
+    "title": "Tutki",
+    "sections": {
+      "vets": "Eläinlääkärit",
+      "safe": "Onko turvallista?",
+      "quizzes": "Visat"
+    }
+  },
   "map": {
     "title": "Eläinlääkärit ja päivystys",
     "youAreHere": "Sinä",
@@ -635,5 +643,25 @@
   },
   "splash": {
     "slogan": "Valvomme niitä, jotka valvovat sinua."
+  },
+  "quiz": {
+    "intro": "Lue lyhyt opas ja testaa sitten osaamisesi arjen tilanteilla.",
+    "questions_one": "{{count}} kysymys",
+    "questions_other": "{{count}} kysymystä",
+    "best": "Paras {{score}}/{{total}}",
+    "beforeYouStart": "Ennen kuin aloitat",
+    "start_one": "Aloita · {{count}} kysymys",
+    "start_other": "Aloita · {{count}} kysymystä",
+    "questionOf": "Kysymys {{current}}/{{total}}",
+    "correct": "Oikein!",
+    "notQuite": "Ei aivan",
+    "next": "Seuraava kysymys",
+    "seeResult": "Katso tulos",
+    "score": "{{score}} / {{total}}",
+    "perfect": "Kaikki oikein! Tiedät, mitä tehdä.",
+    "goodTry": "Hyvä yritys. Lue selitykset uudelleen ja kokeile vielä kerran.",
+    "tryAgain": "Yritä uudelleen",
+    "backToExplore": "Takaisin",
+    "readMore": "Lue lisää: Onko turvallista?"
   }
 }

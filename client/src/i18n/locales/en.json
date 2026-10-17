@@ -433,6 +433,14 @@
     "aiNote": "The app only summarises what your vet wrote. It never makes a diagnosis. Until the clinic checks the draft, it is marked \"Draft\".",
     "preview": "Preview the draft plan"
   },
+  "explore": {
+    "title": "Explore",
+    "sections": {
+      "vets": "Vets",
+      "safe": "Is it safe?",
+      "quizzes": "Quizzes"
+    }
+  },
   "map": {
     "title": "Vets & emergency",
     "youAreHere": "You",
@@ -635,5 +643,25 @@
   },
   "splash": {
     "slogan": "Watching over the ones who watch over you."
+  },
+  "quiz": {
+    "intro": "Read a short lesson, then test yourself with real-life situations.",
+    "questions_one": "{{count}} question",
+    "questions_other": "{{count}} questions",
+    "best": "Best {{score}}/{{total}}",
+    "beforeYouStart": "Before you start",
+    "start_one": "Start · {{count}} question",
+    "start_other": "Start · {{count}} questions",
+    "questionOf": "Question {{current}} of {{total}}",
+    "correct": "Correct!",
+    "notQuite": "Not quite",
+    "next": "Next question",
+    "seeResult": "See result",
+    "score": "{{score}} / {{total}}",
+    "perfect": "All right! You know what to do.",
+    "goodTry": "Good try. Read the explanations again and give it another go.",
+    "tryAgain": "Try again",
+    "backToExplore": "Back to Explore",
+    "readMore": "Read more in Is it safe?"
   }
 }
