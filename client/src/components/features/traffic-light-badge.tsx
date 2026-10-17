@@ -4,8 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import AppText from '@/components/ui/app-text';
 import Icon, { type IconName } from '@/components/ui/icon';
 import { colors, fonts, radius, spacing } from '@/theme';
-
-export type TrafficLightLevel = 'green' | 'yellow' | 'red';
+import type { TrafficLightLevel } from '@/types/health';
 
 // Every level pairs a color with an icon and a word, so it reads without color vision.
 const levels: Record<TrafficLightLevel, { background: string; text: string; icon: IconName }> = {
