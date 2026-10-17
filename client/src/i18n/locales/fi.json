@@ -3,7 +3,11 @@
     "appName": "TassuVahti",
     "tagline": "Valvoo lemmikkiäsi eläinlääkärikäyntien välillä.",
     "emergency": "Hätätilanne",
-    "back": "Takaisin"
+    "back": "Takaisin",
+    "cancel": "Peruuta",
+    "tryAgain": "Yritä uudelleen",
+    "step": "Vaihe {{step}}/{{total}}",
+    "notAVet": "TassuVahti on tukityökalu. Se ei korvaa eläinlääkäriä."
   },
   "tabs": {
     "home": "Koti",
@@ -13,7 +17,6 @@
     "account": "Tili"
   },
   "auth": {
-    "signInDemo": "Kirjaudu (demo)",
     "signOut": "Kirjaudu ulos"
   },
   "placeholder": {
@@ -55,5 +58,73 @@
     "green": "Vihreä · kuten tavallisesti",
     "yellow": "Keltainen · seuraa tilannetta",
     "red": "Punainen · ota yhteys eläinlääkäriin"
+  },
+  "languages": {
+    "en": "English",
+    "fi": "Suomi",
+    "sv": "Svenska"
+  },
+  "welcome": {
+    "languageButton": "Kieli: {{name}}",
+    "title": "Eläinlääkärin ohjeet päivittäiseksi hoitosuunnitelmaksi.",
+    "watchListBold": "Seurantalista",
+    "watchListRest": " lemmikkisi diagnoosin mukaan, kirjaus 30 sekunnissa päivässä.",
+    "trafficLightBold": "Selkeä liikennevalo",
+    "trafficLightRest": " kertoo, milloin on aika ottaa yhteyttä eläinlääkäriin.",
+    "helpBold": "Ensiapu",
+    "helpRest": " jokaisella näkymällä, ilman kirjautumista.",
+    "signIn": "Kirjaudu verkkopankkitunnuksilla",
+    "emergencyNow": "Ensiapu nyt"
+  },
+  "bankAuth": {
+    "title": "Vahvista henkilöllisyytesi",
+    "intro": "Valitse pankkisi. Teet tämän vain kerran tällä laitteella. Sen jälkeen TassuVahti avautuu kasvoilla, sormenjäljellä tai PIN-koodilla.",
+    "note": "Kysymme uudelleen vain uudella laitteella, pitkän tauon jälkeen tai ennen tärkeitä muutoksia, kuten vakuutustietojen muuttamista.",
+    "loadError": "Pankkien listaa ei voitu ladata.",
+    "signInError": "Kirjautuminen ei onnistunut. Tarkista yhteys ja yritä uudelleen."
+  },
+  "setLock": {
+    "identified": "Tunnistettu · {{name}}",
+    "title": "Miten TassuVahti avataan?",
+    "intro": "Istuntosi pysyy tässä puhelimessa. Valitse lukitus, jota käytät päivittäin.",
+    "methods": {
+      "face": {
+        "label": "Kasvojentunnistus",
+        "detail": "Nopein tässä puhelimessa"
+      },
+      "fingerprint": {
+        "label": "Sormenjälki",
+        "detail": "Avaa koskettamalla tunnistinta"
+      },
+      "pin": {
+        "label": "6-numeroinen PIN-koodi",
+        "detail": "Toimii kaikilla laitteilla"
+      }
+    },
+    "continue": "Ota käyttöön ja jatka",
+    "footnote": "Voit kirjata tämän laitteen ulos milloin tahansa Tili-välilehdellä.",
+    "confirmPrompt": "Vahvista lukituksen käyttöönotto",
+    "biometricFailed": "Se ei onnistunut. Yritä uudelleen tai valitse PIN-koodi.",
+    "choosePin": "Valitse 6-numeroinen PIN-koodi",
+    "confirmPin": "Anna sama PIN-koodi uudelleen",
+    "pinMismatch": "PIN-koodit eivät täsmänneet. Valitse PIN-koodi uudelleen.",
+    "saveError": "Lukitusta ei voitu tallentaa. Yritä uudelleen."
+  },
+  "unlock": {
+    "welcomeBack": "Tervetuloa takaisin, {{name}}",
+    "welcomeBackNoName": "Tervetuloa takaisin",
+    "prompt": "Avaa TassuVahti",
+    "faceButton": "Avaa kasvojentunnistuksella",
+    "fingerprintButton": "Avaa sormenjäljellä",
+    "faceHint": "Avaa katsomalla puhelinta",
+    "fingerprintHint": "Avaa koskettamalla tunnistinta",
+    "enterPin": "Anna PIN-koodisi",
+    "wrongPin": "Väärä PIN-koodi. Yritä uudelleen.",
+    "connectionError": "Yhteyttä ei saatu. Tarkista yhteys ja yritä uudelleen.",
+    "signInAgain": "Kirjaudu uudelleen verkkopankkitunnuksilla"
+  },
+  "pinPad": {
+    "delete": "Poista",
+    "entered": "{{count}}/{{total}} numeroa annettu"
   }
 }

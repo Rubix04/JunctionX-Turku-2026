@@ -66,6 +66,41 @@ const paths = {
       <Path d="M5 19l8-8" />
     </>
   ),
+  list: <Path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01" />,
+  trafficLight: (
+    <>
+      <Rect x="7" y="2.5" width="10" height="19" rx="5" />
+      <Circle cx="12" cy="7.5" r="1.5" />
+      <Circle cx="12" cy="12" r="1.5" />
+      <Circle cx="12" cy="16.5" r="1.5" />
+    </>
+  ),
+  bank: <Path d="M3 10 12 4l9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18" />,
+  globe: (
+    <>
+      <Circle cx="12" cy="12" r="9" />
+      <Path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" />
+    </>
+  ),
+  chevronDown: <Path d="M6 9l6 6 6-6" />,
+  face: (
+    <Path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M9 9v1.5M15 9v1.5M12 9v4h-1M9.5 16a3.5 3.5 0 0 0 5 0" />
+  ),
+  fingerprint: (
+    <Path d="M7 11a5 5 0 0 1 10 0v2M12 11v6M9 21c1-2 1-4 1-6M15 20.5c.5-1.5.8-3.4.9-5.5M4.5 15a14 14 0 0 0 .5-4 7 7 0 0 1 12-5" />
+  ),
+  lock: (
+    <>
+      <Rect x="5" y="10.5" width="14" height="10" rx="2" />
+      <Path d="M8 10.5V7.5a4 4 0 0 1 8 0v3M12 14.5v2" />
+    </>
+  ),
+  backspace: (
+    <>
+      <Path d="M9 5h11a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H9l-6-7z" />
+      <Path d="M12 9.5l5 5M17 9.5l-5 5" />
+    </>
+  ),
 } satisfies Record<string, ReactNode>;
 
 export type IconName = keyof typeof paths;

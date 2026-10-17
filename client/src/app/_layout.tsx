@@ -1,4 +1,4 @@
-import '@/i18n';
+import { restoreLanguage } from '@/i18n';
 
 import {
   Figtree_400Regular,
@@ -9,16 +9,27 @@ import {
 import { Sora_600SemiBold, Sora_700Bold, Sora_800ExtraBold, useFonts } from '@expo-google-fonts/sora';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { stackScreenOptions } from '@/constants/navigation';
 import { AuthProvider, useAuth } from '@/context/auth-context';
 
-// Keep the splash screen up until the fonts are ready.
+// Keep the splash screen up until fonts, language and the saved session are ready.
 SplashScreen.preventAutoHideAsync();
 
 const RootNavigator = () => {
-  const { isSignedIn } = useAuth();
+  const { status } = useAuth();
+  const isSignedIn = status === 'signedIn';
+
+  useEffect(() => {
+    if (status !== 'loading') {
+      SplashScreen.hideAsync();
+    }
+  }, [status]);
+
+  if (status === 'loading') {
+    return null;
+  }
 
   return (
     <Stack screenOptions={stackScreenOptions}>
@@ -33,6 +44,7 @@ const RootNavigator = () => {
         <Stack.Screen name="add-visit" options={{ presentation: 'fullScreenModal' }} />
       </Stack.Protected>
 
+      {/* Sign-in and unlock. (auth)/_layout.tsx picks the screens for each status. */}
       <Stack.Protected guard={!isSignedIn}>
         <Stack.Screen name="(auth)" />
       </Stack.Protected>
@@ -54,16 +66,13 @@ const RootLayout = () => {
     Figtree_600SemiBold,
     Figtree_700Bold,
   });
-
-  const ready = fontsLoaded || fontError !== null;
+  const [languageReady, setLanguageReady] = useState(false);
 
   useEffect(() => {
-    if (ready) {
-      SplashScreen.hideAsync();
-    }
-  }, [ready]);
+    restoreLanguage().finally(() => setLanguageReady(true));
+  }, []);
 
-  if (!ready) {
+  if (!(fontsLoaded || fontError) || !languageReady) {
     return null;
   }
 

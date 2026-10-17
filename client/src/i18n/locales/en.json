@@ -3,7 +3,11 @@
     "appName": "TassuVahti",
     "tagline": "Watching over your pet between vet visits.",
     "emergency": "Emergency",
-    "back": "Back"
+    "back": "Back",
+    "cancel": "Cancel",
+    "tryAgain": "Try again",
+    "step": "Step {{step}} of {{total}}",
+    "notAVet": "TassuVahti is a support tool. It does not replace a veterinarian."
   },
   "tabs": {
     "home": "Home",
@@ -13,7 +17,6 @@
     "account": "Account"
   },
   "auth": {
-    "signInDemo": "Sign in (demo)",
     "signOut": "Sign out"
   },
   "placeholder": {
@@ -55,5 +58,73 @@
     "green": "Green · as usual",
     "yellow": "Yellow · keep an eye",
     "red": "Red · contact a vet"
+  },
+  "languages": {
+    "en": "English",
+    "fi": "Suomi",
+    "sv": "Svenska"
+  },
+  "welcome": {
+    "languageButton": "Language: {{name}}",
+    "title": "Your vet’s advice, turned into a daily care plan.",
+    "watchListBold": "A watch list",
+    "watchListRest": " made for your pet’s diagnosis, logged in 30 seconds a day.",
+    "trafficLightBold": "A clear traffic light",
+    "trafficLightRest": " that tells you when it is time to call a vet.",
+    "helpBold": "Emergency help",
+    "helpRest": " on every screen, no sign-in needed.",
+    "signIn": "Sign in with online banking",
+    "emergencyNow": "Emergency help now"
+  },
+  "bankAuth": {
+    "title": "Confirm it’s you",
+    "intro": "Choose your bank. You only do this once on this device; after that TassuVahti opens with your face, fingerprint or PIN.",
+    "note": "We ask again only on a new device, after a long break, or before sensitive changes such as your insurance details.",
+    "loadError": "Couldn’t load the list of banks.",
+    "signInError": "Sign-in didn’t work. Check your connection and try again."
+  },
+  "setLock": {
+    "identified": "Identified · {{name}}",
+    "title": "How should TassuVahti open?",
+    "intro": "Your session stays on this phone. Pick the lock you use every day.",
+    "methods": {
+      "face": {
+        "label": "Face recognition",
+        "detail": "Fastest on this phone"
+      },
+      "fingerprint": {
+        "label": "Fingerprint",
+        "detail": "Touch the sensor to open"
+      },
+      "pin": {
+        "label": "6-digit PIN",
+        "detail": "Works on every device"
+      }
+    },
+    "continue": "Turn on and continue",
+    "footnote": "You can sign this device out any time in Account.",
+    "confirmPrompt": "Confirm to turn on the lock",
+    "biometricFailed": "That didn’t work. Try again or choose a PIN.",
+    "choosePin": "Choose a 6-digit PIN",
+    "confirmPin": "Enter the same PIN again",
+    "pinMismatch": "The PINs didn’t match. Choose a PIN again.",
+    "saveError": "Couldn’t save the lock. Try again."
+  },
+  "unlock": {
+    "welcomeBack": "Welcome back, {{name}}",
+    "welcomeBackNoName": "Welcome back",
+    "prompt": "Unlock TassuVahti",
+    "faceButton": "Unlock with face recognition",
+    "fingerprintButton": "Unlock with fingerprint",
+    "faceHint": "Look at your phone to unlock",
+    "fingerprintHint": "Touch the sensor to unlock",
+    "enterPin": "Enter your PIN",
+    "wrongPin": "Wrong PIN. Try again.",
+    "connectionError": "Couldn’t connect. Check your connection and try again.",
+    "signInAgain": "Sign in again with online banking"
+  },
+  "pinPad": {
+    "delete": "Delete",
+    "entered": "{{count}} of {{total}} digits entered"
   }
 }
