@@ -179,3 +179,26 @@ export const dietPlans = sqliteTable("diet_plans", {
 
 export type WeightEntryRow = typeof weightEntries.$inferSelect;
 export type DietPlanRow = typeof dietPlans.$inferSelect;
+
+// ---- Knowledge base (spec 10) ----
+
+/** "My pet ate this": what was eaten, when, and the risk the app gave at that moment. */
+export const exposures = sqliteTable("exposures", {
+  id: text("id").primaryKey(),
+  petId: text("pet_id")
+    .notNull()
+    .references(() => pets.id, { onDelete: "cascade" }),
+  /** Id in content/knowledge-base.json */
+  substanceId: text("substance_id").notNull(),
+  variantId: text("variant_id"),
+  amount: real("amount"),
+  /** Epoch ms */
+  occurredAt: integer("occurred_at", { mode: "number" }).notNull(),
+  riskLevel: text("risk_level", { enum: ["harmless", "caution", "dangerous", "emergency"] }).notNull(),
+  mgPerKg: real("mg_per_kg"),
+  note: text("note"),
+  createdByUserId: text("created_by_user_id").references(() => users.id, { onDelete: "set null" }),
+  createdAt: createdAt(),
+});
+
+export type ExposureRow = typeof exposures.$inferSelect;
