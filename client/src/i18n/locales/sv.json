@@ -120,6 +120,8 @@
     "fingerprintHint": "Rör vid sensorn för att låsa upp",
     "enterPin": "Ange din PIN-kod",
     "wrongPin": "Fel PIN-kod. Försök igen.",
+    "wrongPinAttemptsLeft_one": "Fel PIN-kod. 1 försök kvar innan du måste logga in igen.",
+    "wrongPinAttemptsLeft_other": "Fel PIN-kod. {{count}} försök kvar.",
     "connectionError": "Det gick inte att ansluta. Kontrollera anslutningen och försök igen.",
     "signInAgain": "Logga in igen med nätbankskoder"
   },
