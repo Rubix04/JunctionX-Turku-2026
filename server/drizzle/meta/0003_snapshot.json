@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "b127a2c7-5560-4986-af6a-0b9ab10268e2",
+  "id": "3a32977d-62fb-4924-964e-1de55f50a96b",
   "prevId": "e6eb2098-3afe-451a-92d7-023d88fc07f2",
   "tables": {
     "device_sessions": {
@@ -131,15 +131,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "package_daily_grams": {
-          "name": "package_daily_grams",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "package_for_weight_kg": {
-          "name": "package_for_weight_kg",
+        "kcal_per_100g": {
+          "name": "kcal_per_100g",
           "type": "real",
           "primaryKey": false,
           "notNull": false,
@@ -152,13 +145,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "goal": {
-          "name": "goal",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "target_weight_kg": {
           "name": "target_weight_kg",
           "type": "real",
@@ -166,15 +152,36 @@
           "notNull": false,
           "autoincrement": false
         },
-        "grams_per_scoop": {
-          "name": "grams_per_scoop",
-          "type": "real",
+        "neutered": {
+          "name": "neutered",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
+        "activity_level": {
+          "name": "activity_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "notes": {
           "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "previous_food_name": {
+          "name": "previous_food_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "transition_started_on": {
+          "name": "transition_started_on",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -640,20 +647,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "source": {
-          "name": "source",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "visit_record_id": {
-          "name": "visit_record_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "note": {
           "name": "note",
           "type": "text",
@@ -687,19 +680,6 @@
           "tableTo": "pets",
           "columnsFrom": [
             "pet_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "weight_entries_visit_record_id_health_records_id_fk": {
-          "name": "weight_entries_visit_record_id_health_records_id_fk",
-          "tableFrom": "weight_entries",
-          "tableTo": "health_records",
-          "columnsFrom": [
-            "visit_record_id"
           ],
           "columnsTo": [
             "id"
