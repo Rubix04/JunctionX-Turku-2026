@@ -5,147 +5,271 @@
     "updatedOn": "2026-10-17",
     "notice": "Sample content for the prototype, not reviewed. A veterinarian must review and approve every value and text before release.",
     "sources": [
-      "AAHA 2021 Nutrition and Weight Management Guidelines for Dogs and Cats",
-      "WSAVA Global Nutrition Committee guidelines"
+      "Food manufacturers' feeding tables (the owner enters the amount from the package)",
+      "AAHA 2021 Nutrition and Weight Management Guidelines for Dogs and Cats"
     ]
   },
-  "energy": {
-    "rerFactor": 70,
-    "rerExponent": 0.75,
-    "adultAgeMonths": { "dog": 12, "cat": 12 },
-    "factors": {
-      "dog": {
-        "growthUnder4Months": 3.0,
-        "growth4MonthsToAdult": 2.0,
-        "intactAdult": 1.8,
-        "neuteredAdult": 1.6,
-        "lowActivity": 1.4,
-        "highActivity": 2.0,
-        "weightLoss": 1.0
-      },
-      "cat": {
-        "growthUnder4Months": 2.5,
-        "growth4MonthsToAdult": 2.5,
-        "intactAdult": 1.4,
-        "neuteredAdult": 1.2,
-        "lowActivity": 1.0,
-        "highActivity": 1.6,
-        "weightLoss": 0.8
-      }
+  "portion": {
+    "metabolicExponent": 0.75,
+    "adultAgeMonths": {
+      "dog": 12,
+      "cat": 12,
+      "smallAnimal": 6
     },
     "treatsMaxShare": 0.1,
-    "largeWeightLossShare": 0.2
+    "largeWeightLossShare": 0.2,
+    "packageWeightFarShare": 0.25,
+    "roundGramsTo": 5
   },
-  "transition": {
-    "steps": [
-      { "fromDay": 1, "toDay": 2, "newFoodPercent": 25 },
-      { "fromDay": 3, "toDay": 4, "newFoodPercent": 50 },
-      { "fromDay": 5, "toDay": 6, "newFoodPercent": 75 },
-      { "fromDay": 7, "toDay": 7, "newFoodPercent": 100 }
-    ]
+  "foodChangeTip": {
+    "fi": "Vaihda ruoka vähitellen noin viikon aikana: sekoita uutta ruokaa vanhan joukkoon ja lisää sen osuutta päivä päivältä. Jos eläinlääkäri on käskenyt vaihtaa heti, toimi hänen ohjeensa mukaan.",
+    "sv": "Byt foder gradvis under ungefär en vecka: blanda in det nya i det gamla och öka andelen dag för dag. Om veterinären har sagt att byta direkt, följ veterinärens råd.",
+    "en": "Change food gradually over about a week: mix the new food into the old one and increase its share day by day. If your vet told you to switch at once, follow the vet's advice."
   },
   "weight": {
-    "unexpectedChangeShare": 0.05,
-    "unexpectedChangeDays": 30
+    "betweenWeighInsShare": 0.1,
+    "halfYearShare": 0.05,
+    "halfYearDays": 183,
+    "weightLossWeighInDays": 42
   },
   "diets": {
     "maintenance": {
-      "title": { "fi": "Ylläpitoruokavalio", "sv": "Underhållsfoder", "en": "Maintenance diet" },
+      "title": {
+        "fi": "Ylläpitoruokavalio",
+        "sv": "Underhållsfoder",
+        "en": "Maintenance diet"
+      },
       "summary": {
         "fi": "Täysravinto, joka pitää terveen aikuisen lemmikin painon vakaana.",
         "sv": "Helfoder som håller ett friskt vuxet djurs vikt stabil.",
         "en": "A complete food that keeps a healthy adult pet's weight stable."
       },
       "keyPoints": {
-        "fi": ["Punnitse annokset vaa'alla.", "Herkkujen osuus enintään 10 % päivän energiasta."],
-        "sv": ["Väg portionerna på en våg.", "Godis högst 10 % av dagens energi."],
-        "en": ["Weigh portions on a scale.", "Keep treats to at most 10% of the day's energy."]
+        "fi": [
+          "Punnitse annokset vaa'alla.",
+          "Herkkujen osuus enintään 10 % päivän energiasta."
+        ],
+        "sv": [
+          "Väg portionerna på en våg.",
+          "Godis högst 10 % av dagens energi."
+        ],
+        "en": [
+          "Weigh portions on a scale.",
+          "Keep treats to at most 10% of the day's energy."
+        ]
       },
       "diagnosisKeywords": []
     },
     "weightLoss": {
-      "title": { "fi": "Laihdutusruokavalio", "sv": "Viktminskningsfoder", "en": "Weight-loss diet" },
+      "title": {
+        "fi": "Laihdutusruokavalio",
+        "sv": "Viktminskningsfoder",
+        "en": "Weight-loss diet"
+      },
       "summary": {
         "fi": "Vähäenergiainen ruoka ja tarkat annokset painon hallittuun laskuun eläinlääkärin seurannassa.",
         "sv": "Energisnålt foder och noggranna portioner för kontrollerad viktminskning med veterinärens uppföljning.",
         "en": "A lower-energy food and exact portions for controlled weight loss, followed up by a vet."
       },
       "keyPoints": {
-        "fi": ["Punnitse lemmikki 2–4 viikon välein.", "Älä paastota, erityisesti kissaa."],
-        "sv": ["Väg djuret var 2–4 vecka.", "Låt inte djuret fasta, särskilt inte katter."],
-        "en": ["Weigh your pet every 2–4 weeks.", "Never starve your pet, especially a cat."]
+        "fi": [
+          "Punnitse lemmikki 2–4 viikon välein.",
+          "Älä paastota, erityisesti kissaa."
+        ],
+        "sv": [
+          "Väg djuret var 2–4 vecka.",
+          "Låt inte djuret fasta, särskilt inte katter."
+        ],
+        "en": [
+          "Weigh your pet every 2–4 weeks.",
+          "Never starve your pet, especially a cat."
+        ]
       },
-      "diagnosisKeywords": ["obes", "overweight", "ylipaino", "lihav", "övervikt", "fetma"]
+      "diagnosisKeywords": [
+        "obes",
+        "overweight",
+        "ylipaino",
+        "lihav",
+        "övervikt",
+        "fetma"
+      ]
     },
     "kidney": {
-      "title": { "fi": "Munuaisruokavalio", "sv": "Njurdiet", "en": "Kidney diet" },
+      "title": {
+        "fi": "Munuaisruokavalio",
+        "sv": "Njurdiet",
+        "en": "Kidney diet"
+      },
       "summary": {
         "fi": "Eläinlääkärin määräämä ruoka, jossa on vähän fosforia ja kohtuullisesti laadukasta proteiinia.",
         "sv": "Foder ordinerat av veterinär, med lite fosfor och måttligt med högkvalitativt protein.",
         "en": "A vet-prescribed food that is low in phosphorus with moderate, high-quality protein."
       },
       "keyPoints": {
-        "fi": ["Pidä raikasta vettä aina saatavilla.", "Älä anna lisäravinteita kysymättä eläinlääkäriltä."],
-        "sv": ["Ha alltid färskt vatten framme.", "Ge inga kosttillskott utan att fråga veterinären."],
-        "en": ["Always keep fresh water available.", "Don't give supplements without asking your vet."]
+        "fi": [
+          "Pidä raikasta vettä aina saatavilla.",
+          "Älä anna lisäravinteita kysymättä eläinlääkäriltä."
+        ],
+        "sv": [
+          "Ha alltid färskt vatten framme.",
+          "Ge inga kosttillskott utan att fråga veterinären."
+        ],
+        "en": [
+          "Always keep fresh water available.",
+          "Don't give supplements without asking your vet."
+        ]
       },
-      "diagnosisKeywords": ["kidney", "renal", "ckd", "munuai", "njur"]
+      "diagnosisKeywords": [
+        "kidney",
+        "renal",
+        "ckd",
+        "munuai",
+        "njur"
+      ]
     },
     "urinary": {
-      "title": { "fi": "Virtsatieruokavalio", "sv": "Urinvägsdiet", "en": "Urinary diet" },
+      "title": {
+        "fi": "Virtsatieruokavalio",
+        "sv": "Urinvägsdiet",
+        "en": "Urinary diet"
+      },
       "summary": {
         "fi": "Ruoka, joka auttaa ehkäisemään virtsakiteitä ja -kiviä. Tyyppi riippuu kiteiden laadusta.",
         "sv": "Foder som hjälper att förebygga urinkristaller och stenar. Typen beror på kristallerna.",
         "en": "A food that helps prevent urinary crystals and stones. The right type depends on the crystals."
       },
       "keyPoints": {
-        "fi": ["Lisää juomista, esimerkiksi märkäruoalla.", "Seuraa virtsaamista ja hakeudu hoitoon, jos virtsaa ei tule."],
-        "sv": ["Öka vätskeintaget, till exempel med blötfoder.", "Följ urineringen och sök vård om inget urin kommer."],
-        "en": ["Increase drinking, for example with wet food.", "Watch urination and get help if no urine comes out."]
+        "fi": [
+          "Lisää juomista, esimerkiksi märkäruoalla.",
+          "Seuraa virtsaamista ja hakeudu hoitoon, jos virtsaa ei tule."
+        ],
+        "sv": [
+          "Öka vätskeintaget, till exempel med blötfoder.",
+          "Följ urineringen och sök vård om inget urin kommer."
+        ],
+        "en": [
+          "Increase drinking, for example with wet food.",
+          "Watch urination and get help if no urine comes out."
+        ]
       },
-      "diagnosisKeywords": ["urinary", "bladder", "cystitis", "struvite", "oxalate", "flutd", "crystal", "virtsa", "rakko", "kristall", "urinväg", "blås"]
+      "diagnosisKeywords": [
+        "urinary",
+        "bladder",
+        "cystitis",
+        "struvite",
+        "oxalate",
+        "flutd",
+        "crystal",
+        "virtsa",
+        "rakko",
+        "kristall",
+        "urinväg",
+        "blås"
+      ]
     },
     "hypoallergenic": {
-      "title": { "fi": "Allergiaruokavalio", "sv": "Allergidiet", "en": "Hypoallergenic diet" },
+      "title": {
+        "fi": "Allergiaruokavalio",
+        "sv": "Allergidiet",
+        "en": "Hypoallergenic diet"
+      },
       "summary": {
         "fi": "Hydrolysoitua tai uutta proteiinia sisältävä ruoka ruoka-aineallergian selvittämiseen ja hoitoon.",
         "sv": "Foder med hydrolyserat eller nytt protein för att utreda och behandla foderallergi.",
         "en": "A food with hydrolysed or novel protein to investigate and manage a food allergy."
       },
       "keyPoints": {
-        "fi": ["Eliminaatiodieetin aikana ei muita ruokia eikä herkkuja.", "Vaikutus näkyy yleensä vasta viikkojen päästä."],
-        "sv": ["Under eliminationsdieten inga andra foder eller godis.", "Effekten syns oftast först efter flera veckor."],
-        "en": ["No other foods or treats during an elimination diet.", "It usually takes several weeks to see an effect."]
+        "fi": [
+          "Eliminaatiodieetin aikana ei muita ruokia eikä herkkuja.",
+          "Vaikutus näkyy yleensä vasta viikkojen päästä."
+        ],
+        "sv": [
+          "Under eliminationsdieten inga andra foder eller godis.",
+          "Effekten syns oftast först efter flera veckor."
+        ],
+        "en": [
+          "No other foods or treats during an elimination diet.",
+          "It usually takes several weeks to see an effect."
+        ]
       },
-      "diagnosisKeywords": ["allerg", "atopic", "atopi", "intoleran", "dermatit"]
+      "diagnosisKeywords": [
+        "allerg",
+        "atopic",
+        "atopi",
+        "intoleran",
+        "dermatit"
+      ]
     },
     "gastrointestinal": {
-      "title": { "fi": "Suolistoruokavalio", "sv": "Mag-tarmdiet", "en": "Gastrointestinal diet" },
+      "title": {
+        "fi": "Suolistoruokavalio",
+        "sv": "Mag-tarmdiet",
+        "en": "Gastrointestinal diet"
+      },
       "summary": {
         "fi": "Helposti sulava ruoka vatsan ja suoliston toipumisen tueksi.",
         "sv": "Lättsmält foder som stöd när mage och tarm återhämtar sig.",
         "en": "An easily digestible food to support the stomach and gut while they recover."
       },
       "keyPoints": {
-        "fi": ["Anna pieniä annoksia useasti.", "Ota yhteyttä eläinlääkäriin, jos oksentelu tai ripuli jatkuu."],
-        "sv": ["Ge små portioner ofta.", "Kontakta veterinären om kräkningar eller diarré fortsätter."],
-        "en": ["Give small portions often.", "Contact a vet if vomiting or diarrhoea continues."]
+        "fi": [
+          "Anna pieniä annoksia useasti.",
+          "Ota yhteyttä eläinlääkäriin, jos oksentelu tai ripuli jatkuu."
+        ],
+        "sv": [
+          "Ge små portioner ofta.",
+          "Kontakta veterinären om kräkningar eller diarré fortsätter."
+        ],
+        "en": [
+          "Give small portions often.",
+          "Contact a vet if vomiting or diarrhoea continues."
+        ]
       },
-      "diagnosisKeywords": ["gastro", "diarrh", "vomit", "colitis", "pancreat", "enterit", "ripuli", "oksent", "suolist", "haima", "diarré", "kräk", "tarm"]
+      "diagnosisKeywords": [
+        "gastro",
+        "diarrh",
+        "vomit",
+        "colitis",
+        "pancreat",
+        "enterit",
+        "ripuli",
+        "oksent",
+        "suolist",
+        "haima",
+        "diarré",
+        "kräk",
+        "tarm"
+      ]
     },
     "diabetes": {
-      "title": { "fi": "Diabetesruokavalio", "sv": "Diabetesdiet", "en": "Diabetes diet" },
+      "title": {
+        "fi": "Diabetesruokavalio",
+        "sv": "Diabetesdiet",
+        "en": "Diabetes diet"
+      },
       "summary": {
         "fi": "Ruoka, joka tasaa verensokeria. Ruokinnan ja insuliinin ajoitus sovitaan eläinlääkärin kanssa.",
         "sv": "Foder som jämnar ut blodsockret. Tider för mat och insulin bestäms med veterinären.",
         "en": "A food that steadies blood sugar. Meal and insulin times are agreed with the vet."
       },
       "keyPoints": {
-        "fi": ["Ruoki samaan aikaan joka päivä.", "Älä anna insuliinia, jos lemmikki ei syö, vaan soita eläinlääkärille."],
-        "sv": ["Utfodra på samma tider varje dag.", "Ge inte insulin om djuret inte äter, ring veterinären."],
-        "en": ["Feed at the same times every day.", "Don't give insulin if your pet doesn't eat; call your vet."]
+        "fi": [
+          "Ruoki samaan aikaan joka päivä.",
+          "Älä anna insuliinia, jos lemmikki ei syö, vaan soita eläinlääkärille."
+        ],
+        "sv": [
+          "Utfodra på samma tider varje dag.",
+          "Ge inte insulin om djuret inte äter, ring veterinären."
+        ],
+        "en": [
+          "Feed at the same times every day.",
+          "Don't give insulin if your pet doesn't eat; call your vet."
+        ]
       },
-      "diagnosisKeywords": ["diabet", "sokeritauti"]
+      "diagnosisKeywords": [
+        "diabet",
+        "sokeritauti"
+      ]
     }
   }
 }

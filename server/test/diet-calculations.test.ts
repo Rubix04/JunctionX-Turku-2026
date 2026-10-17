@@ -8,71 +8,67 @@ import {
   calculatePortion,
   type PortionInput,
   suggestDiets,
-  transitionStatus,
   weightSummary,
 } from "../src/modules/diet/calculations.js";
 
-const adultDog: PortionInput = {
+// The package says 200 g a day for a 10 kg dog.
+const dog: PortionInput = {
   species: "dog",
   weightKg: 10,
   ageMonths: 48,
-  neutered: true,
-  activityLevel: "normal",
+  packageDailyGrams: 200,
+  packageForWeightKg: 10,
   goal: "maintain",
   targetWeightKg: null,
-  kcalPer100g: 350,
   mealsPerDay: 2,
+  gramsPerScoop: null,
 };
 
 describe("calculatePortion", () => {
-  // RER = 70 × 10^0.75 ≈ 393.6 kcal
-  it("uses RER × 1.6 for a neutered adult dog", () => {
-    const result = calculatePortion(adultDog);
-    expect(result).toMatchObject({ restingKcal: 394, factor: 1.6, dailyKcal: 630, treatsMaxKcal: 63, lifeStage: "adult" });
-    expect(result.food).toEqual({ kcalPer100g: 350, mealsPerDay: 2, gramsPerDay: 180, gramsPerMeal: 90 });
+  it("uses the package amount when the pet weighs what the package row says", () => {
+    expect(calculatePortion(dog)).toEqual({
+      feedForWeightKg: 10,
+      gramsPerDay: 200,
+      mealsPerDay: 2,
+      gramsPerMeal: 100,
+      scoopsPerMeal: null,
+      gramsPerDayWithTreats: 180,
+      warnings: [],
+    });
   });
 
-  it("uses the intact, low and high activity factors", () => {
-    expect(calculatePortion({ ...adultDog, neutered: false }).factorName).toBe("intactAdult");
-    expect(calculatePortion({ ...adultDog, activityLevel: "low" }).factorName).toBe("lowActivity");
-    expect(calculatePortion({ ...adultDog, activityLevel: "high" }).factorName).toBe("highActivity");
+  // 200 × (12/10)^0.75 ≈ 229 g → 230 g a day, 115 g a meal
+  it("adjusts the package amount to the pet's own weight", () => {
+    expect(calculatePortion({ ...dog, weightKg: 12 })).toMatchObject({ gramsPerDay: 230, gramsPerMeal: 115, warnings: [] });
   });
 
-  it("assumes neutered when unknown, to avoid overfeeding", () => {
-    const result = calculatePortion({ ...adultDog, neutered: null });
-    expect(result.factorName).toBe("neuteredAdult");
-    expect(result.warnings).toContain("neuteredUnknown");
+  it("feeds for the target weight on a weight-loss plan", () => {
+    const result = calculatePortion({ ...dog, weightKg: 12, goal: "lose", targetWeightKg: 10 });
+    expect(result).toMatchObject({ feedForWeightKg: 10, gramsPerDay: 200, warnings: [] });
   });
 
-  // RER(5 kg target) = 70 × 5^0.75 ≈ 234.1 kcal; × 0.8 ≈ 187
-  it("calculates weight loss from the target weight", () => {
-    const result = calculatePortion({ ...adultDog, species: "cat", weightKg: 6, goal: "lose", targetWeightKg: 5 });
-    expect(result).toMatchObject({ factorName: "weightLoss", basisWeightKg: 5, dailyKcal: 187 });
-  });
-
-  it("warns about a large weight-loss target and rejects a target that isn't lower", () => {
-    const big = calculatePortion({ ...adultDog, weightKg: 40, goal: "lose", targetWeightKg: 28 });
+  it("warns about large weight-loss targets and rejects a target that isn't lower", () => {
+    const big = calculatePortion({ ...dog, weightKg: 40, packageForWeightKg: 30, goal: "lose", targetWeightKg: 28 });
     expect(big.warnings).toContain("largeWeightLoss");
-    expect(() => calculatePortion({ ...adultDog, goal: "lose", targetWeightKg: 12 })).toThrow(/target/i);
-    expect(() => calculatePortion({ ...adultDog, goal: "lose", targetWeightKg: null })).toThrow(/target/i);
+    expect(() => calculatePortion({ ...dog, goal: "lose", targetWeightKg: 12 })).toThrow(/target/i);
   });
 
-  it("uses growth factors for puppies and kittens and doesn't put them on a diet", () => {
-    const puppy = calculatePortion({ ...adultDog, weightKg: 5, ageMonths: 3, goal: "lose", targetWeightKg: 4 });
-    expect(puppy).toMatchObject({ lifeStage: "growth", factorName: "growthUnder4Months", dailyKcal: 702 });
-    expect(puppy.warnings).toContain("growingNoWeightLoss");
-    expect(calculatePortion({ ...adultDog, ageMonths: 8 }).factorName).toBe("growth4MonthsToAdult");
+  it("suggests checking the package table when the pet is far from the row used", () => {
+    expect(calculatePortion({ ...dog, weightKg: 20 }).warnings).toEqual(["checkPackageTable"]);
   });
 
-  it("still gives the energy need without the food's kcal", () => {
-    const result = calculatePortion({ ...adultDog, kcalPer100g: null });
-    expect(result.food).toBeNull();
-    expect(result.dailyKcal).toBe(630);
-    expect(result.warnings).toContain("foodEnergyMissing");
+  it("shows scoops when the owner told the scoop size", () => {
+    expect(calculatePortion({ ...dog, gramsPerScoop: 40 }).scoopsPerMeal).toBe(2.5);
   });
 
-  it("refuses small animals", () => {
-    expect(() => calculatePortion({ ...adultDog, species: "smallAnimal" })).toThrow(/cats and dogs/);
+  it("doesn't put growing pets on a diet", () => {
+    const puppy = calculatePortion({ ...dog, weightKg: 12, ageMonths: 6, goal: "lose", targetWeightKg: 10 });
+    expect(puppy).toMatchObject({ feedForWeightKg: 12, warnings: ["growingNoWeightLoss"] });
+  });
+
+  it("works for every species, because it follows the package", () => {
+    const rabbit = calculatePortion({ ...dog, species: "smallAnimal", weightKg: 2, packageForWeightKg: 2, packageDailyGrams: 60 });
+    expect(rabbit.gramsPerDay).toBe(60);
   });
 });
 
@@ -84,51 +80,59 @@ describe("ageInMonths", () => {
   });
 });
 
-describe("transitionStatus", () => {
-  const plan = { foodName: "New", previousFoodName: "Old", transitionStartedOn: "2026-10-10" };
-
-  it("mixes in the new food over 7 days", () => {
-    expect(transitionStatus(plan, "2026-10-10")).toMatchObject({ day: 1, newFoodPercent: 25, oldFoodPercent: 75 });
-    expect(transitionStatus(plan, "2026-10-12")).toMatchObject({ day: 3, newFoodPercent: 50 });
-    expect(transitionStatus(plan, "2026-10-16")).toMatchObject({ day: 7, newFoodPercent: 100, endsOn: "2026-10-16" });
-    expect(transitionStatus(plan, "2026-10-17")).toBeNull();
-  });
-
-  it("is null without a food change", () => {
-    expect(transitionStatus({ foodName: "New", previousFoodName: null, transitionStartedOn: null }, "2026-10-10")).toBeNull();
-  });
-});
-
 describe("weightSummary", () => {
-  const entries = [
-    { weighedOn: "2026-09-20", weightKg: 10 },
-    { weighedOn: "2026-09-22", weightKg: 10.2 },
-    { weighedOn: "2026-10-15", weightKg: 9.4 },
-  ];
+  const options = { losingWeightOnPurpose: false, targetWeightKg: null, today: "2026-10-17" };
 
-  it("flags a large unplanned change in the last 30 days", () => {
-    const summary = weightSummary(entries, { losingWeightOnPurpose: false, targetWeightKg: null });
-    expect(summary?.latest).toEqual({ weighedOn: "2026-10-15", weightKg: 9.4 });
-    expect(summary?.recentChange).toEqual({ since: "2026-09-20", changeKg: -0.6, changePercent: -6, unexpectedChange: true });
+  it("compares weigh-ins months apart and flags a large change", () => {
+    const summary = weightSummary(
+      [
+        { weighedOn: "2025-10-01", weightKg: 10 },
+        { weighedOn: "2026-04-01", weightKg: 10.2 },
+        { weighedOn: "2026-10-01", weightKg: 11.3 },
+      ],
+      options,
+    );
+    expect(summary).toMatchObject({
+      latest: { weighedOn: "2026-10-01", weightKg: 11.3 },
+      sincePrevious: { since: "2026-04-01", days: 183, changeKg: 1.1, changePercent: 10.8 },
+      lastYear: { since: "2025-10-01", changeKg: 1.3, changePercent: 13 },
+      unexpectedChange: true,
+      nextWeighInOn: null,
+      weighInDue: false,
+    });
   });
 
-  it("doesn't flag weight loss that is the plan", () => {
-    const summary = weightSummary(entries, { losingWeightOnPurpose: true, targetWeightKg: 9 });
-    expect(summary?.recentChange?.unexpectedChange).toBe(false);
-    expect(summary?.toTargetKg).toBe(0.4);
+  it("flags a smaller change within about six months", () => {
+    const summary = weightSummary(
+      [
+        { weighedOn: "2026-05-01", weightKg: 10 },
+        { weighedOn: "2026-08-01", weightKg: 10.3 },
+        { weighedOn: "2026-10-01", weightKg: 10.6 },
+      ],
+      options,
+    );
+    expect(summary?.sincePrevious?.changePercent).toBe(2.9);
+    expect(summary?.unexpectedChange).toBe(true);
   });
 
-  it("averages by week starting on Monday", () => {
-    const summary = weightSummary(entries, { losingWeightOnPurpose: false, targetWeightKg: null });
-    expect(summary?.weekly).toEqual([
-      { weekStart: "2026-09-14", averageKg: 10 },
-      { weekStart: "2026-09-21", averageKg: 10.2 },
-      { weekStart: "2026-10-12", averageKg: 9.4 },
-    ]);
+  it("doesn't flag planned weight loss and reminds to weigh in every 6 weeks", () => {
+    const summary = weightSummary(
+      [
+        { weighedOn: "2026-06-01", weightKg: 12 },
+        { weighedOn: "2026-08-01", weightKg: 10.6 },
+      ],
+      { ...options, losingWeightOnPurpose: true, targetWeightKg: 10 },
+    );
+    expect(summary).toMatchObject({ unexpectedChange: false, toTargetKg: 0.6, nextWeighInOn: "2026-09-12", weighInDue: true });
   });
 
-  it("is null without entries", () => {
-    expect(weightSummary([], { losingWeightOnPurpose: false, targetWeightKg: null })).toBeNull();
+  it("is quiet with a single weigh-in and null without any", () => {
+    expect(weightSummary([{ weighedOn: "2026-10-01", weightKg: 10 }], options)).toMatchObject({
+      sincePrevious: null,
+      lastYear: null,
+      unexpectedChange: false,
+    });
+    expect(weightSummary([], options)).toBeNull();
   });
 });
 

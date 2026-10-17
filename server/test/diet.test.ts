@@ -8,10 +8,10 @@ describe("diet and weight API", () => {
   let user: ReturnType<typeof createTestUser>;
   let petId: string;
 
-  const request = (method: "GET" | "POST" | "PUT" | "DELETE", url: string, payload?: object) =>
+  const request = (method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE", url: string, payload?: object) =>
     app.inject({ method, url, headers: user.headers, payload });
 
-  const plan = { dietType: "maintenance", foodName: "Dry food A", kcalPer100g: 350, neutered: true };
+  const plan = { dietType: "maintenance", foodName: "Dry food A", packageDailyGrams: 200 };
 
   beforeEach(async () => {
     app = await createTestApp();
@@ -25,63 +25,61 @@ describe("diet and weight API", () => {
   });
 
   it("lists diet types in the requested language, marked as sample content", async () => {
-    const response = await request("GET", "/diets?lang=sv");
-    const body = response.json();
+    const body = (await request("GET", "/diets?lang=sv")).json();
     expect(body.content.status).toBe("sample");
     expect(body.diets).toHaveLength(7);
     expect(body.diets.find((d: { dietType: string }) => d.dietType === "kidney").title).toBe("Njurdiet");
   });
 
-  it("calculates a portion without saving anything", async () => {
-    const response = await request("POST", "/diet/portion", { species: "dog", weightKg: 10, neutered: true, kcalPer100g: 350 });
-    expect(response.statusCode).toBe(200);
-    expect(response.json().portion).toMatchObject({ dailyKcal: 630, food: { gramsPerDay: 180, gramsPerMeal: 90 } });
-
-    const smallAnimal = await request("POST", "/diet/portion", { species: "smallAnimal", weightKg: 1 });
-    expect(smallAnimal.statusCode).toBe(422);
-    expect(smallAnimal.json().error.code).toBe("UNSUPPORTED_SPECIES");
-
-    const noTarget = await request("POST", "/diet/portion", { species: "dog", weightKg: 10, goal: "lose" });
-    expect(noTarget.json().error.code).toBe("INVALID_TARGET");
+  it("calculates a portion from a package amount without saving anything", async () => {
+    const response = await request("POST", "/diet/portion", { species: "cat", weightKg: 4, packageDailyGrams: 60, mealsPerDay: 3 });
+    expect(response.json().portion).toMatchObject({ gramsPerDay: 60, gramsPerMeal: 20 });
   });
 
-  it("returns an empty diet before a plan is set", async () => {
+  it("starts with suggestions only", async () => {
     const body = (await request("GET", `/pets/${petId}/diet`)).json();
-    expect(body).toMatchObject({ plan: null, diet: null, portion: null, transition: null });
+    expect(body).toMatchObject({ suggestions: [], plan: null, portion: null, portionMissing: "noPlan" });
   });
 
-  it("saves a plan and calculates the portion from the pet's weight", async () => {
-    const response = await request("PUT", `/pets/${petId}/diet?lang=en`, plan);
-    expect(response.statusCode).toBe(200);
-    const body = response.json();
-    expect(body.plan).toMatchObject({ foodName: "Dry food A", mealsPerDay: 2, source: "owner" });
+  it("saves a plan and gives the portion in grams per meal", async () => {
+    const body = (await request("PUT", `/pets/${petId}/diet?lang=en`, plan)).json();
+    expect(body.plan).toMatchObject({ foodName: "Dry food A", packageForWeightKg: 10, goal: "maintain" });
     expect(body.diet.title).toBe("Maintenance diet");
-    expect(body.portion).toMatchObject({ dailyKcal: 630, food: { gramsPerMeal: 90 } });
-    expect(body.transition).toBeNull();
+    expect(body.portion).toMatchObject({ gramsPerDay: 200, gramsPerMeal: 100 });
+    expect(body.foodChangeTip).toBeNull();
   });
 
-  it("uses the target weight on a weight-loss plan", async () => {
-    const body = (await request("PUT", `/pets/${petId}/diet`, { ...plan, dietType: "weightLoss", targetWeightKg: 8 })).json();
-    expect(body.portion).toMatchObject({ factorName: "weightLoss", basisWeightKg: 8 });
+  it("explains why there is no portion yet", async () => {
+    const body = (await request("PUT", `/pets/${petId}/diet`, { dietType: "urinary", foodName: "Vet diet" })).json();
+    expect(body).toMatchObject({ portion: null, portionMissing: "packageAmountMissing" });
+
+    const noWeight = (await request("POST", "/pets", { name: "Mirri", species: "cat" })).json();
+    const missing = await request("PUT", `/pets/${noWeight.id}/diet`, plan);
+    expect(missing.json().error.code).toBe("PACKAGE_WEIGHT_REQUIRED");
   });
 
-  it("starts a gradual switch when the food changes", async () => {
+  it("requires a target weight for weight loss", async () => {
+    const response = await request("PUT", `/pets/${petId}/diet`, { ...plan, goal: "lose" });
+    expect(response.statusCode).toBe(400);
+    const ok = (await request("PUT", `/pets/${petId}/diet`, { ...plan, goal: "lose", targetWeightKg: 9 })).json();
+    expect(ok.portion.feedForWeightKg).toBe(9);
+  });
+
+  it("shows the food change tip once, when the food changes", async () => {
     await request("PUT", `/pets/${petId}/diet`, plan);
-    const changed = (await request("PUT", `/pets/${petId}/diet`, { ...plan, foodName: "Dry food B" })).json();
-    expect(changed.transition).toMatchObject({
-      previousFoodName: "Dry food A",
-      newFoodName: "Dry food B",
-      startedOn: todayInFinland(),
-      day: 1,
-      newFoodPercent: 25,
-    });
+    const changed = (await request("PUT", `/pets/${petId}/diet?lang=en`, { ...plan, foodName: "Dry food B" })).json();
+    expect(changed.foodChangeTip).toContain("gradually");
+    const again = (await request("PUT", `/pets/${petId}/diet`, { ...plan, foodName: "Dry food B", mealsPerDay: 3 })).json();
+    expect(again.foodChangeTip).toBeNull();
+    expect((await request("GET", `/pets/${petId}/diet`)).json().foodChangeTip).toBeUndefined();
+  });
 
-    // Editing other settings keeps the switch going.
-    const edited = (await request("PUT", `/pets/${petId}/diet`, { ...plan, foodName: "Dry food B", mealsPerDay: 3 })).json();
-    expect(edited.transition.previousFoodName).toBe("Dry food A");
-
-    const immediate = (await request("PUT", `/pets/${petId}/diet`, { ...plan, foodName: "Vet diet C", skipTransition: true })).json();
-    expect(immediate.transition).toBeNull();
+  it("puts diet suggestions from the passport first", async () => {
+    await request("PUT", `/pets/${petId}/diet`, { ...plan, dietType: "urinary" });
+    await request("POST", `/pets/${petId}/passport/visits`, { visitedOn: "2026-10-15", reason: "Straining", diagnosis: "Struvite crystals" });
+    const body = (await request("GET", `/pets/${petId}/diet?lang=fi`)).json();
+    expect(body.suggestions).toHaveLength(1);
+    expect(body.suggestions[0]).toMatchObject({ dietType: "urinary", title: "Virtsatieruokavalio", current: true });
   });
 
   it("deletes the plan", async () => {
@@ -90,41 +88,63 @@ describe("diet and weight API", () => {
     expect((await request("DELETE", `/pets/${petId}/diet`)).statusCode).toBe(404);
   });
 
-  it("suggests diets from the passport", async () => {
-    await request("PUT", `/pets/${petId}/diet`, { ...plan, dietType: "urinary" });
-    await request("POST", `/pets/${petId}/passport/visits`, { visitedOn: "2026-10-15", reason: "Straining", diagnosis: "Struvite crystals" });
-    const body = (await request("GET", `/pets/${petId}/diet/suggestions?lang=fi`)).json();
-    expect(body.suggestions).toHaveLength(1);
-    expect(body.suggestions[0]).toMatchObject({ dietType: "urinary", title: "Virtsatieruokavalio", current: true });
-  });
-
   describe("weights", () => {
-    it("logs weights, replaces a same-day entry and updates the pet's weight", async () => {
-      await request("POST", `/pets/${petId}/weights`, { weightKg: 10.4, weighedOn: "2026-09-20" });
-      await request("POST", `/pets/${petId}/weights`, { weightKg: 10.1, weighedOn: "2026-10-01" });
-      const replaced = await request("POST", `/pets/${petId}/weights`, { weightKg: 10.0, weighedOn: "2026-10-01", note: "After walk" });
-      expect(replaced.statusCode).toBe(201);
+    const visit = (visitedOn: string, weightKg?: number) =>
+      request("POST", `/pets/${petId}/passport/visits`, { visitedOn, reason: "Check-up", weightKg });
 
-      const body = (await request("GET", `/pets/${petId}/weights`)).json();
-      expect(body.entries).toHaveLength(2);
-      expect(body.summary.latest).toEqual({ weighedOn: "2026-10-01", weightKg: 10 });
-      expect((await request("GET", `/pets/${petId}`)).json().weightKg).toBe(10);
+    it("takes the weight from a vet visit and keeps the portion up to date", async () => {
+      await request("PUT", `/pets/${petId}/diet`, plan);
+      await visit("2026-10-01", 12);
+
+      const weights = (await request("GET", `/pets/${petId}/weights`)).json();
+      expect(weights.entries).toEqual([expect.objectContaining({ weighedOn: "2026-10-01", weightKg: 12, source: "vet" })]);
+      expect((await request("GET", `/pets/${petId}`)).json().weightKg).toBe(12);
+
+      const diet = (await request("GET", `/pets/${petId}/diet`)).json();
+      expect(diet.portion.gramsPerDay).toBe(230);
+      expect(diet.weighIn.latest).toEqual({ weighedOn: "2026-10-01", weightKg: 12, source: "vet" });
     });
 
-    it("restores the pet's weight from the previous entry when the latest is deleted", async () => {
-      await request("POST", `/pets/${petId}/weights`, { weightKg: 10.4, weighedOn: "2026-09-20" });
-      const latest = (await request("POST", `/pets/${petId}/weights`, { weightKg: 9.9, weighedOn: "2026-10-01" })).json();
-      expect((await request("DELETE", `/pets/${petId}/weights/${latest.id}`)).statusCode).toBe(204);
+    it("follows changes to the visit and removes the weight with it", async () => {
+      await request("POST", `/pets/${petId}/weights`, { weightKg: 10.4, weighedOn: "2026-03-01" });
+      const created = (await visit("2026-10-01", 11)).json();
+      const url = `/pets/${petId}/passport/visits/${created.id}`;
+
+      await request("PATCH", url, { weightKg: 11.5 });
+      expect((await request("GET", `/pets/${petId}`)).json().weightKg).toBe(11.5);
+
+      await request("PATCH", url, { weightKg: null });
+      expect((await request("GET", `/pets/${petId}/weights`)).json().entries).toHaveLength(1);
+
+      await request("PATCH", url, { weightKg: 11 });
+      await request("DELETE", url);
+      expect((await request("GET", `/pets/${petId}/weights`)).json().entries).toHaveLength(1);
       expect((await request("GET", `/pets/${petId}`)).json().weightKg).toBe(10.4);
-      expect((await request("DELETE", `/pets/${petId}/weights/${latest.id}`)).statusCode).toBe(404);
     });
 
-    it("defaults to today and filters the chart range", async () => {
-      await request("POST", `/pets/${petId}/weights`, { weightKg: 11, weighedOn: "2020-01-01" });
-      const today = (await request("POST", `/pets/${petId}/weights`, { weightKg: 10 })).json();
-      expect(today.weighedOn).toBe(todayInFinland());
-      const recent = (await request("GET", `/pets/${petId}/weights?days=30`)).json();
-      expect(recent.entries).toHaveLength(1);
+    it("lets a visit replace the owner's weigh-in on the same day", async () => {
+      await request("POST", `/pets/${petId}/weights`, { weightKg: 10.9, weighedOn: "2026-10-01" });
+      await visit("2026-10-01", 11.2);
+      const entries = (await request("GET", `/pets/${petId}/weights`)).json().entries;
+      expect(entries).toEqual([expect.objectContaining({ weightKg: 11.2, source: "vet" })]);
+    });
+
+    it("only deletes the owner's own entries", async () => {
+      await visit("2026-10-01", 11);
+      const own = (await request("POST", `/pets/${petId}/weights`, { weightKg: 10.8 })).json();
+      expect(own).toMatchObject({ weighedOn: todayInFinland(), source: "owner" });
+
+      const fromVisit = (await request("GET", `/pets/${petId}/weights`)).json().entries[0];
+      const refused = await request("DELETE", `/pets/${petId}/weights/${fromVisit.id}`);
+      expect(refused.json().error.code).toBe("WEIGHT_FROM_VISIT");
+      expect((await request("DELETE", `/pets/${petId}/weights/${own.id}`)).statusCode).toBe(204);
+    });
+
+    it("reminds to weigh in on a weight-loss plan", async () => {
+      await visit("2026-01-10", 12);
+      await request("PUT", `/pets/${petId}/diet`, { ...plan, goal: "lose", targetWeightKg: 10 });
+      const body = (await request("GET", `/pets/${petId}/diet`)).json();
+      expect(body.weighIn).toMatchObject({ nextWeighInOn: "2026-02-21", weighInDue: true });
     });
 
     it("keeps weights private to the household", async () => {
