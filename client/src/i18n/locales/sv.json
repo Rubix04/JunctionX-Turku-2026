@@ -433,6 +433,14 @@
     "aiNote": "Appen sammanfattar bara vad veterinären skrev. Den ställer aldrig diagnoser. Tills kliniken har kontrollerat utkastet är det märkt \"Utkast\".",
     "preview": "Förhandsgranska utkastet"
   },
+  "explore": {
+    "title": "Utforska",
+    "sections": {
+      "vets": "Veterinärer",
+      "safe": "Är det säkert?",
+      "quizzes": "Quiz"
+    }
+  },
   "map": {
     "title": "Veterinärer och jour",
     "youAreHere": "Du",
@@ -635,5 +643,25 @@
   },
   "splash": {
     "slogan": "Vi vakar över dem som vakar över dig."
+  },
+  "quiz": {
+    "intro": "Läs en kort lektion och testa dig sedan med vardagliga situationer.",
+    "questions_one": "{{count}} fråga",
+    "questions_other": "{{count}} frågor",
+    "best": "Bästa {{score}}/{{total}}",
+    "beforeYouStart": "Innan du börjar",
+    "start_one": "Starta · {{count}} fråga",
+    "start_other": "Starta · {{count}} frågor",
+    "questionOf": "Fråga {{current}} av {{total}}",
+    "correct": "Rätt!",
+    "notQuite": "Inte riktigt",
+    "next": "Nästa fråga",
+    "seeResult": "Se resultat",
+    "score": "{{score}} / {{total}}",
+    "perfect": "Alla rätt! Du vet vad du ska göra.",
+    "goodTry": "Bra försök. Läs förklaringarna igen och försök en gång till.",
+    "tryAgain": "Försök igen",
+    "backToExplore": "Tillbaka",
+    "readMore": "Läs mer i Är det säkert?"
   }
 }

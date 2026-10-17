@@ -8,7 +8,7 @@ import SchematicMap from '@/components/features/schematic-map';
 import AppText from '@/components/ui/app-text';
 import { ListGroup, ListRow } from '@/components/ui/list-group';
 import Pill from '@/components/ui/pill';
-import Screen, { ScreenSection } from '@/components/ui/screen';
+import { ScreenSection } from '@/components/ui/screen';
 import { EmptyView, ErrorView, LoadingView } from '@/components/ui/state-views';
 import { useAsync } from '@/hooks/use-async';
 import { getClinics } from '@/services/clinics';
@@ -49,9 +49,9 @@ const matches = (clinic: Clinic, f: Filters) =>
   (!f.species || clinic.species.includes(f.species)) &&
   (!f.maxKm || clinic.distanceKm <= f.maxKm);
 
-// Contracted vets and emergency clinics (spec 7). With ?mode=emergency the 24 h clinics come
+// Contracted vets and emergency clinics (spec 7), shown in the Explore tab. With ?mode=emergency the 24 h clinics come
 // first, ordered by opening status and distance.
-const MapScreen = () => {
+const MapSection = () => {
   const { t } = useTranslation();
   const { mode } = useLocalSearchParams<{ mode?: string }>();
   const { data: clinics, error, reload } = useAsync(getClinics, []);
@@ -66,27 +66,15 @@ const MapScreen = () => {
   }
 
   const toggle = (key: 'openNow' | 'emergency' | 'contractedOnly') => setFilters({ ...filters, [key]: !filters[key] });
-  const header = (
-    <View style={styles.header}>
-      <AppText variant="h1" accessibilityRole="header" style={styles.flex}>
-        {t('map.title')}
-      </AppText>
-    </View>
-  );
-
   if (!clinics) {
-    return (
-      <Screen inTabs header={header}>
-        {error ? <ErrorView onRetry={reload} /> : <LoadingView />}
-      </Screen>
-    );
+    return <ScreenSection>{error ? <ErrorView onRetry={reload} /> : <LoadingView />}</ScreenSection>;
   }
 
   const shown = clinics.filter((c) => matches(c, filters));
   const selected = shown.find((c) => c.id === selectedId) ?? null;
 
   return (
-    <Screen inTabs header={header} noPadding contentStyle={styles.content}>
+    <>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>
         <FilterChip label={t('map.filter.openNow')} selected={filters.openNow} onPress={() => toggle('openNow')} />
         <FilterChip label={t('map.filter.emergency')} selected={filters.emergency} onPress={() => toggle('emergency')} />
@@ -174,24 +162,14 @@ const MapScreen = () => {
           {t('map.registryNote')}
         </AppText>
       </ScreenSection>
-    </Screen>
+    </>
   );
 };
 
-export default MapScreen;
+export default MapSection;
 
 const styles = StyleSheet.create({
-  flex: { flex: 1 },
   center: { textAlign: 'center' },
-  header: {
-    paddingHorizontal: spacing.xl,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.md,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  content: { gap: spacing.md },
   filters: { paddingHorizontal: spacing.xl, gap: spacing.sm },
   chip: { minHeight: 40, paddingHorizontal: 14, borderRadius: radius.pill, borderWidth: 1, justifyContent: 'center' },
   chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },

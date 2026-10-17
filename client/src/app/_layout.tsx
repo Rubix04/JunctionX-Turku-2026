@@ -38,6 +38,7 @@ const RootNavigator = () => {
         <Stack.Screen name="pet/[petId]" />
         <Stack.Screen name="clinic/[id]" />
         <Stack.Screen name="substance/[id]" />
+        <Stack.Screen name="quiz/[id]" />
         <Stack.Screen name="find-in-store" />
         <Stack.Screen name="ate-this" options={{ presentation: 'fullScreenModal' }} />
         <Stack.Screen name="add-pet" options={{ presentation: 'fullScreenModal' }} />
