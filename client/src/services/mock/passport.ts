@@ -3,9 +3,11 @@ import type { Passport, PassportShare } from '@/types/passport';
 export const mockPassports: Passport[] = [
   {
     petId: 'mirri',
-    microchip: '[CHIP NUMBER]',
+    microchip: '246098100234517',
+    markings: 'Grey tabby, white chest and paws',
+    registration: null,
     ownerName: 'Aino Virtanen',
-    policyNumber: '[POLICY NO.]',
+    policyNumber: 'TV-2026-048213',
     sex: 'female',
     neutered: true,
     vaccinations: [
@@ -30,12 +32,36 @@ export const mockPassports: Passport[] = [
     allergies: [],
     allergiesUpdatedOn: '2026-10-13',
     surgeries: [{ id: 'mirri-spay', name: 'Spaying', year: 2019 }],
+    conditions: [
+      { id: 'mirri-uti', name: 'Urinary tract infection', diagnosedOn: '2026-10-13', resolved: false },
+      { id: 'mirri-dental', name: 'Mild gingivitis', diagnosedOn: '2025-03-10', resolved: true },
+    ],
+    labReports: [
+      {
+        id: 'mirri-urine',
+        kind: 'urine',
+        date: '2026-10-13',
+        title: 'Urine test',
+        summary: 'Bacteria and white blood cells found. No crystals.',
+        clinicName: 'Pet Clinic Aurora',
+      },
+      {
+        id: 'mirri-blood',
+        kind: 'blood',
+        date: '2026-03-02',
+        title: 'Blood count and kidney values',
+        summary: 'All values within normal range.',
+        clinicName: 'Pet Clinic Aurora',
+      },
+    ],
   },
   {
     petId: 'rekku',
-    microchip: '[CHIP NUMBER]',
+    microchip: '246098100771203',
+    markings: 'Yellow, short coat',
+    registration: 'FI28417/21 · Finnish Kennel Club',
     ownerName: 'Aino Virtanen',
-    policyNumber: '[POLICY NO.]',
+    policyNumber: 'TV-2026-051907',
     sex: 'male',
     neutered: false,
     vaccinations: [
@@ -58,6 +84,25 @@ export const mockPassports: Passport[] = [
     allergies: [{ id: 'rekku-chicken', allergen: 'Chicken protein', severity: 'mild' }],
     allergiesUpdatedOn: '2025-11-07',
     surgeries: [],
+    conditions: [{ id: 'rekku-paw', name: 'Paw pad injury', diagnosedOn: '2026-09-28', resolved: true }],
+    labReports: [
+      {
+        id: 'rekku-xray',
+        kind: 'xray',
+        date: '2026-09-28',
+        title: 'X-ray, front left paw',
+        summary: 'No fracture. Soft tissue injury only.',
+        clinicName: 'Kaarina Dog Clinic',
+      },
+      {
+        id: 'rekku-ultrasound',
+        kind: 'ultrasound',
+        date: '2025-11-07',
+        title: 'Abdominal ultrasound',
+        summary: 'Normal findings. Checked because of an upset stomach.',
+        clinicName: 'Kaarina Dog Clinic',
+      },
+    ],
   },
 ];
 

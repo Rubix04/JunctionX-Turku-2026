@@ -10,25 +10,37 @@ import { Sora_600SemiBold, Sora_700Bold, Sora_800ExtraBold, useFonts } from '@ex
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
+import AppLogo from '@/components/features/app-logo';
 import { stackScreenOptions } from '@/constants/navigation';
 import { AuthProvider, useAuth } from '@/context/auth-context';
+import { colors } from '@/theme';
 
-// Keep the splash screen up until fonts, language and the saved session are ready.
+// The native splash hands over to LoadingScreen, which stays up for at least this long.
 SplashScreen.preventAutoHideAsync();
+const minSplashMs = 3000;
 
-const RootNavigator = () => {
+/** Same look as the native splash: blue with the logo */
+const LoadingScreen = () => {
+  useEffect(() => {
+    SplashScreen.hideAsync();
+  }, []);
+
+  return (
+    <View style={styles.loading}>
+      <AppLogo size={120} variant="light" />
+      <ActivityIndicator color={colors.onDark} />
+    </View>
+  );
+};
+
+const RootNavigator = ({ ready }: { ready: boolean }) => {
   const { status } = useAuth();
   const isSignedIn = status === 'signedIn';
 
-  useEffect(() => {
-    if (status !== 'loading') {
-      SplashScreen.hideAsync();
-    }
-  }, [status]);
-
-  if (status === 'loading') {
-    return null;
+  if (!ready || status === 'loading') {
+    return <LoadingScreen />;
   }
 
   return (
@@ -65,20 +77,28 @@ const RootLayout = () => {
     Figtree_700Bold,
   });
   const [languageReady, setLanguageReady] = useState(false);
+  const [splashTimeUp, setSplashTimeUp] = useState(false);
 
   useEffect(() => {
     restoreLanguage().finally(() => setLanguageReady(true));
+    const timer = setTimeout(() => setSplashTimeUp(true), minSplashMs);
+    return () => clearTimeout(timer);
   }, []);
 
-  if (!(fontsLoaded || fontError) || !languageReady) {
-    return null;
+  if (!(fontsLoaded || fontError)) {
+    return <LoadingScreen />;
   }
 
+  // The saved session loads while the logo is showing.
   return (
     <AuthProvider>
-      <RootNavigator />
+      <RootNavigator ready={languageReady && splashTimeUp} />
     </AuthProvider>
   );
 };
 
 export default RootLayout;
+
+const styles = StyleSheet.create({
+  loading: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 32, backgroundColor: colors.primary },
+});

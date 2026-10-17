@@ -1,7 +1,5 @@
 {
   "common": {
-    "appName": "TassuVahti",
-    "tagline": "Vakar över ditt djur mellan veterinärbesöken.",
     "back": "Tillbaka",
     "close": "Stäng",
     "cancel": "Avbryt",
@@ -11,8 +9,6 @@
     "errorTitle": "Något gick fel",
     "errorBody": "Kontrollera anslutningen och försök igen.",
     "tryAgain": "Försök igen",
-    "step": "Steg {{step}} av {{total}}",
-    "notAVet": "TassuVahti är ett stödverktyg. Det ersätter inte en veterinär.",
     "language": "Språk"
   },
   "tabs": {
@@ -23,21 +19,13 @@
   },
   "screens": {
     "home": "Hem",
-    "map": "Veterinärer och jourer",
-    "knowledge": "Är det säkert?",
-    "settings": "Konto och inställningar",
     "insurance": "Försäkringar och ersättningar",
-    "pet": "Djurets sida",
     "log": "Dagens logg",
-    "logResult": "Loggens resultat",
     "trends": "Trender",
     "carePlan": "Vårdplan",
     "reminders": "Påminnelser",
     "diet": "Kost och vikt",
     "passport": "Hälsopass",
-    "sharePassport": "Dela passet",
-    "photo": "Beskär profilbild",
-    "firstAidGuide": "Guide för första hjälpen",
     "clinic": "Klinik",
     "substance": "Artikel i kunskapsbanken",
     "ateThis": "Mitt djur åt detta",
@@ -71,13 +59,6 @@
     "catPlural": "Katter",
     "dogPlural": "Hundar",
     "smallAnimalPlural": "Smådjur"
-  },
-  "seasons": {
-    "winter": "Vinter",
-    "spring": "Vår",
-    "summer": "Sommar",
-    "autumn": "Höst",
-    "holidays": "Jul och nyår"
   },
   "weekday": {
     "mon": "Måndag",
@@ -172,42 +153,58 @@
       "male": "Hane",
       "maleNeutered": "Hane, kastrerad"
     },
-    "watchListDay": "{{condition}} · bevakningsdag {{day}} av {{total}}",
-    "noWatchList": "Ingen aktiv bevakningslista",
-    "symptomLog": "Symtomlogg",
-    "watchListItems_one": "Bevakningslista · {{count}} punkt",
-    "watchListItems_other": "Bevakningslista · {{count}} punkter",
-    "dailyLog": "Dagens logg",
     "fromVisit": "Från besöket {{date}}",
     "noCarePlan": "Ingen plan än",
     "medication": "Medicinering",
     "nextDose": "Nästa {{time}}",
     "noMedication": "Påminnelser",
     "portionCalculator": "Portionsräknare",
-    "vaccinesOk": "Vaccinationerna är giltiga",
-    "vaccinesDue": "Vaccination snart",
     "trendsHint": "Vikt, vatten",
-    "visitHistory": "Besökshistorik",
     "addVisit": "+ Lägg till besök",
-    "addShort": "+ Lägg till",
-    "draftVisit": "Utkast · väntar på klinikens kontroll",
     "noVisits": "Inga besök än",
-    "noVisitsBody": "Lägg till anteckningarna från ett veterinärbesök för att få en vårdplan.",
-    "speciesSection": {
-      "cat": "För katter",
-      "dog": "För hundar",
-      "smallAnimal": "För smådjur"
-    },
-    "readMore": "Läs mer i kunskapsbanken",
-    "sharedWith": "Delas med {{names}} i ditt familjekonto",
     "tabs": {
       "overview": "Översikt",
-      "care": "Vård",
-      "log": "Logg",
+      "records": "Journal",
       "passport": "Pass"
     },
     "logToday": "Logga i dag · 30 s",
-    "shareHint": "Skicka en läslänk till veterinär eller djurvakt"
+    "records": {
+      "kind": {
+        "all": "Alla",
+        "allergies": "Allergier",
+        "conditions": "Sjukdomar",
+        "surgeries": "Operationer",
+        "medications": "Mediciner",
+        "labs": "Provsvar",
+        "visits": "Besök"
+      },
+      "severity": {
+        "mild": "Lindrig reaktion",
+        "moderate": "Måttlig reaktion",
+        "severe": "Allvarlig reaktion"
+      },
+      "resolved": "Läkt",
+      "ongoing": "Pågående",
+      "lab": {
+        "blood": "Blodprov",
+        "urine": "Urinprov",
+        "ultrasound": "Ultraljud",
+        "xray": "Röntgen"
+      },
+      "empty": "Inga anteckningar i den här kategorin"
+    },
+    "passportTab": {
+      "title": "Digitalt pass",
+      "markings": "Färg och kännetecken",
+      "registration": "Registreringsnummer",
+      "sex": "Kön",
+      "summaryTitle": "{{name}} · hälsosammanfattning",
+      "validUntil": "giltigt till {{date}}",
+      "shareVet": "Dela med veterinär · QR-kod",
+      "shareVetHint": "Veterinären skannar koden och ser hela historiken. Länken slutar fungera efter tiden du väljer.",
+      "export": "Exportera resesammanfattning",
+      "full": "Hela hälsopasset"
+    }
   },
   "log": {
     "title": "{{name}} · i dag",
@@ -442,7 +439,6 @@
     }
   },
   "map": {
-    "title": "Veterinärer och jour",
     "youAreHere": "Du",
     "filter": {
       "openNow": "Öppet nu",
@@ -509,7 +505,6 @@
     "note": "Produkterna kommer från veterinären eller försäkringsbolagets godkända lista, inte från reklam. Receptbelagda läkemedel går via receptet, inte via butikskartan."
   },
   "knowledge": {
-    "title": "Är det säkert?",
     "searchLabel": "Sök livsmedel, växter och ämnen",
     "searchPlaceholder": "t.ex. russin, lilja, xylitol",
     "clear": "Rensa sökningen",
@@ -677,14 +672,6 @@
     "title": "Den här sidan finns inte",
     "body": "Länken kan vara gammal. Gå tillbaka till hemskärmen för att fortsätta."
   },
-  "placeholder": {
-    "notBuilt": "Den här vyn är inte byggd än."
-  },
-  "languages": {
-    "en": "English",
-    "fi": "Suomi",
-    "sv": "Svenska"
-  },
   "splash": {
     "slogan": "Vi vakar över dem som vakar över dig."
   },
@@ -707,5 +694,14 @@
     "tryAgain": "Försök igen",
     "backToExplore": "Tillbaka",
     "readMore": "Läs mer i Är det säkert?"
+  },
+  "watchList": {
+    "byVet": "Bevakningslista från {{vet}}",
+    "noneBody": "Det finns ingen aktiv bevakning. Logga hur {{name}} mår när något verkar fel.",
+    "latestLog": "Senaste logg · {{date}}",
+    "watching": "Det här bevakar vi",
+    "notLogged": "Inte loggat",
+    "whatToDo": "Vad du gör nu",
+    "callVet": "När du ska ringa veterinär: {{when}}"
   }
 }
