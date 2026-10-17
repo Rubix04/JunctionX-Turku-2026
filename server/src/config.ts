@@ -1,0 +1,33 @@
+import { z } from "zod";
+
+const envSchema = z.object({
+  NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+  PORT: z.coerce.number().int().default(3000),
+  HOST: z.string().default("0.0.0.0"),
+  DATABASE_PATH: z.string().default("./data/tassuvahti.db"),
+  UPLOAD_DIR: z.string().default("./data/uploads"),
+  /** Public address of the server, used in share links. Defaults to the request's own host. */
+  PUBLIC_BASE_URL: z.url().optional(),
+  JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
+  // Kept separate from JWT_SECRET: changing it would disconnect every user from their account.
+  IDENTITY_HASH_SECRET: z.string().min(32, "IDENTITY_HASH_SECRET must be at least 32 characters"),
+  DEMO_MODE: z
+    .enum(["true", "false"])
+    .default("false")
+    .transform((value) => value === "true"),
+  /** off: no seasonal push job; log: write pushes to the log; expo: really send them */
+  PUSH_MODE: z.enum(["off", "log", "expo"]).default("log"),
+  /** Optional Expo access token, if push security is enabled in the Expo project */
+  EXPO_ACCESS_TOKEN: z.string().optional(),
+});
+
+export type Config = z.infer<typeof envSchema>;
+
+export const loadConfig = (env: NodeJS.ProcessEnv = process.env): Config => {
+  const result = envSchema.safeParse(env);
+  if (!result.success) {
+    const problems = result.error.issues.map((issue) => `  ${issue.path.join(".")}: ${issue.message}`);
+    throw new Error(`Invalid environment configuration:\n${problems.join("\n")}`);
+  }
+  return result.data;
+};
