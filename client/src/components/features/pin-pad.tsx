@@ -72,9 +72,10 @@ const PinPad = ({ title, onComplete, error, tone = 'light' }: PinPadProps) => {
       </AppText>
 
       <View style={styles.keys}>
-        {KEYS.map((key, i) =>
+        {KEYS.map((key) =>
           key === '' ? (
-            <View key={i} style={styles.key} />
+            // The empty slot left of 0. Its key must differ from the digit keys ('9' etc.).
+            <View key="empty" style={styles.key} />
           ) : (
             <Pressable
               key={key}
