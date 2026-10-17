@@ -5,7 +5,7 @@ import PlaceholderScreen from '@/components/ui/placeholder-screen';
 const FirstAidGuideScreen = () => {
   const { t } = useTranslation();
 
-  return <PlaceholderScreen title={t('screens.firstAidGuide')} />;
+  return <PlaceholderScreen title={t('screens.firstAidGuide')} showEmergency={false} />;
 };
 
 export default FirstAidGuideScreen;

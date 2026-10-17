@@ -50,5 +50,10 @@
     "addPet": "Lägg till ett djur",
     "addVisit": "Lägg till veterinärbesök",
     "notFound": "Sidan hittades inte"
+  },
+  "trafficLight": {
+    "green": "Grön · som vanligt",
+    "yellow": "Gul · håll ett öga på",
+    "red": "Röd · kontakta en veterinär"
   }
 }

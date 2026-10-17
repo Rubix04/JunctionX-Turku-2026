@@ -8,6 +8,7 @@ const EmergencyScreen = () => {
   return (
     <PlaceholderScreen
       title={t('screens.emergency')}
+      showEmergency={false}
       links={[
         { label: t('screens.firstAid'), href: '/emergency/first-aid' },
       ]}

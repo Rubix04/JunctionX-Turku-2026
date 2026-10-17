@@ -50,5 +50,10 @@
     "addPet": "Lisää lemmikki",
     "addVisit": "Lisää eläinlääkärikäynti",
     "notFound": "Sivua ei löytynyt"
+  },
+  "trafficLight": {
+    "green": "Vihreä · kuten tavallisesti",
+    "yellow": "Keltainen · seuraa tilannetta",
+    "red": "Punainen · ota yhteys eläinlääkäriin"
   }
 }
