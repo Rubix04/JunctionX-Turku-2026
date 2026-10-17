@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import ClinicCard from '@/components/features/clinic-card';
-import EmergencyButton from '@/components/features/emergency-button';
 import SchematicMap from '@/components/features/schematic-map';
 import AppText from '@/components/ui/app-text';
 import { ListGroup, ListRow } from '@/components/ui/list-group';
@@ -50,7 +49,7 @@ const matches = (clinic: Clinic, f: Filters) =>
   (!f.species || clinic.species.includes(f.species)) &&
   (!f.maxKm || clinic.distanceKm <= f.maxKm);
 
-// Contracted vets and emergency clinics (spec 7). In emergency mode the 24 h clinics come
+// Contracted vets and emergency clinics (spec 7). With ?mode=emergency the 24 h clinics come
 // first, ordered by opening status and distance.
 const MapScreen = () => {
   const { t } = useTranslation();
@@ -72,7 +71,6 @@ const MapScreen = () => {
       <AppText variant="h1" accessibilityRole="header" style={styles.flex}>
         {t('map.title')}
       </AppText>
-      <EmergencyButton />
     </View>
   );
 

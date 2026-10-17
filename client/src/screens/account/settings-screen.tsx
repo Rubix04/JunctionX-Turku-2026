@@ -5,7 +5,6 @@ import { StyleSheet, Switch, View } from 'react-native';
 
 import AppLogo from '@/components/features/app-logo';
 import Disclaimer from '@/components/features/disclaimer';
-import EmergencyButton from '@/components/features/emergency-button';
 import PetAvatar from '@/components/features/pet-avatar';
 import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
@@ -51,10 +50,10 @@ const SwitchRow = ({ label, hint, value, onChange }: { label: string; hint?: str
   </View>
 );
 
-// Account, family, language, device lock, notifications, sharing and privacy.
+// Account, family, language, notifications, sharing and privacy.
 const SettingsScreen = () => {
   const { t, i18n } = useTranslation();
-  const { displayName, lockMethod, lock, signOut } = useAuth();
+  const { displayName, signOut } = useAuth();
   const { data, reload } = useAsync(loadSettings, []);
   useReloadOnFocus(reload);
   const [notifications, setNotifications] = useState({ medication: true, followUps: true, seasonal: true, location: false });
@@ -73,7 +72,6 @@ const SettingsScreen = () => {
           <AppText variant="h1" accessibilityRole="header" style={styles.flex}>
             {t('settings.title')}
           </AppText>
-          <EmergencyButton />
         </View>
       }
     >
@@ -127,14 +125,6 @@ const SettingsScreen = () => {
         onChange={(lang) => i18n.changeLanguage(lang)}
         options={supportedLanguages.map((lang) => ({ value: lang, label: languageNames[lang] }))}
       />
-
-      <SectionLabel label={t('settings.deviceLock')} />
-      {/* Changing the lock needs a new PIN or biometric check; for now it is chosen at sign-in. */}
-      {lockMethod && (
-        <ListGroup>
-          <ListRow leading={<IconTile name={lockMethod} />} title={t(`lock.${lockMethod}`)} />
-        </ListGroup>
-      )}
 
       <SectionLabel label={t('settings.notifications')} />
       <ListGroup>
@@ -192,7 +182,6 @@ const SettingsScreen = () => {
       </ListGroup>
 
       <View style={styles.buttons}>
-        <Button label={t('settings.lockNow')} icon="lock" variant="outline" onPress={lock} />
         <Button label={t('settings.signOut')} icon="logout" variant="dangerOutline" onPress={signOut} />
         <AppText variant="caption" color={colors.muted} style={styles.center}>
           {t('settings.signOutHint')}

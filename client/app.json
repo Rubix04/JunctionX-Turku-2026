@@ -12,7 +12,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#0E5A63",
+        "backgroundColor": "#0B5AA0",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -28,7 +28,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#0E5A63",
+          "backgroundColor": "#0B5AA0",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 120,
           "resizeMode": "contain"
@@ -44,13 +44,7 @@
           "microphonePermission": "TassuVahti records sound with videos of your pet for the vet."
         }
       ],
-      "expo-secure-store",
-      [
-        "expo-local-authentication",
-        {
-          "faceIDPermission": "Allow TassuVahti to use Face ID to unlock the app."
-        }
-      ]
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, Pressable, StyleSheet, View } from 'react-native';
 
-import EmergencyButton from '@/components/features/emergency-button';
 import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
 import Icon, { type IconName } from '@/components/ui/icon';
@@ -95,14 +94,6 @@ const AlertCard = ({ alert, pets, matched }: { alert: SeasonalAlert; pets: Pet[]
         </Note>
       )}
       <View style={styles.actions}>
-        {alert.firstAidTopic && (
-          <Button
-            label={t('alerts.whatIf')}
-            variant="dangerOutline"
-            size="small"
-            onPress={() => router.push(`/emergency/${alert.firstAidTopic}`)}
-          />
-        )}
         {alert.substanceId && (
           <Button
             label={t('alerts.isItSafe')}
@@ -131,7 +122,6 @@ const AlertsScreen = () => {
       <AppText variant="h1" accessibilityRole="header" style={styles.flex}>
         {t('alerts.title')}
       </AppText>
-      <EmergencyButton />
     </View>
   );
 

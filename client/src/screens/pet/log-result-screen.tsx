@@ -94,7 +94,6 @@ const LogResultScreen = () => {
             backIcon="close"
             onBack={close}
             onColor
-            showEmergency={level !== 'red'}
             trailing={
               level === 'red' && log ? (
                 <AppText variant="bodySmall" color={colors.redOnDark} style={styles.bold}>
@@ -138,13 +137,12 @@ const LogResultScreen = () => {
             <ListGroup>
               <ListRow
                 title={t('result.otherClinics')}
-                onPress={() => router.push('/(tabs)/(map)?mode=emergency')}
+                onPress={() => router.push('/(tabs)/(explore)?mode=emergency')}
               />
               <ListRow
                 title={t('result.showPassport', { name: pet.name })}
                 onPress={() => router.push(`/pet/${petId}/passport`)}
               />
-              <ListRow title={t('result.firstAid')} onPress={() => router.push('/emergency/first-aid')} />
             </ListGroup>
             <Disclaimer kind="result" />
             <AppText variant="caption" color={colors.muted} style={styles.center}>

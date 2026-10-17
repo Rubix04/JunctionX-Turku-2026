@@ -141,21 +141,9 @@ const AteThisScreen = () => {
             <ListRow
               leading={<Icon name="map" size={20} color={colors.red} />}
               title={t('ateThis.emergencyMap')}
-              onPress={() => router.push('/(tabs)/(map)?mode=emergency')}
+              onPress={() => router.push('/(tabs)/(explore)?mode=emergency')}
             />
           )}
-          {assessment.next.quickAssessment && (
-            <ListRow
-              leading={<Icon name="emergency" size={20} color={colors.red} />}
-              title={t('ateThis.quickAssessment')}
-              onPress={() => router.push('/emergency')}
-            />
-          )}
-          <ListRow
-            leading={<Icon name="flask" size={20} color={colors.primary} />}
-            title={t('ateThis.firstAid')}
-            onPress={() => router.push('/emergency/poisoning')}
-          />
           <ListRow
             leading={<Icon name="book" size={20} color={colors.primary} />}
             title={t('ateThis.readEntry', { substance: substance.name })}

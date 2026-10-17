@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { ColorValue } from 'react-native';
 
 import Icon, { type IconName } from '@/components/ui/icon';
-import { colors, typography } from '@/theme';
+import { colors, radius, spacing, typography } from '@/theme';
 
 const tabIcon =
   (name: IconName) =>
@@ -18,24 +18,22 @@ const TabLayout = () => {
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.muted,
+        tabBarActiveBackgroundColor: colors.accentTint,
+        tabBarItemStyle: { margin: spacing.xs, borderRadius: radius.md },
         tabBarLabelStyle: typography.tabLabel,
         tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.border },
         sceneStyle: { backgroundColor: colors.background },
       }}
     >
       <Tabs.Screen name="(home)" options={{ title: t('tabs.home'), tabBarIcon: tabIcon('home') }} />
-      <Tabs.Screen name="(map)" options={{ title: t('tabs.map'), tabBarIcon: tabIcon('map') }} />
+      <Tabs.Screen name="(pets)" options={{ title: t('tabs.pets'), tabBarIcon: tabIcon('paw') }} />
       <Tabs.Screen
-        name="(knowledge)"
-        options={{ title: t('tabs.knowledge'), tabBarIcon: tabIcon('book') }}
+        name="(explore)"
+        options={{ title: t('tabs.explore'), tabBarIcon: tabIcon('map') }}
       />
       <Tabs.Screen
-        name="(alerts)"
-        options={{ title: t('tabs.alerts'), tabBarIcon: tabIcon('bell') }}
-      />
-      <Tabs.Screen
-        name="(account)"
-        options={{ title: t('tabs.account'), tabBarIcon: tabIcon('user') }}
+        name="(profile)"
+        options={{ title: t('tabs.profile'), tabBarIcon: tabIcon('user') }}
       />
     </Tabs>
   );

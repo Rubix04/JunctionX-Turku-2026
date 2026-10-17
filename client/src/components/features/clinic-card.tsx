@@ -15,11 +15,11 @@ type ClinicCardProps = {
   clinic: Clinic;
   /** Big red Call button, for emergencies */
   emergency?: boolean;
-  /** Opens the clinic card. Off in emergency mode before sign-in. */
+  /** Opens the clinic card. */
   linkToDetails?: boolean;
 };
 
-// Clinic summary with Call and Directions, used on the red result, emergency mode and the map.
+// Clinic summary with Call and Directions, used on the red result and the map.
 const ClinicCard = ({ clinic, emergency = false, linkToDetails = true }: ClinicCardProps) => {
   const { t } = useTranslation();
   const open = isOpenNow(clinic);

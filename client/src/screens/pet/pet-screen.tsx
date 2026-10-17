@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import EmergencyButton from '@/components/features/emergency-button';
 import PetAvatar, { speciesTint } from '@/components/features/pet-avatar';
 import AppText from '@/components/ui/app-text';
 import Icon, { type IconName } from '@/components/ui/icon';
@@ -103,7 +102,6 @@ const PetScreen = () => {
           >
             <Icon name="back" size={22} />
           </Pressable>
-          <EmergencyButton />
         </View>
         <View style={styles.identity}>
           <View>
@@ -249,17 +247,10 @@ const PetScreen = () => {
                         <AppText variant="bodySmall" color={colors.textSecondary}>
                           {localize(topic.tip)}
                         </AppText>
-                        {(topic.substanceId || topic.firstAidTopic) && (
-                          <Link
-                            href={
-                              topic.substanceId
-                                ? `/substance/${topic.substanceId}`
-                                : `/emergency/${topic.firstAidTopic}`
-                            }
-                            style={styles.topicLink}
-                          >
+                        {topic.substanceId && (
+                          <Link href={`/substance/${topic.substanceId}`} style={styles.topicLink}>
                             <AppText variant="bodySmall" color={colors.primary} style={styles.bold}>
-                              {topic.substanceId ? t('pet.readMore') : t('pet.openFirstAid')}
+                              {t('pet.readMore')}
                             </AppText>
                           </Link>
                         )}

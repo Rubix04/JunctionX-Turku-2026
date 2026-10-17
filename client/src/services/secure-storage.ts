@@ -7,12 +7,6 @@ const webMemory = new Map<string, string>();
 
 export const storageKeys = {
   refreshToken: 'auth.refreshToken',
-  lockMethod: 'auth.lockMethod',
-  /** Plain PIN from earlier builds; moved to pinHash on the next correct unlock. */
-  pin: 'auth.pin',
-  pinHash: 'auth.pinHash',
-  pinSalt: 'auth.pinSalt',
-  pinAttempts: 'auth.pinAttempts',
   displayName: 'auth.displayName',
   language: 'settings.language',
 } as const;
