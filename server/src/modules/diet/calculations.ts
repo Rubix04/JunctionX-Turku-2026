@@ -1,5 +1,5 @@
-import type { ActivityLevel, DietType, HealthRecordRow, Species } from "../../db/schema.js";
-import { ApiError, badRequest } from "../../errors.js";
+import type { DietType, HealthRecordRow, Species } from "../../db/schema.js";
+import { badRequest } from "../../errors.js";
 import { type DietContent, dietContent } from "./content.js";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -7,7 +7,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 const daysBetween = (fromIso: string, toIso: string) =>
   Math.round((Date.parse(`${toIso}T00:00:00Z`) - Date.parse(`${fromIso}T00:00:00Z`)) / DAY_MS);
 
-const addDays = (isoDate: string, days: number) =>
+export const addDays = (isoDate: string, days: number) =>
   new Date(Date.parse(`${isoDate}T00:00:00Z`) + days * DAY_MS).toISOString().slice(0, 10);
 
 /** Whole months between a birth date and today, or null if unknown. */
@@ -20,195 +20,133 @@ export const ageInMonths = (birthDate: string | null, today: string) => {
   return Math.max(0, (ty - by) * 12 + (tm - bm) - (td < bd ? 1 : 0));
 };
 
-// ---- Portion calculator ----
+// ---- Portion from the package's feeding table ----
 
 export type PortionInput = {
   species: Species;
+  /** The pet's current weight */
   weightKg: number;
   ageMonths: number | null;
-  /** Null if unknown; then the lower (neutered) factor is used so the pet isn't overfed. */
-  neutered: boolean | null;
-  activityLevel: ActivityLevel;
+  /** Daily amount the package recommends... */
+  packageDailyGrams: number;
+  /** ...for a pet of this weight */
+  packageForWeightKg: number;
   goal: "maintain" | "lose";
   targetWeightKg: number | null;
-  kcalPer100g: number | null;
   mealsPerDay: number;
+  gramsPerScoop: number | null;
 };
 
-export type PortionWarning =
-  | "neuteredUnknown"
-  | "growingNoWeightLoss"
-  | "largeWeightLoss"
-  | "foodEnergyMissing";
-
-type FactorName = keyof DietContent["energy"]["factors"]["dog"];
+export type PortionWarning = "growingNoWeightLoss" | "largeWeightLoss" | "checkPackageTable";
 
 /**
- * Daily energy need and portion size.
- * Resting energy (RER) = 70 × weight^0.75 kcal; daily need = RER × a life-stage factor.
- * For weight loss the RER is calculated from the target weight.
- * All numbers come from content/diet.json and must be reviewed by a vet.
+ * How much to put in the bowl. Starts from the package's recommended daily amount and adjusts it
+ * to the pet's own weight (food need grows with weight^0.75). For weight loss the amount is for
+ * the target weight, as vets usually advise. Owners don't need to know calories.
  */
 export const calculatePortion = (input: PortionInput, content: DietContent = dietContent) => {
-  if (input.species === "smallAnimal") {
-    throw new ApiError(422, "UNSUPPORTED_SPECIES", "Portion calculation is available for cats and dogs only");
-  }
-  const { energy } = content;
-  const factors = energy.factors[input.species];
+  const { portion } = content;
   const warnings: PortionWarning[] = [];
+  const growing = input.ageMonths !== null && input.ageMonths < portion.adultAgeMonths[input.species];
 
-  const growing = input.ageMonths !== null && input.ageMonths < energy.adultAgeMonths[input.species];
-  let factorName: FactorName;
-  let basisWeightKg = input.weightKg;
-
-  if (growing) {
-    factorName = (input.ageMonths as number) < 4 ? "growthUnder4Months" : "growth4MonthsToAdult";
-    if (input.goal === "lose") {
-      warnings.push("growingNoWeightLoss");
-    }
-  } else if (input.goal === "lose") {
+  let feedForWeightKg = input.weightKg;
+  if (input.goal === "lose") {
     if (input.targetWeightKg === null || input.targetWeightKg >= input.weightKg) {
       throw badRequest("INVALID_TARGET", "For weight loss, set a target weight below the current weight");
     }
-    factorName = "weightLoss";
-    basisWeightKg = input.targetWeightKg;
-    if ((input.weightKg - input.targetWeightKg) / input.weightKg > energy.largeWeightLossShare) {
-      warnings.push("largeWeightLoss");
-    }
-  } else if (input.activityLevel === "low") {
-    factorName = "lowActivity";
-  } else if (input.activityLevel === "high") {
-    factorName = "highActivity";
-  } else {
-    factorName = input.neutered === false ? "intactAdult" : "neuteredAdult";
-    if (input.neutered === null) {
-      warnings.push("neuteredUnknown");
+    if (growing) {
+      warnings.push("growingNoWeightLoss");
+    } else {
+      feedForWeightKg = input.targetWeightKg;
+      if ((input.weightKg - input.targetWeightKg) / input.weightKg > portion.largeWeightLossShare) {
+        warnings.push("largeWeightLoss");
+      }
     }
   }
 
-  const restingKcal = energy.rerFactor * basisWeightKg ** energy.rerExponent;
-  const dailyKcal = Math.round(restingKcal * factors[factorName]);
-
-  let food = null;
-  if (input.kcalPer100g) {
-    const gramsPerDay = Math.round((dailyKcal / input.kcalPer100g) * 100);
-    food = {
-      kcalPer100g: input.kcalPer100g,
-      mealsPerDay: input.mealsPerDay,
-      gramsPerDay,
-      gramsPerMeal: Math.round(gramsPerDay / input.mealsPerDay),
-    };
-  } else {
-    warnings.push("foodEnergyMissing");
+  // Scaling is a good estimate near the package row; far from it, the table itself is better.
+  if (Math.abs(feedForWeightKg - input.packageForWeightKg) / input.packageForWeightKg > portion.packageWeightFarShare) {
+    warnings.push("checkPackageTable");
   }
+
+  const round = (grams: number) => Math.max(portion.roundGramsTo, Math.round(grams / portion.roundGramsTo) * portion.roundGramsTo);
+  const exact =
+    input.packageDailyGrams * (feedForWeightKg / input.packageForWeightKg) ** portion.metabolicExponent;
+  const gramsPerDay = round(exact);
+  const gramsPerMeal = round(exact / input.mealsPerDay);
 
   return {
-    species: input.species,
-    lifeStage: growing ? ("growth" as const) : ("adult" as const),
-    factorName,
-    factor: factors[factorName],
-    basisWeightKg,
-    restingKcal: Math.round(restingKcal),
-    dailyKcal,
-    /** Treats should stay under this many kcal a day, and come out of the daily amount. */
-    treatsMaxKcal: Math.round(dailyKcal * energy.treatsMaxShare),
-    food,
+    feedForWeightKg,
+    gramsPerDay,
+    mealsPerDay: input.mealsPerDay,
+    gramsPerMeal,
+    /** Scoops per meal, to the nearest quarter, if the owner told how much their scoop holds */
+    scoopsPerMeal: input.gramsPerScoop ? Math.round((exact / input.mealsPerDay / input.gramsPerScoop) * 4) / 4 : null,
+    /** If the pet also gets treats, give this much food instead (treats at most ~10 % of the day) */
+    gramsPerDayWithTreats: round(exact * (1 - portion.treatsMaxShare)),
     warnings,
   };
 };
 
 export type PortionResult = ReturnType<typeof calculatePortion>;
 
-// ---- Gradual food change ----
-
-/**
- * Where the pet is in a food change: how much of the new food to give today.
- * Returns null when there is no change in progress or it has finished.
- */
-export const transitionStatus = (
-  plan: { foodName: string; previousFoodName: string | null; transitionStartedOn: string | null },
-  today: string,
-  content: DietContent = dietContent,
-) => {
-  if (!plan.previousFoodName || !plan.transitionStartedOn) {
-    return null;
-  }
-  const { steps } = content.transition;
-  const totalDays = steps[steps.length - 1].toDay;
-  const day = Math.max(1, daysBetween(plan.transitionStartedOn, today) + 1);
-  if (day > totalDays) {
-    return null;
-  }
-  const step = steps.find((s) => day >= s.fromDay && day <= s.toDay) ?? steps[steps.length - 1];
-  return {
-    previousFoodName: plan.previousFoodName,
-    newFoodName: plan.foodName,
-    startedOn: plan.transitionStartedOn,
-    endsOn: addDays(plan.transitionStartedOn, totalDays - 1),
-    day,
-    totalDays,
-    newFoodPercent: step.newFoodPercent,
-    oldFoodPercent: 100 - step.newFoodPercent,
-    schedule: steps.map((s) => ({ ...s, date: addDays(plan.transitionStartedOn as string, s.fromDay - 1) })),
-  };
-};
-
-// ---- Weight trend ----
+// ---- Weight trend from occasional weigh-ins ----
 
 type WeightPoint = { weighedOn: string; weightKg: number };
 
-const mondayOf = (isoDate: string) => {
-  const weekday = (new Date(`${isoDate}T00:00:00Z`).getUTCDay() + 6) % 7;
-  return addDays(isoDate, -weekday);
+const change = (from: WeightPoint, to: WeightPoint) => {
+  const changeKg = to.weightKg - from.weightKg;
+  return {
+    since: from.weighedOn,
+    days: daysBetween(from.weighedOn, to.weighedOn),
+    changeKg: Math.round(changeKg * 100) / 100,
+    changePercent: Math.round((changeKg / from.weightKg) * 1000) / 10,
+  };
 };
 
 /**
- * Summary for the weight chart: latest weight, change over the last ~30 days and weekly averages.
- * `unexpectedChange` flags a large change that isn't part of a weight-loss plan; the app can
- * suggest keeping an eye on it or contacting a vet.
+ * Pets are mostly weighed at the vet, months apart, so the trend compares weigh-ins rather than
+ * weeks. `unexpectedChange` flags a large change that isn't part of a weight-loss plan:
+ * over 10 % since the previous weigh-in, or over 5 % within about six months.
+ * `nextWeighInOn` is set for pets on a weight-loss plan, which should be weighed regularly.
  */
 export const weightSummary = (
   entries: WeightPoint[],
-  options: { losingWeightOnPurpose: boolean; targetWeightKg: number | null },
+  options: { losingWeightOnPurpose: boolean; targetWeightKg: number | null; today: string },
   content: DietContent = dietContent,
 ) => {
   if (entries.length === 0) {
     return null;
   }
+  const { weight } = content;
   const sorted = [...entries].sort((a, b) => a.weighedOn.localeCompare(b.weighedOn));
   const latest = sorted[sorted.length - 1];
-  const windowStart = addDays(latest.weighedOn, -content.weight.unexpectedChangeDays);
-  const baseline = sorted.find((entry) => entry.weighedOn >= windowStart && entry.weighedOn < latest.weighedOn);
+  const previous = sorted.length > 1 ? sorted[sorted.length - 2] : null;
+  const halfYearStart = addDays(latest.weighedOn, -weight.halfYearDays);
+  const halfYearBase = sorted.find((e) => e.weighedOn >= halfYearStart && e.weighedOn < latest.weighedOn) ?? null;
+  const yearBase = sorted.find((e) => e.weighedOn >= addDays(latest.weighedOn, -365) && e.weighedOn < latest.weighedOn) ?? null;
 
-  let recentChange = null;
-  if (baseline) {
-    const changeKg = latest.weightKg - baseline.weightKg;
-    const changePercent = (changeKg / baseline.weightKg) * 100;
-    const large = Math.abs(changePercent) / 100 >= content.weight.unexpectedChangeShare;
-    recentChange = {
-      since: baseline.weighedOn,
-      changeKg: Math.round(changeKg * 100) / 100,
-      changePercent: Math.round(changePercent * 10) / 10,
-      unexpectedChange: large && !(options.losingWeightOnPurpose && changeKg < 0),
-    };
-  }
+  const sincePrevious = previous ? change(previous, latest) : null;
+  const sinceHalfYear = halfYearBase ? change(halfYearBase, latest) : null;
+  const isPlannedLoss = (c: { changeKg: number } | null) => options.losingWeightOnPurpose && !!c && c.changeKg < 0;
+  const large = (c: { changePercent: number } | null, share: number) => !!c && Math.abs(c.changePercent) / 100 >= share;
 
-  const weeks = new Map<string, number[]>();
-  for (const entry of sorted) {
-    const week = mondayOf(entry.weighedOn);
-    weeks.set(week, [...(weeks.get(week) ?? []), entry.weightKg]);
-  }
+  const unexpectedChange =
+    (large(sincePrevious, weight.betweenWeighInsShare) && !isPlannedLoss(sincePrevious)) ||
+    (large(sinceHalfYear, weight.halfYearShare) && !isPlannedLoss(sinceHalfYear));
+
+  const nextWeighInOn = options.losingWeightOnPurpose ? addDays(latest.weighedOn, weight.weightLossWeighInDays) : null;
 
   return {
     latest,
     targetWeightKg: options.targetWeightKg,
     toTargetKg:
       options.targetWeightKg === null ? null : Math.round((latest.weightKg - options.targetWeightKg) * 100) / 100,
-    recentChange,
-    weekly: [...weeks].map(([weekStart, values]) => ({
-      weekStart,
-      averageKg: Math.round((values.reduce((sum, v) => sum + v, 0) / values.length) * 100) / 100,
-    })),
+    sincePrevious,
+    lastYear: yearBase ? change(yearBase, latest) : null,
+    unexpectedChange,
+    nextWeighInOn,
+    weighInDue: nextWeighInOn !== null && options.today >= nextWeighInOn,
   };
 };
 

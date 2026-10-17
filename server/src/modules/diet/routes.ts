@@ -12,11 +12,10 @@ import {
   petDietSchema,
   portionRequestSchema,
   portionResponseSchema,
-  suggestionsSchema,
+  savedDietSchema,
   weightEntrySchema,
   weightInputSchema,
   weightParamsSchema,
-  weightQuerySchema,
   weightsResponseSchema,
 } from "./schemas.js";
 import {
@@ -25,23 +24,23 @@ import {
   deletePlan,
   deleteWeight,
   dietInfo,
-  dietSuggestions,
+  foodChangeTip,
   listWeights,
   petDiet,
   savePlan,
 } from "./service.js";
 
 /**
- * Diet and weight (spec 3).
+ * Diet and weight (spec 3). Portions come from the food package's feeding table; weights mostly
+ * from vet visits in the passport.
  * - GET    /diets                          diet types with texts (?lang=fi|sv|en)
  * - POST   /diet/portion                   calculator without saving anything
- * - GET    /pets/:petId/diet               plan, portion for today's weight, food change mix
- * - PUT    /pets/:petId/diet               set or change the diet; a new food starts a 7-day switch
+ * - GET    /pets/:petId/diet               diet suggestions, plan, today's portion, weigh-in status
+ * - PUT    /pets/:petId/diet               set or change the diet (food change → one-time tip)
  * - DELETE /pets/:petId/diet
- * - GET    /pets/:petId/diet/suggestions   diets to discuss with the vet, from the passport
- * - GET    /pets/:petId/weights            entries + summary for the chart (?days=90)
- * - POST   /pets/:petId/weights            log a weight (same day replaces)
- * - DELETE /pets/:petId/weights/:entryId
+ * - GET    /pets/:petId/weights            weigh-ins and trend
+ * - POST   /pets/:petId/weights            the owner's own weigh-in (same day replaces)
+ * - DELETE /pets/:petId/weights/:entryId   owner entries only; visit weights change in the passport
  */
 export const dietRoutes: FastifyPluginAsyncZod = async (app) => {
   app.addHook("preHandler", app.authenticate);
@@ -68,9 +67,9 @@ export const dietRoutes: FastifyPluginAsyncZod = async (app) => {
         portion: calculatePortion({
           ...body,
           ageMonths: body.ageMonths ?? null,
-          neutered: body.neutered ?? null,
+          packageForWeightKg: body.packageForWeightKg ?? body.weightKg,
           targetWeightKg: body.targetWeightKg ?? null,
-          kcalPer100g: body.kcalPer100g ?? null,
+          gramsPerScoop: body.gramsPerScoop ?? null,
         }),
       };
     },
@@ -89,13 +88,16 @@ export const dietRoutes: FastifyPluginAsyncZod = async (app) => {
         params: petParamsSchema,
         querystring: languageQuerySchema,
         body: dietPlanInputSchema,
-        response: { 200: petDietSchema },
+        response: { 200: savedDietSchema },
       },
     },
     async (request) => {
       const pet = petFor(request, request.params.petId);
-      savePlan(app.db, pet.id, request.body);
-      return petDiet(app.db, pet, request.query.lang);
+      const { foodChanged } = savePlan(app.db, pet, request.body);
+      return {
+        ...petDiet(app.db, pet, request.query.lang),
+        foodChangeTip: foodChanged ? foodChangeTip(request.query.lang) : null,
+      };
     },
   );
 
@@ -105,15 +107,9 @@ export const dietRoutes: FastifyPluginAsyncZod = async (app) => {
   });
 
   app.get(
-    "/pets/:petId/diet/suggestions",
-    { schema: { params: petParamsSchema, querystring: languageQuerySchema, response: { 200: suggestionsSchema } } },
-    async (request) => dietSuggestions(app.db, petFor(request, request.params.petId), request.query.lang),
-  );
-
-  app.get(
     "/pets/:petId/weights",
-    { schema: { params: petParamsSchema, querystring: weightQuerySchema, response: { 200: weightsResponseSchema } } },
-    async (request) => listWeights(app.db, petFor(request, request.params.petId), request.query.days),
+    { schema: { params: petParamsSchema, response: { 200: weightsResponseSchema } } },
+    async (request) => listWeights(app.db, petFor(request, request.params.petId)),
   );
 
   app.post(

@@ -36,6 +36,13 @@
       "when": 1792233336593,
       "tag": "0004_exposures",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1792235560330,
+      "tag": "0005_diet_package_portions",
+      "breakpoints": true
     }
   ]
 }
