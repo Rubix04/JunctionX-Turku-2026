@@ -598,36 +598,80 @@
     "directPaymentNote": "Sopimusklinikat, joissa on suorakorvaus: korvausta ei tarvitse hakea jälkikäteen.",
     "bankIdNote": "Vakuutustietojen muuttaminen vaatii uuden pankkitunnistautumisen."
   },
-  "settings": {
-    "title": "Tili",
-    "verified": "Tunnistettu verkkopankkitunnuksilla",
-    "insuranceHint": "Vakuutukset, korvaukset ja suorakorvaus",
-    "pets": "Lemmikkisi",
-    "family": "Perhetili",
-    "owner": "Omistaja",
-    "member": "Perheenjäsen",
-    "familyHint": "Kaikki perhetilin jäsenet näkevät samat lemmikkisivut ja muistutukset.",
-    "language": "Kieli",
-    "notifications": "Ilmoitukset",
-    "notify": {
-      "medication": "Lääkemuistutukset",
-      "followUps": "Jälkitarkastukset ja rokotukset",
-      "seasonal": "Kausivinkit",
-      "location": "Paikalliset varoitukset",
-      "locationHint": "esim. sinilevä tai myrkkyvaroitukset lähistöllä"
+  "profile": {
+    "pets_one": "{{count}} lemmikki",
+    "pets_other": "{{count}} lemmikkiä",
+    "policies_one": "{{count}} voimassa oleva vakuutus",
+    "policies_other": "{{count}} voimassa olevaa vakuutusta",
+    "openClaims_one": "{{count}} avoin korvaushakemus",
+    "openClaims_other": "{{count}} avointa korvaushakemusta",
+    "noOpenClaims": "Ei avoimia korvaushakemuksia",
+    "signOut": "Kirjaudu ulos",
+    "version": "TassuVahti {{version}}",
+    "myAccount": "Oma tili",
+    "aboutUs": "Meistä",
+    "team": "Eläinlääkärit ja neuvojat",
+    "faq": "Usein kysyttyä",
+    "support": "Asiakaspalvelu",
+    "accessibility": "Saavutettavuusseloste",
+    "referTitle": "Suosittele ystävälle",
+    "refer": "Suosittele sovellusta ystävälle",
+    "referHint": "Jaa linkki ystävälle, jolla on lemmikki",
+    "referMessage": "Seuraan lemmikkini terveyttä ja vakuutusta TassuVahdilla. Kokeile: https://tassuvahti.fi",
+    "account": {
+      "name": "Nimi",
+      "signIn": "Kirjautumistapa",
+      "signInValue": "Pankkitunnukset tai sähköposti",
+      "family": "Perhetili",
+      "you": "Sinä · omistaja",
+      "member": "Perheenjäsen",
+      "familyHint": "Kaikki perhetilin jäsenet näkevät samat lemmikkisivut ja muistutukset.",
+      "yourPets": "Lemmikkisi"
     },
-    "sharing": "Jaetut passit",
-    "shareOf": "Lemmikin {{name}} passi",
-    "shareExpires": "Linkki toimii {{date}} asti",
-    "noShares": "Et jaa tällä hetkellä passia.",
-    "privacy": "Tietosuoja",
-    "vetConsent": "Jaa käyntitiedot eläinlääkärini kanssa",
-    "vetConsentHint": "Klinikka voi tarkistaa hoitosuunnitelmat ja lähettää käyntitiedot",
-    "privacyNotice": "Tietosuojaseloste",
-    "privacyNoticeHint": "Miten sinun ja lemmikkiesi tietoja käytetään (GDPR)",
-    "signOut": "Kirjaa tämä laite ulos",
-    "signOutHint": "Uloskirjautuminen poistaa istunnon tästä puhelimesta. Tarvitset verkkopankkitunnukset kirjautuaksesi uudelleen.",
-    "version": "TassuVahti {{version}}"
+    "teamIntro": "Eläinlääkärimme ja neuvojamme vastaavat puheluihin ja chattiin sekä tarkistavat sovelluksen sisällön.",
+    "roles": {
+      "vet": "Eläinlääkäri",
+      "nurse": "Eläinhoitaja",
+      "behaviour": "Käytösneuvoja"
+    },
+    "speaks": "Kielet: {{languages}}",
+    "faqItems": [
+      {
+        "q": "Miten teen korvaushakemuksen?",
+        "a": "Avaa Koti ja napauta lemmikin kortilla Tee korvaushakemus. Lisää käynnin tiedot ja kuva kuitista. Suorakorvausta käyttävillä sopimusklinikoilla hakemusta ei tarvita."
+      },
+      {
+        "q": "Mitä vakuutukseni kattaa?",
+        "a": "Eläinlääkärikulut vuosittaiseen enimmäismäärään asti. Jäljellä olevan korvauksen näet Koti-näkymästä ja kohdasta Vakuutukset ja korvaukset."
+      },
+      {
+        "q": "Kuka näkee lemmikkini tiedot?",
+        "a": "Vain sinä ja lisäämäsi perheenjäsenet. Päätät itse, milloin jaat terveyspassin eläinlääkärille tai hoitajalle, ja voit lopettaa jakamisen milloin tahansa."
+      },
+      {
+        "q": "Korvaako sovellus eläinlääkärin?",
+        "a": "Ei. TassuVahti auttaa seuraamaan lemmikkiä käyntien välillä. Jos olet huolissasi, ota aina yhteyttä eläinlääkäriin."
+      },
+      {
+        "q": "Miten vaihdan kielen?",
+        "a": "Avaa Profiili ja valitse kohdasta Kieli Suomi, Svenska tai English."
+      }
+    ],
+    "supportIntro": "Autamme mielellämme vakuutus-, korvaus- ja sovellusasioissa.",
+    "phone": "Puhelin",
+    "email": "Sähköposti",
+    "hours": "Aukioloajat",
+    "hoursValue": "ma–pe 8–18 · la 10–15",
+    "call": "Soita meille",
+    "sendEmail": "Lähetä sähköpostia",
+    "emergencyNote": "Onko lemmikkisi äkillisesti sairas? Löydät lähimmän päivystyksen Tutki-välilehdeltä.",
+    "accessibilityBody": [
+      "Haluamme, että kaikki voivat käyttää TassuVahtia. Sovellus pyrkii täyttämään WCAG 2.1 AA -ohjeet.",
+      "Terveystila näytetään aina värin, kuvakkeen ja sanan avulla, joten sen voi lukea ilman värinäköä. Teksti noudattaa puhelimen kokoasetusta, ja kaikki painikkeet toimivat ruudunlukijoilla, kuten VoiceOver ja TalkBack.",
+      "Tunnetut puutteet: klinikkakartta on kuva, joten käytä sen alla olevaa klinikkalistaa.",
+      "Huomasitko jotain, mikä ei toimi sinulle? Kerro asiakaspalveluun, niin korjaamme sen."
+    ],
+    "accessibilityUpdated": "Seloste päivitetty 18.10.2026"
   },
   "notFound": {
     "title": "Tätä sivua ei ole olemassa",

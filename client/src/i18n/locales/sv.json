@@ -598,36 +598,80 @@
     "directPaymentNote": "Avtalskliniker med direktersättning: du behöver inte ansöka i efterhand.",
     "bankIdNote": "Ändring av försäkringsuppgifter kräver ny bankidentifiering."
   },
-  "settings": {
-    "title": "Konto",
-    "verified": "Identifierad med nätbankskoder",
-    "insuranceHint": "Försäkringar, ersättningar och direktersättning",
-    "pets": "Dina djur",
-    "family": "Familjekonto",
-    "owner": "Ägare",
-    "member": "Familjemedlem",
-    "familyHint": "Alla i familjekontot ser samma djursidor och påminnelser.",
-    "language": "Språk",
-    "notifications": "Aviseringar",
-    "notify": {
-      "medication": "Medicinpåminnelser",
-      "followUps": "Återbesök och vaccinationer",
-      "seasonal": "Säsongstips",
-      "location": "Lokala varningar",
-      "locationHint": "t.ex. blågröna alger eller giftvarningar i närheten"
+  "profile": {
+    "pets_one": "{{count}} husdjur",
+    "pets_other": "{{count}} husdjur",
+    "policies_one": "{{count}} aktiv försäkring",
+    "policies_other": "{{count}} aktiva försäkringar",
+    "openClaims_one": "{{count}} öppet ersättningsärende",
+    "openClaims_other": "{{count}} öppna ersättningsärenden",
+    "noOpenClaims": "Inga öppna ersättningsärenden",
+    "signOut": "Logga ut",
+    "version": "TassuVahti {{version}}",
+    "myAccount": "Mitt konto",
+    "aboutUs": "Om oss",
+    "team": "Veterinärer och rådgivare",
+    "faq": "Vanliga frågor",
+    "support": "Kundtjänst",
+    "accessibility": "Tillgänglighetsredogörelse",
+    "referTitle": "Tipsa en vän",
+    "refer": "Rekommendera appen till en vän",
+    "referHint": "Dela en länk med en vän som har djur",
+    "referMessage": "Jag använder TassuVahti för att hålla koll på mitt djurs hälsa och försäkring. Testa: https://tassuvahti.fi",
+    "account": {
+      "name": "Namn",
+      "signIn": "Inloggad med",
+      "signInValue": "Bankkoder eller e-post",
+      "family": "Familjekonto",
+      "you": "Du · ägare",
+      "member": "Familjemedlem",
+      "familyHint": "Alla i familjekontot ser samma djursidor och påminnelser.",
+      "yourPets": "Dina djur"
     },
-    "sharing": "Delade pass",
-    "shareOf": "{{name}}s pass",
-    "shareExpires": "Länken fungerar till {{date}}",
-    "noShares": "Du delar inget pass just nu.",
-    "privacy": "Integritet",
-    "vetConsent": "Dela besöksuppgifter med min veterinär",
-    "vetConsentHint": "Kliniken kan kontrollera vårdplaner och skicka besöksanteckningar",
-    "privacyNotice": "Dataskyddsbeskrivning",
-    "privacyNoticeHint": "Hur dina och dina djurs uppgifter används (GDPR)",
-    "signOut": "Logga ut den här enheten",
-    "signOutHint": "Utloggningen tar bort sessionen från telefonen. Du behöver nätbankskoder för att logga in igen.",
-    "version": "TassuVahti {{version}}"
+    "teamIntro": "Våra veterinärer och rådgivare svarar på samtal och chatt och granskar innehållet i appen.",
+    "roles": {
+      "vet": "Veterinär",
+      "nurse": "Djursjukskötare",
+      "behaviour": "Beteenderådgivare"
+    },
+    "speaks": "Språk: {{languages}}",
+    "faqItems": [
+      {
+        "q": "Hur gör jag en skadeanmälan?",
+        "a": "Öppna Hem och tryck på Gör en skadeanmälan på djurets kort. Lägg till besöket och ett foto av kvittot. På avtalskliniker med direktreglering behöver du inte anmäla något."
+      },
+      {
+        "q": "Vad täcker min försäkring?",
+        "a": "Veterinärvård upp till ditt årliga belopp. Hur mycket som finns kvar ser du på Hem och under Försäkringar och ersättningar."
+      },
+      {
+        "q": "Vem kan se mitt djurs uppgifter?",
+        "a": "Bara du och de familjemedlemmar du lägger till. Du bestämmer själv när du delar hälsopasset med en veterinär eller djurvakt och kan sluta dela när som helst."
+      },
+      {
+        "q": "Ersätter appen en veterinär?",
+        "a": "Nej. TassuVahti hjälper dig att hålla koll på djuret mellan besöken. Om du är orolig, kontakta alltid en veterinär."
+      },
+      {
+        "q": "Hur byter jag språk?",
+        "a": "Gå till Profil och välj Suomi, Svenska eller English under Språk."
+      }
+    ],
+    "supportIntro": "Vi hjälper gärna till med försäkring, ersättningar och appen.",
+    "phone": "Telefon",
+    "email": "E-post",
+    "hours": "Öppettider",
+    "hoursValue": "mån–fre 8–18 · lör 10–15",
+    "call": "Ring oss",
+    "sendEmail": "Skicka e-post",
+    "emergencyNote": "Är ditt djur akut sjukt? Hitta närmaste jourklinik under Utforska.",
+    "accessibilityBody": [
+      "Vi vill att alla ska kunna använda TassuVahti. Appen strävar efter att uppfylla WCAG 2.1 AA.",
+      "Hälsoläget visas alltid med färg, ikon och ord, så det går att läsa utan färgseende. Texten följer storleken du valt i telefonen, och alla knappar fungerar med skärmläsare som VoiceOver och TalkBack.",
+      "Kända brister: klinikkartan är en bild, så använd kliniklistan under den.",
+      "Hittade du något som inte fungerar för dig? Berätta via Kundtjänst så åtgärdar vi det."
+    ],
+    "accessibilityUpdated": "Redogörelsen uppdaterad 18.10.2026"
   },
   "notFound": {
     "title": "Den här sidan finns inte",

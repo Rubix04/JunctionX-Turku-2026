@@ -598,36 +598,80 @@
     "directPaymentNote": "Contracted clinics with direct payment: no need to claim afterwards.",
     "bankIdNote": "Changing policy details asks for bank ID again."
   },
-  "settings": {
-    "title": "Account",
-    "verified": "Identified with online banking",
-    "insuranceHint": "Policies, claims and direct payment",
-    "pets": "Your pets",
-    "family": "Family account",
-    "owner": "Owner",
-    "member": "Family member",
-    "familyHint": "Everyone in the family account sees the same pet pages and reminders.",
-    "language": "Language",
-    "notifications": "Notifications",
-    "notify": {
-      "medication": "Medication reminders",
-      "followUps": "Follow-ups and vaccinations",
-      "seasonal": "Seasonal alerts",
-      "location": "Local warnings",
-      "locationHint": "e.g. blue-green algae or poisoning warnings nearby"
+  "profile": {
+    "pets_one": "{{count}} pet",
+    "pets_other": "{{count}} pets",
+    "policies_one": "{{count}} active policy",
+    "policies_other": "{{count}} active policies",
+    "openClaims_one": "{{count}} open claim",
+    "openClaims_other": "{{count}} open claims",
+    "noOpenClaims": "No open claims",
+    "signOut": "Sign out",
+    "version": "TassuVahti {{version}}",
+    "myAccount": "My account",
+    "aboutUs": "About us",
+    "team": "Vets and advisors",
+    "faq": "FAQ",
+    "support": "Customer service",
+    "accessibility": "Accessibility statement",
+    "referTitle": "Refer a friend",
+    "refer": "Recommend the app to a friend",
+    "referHint": "Share a link with a friend who has a pet",
+    "referMessage": "I use TassuVahti to keep track of my pet’s health and insurance. Try it: https://tassuvahti.fi",
+    "account": {
+      "name": "Name",
+      "signIn": "Signed in with",
+      "signInValue": "BankID or email",
+      "family": "Family account",
+      "you": "You · owner",
+      "member": "Family member",
+      "familyHint": "Everyone in the family account sees the same pet pages and reminders.",
+      "yourPets": "Your pets"
     },
-    "sharing": "Shared passports",
-    "shareOf": "{{name}}'s passport",
-    "shareExpires": "Link works until {{date}}",
-    "noShares": "You are not sharing a passport right now.",
-    "privacy": "Privacy",
-    "vetConsent": "Share visit data with my vet",
-    "vetConsentHint": "Lets the clinic check care plans and send visit notes",
-    "privacyNotice": "Privacy notice",
-    "privacyNoticeHint": "How your and your pets' data is used (GDPR)",
-    "signOut": "Sign this device out",
-    "signOutHint": "Signing out removes the session from this phone. You'll need online banking to sign in again.",
-    "version": "TassuVahti {{version}}"
+    "teamIntro": "Our vets and advisors answer your calls and chats and review the content in the app.",
+    "roles": {
+      "vet": "Veterinarian",
+      "nurse": "Vet nurse",
+      "behaviour": "Behaviour advisor"
+    },
+    "speaks": "Speaks {{languages}}",
+    "faqItems": [
+      {
+        "q": "How do I make a claim?",
+        "a": "Open Home and tap Submit a claim on your pet’s card. Add the visit details and a photo of the receipt. At contracted clinics with direct payment you don’t need to claim at all."
+      },
+      {
+        "q": "What does my insurance cover?",
+        "a": "Vet care up to your yearly limit. You can see how much cover you have left on the Home screen and in Insurance & claims."
+      },
+      {
+        "q": "Who can see my pet’s information?",
+        "a": "Only you and the family members you add. You decide when to share the health passport with a vet or pet sitter, and you can stop sharing at any time."
+      },
+      {
+        "q": "Does the app replace a vet?",
+        "a": "No. TassuVahti helps you keep an eye on your pet between visits. If you are worried, always contact a vet."
+      },
+      {
+        "q": "How do I change the language?",
+        "a": "Go to Profile and pick Suomi, Svenska or English under Language."
+      }
+    ],
+    "supportIntro": "We’re happy to help with insurance, claims and the app.",
+    "phone": "Phone",
+    "email": "Email",
+    "hours": "Opening hours",
+    "hoursValue": "Mon–Fri 8–18 · Sat 10–15",
+    "call": "Call us",
+    "sendEmail": "Send an email",
+    "emergencyNote": "Is your pet acutely ill? Find the nearest emergency clinic in Explore.",
+    "accessibilityBody": [
+      "We want everyone to be able to use TassuVahti. The app aims to meet the WCAG 2.1 AA guidelines.",
+      "Health status is always shown with a colour, an icon and a word, so it can be read without colour vision. Text follows the size set on your phone, and every button works with screen readers such as VoiceOver and TalkBack.",
+      "Known issues: the clinic map is a picture, so use the clinic list below it instead.",
+      "Found something that doesn’t work for you? Tell us through Customer service and we’ll fix it."
+    ],
+    "accessibilityUpdated": "Statement updated 18 Oct 2026"
   },
   "notFound": {
     "title": "This page doesn't exist",
