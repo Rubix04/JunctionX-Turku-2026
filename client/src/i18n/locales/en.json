@@ -738,5 +738,9 @@
   "pinPad": {
     "delete": "Delete",
     "entered": "{{count}} of {{total}} digits entered"
+  },
+  "splash": {
+    "continue": "Tap to continue",
+    "by": "by [Insurance company]"
   }
 }

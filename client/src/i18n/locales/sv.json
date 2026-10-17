@@ -738,5 +738,9 @@
   "pinPad": {
     "delete": "Radera",
     "entered": "{{count}} av {{total}} siffror angivna"
+  },
+  "splash": {
+    "continue": "Tryck för att fortsätta",
+    "by": "av [Försäkringsbolag]"
   }
 }
