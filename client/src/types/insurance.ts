@@ -4,6 +4,8 @@ export type Policy = {
   id: string;
   petId: string;
   number: string;
+  /** Product name, e.g. "Basic Protection" */
+  plan: string;
   /** Yearly vet care cover, euros */
   coverLimit: number;
   usedThisYear: number;
