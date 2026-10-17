@@ -205,3 +205,39 @@ export const exposures = sqliteTable("exposures", {
 });
 
 export type ExposureRow = typeof exposures.$inferSelect;
+
+// ---- Seasonal alerts and push notifications (spec 9) ----
+
+/** Push registration for one signed-in device. Removed with the session when it signs out. */
+export const pushDevices = sqliteTable("push_devices", {
+  sessionId: text("session_id")
+    .primaryKey()
+    .references(() => deviceSessions.id, { onDelete: "cascade" }),
+  expoPushToken: text("expo_push_token").notNull(),
+  platform: text("platform", { enum: ["ios", "android"] }).notNull(),
+  language: text("language", { enum: ["fi", "sv", "en"] }).notNull(),
+  /** Rounded to 1 decimal (about 10 km): enough to pick the region, not to locate a home. */
+  latitude: real("latitude"),
+  longitude: real("longitude"),
+  seasonalAlerts: integer("seasonal_alerts", { mode: "boolean" }).notNull().default(true),
+  updatedAt: integer("updated_at", { mode: "number" }).notNull(),
+  createdAt: createdAt(),
+});
+
+/** Which seasonal card has been pushed to which device, so each is sent once per season. */
+export const seasonalNotificationsSent = sqliteTable(
+  "seasonal_notifications_sent",
+  {
+    id: text("id").primaryKey(),
+    sessionId: text("session_id")
+      .notNull()
+      .references(() => deviceSessions.id, { onDelete: "cascade" }),
+    cardId: text("card_id").notNull(),
+    /** The year the card's window started, e.g. 2026 for Dec 2026 – Jan 2027 */
+    seasonYear: integer("season_year").notNull(),
+    sentAt: integer("sent_at", { mode: "number" }).notNull(),
+  },
+  (table) => [uniqueIndex("seasonal_sent_once").on(table.sessionId, table.cardId, table.seasonYear)],
+);
+
+export type PushDeviceRow = typeof pushDevices.$inferSelect;

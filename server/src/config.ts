@@ -15,6 +15,10 @@ const envSchema = z.object({
     .enum(["true", "false"])
     .default("false")
     .transform((value) => value === "true"),
+  /** off: no seasonal push job; log: write pushes to the log; expo: really send them */
+  PUSH_MODE: z.enum(["off", "log", "expo"]).default("log"),
+  /** Optional Expo access token, if push security is enabled in the Expo project */
+  EXPO_ACCESS_TOKEN: z.string().optional(),
 });
 
 export type Config = z.infer<typeof envSchema>;
