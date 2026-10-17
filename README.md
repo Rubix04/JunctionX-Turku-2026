@@ -2,7 +2,7 @@
 
 Group Gabagoolers
 
-TassuVahti ("PawWatch") is a pet health app for an insurance company. It turns the information from a vet visit into a personal care plan, tells the owner what to watch for at home, and makes it clear when it is time to contact a vet.
+TassuVahti ("PawGuard") is a pet health app for an insurance company. It turns the information from a vet visit into a personal care plan, tells the owner what to watch for at home, and makes it clear when it is time to contact a vet.
 
 Built with **React Native**, **Expo Router** and **TypeScript**.
 
