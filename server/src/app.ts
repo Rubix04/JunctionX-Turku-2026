@@ -15,6 +15,7 @@ import { authRoutes } from "./modules/auth/routes.js";
 import { alertsRoutes, notificationRoutes, petAlertsRoutes } from "./modules/alerts/routes.js";
 import { careRoutes, reminderRoutes } from "./modules/care/routes.js";
 import { emergencyRoutes, petEmergencyRoutes } from "./modules/emergency/routes.js";
+import { clinicRoutes } from "./modules/clinics/routes.js";
 import { dietRoutes } from "./modules/diet/routes.js";
 import { exposureRoutes, knowledgeRoutes } from "./modules/knowledge/routes.js";
 import { passportRoutes, sharedPassportRoutes } from "./modules/passport/routes.js";
@@ -91,6 +92,7 @@ export const buildApp = async ({
   await app.register(passportRoutes, { prefix: "/pets" });
   await app.register(sharedPassportRoutes, { prefix: "/shared" });
   await app.register(dietRoutes);
+  await app.register(clinicRoutes, { prefix: "/clinics" });
   await app.register(knowledgeRoutes, { prefix: "/knowledge" });
   await app.register(exposureRoutes, { prefix: "/pets" });
   await app.register(alertsRoutes, { prefix: "/alerts" });
