@@ -66,3 +66,57 @@ export const pets = sqliteTable("pets", {
 export type UserRow = typeof users.$inferSelect;
 export type DeviceSessionRow = typeof deviceSessions.$inferSelect;
 export type PetRow = typeof pets.$inferSelect;
+
+// ---- Health passport (spec 4) ----
+
+export const healthRecordKinds = ["vaccination", "medication", "allergy", "surgery", "visit"] as const;
+export type HealthRecordKind = (typeof healthRecordKinds)[number];
+
+/**
+ * One entry in a pet's health passport. The fields that differ per kind live in `data` (JSON),
+ * validated by the kind's schema in modules/passport/records.ts.
+ */
+export const healthRecords = sqliteTable("health_records", {
+  id: text("id").primaryKey(),
+  petId: text("pet_id")
+    .notNull()
+    .references(() => pets.id, { onDelete: "cascade" }),
+  kind: text("kind", { enum: healthRecordKinds }).notNull(),
+  /** The record's main date (ISO), used for sorting. Null if unknown, e.g. an allergy. */
+  date: text("date"),
+  data: text("data", { mode: "json" }).notNull().$type<Record<string, unknown>>(),
+  createdAt: createdAt(),
+  updatedAt: integer("updated_at", { mode: "number" }).notNull(),
+});
+
+export const shareRecipients = ["vet", "petCare", "other"] as const;
+export const passportSections = ["vaccinations", "medications", "allergies", "surgeries", "visits"] as const;
+export type PassportSection = (typeof passportSections)[number];
+
+/**
+ * A read-only link to a pet's passport for a vet or pet care facility. Creating one is the
+ * owner's consent to share; the row is kept after expiry or revocation as a record of it.
+ */
+export const passportShares = sqliteTable("passport_shares", {
+  id: text("id").primaryKey(),
+  petId: text("pet_id")
+    .notNull()
+    .references(() => pets.id, { onDelete: "cascade" }),
+  createdByUserId: text("created_by_user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  tokenHash: text("token_hash").notNull().unique(),
+  recipientType: text("recipient_type", { enum: shareRecipients }).notNull(),
+  recipientName: text("recipient_name"),
+  sections: text("sections", { mode: "json" }).notNull().$type<PassportSection[]>(),
+  /** Language of the shared page: fi, sv or en */
+  language: text("language").notNull(),
+  expiresAt: integer("expires_at", { mode: "number" }).notNull(),
+  revokedAt: integer("revoked_at", { mode: "number" }),
+  accessCount: integer("access_count").notNull().default(0),
+  lastAccessedAt: integer("last_accessed_at", { mode: "number" }),
+  createdAt: createdAt(),
+});
+
+export type HealthRecordRow = typeof healthRecords.$inferSelect;
+export type PassportShareRow = typeof passportShares.$inferSelect;

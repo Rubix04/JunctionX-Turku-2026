@@ -6,6 +6,8 @@ const envSchema = z.object({
   HOST: z.string().default("0.0.0.0"),
   DATABASE_PATH: z.string().default("./data/tassuvahti.db"),
   UPLOAD_DIR: z.string().default("./data/uploads"),
+  /** Public address of the server, used in share links. Defaults to the request's own host. */
+  PUBLIC_BASE_URL: z.url().optional(),
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
   // Kept separate from JWT_SECRET: changing it would disconnect every user from their account.
   IDENTITY_HASH_SECRET: z.string().min(32, "IDENTITY_HASH_SECRET must be at least 32 characters"),
