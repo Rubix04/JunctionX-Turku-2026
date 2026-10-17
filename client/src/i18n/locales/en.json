@@ -1,1 +1,7 @@
-{}
+{
+  "common": {
+    "appName": "TassuVahti",
+    "tagline": "Watching over your pet between vet visits.",
+    "emergency": "Emergency"
+  }
+}
