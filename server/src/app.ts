@@ -14,6 +14,7 @@ import { type BankIdentityProvider, mockBankProvider } from "./modules/auth/bank
 import { authRoutes } from "./modules/auth/routes.js";
 import { alertsRoutes, notificationRoutes, petAlertsRoutes } from "./modules/alerts/routes.js";
 import { careRoutes, reminderRoutes } from "./modules/care/routes.js";
+import { emergencyRoutes, petEmergencyRoutes } from "./modules/emergency/routes.js";
 import { dietRoutes } from "./modules/diet/routes.js";
 import { exposureRoutes, knowledgeRoutes } from "./modules/knowledge/routes.js";
 import { passportRoutes, sharedPassportRoutes } from "./modules/passport/routes.js";
@@ -99,6 +100,8 @@ export const buildApp = async ({
   await app.register(symptomRoutes, { prefix: "/pets" });
   await app.register(careRoutes, { prefix: "/pets" });
   await app.register(reminderRoutes, { prefix: "/reminders" });
+  await app.register(emergencyRoutes, { prefix: "/emergency" });
+  await app.register(petEmergencyRoutes, { prefix: "/pets" });
 
   return app;
 };
