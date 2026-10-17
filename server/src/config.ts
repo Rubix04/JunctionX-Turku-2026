@@ -5,7 +5,10 @@ const envSchema = z.object({
   PORT: z.coerce.number().int().default(3000),
   HOST: z.string().default("0.0.0.0"),
   DATABASE_PATH: z.string().default("./data/tassuvahti.db"),
+  UPLOAD_DIR: z.string().default("./data/uploads"),
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
+  // Kept separate from JWT_SECRET: changing it would disconnect every user from their account.
+  IDENTITY_HASH_SECRET: z.string().min(32, "IDENTITY_HASH_SECRET must be at least 32 characters"),
   DEMO_MODE: z
     .enum(["true", "false"])
     .default("false")

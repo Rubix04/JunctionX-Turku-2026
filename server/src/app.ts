@@ -10,6 +10,9 @@ import {
 import type { Config } from "./config.js";
 import type { Db } from "./db/client.js";
 import { ApiError } from "./errors.js";
+import { type BankIdentityProvider, mockBankProvider } from "./modules/auth/bank-provider.js";
+import { authRoutes } from "./modules/auth/routes.js";
+import { petPhotoRoutes } from "./modules/pet-photos/routes.js";
 import { petRoutes } from "./modules/pets/routes.js";
 import { authPlugin } from "./plugins/auth.js";
 
@@ -24,9 +27,16 @@ type BuildAppOptions = {
   config: Config;
   db: Db;
   logger?: FastifyServerOptions["logger"];
+  /** Online banking identification. Defaults to the mock until a real FTN broker is connected. */
+  bankProvider?: BankIdentityProvider;
 };
 
-export const buildApp = async ({ config, db, logger = false }: BuildAppOptions) => {
+export const buildApp = async ({
+  config,
+  db,
+  logger = false,
+  bankProvider = mockBankProvider,
+}: BuildAppOptions) => {
   const app = Fastify({ logger }).withTypeProvider<ZodTypeProvider>();
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
@@ -66,7 +76,9 @@ export const buildApp = async ({ config, db, logger = false }: BuildAppOptions) 
   await app.register(authPlugin, { secret: config.JWT_SECRET });
 
   app.get("/health", async () => ({ status: "ok" }));
+  await app.register(authRoutes, { prefix: "/auth", bankProvider });
   await app.register(petRoutes, { prefix: "/pets" });
+  await app.register(petPhotoRoutes, { prefix: "/pets" });
 
   return app;
 };

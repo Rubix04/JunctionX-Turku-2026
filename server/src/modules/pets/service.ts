@@ -14,6 +14,8 @@ export const toPetDto = (row: PetRow): PetDto => ({
   breed: row.breed,
   birthDate: row.birthDate,
   weightKg: row.weightKg,
+  // The version parameter changes with every new picture, so clients can cache by URL.
+  photoUrl: row.photoKey ? `/pets/${row.id}/photo?v=${row.photoKey.slice(0, 8)}` : null,
 });
 
 export const listPets = (db: Db, householdId: string) =>
@@ -52,7 +54,9 @@ export const updatePet = (db: Db, householdId: string, petId: string, input: Upd
   return db.update(pets).set(input).where(eq(pets.id, petId)).returning().get();
 };
 
-export const deletePet = (db: Db, householdId: string, petId: string) => {
-  getPet(db, householdId, petId);
+/** Deletes the pet and returns the deleted row, so the caller can clean up its files. */
+export const deletePet = (db: Db, householdId: string, petId: string): PetRow => {
+  const pet = getPet(db, householdId, petId);
   db.delete(pets).where(eq(pets.id, petId)).run();
+  return pet;
 };

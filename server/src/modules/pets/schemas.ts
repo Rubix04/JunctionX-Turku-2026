@@ -11,6 +11,8 @@ export const petSchema = z.object({
   breed: z.string().nullable(),
   birthDate: isoDate.nullable(),
   weightKg: z.number().nullable(),
+  /** Path of the profile picture (GET it with the access token), or null for the species default. */
+  photoUrl: z.string().nullable(),
 });
 
 export const createPetSchema = z.object({
