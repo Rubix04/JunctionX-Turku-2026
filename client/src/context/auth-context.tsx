@@ -1,7 +1,9 @@
-import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, type ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import { AppState } from 'react-native';
 
 import { ApiError, setAccessToken, setTokenRefresher } from '@/services/api-client';
 import * as authService from '@/services/auth';
+import { clearPin, savePin, verifyPin } from '@/services/pin';
 import {
   deleteStoredItem,
   getStoredItem,
@@ -27,11 +29,20 @@ type AuthContextValue = {
   signInWithBank: (bankId: string) => Promise<void>;
   /** Saves the session behind the chosen lock and opens the app. */
   finishSetup: (method: LockMethod, pin?: string) => Promise<void>;
-  checkPin: (pin: string) => Promise<boolean>;
+  /** On the last wrong attempt the device is signed out and the app goes back to the welcome screen. */
+  checkPin: (pin: string) => Promise<{ ok: boolean; attemptsLeft: number }>;
   /** Call after face, fingerprint or PIN check passed. Resolves false if the session expired. */
   unlock: () => Promise<boolean>;
   signOut: () => Promise<void>;
+  /**
+   * Confirms a sensitive action with online banking when the server answers
+   * BANK_REAUTH_REQUIRED (see isBankReauthRequired). Retry the action afterwards.
+   */
+  confirmWithBank: (bankId: string) => Promise<void>;
 };
+
+// Ask for face, fingerprint or PIN again after the app has been in the background this long.
+const LOCK_AFTER_BACKGROUND_MS = 60 * 1000;
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -39,8 +50,8 @@ const clearStoredSession = () =>
   Promise.all([
     deleteStoredItem(storageKeys.refreshToken),
     deleteStoredItem(storageKeys.lockMethod),
-    deleteStoredItem(storageKeys.pin),
     deleteStoredItem(storageKeys.displayName),
+    clearPin(),
   ]);
 
 const isSessionGone = (error: unknown) =>
@@ -51,6 +62,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [lockMethod, setLockMethod] = useState<LockMethod | null>(null);
   const [pendingSignIn, setPendingSignIn] = useState<SignInResponse | null>(null);
+  const backgroundedAt = useRef<number | null>(null);
+  const statusRef = useRef(status);
+  useEffect(() => {
+    statusRef.current = status;
+  }, [status]);
 
   const resetToSignedOut = async () => {
     await clearStoredSession();
@@ -92,6 +108,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     restore().catch(() => setStatus('signedOut'));
   }, []);
 
+  // Lock again when the app comes back after a while in the background (spec 13: the app
+  // opens with the device lock). Short trips, e.g. to the photo picker, don't lock.
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'background') {
+        backgroundedAt.current = Date.now();
+      } else if (state === 'active' && backgroundedAt.current !== null) {
+        const away = Date.now() - backgroundedAt.current;
+        backgroundedAt.current = null;
+        if (away > LOCK_AFTER_BACKGROUND_MS && statusRef.current === 'signedIn') {
+          setAccessToken(null);
+          setStatus('locked');
+        }
+      }
+    });
+    return () => subscription.remove();
+  }, []);
+
   // Let the API client renew an expired access token while the app is open.
   useEffect(() => {
     setTokenRefresher(async () => {
@@ -127,8 +161,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setStoredItem(storageKeys.refreshToken, pendingSignIn.refreshToken),
         setStoredItem(storageKeys.lockMethod, method),
         setStoredItem(storageKeys.displayName, pendingSignIn.user.displayName),
-        // Stored in the Keychain / Keystore, which is encrypted by the OS.
-        pin ? setStoredItem(storageKeys.pin, pin) : deleteStoredItem(storageKeys.pin),
+        // Only a salted hash of the PIN is kept, in the Keychain / Keystore.
+        pin ? savePin(pin) : clearPin(),
       ]);
       setAccessToken(pendingSignIn.accessToken);
       setDisplayName(pendingSignIn.user.displayName);
@@ -137,7 +171,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setStatus('signedIn');
     },
 
-    checkPin: async (pin) => (await getStoredItem(storageKeys.pin)) === pin,
+    checkPin: async (pin) => {
+      const result = await verifyPin(pin);
+      if (!result.ok && result.attemptsLeft === 0) {
+        // Too many wrong guesses: forget the session on this device. The server session
+        // can't be used without the refresh token we delete here.
+        await resetToSignedOut();
+      }
+      return result;
+    },
 
     unlock: async () => {
       try {
@@ -158,6 +200,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Best effort: sign out locally even if the server can't be reached.
       await authService.signOutSession().catch(() => undefined);
       await resetToSignedOut();
+    },
+
+    confirmWithBank: async (bankId) => {
+      const { accessToken } = await authService.reauthenticateWithBank(bankId);
+      setAccessToken(accessToken);
     },
   };
 

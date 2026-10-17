@@ -120,6 +120,8 @@
     "fingerprintHint": "Avaa koskettamalla tunnistinta",
     "enterPin": "Anna PIN-koodisi",
     "wrongPin": "Väärä PIN-koodi. Yritä uudelleen.",
+    "wrongPinAttemptsLeft_one": "Väärä PIN-koodi. 1 yritys jäljellä, sitten pitää kirjautua uudelleen.",
+    "wrongPinAttemptsLeft_other": "Väärä PIN-koodi. {{count}} yritystä jäljellä.",
     "connectionError": "Yhteyttä ei saatu. Tarkista yhteys ja yritä uudelleen.",
     "signInAgain": "Kirjaudu uudelleen verkkopankkitunnuksilla"
   },

@@ -18,6 +18,16 @@ export const setAccessToken = (token: string | null) => {
   accessToken = token;
 };
 
+// For requests that don't go through apiFetch, e.g. images loaded by expo-image.
+export const getAccessToken = () => accessToken;
+
+/**
+ * Sensitive actions (e.g. changing insurance details) answer 403 BANK_REAUTH_REQUIRED when the
+ * last bank sign-in is too old. Confirm with the bank (useAuth().confirmWithBank) and retry.
+ */
+export const isBankReauthRequired = (error: unknown) =>
+  error instanceof ApiError && error.status === 403 && error.code === 'BANK_REAUTH_REQUIRED';
+
 // Gets a new access token when the old one has expired. Resolves false if the
 // session is gone. Set by AuthProvider.
 let refreshAccessToken: (() => Promise<boolean>) | null = null;
@@ -52,8 +62,10 @@ export const apiFetch = async <T>(
     throw new Error('EXPO_PUBLIC_API_URL is not set');
   }
 
+  // FormData (file uploads) sets its own multipart Content-Type with the boundary.
+  const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
   const headers: Record<string, string> = {};
-  if (body !== undefined) {
+  if (body !== undefined && !isFormData) {
     headers['Content-Type'] = 'application/json';
   }
   if (accessToken) {
@@ -63,7 +75,7 @@ export const apiFetch = async <T>(
   const response = await fetch(`${apiUrl}${path}`, {
     method,
     headers,
-    body: body === undefined ? undefined : JSON.stringify(body),
+    body: body === undefined ? undefined : isFormData ? (body as FormData) : JSON.stringify(body),
   });
 
   const isSignInCall = path === '/auth/bank' || path === '/auth/refresh';

@@ -41,10 +41,12 @@ const UnlockScreen = () => {
   };
 
   const unlockWithPin = async (pin: string) => {
-    if (await checkPin(pin)) {
+    const { ok, attemptsLeft } = await checkPin(pin);
+    if (ok) {
       await finishUnlock();
     } else {
-      setError(t('unlock.wrongPin'));
+      // At 0 the device is signed out and the app returns to the welcome screen.
+      setError(t('unlock.wrongPinAttemptsLeft', { count: attemptsLeft }));
     }
   };
 

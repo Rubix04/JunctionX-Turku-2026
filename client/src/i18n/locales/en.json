@@ -120,6 +120,8 @@
     "fingerprintHint": "Touch the sensor to unlock",
     "enterPin": "Enter your PIN",
     "wrongPin": "Wrong PIN. Try again.",
+    "wrongPinAttemptsLeft_one": "Wrong PIN. 1 try left before you need to sign in again.",
+    "wrongPinAttemptsLeft_other": "Wrong PIN. {{count}} tries left.",
     "connectionError": "Couldn’t connect. Check your connection and try again.",
     "signInAgain": "Sign in again with online banking"
   },

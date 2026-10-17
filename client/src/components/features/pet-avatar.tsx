@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import Svg, { Circle, Ellipse, Path } from 'react-native-svg';
 
+import { petPhotoSource } from '@/services/pet-photos';
 import { colors } from '@/theme';
 import type { Species } from '@/types/pet';
 
@@ -57,15 +58,14 @@ const DefaultPicture = ({ species, size }: { species: Species; size: number }) =
 };
 
 // Decorative: show the pet's name next to it.
-const PetAvatar = ({ species, photoUrl, size = 36 }: PetAvatarProps) =>
-  photoUrl ? (
-    <Image
-      source={{ uri: photoUrl }}
-      style={{ width: size, height: size, borderRadius: size / 2 }}
-      accessible={false}
-    />
+const PetAvatar = ({ species, photoUrl, size = 36 }: PetAvatarProps) => {
+  // The backend's photoUrl is a private path; this adds the server address and access token.
+  const source = petPhotoSource(photoUrl);
+  return source ? (
+    <Image source={source} style={{ width: size, height: size, borderRadius: size / 2 }} accessible={false} />
   ) : (
     <DefaultPicture species={species} size={size} />
   );
+};
 
 export default PetAvatar;
