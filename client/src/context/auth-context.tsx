@@ -8,7 +8,7 @@ import {
   setStoredItem,
   storageKeys,
 } from '@/services/secure-storage';
-import type { SignInResponse } from '@/types/auth';
+import type { EmailSignUpInput, SignInResponse } from '@/types/auth';
 
 /**
  * - loading: reading the saved session on app start
@@ -21,6 +21,10 @@ type AuthContextValue = {
   status: AuthStatus;
   displayName: string | null;
   signInWithBank: (bankId: string) => Promise<void>;
+  /** Rejects with EmailAuthError('invalidCredentials') */
+  signInWithEmail: (email: string, password: string) => Promise<void>;
+  /** Rejects with EmailAuthError('emailTaken') */
+  signUpWithEmail: (input: EmailSignUpInput) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -71,13 +75,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Restore the saved session on app start.
   useEffect(() => {
     const restore = async () => {
-      const refreshToken = await getStoredItem(storageKeys.refreshToken);
+      const [refreshToken, savedName] = await Promise.all([
+        getStoredItem(storageKeys.refreshToken),
+        getStoredItem(storageKeys.displayName),
+      ]);
       if (!refreshToken) {
         setStatus('signedOut');
         return;
       }
       const session = await refreshTokens();
-      await startSession(session);
+      setDisplayName(savedName ?? session.user.displayName);
+      setStatus('signedIn');
     };
     restore().catch(() => resetToSignedOut());
   }, []);
@@ -104,6 +112,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     signInWithBank: async (bankId) => {
       await startSession(await authService.signInWithBank(bankId));
+    },
+
+    signInWithEmail: async (email, password) => {
+      await startSession(await authService.signInWithEmail(email, password));
+    },
+
+    signUpWithEmail: async (input) => {
+      await startSession(await authService.signUpWithEmail(input));
     },
 
     signOut: async () => {

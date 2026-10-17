@@ -12,7 +12,8 @@
     "errorBody": "Check your connection and try again.",
     "tryAgain": "Try again",
     "step": "Step {{step}} of {{total}}",
-    "notAVet": "TassuVahti is a support tool. It does not replace a veterinarian."
+    "notAVet": "TassuVahti is a support tool. It does not replace a veterinarian.",
+    "language": "Language"
   },
   "tabs": {
     "home": "Home",
@@ -89,8 +90,51 @@
     "sun": "Sunday"
   },
   "auth": {
-    "title": "Sign in",
-    "continueWithBankId": "Continue with BankID"
+    "landing": {
+      "bankId": "Continue with BankID",
+      "emailSignIn": "Log in with email",
+      "newHere": "New to TassuVahti?",
+      "createAccount": "Create an account",
+      "terms": "By continuing you accept the terms of use and privacy policy."
+    },
+    "bankId": {
+      "title": "Log in with BankID",
+      "intro": "Choose your bank. You'll confirm it's you in your bank's app.",
+      "waiting": "Waiting for confirmation in your bank app…",
+      "loadError": "Couldn't load the list of banks.",
+      "signInError": "Sign-in didn't work. Check your connection and try again.",
+      "note": "TassuVahti never sees your bank credentials."
+    },
+    "signIn": {
+      "title": "Welcome back",
+      "intro": "Log in with your email and password.",
+      "submit": "Log in",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Create one",
+      "demoHint": "Demo account: demo@tassuvahti.fi / demo1234"
+    },
+    "signUp": {
+      "title": "Create your account",
+      "intro": "Your pet's insurance, care plan and vet visits in one place.",
+      "name": "Full name",
+      "confirmPassword": "Confirm password",
+      "passwordHint": "At least 8 characters",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Log in"
+    },
+    "email": "Email",
+    "emailPlaceholder": "name@example.com",
+    "password": "Password",
+    "errors": {
+      "required": "Fill in this field.",
+      "invalidEmail": "Enter a valid email address.",
+      "passwordTooShort": "Use at least 8 characters.",
+      "passwordMismatch": "The passwords don't match.",
+      "invalidCredentials": "Email or password is wrong.",
+      "emailTaken": "An account with this email already exists. Log in instead.",
+      "generic": "Something went wrong. Try again."
+    }
   },
   "home": {
     "greeting": "Hi {{name}}",
@@ -591,8 +635,6 @@
     "sv": "Svenska"
   },
   "splash": {
-    "slogan": "Watching over the ones who watch over you.",
-    "continue": "Tap to continue",
-    "by": "by [Insurance company]"
+    "slogan": "Watching over the ones who watch over you."
   }
 }

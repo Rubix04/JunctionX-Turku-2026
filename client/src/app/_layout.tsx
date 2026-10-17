@@ -11,7 +11,6 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 
-import SplashOverlay from '@/components/features/splash-overlay';
 import { stackScreenOptions } from '@/constants/navigation';
 import { AuthProvider, useAuth } from '@/context/auth-context';
 
@@ -21,7 +20,6 @@ SplashScreen.preventAutoHideAsync();
 const RootNavigator = () => {
   const { status } = useAuth();
   const isSignedIn = status === 'signedIn';
-  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     if (status !== 'loading') {
@@ -34,28 +32,23 @@ const RootNavigator = () => {
   }
 
   return (
-    <>
-      <Stack screenOptions={stackScreenOptions}>
-        <Stack.Protected guard={isSignedIn}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="pet/[petId]" />
-          <Stack.Screen name="clinic/[id]" />
-          <Stack.Screen name="substance/[id]" />
-          <Stack.Screen name="find-in-store" />
-          <Stack.Screen name="ate-this" options={{ presentation: 'fullScreenModal' }} />
-          <Stack.Screen name="add-pet" options={{ presentation: 'fullScreenModal' }} />
-          <Stack.Screen name="add-visit" options={{ presentation: 'fullScreenModal' }} />
-        </Stack.Protected>
+    <Stack screenOptions={stackScreenOptions}>
+      <Stack.Protected guard={isSignedIn}>
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="pet/[petId]" />
+        <Stack.Screen name="clinic/[id]" />
+        <Stack.Screen name="substance/[id]" />
+        <Stack.Screen name="find-in-store" />
+        <Stack.Screen name="ate-this" options={{ presentation: 'fullScreenModal' }} />
+        <Stack.Screen name="add-pet" options={{ presentation: 'fullScreenModal' }} />
+        <Stack.Screen name="add-visit" options={{ presentation: 'fullScreenModal' }} />
+      </Stack.Protected>
 
-        {/* BankID and email sign-in / sign-up. */}
-        <Stack.Protected guard={!isSignedIn}>
-          <Stack.Screen name="(auth)" />
-        </Stack.Protected>
-      </Stack>
-
-      {/* Rendered over the stack so the first screen is ready underneath when it fades out. */}
-      {showSplash && <SplashOverlay onContinue={() => setShowSplash(false)} />}
-    </>
+      {/* BankID and email sign-in / sign-up. */}
+      <Stack.Protected guard={!isSignedIn}>
+        <Stack.Screen name="(auth)" />
+      </Stack.Protected>
+    </Stack>
   );
 };
 

@@ -1,10 +1,17 @@
-import { Pressable, type StyleProp, StyleSheet, type ViewStyle } from 'react-native';
+import { ActivityIndicator, Pressable, type StyleProp, StyleSheet, type ViewStyle } from 'react-native';
 
 import AppText from '@/components/ui/app-text';
 import Icon, { type IconName } from '@/components/ui/icon';
 import { colors, fonts, radius, spacing } from '@/theme';
 
-type ButtonVariant = 'primary' | 'outline' | 'tealOutline' | 'danger' | 'dangerOutline';
+type ButtonVariant =
+  | 'primary'
+  | 'outline'
+  | 'tealOutline'
+  | 'danger'
+  | 'dangerOutline'
+  | 'light'
+  | 'lightOutline';
 
 type ButtonProps = {
   label: string;
@@ -14,6 +21,8 @@ type ButtonProps = {
   /** 'large' for the main action at the bottom of a screen */
   size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
+  /** Shows a spinner instead of the icon and blocks presses, e.g. while signing in */
+  loading?: boolean;
   accessibilityHint?: string;
   style?: StyleProp<ViewStyle>;
 };
@@ -33,6 +42,12 @@ const variants: Record<ButtonVariant, { container: ViewStyle; text: string }> = 
     container: { borderWidth: 1.5, borderColor: colors.red, backgroundColor: colors.surface },
     text: colors.red,
   },
+  // On photos and video, e.g. the sign-in landing page
+  light: { container: { backgroundColor: colors.surface }, text: colors.primary },
+  lightOutline: {
+    container: { borderWidth: 1.5, borderColor: 'rgba(255, 255, 255, 0.7)', backgroundColor: 'rgba(255, 255, 255, 0.08)' },
+    text: colors.onDark,
+  },
 };
 
 const heights = { small: 40, medium: 48, large: 54 };
@@ -44,6 +59,7 @@ const Button = ({
   icon,
   size = 'medium',
   disabled = false,
+  loading = false,
   accessibilityHint,
   style,
 }: ButtonProps) => {
@@ -52,9 +68,9 @@ const Button = ({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityState={{ disabled }}
+      accessibilityState={{ disabled, busy: loading }}
       accessibilityHint={accessibilityHint}
-      disabled={disabled}
+      disabled={disabled || loading}
       onPress={onPress}
       style={({ pressed }) => [
         styles.base,
@@ -66,7 +82,11 @@ const Button = ({
         style,
       ]}
     >
-      {icon && <Icon name={icon} size={size === 'small' ? 16 : 20} color={text} />}
+      {loading ? (
+        <ActivityIndicator color={text} />
+      ) : (
+        icon && <Icon name={icon} size={size === 'small' ? 16 : 20} color={text} />
+      )}
       <AppText
         variant="label"
         color={text}
