@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { activityLevels, dietTypes } from "../../db/schema.js";
+import { dietTypes, species } from "../../db/schema.js";
 
 export const languages = ["fi", "sv", "en"] as const;
 export const languageQuerySchema = z.object({ lang: z.enum(languages).default("fi") });
@@ -20,108 +20,106 @@ export const dietInfoSchema = z.object({
 
 export const dietCatalogSchema = z.object({ content: contentStatus, diets: z.array(dietInfoSchema) });
 
-// ---- Portion calculator ----
+const grams = z.number().positive().max(5000);
+const weight = z.number().positive().max(150);
+const meals = z.number().int().min(1).max(6);
 
-const portionWarnings = ["neuteredUnknown", "growingNoWeightLoss", "largeWeightLoss", "foodEnergyMissing"] as const;
+// ---- Portion ----
 
 export const portionResultSchema = z.object({
-  species: z.enum(["cat", "dog"]),
-  lifeStage: z.enum(["growth", "adult"]),
-  factorName: z.string(),
-  factor: z.number(),
-  basisWeightKg: z.number(),
-  restingKcal: z.number(),
-  dailyKcal: z.number(),
-  treatsMaxKcal: z.number(),
-  food: z
-    .object({
-      kcalPer100g: z.number(),
-      mealsPerDay: z.number(),
-      gramsPerDay: z.number(),
-      gramsPerMeal: z.number(),
-    })
-    .nullable(),
-  warnings: z.array(z.enum(portionWarnings)),
+  /** The weight the amount is calculated for: the target weight on a weight-loss plan */
+  feedForWeightKg: z.number(),
+  gramsPerDay: z.number(),
+  mealsPerDay: z.number(),
+  gramsPerMeal: z.number(),
+  scoopsPerMeal: z.number().nullable(),
+  gramsPerDayWithTreats: z.number(),
+  warnings: z.array(z.enum(["growingNoWeightLoss", "largeWeightLoss", "checkPackageTable"])),
 });
-
-const kcal = z.number().positive().max(1000);
-const weight = z.number().positive().max(150);
 
 /** Stand-alone calculator, e.g. for trying out a new food before saving it. */
-export const portionRequestSchema = z.object({
-  species: z.enum(["cat", "dog", "smallAnimal"]),
-  weightKg: weight,
-  ageMonths: z.number().int().min(0).max(400).nullish(),
-  neutered: z.boolean().nullish(),
-  activityLevel: z.enum(activityLevels).default("normal"),
-  goal: z.enum(["maintain", "lose"]).default("maintain"),
-  targetWeightKg: weight.nullish(),
-  kcalPer100g: kcal.nullish(),
-  mealsPerDay: z.number().int().min(1).max(6).default(2),
-});
+export const portionRequestSchema = z
+  .object({
+    species: z.enum(species),
+    weightKg: weight,
+    ageMonths: z.number().int().min(0).max(400).nullish(),
+    /** The daily amount printed in the package's feeding table... */
+    packageDailyGrams: grams,
+    /** ...and the pet weight that row is for. Defaults to weightKg. */
+    packageForWeightKg: weight.nullish(),
+    goal: z.enum(["maintain", "lose"]).default("maintain"),
+    targetWeightKg: weight.nullish(),
+    mealsPerDay: meals.default(2),
+    gramsPerScoop: z.number().positive().max(500).nullish(),
+  });
 
 export const portionResponseSchema = z.object({ content: contentStatus, portion: portionResultSchema });
 
 // ---- Diet plan ----
 
-export const dietPlanInputSchema = z.object({
-  dietType: z.enum(dietTypes),
-  source: z.enum(["vet", "owner"]).default("owner"),
-  foodName: z.string().trim().min(1).max(120),
-  kcalPer100g: kcal.nullish(),
-  mealsPerDay: z.number().int().min(1).max(6).default(2),
-  targetWeightKg: weight.nullish(),
-  neutered: z.boolean().nullish(),
-  activityLevel: z.enum(activityLevels).default("normal"),
-  notes: z.string().trim().max(1000).nullish(),
-  /** Switch at once instead of over a week, e.g. when the vet says so. */
-  skipTransition: z.boolean().default(false),
-});
+export const dietPlanInputSchema = z
+  .object({
+    dietType: z.enum(dietTypes),
+    source: z.enum(["vet", "owner"]).default("owner"),
+    foodName: z.string().trim().min(1).max(120),
+    /** From the package's feeding table: the daily amount... */
+    packageDailyGrams: grams.nullish(),
+    /** ...for a pet of this weight. Defaults to the pet's current weight. */
+    packageForWeightKg: weight.nullish(),
+    mealsPerDay: meals.default(2),
+    goal: z.enum(["maintain", "lose"]).default("maintain"),
+    targetWeightKg: weight.nullish(),
+    /** Optional: how many grams the owner's scoop or decilitre measure holds */
+    gramsPerScoop: z.number().positive().max(500).nullish(),
+    notes: z.string().trim().max(1000).nullish(),
+  })
+  .refine((plan) => plan.goal !== "lose" || plan.targetWeightKg, {
+    path: ["targetWeightKg"],
+    message: "Set a target weight for weight loss",
+  });
 
 export const dietPlanSchema = z.object({
   dietType: z.enum(dietTypes),
   source: z.enum(["vet", "owner"]),
   foodName: z.string(),
-  kcalPer100g: z.number().nullable(),
+  packageDailyGrams: z.number().nullable(),
+  packageForWeightKg: z.number().nullable(),
   mealsPerDay: z.number(),
+  goal: z.enum(["maintain", "lose"]),
   targetWeightKg: z.number().nullable(),
-  neutered: z.boolean().nullable(),
-  activityLevel: z.enum(activityLevels),
+  gramsPerScoop: z.number().nullable(),
   notes: z.string().nullable(),
   updatedAt: z.number(),
 });
 
-export const transitionSchema = z.object({
-  previousFoodName: z.string(),
-  newFoodName: z.string(),
-  startedOn: z.string(),
-  endsOn: z.string(),
-  day: z.number(),
-  totalDays: z.number(),
-  newFoodPercent: z.number(),
-  oldFoodPercent: z.number(),
-  schedule: z.array(z.object({ fromDay: z.number(), toDay: z.number(), newFoodPercent: z.number(), date: z.string() })),
+export const suggestionSchema = dietInfoSchema.extend({
+  reason: z.object({ kind: z.enum(["visit", "allergy"]), date: z.string().nullable(), text: z.string() }),
+  /** True if the pet is already on this diet */
+  current: z.boolean(),
 });
+
+const weightPointSchema = z.object({ weighedOn: z.string(), weightKg: z.number(), source: z.enum(["vet", "owner"]) });
 
 export const petDietSchema = z.object({
   content: contentStatus,
+  /** Diets to discuss with the vet, from the passport's diagnoses and allergies */
+  suggestions: z.array(suggestionSchema),
   plan: dietPlanSchema.nullable(),
   diet: dietInfoSchema.nullable(),
-  /** Null without a plan, a known weight, or for small animals */
   portion: portionResultSchema.nullable(),
-  /** Today's old/new food mix while a food change is in progress */
-  transition: transitionSchema.nullable(),
+  /** Why `portion` is null */
+  portionMissing: z.enum(["noPlan", "packageAmountMissing", "weightMissing"]).nullable(),
+  weighIn: z.object({
+    latest: weightPointSchema.nullable(),
+    /** Only on a weight-loss plan */
+    nextWeighInOn: z.string().nullable(),
+    weighInDue: z.boolean(),
+  }),
 });
 
-export const suggestionsSchema = z.object({
-  content: contentStatus,
-  suggestions: z.array(
-    dietInfoSchema.extend({
-      reason: z.object({ kind: z.enum(["visit", "allergy"]), date: z.string().nullable(), text: z.string() }),
-      /** True if the pet is already on this diet */
-      current: z.boolean(),
-    }),
-  ),
+export const savedDietSchema = petDietSchema.extend({
+  /** Set once, in the response that changed the food: how to switch foods gradually */
+  foodChangeTip: z.string().nullable(),
 });
 
 // ---- Weight ----
@@ -137,12 +135,16 @@ export const weightEntrySchema = z.object({
   id: z.string(),
   weighedOn: z.string(),
   weightKg: z.number(),
+  /** "vet" when it came from a passport visit */
+  source: z.enum(["vet", "owner"]),
   note: z.string().nullable(),
 });
 
-export const weightQuerySchema = z.object({
-  /** Only entries from this many days back, for the chart range */
-  days: z.coerce.number().int().min(1).max(3650).optional(),
+const changeSchema = z.object({
+  since: z.string(),
+  days: z.number(),
+  changeKg: z.number(),
+  changePercent: z.number(),
 });
 
 export const weightsResponseSchema = z.object({
@@ -152,15 +154,11 @@ export const weightsResponseSchema = z.object({
       latest: z.object({ weighedOn: z.string(), weightKg: z.number() }),
       targetWeightKg: z.number().nullable(),
       toTargetKg: z.number().nullable(),
-      recentChange: z
-        .object({
-          since: z.string(),
-          changeKg: z.number(),
-          changePercent: z.number(),
-          unexpectedChange: z.boolean(),
-        })
-        .nullable(),
-      weekly: z.array(z.object({ weekStart: z.string(), averageKg: z.number() })),
+      sincePrevious: changeSchema.nullable(),
+      lastYear: changeSchema.nullable(),
+      unexpectedChange: z.boolean(),
+      nextWeighInOn: z.string().nullable(),
+      weighInDue: z.boolean(),
     })
     .nullable(),
 });

@@ -12,16 +12,6 @@ import { dietTypes } from "../../db/schema.js";
 const localized = z.object({ fi: z.string(), sv: z.string(), en: z.string() });
 const localizedList = z.object({ fi: z.array(z.string()), sv: z.array(z.string()), en: z.array(z.string()) });
 
-const factorsSchema = z.object({
-  growthUnder4Months: z.number().positive(),
-  growth4MonthsToAdult: z.number().positive(),
-  intactAdult: z.number().positive(),
-  neuteredAdult: z.number().positive(),
-  lowActivity: z.number().positive(),
-  highActivity: z.number().positive(),
-  weightLoss: z.number().positive(),
-});
-
 const contentSchema = z.object({
   meta: z.object({
     status: z.enum(["sample", "reviewed"]),
@@ -30,23 +20,27 @@ const contentSchema = z.object({
     notice: z.string(),
     sources: z.array(z.string()),
   }),
-  energy: z.object({
-    rerFactor: z.number().positive(),
-    rerExponent: z.number().positive(),
-    adultAgeMonths: z.object({ dog: z.number().int(), cat: z.number().int() }),
-    factors: z.object({ dog: factorsSchema, cat: factorsSchema }),
+  portion: z.object({
+    /** Food need grows with weight^0.75, used to adjust the package amount to another weight */
+    metabolicExponent: z.number().positive(),
+    adultAgeMonths: z.object({ dog: z.number().int(), cat: z.number().int(), smallAnimal: z.number().int() }),
     treatsMaxShare: z.number().min(0).max(1),
     /** Weight-loss targets more than this share below the current weight need vet supervision. */
     largeWeightLossShare: z.number().min(0).max(1),
+    /** Suggest re-checking the package table when the pet's weight is this far from its row */
+    packageWeightFarShare: z.number().min(0).max(1),
+    roundGramsTo: z.number().int().positive(),
   }),
-  transition: z.object({
-    steps: z
-      .array(z.object({ fromDay: z.number().int(), toDay: z.number().int(), newFoodPercent: z.number().min(0).max(100) }))
-      .min(1),
-  }),
+  /** Shown once, when the food changes (spec 3: don't change food abruptly) */
+  foodChangeTip: localized,
   weight: z.object({
-    unexpectedChangeShare: z.number().positive(),
-    unexpectedChangeDays: z.number().int().positive(),
+    /** Flag a change this large between two weigh-ins... */
+    betweenWeighInsShare: z.number().positive(),
+    /** ...or this large within halfYearDays */
+    halfYearShare: z.number().positive(),
+    halfYearDays: z.number().int().positive(),
+    /** Weigh-in reminder interval for pets on a weight-loss plan */
+    weightLossWeighInDays: z.number().int().positive(),
   }),
   diets: z.record(
     z.enum(dietTypes),
