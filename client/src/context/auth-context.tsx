@@ -33,6 +33,8 @@ type AuthContextValue = {
   checkPin: (pin: string) => Promise<{ ok: boolean; attemptsLeft: number }>;
   /** Call after face, fingerprint or PIN check passed. Resolves false if the session expired. */
   unlock: () => Promise<boolean>;
+  /** Locks the app now, as after a while in the background. */
+  lock: () => void;
   signOut: () => Promise<void>;
   /**
    * Confirms a sensitive action with online banking when the server answers
@@ -194,6 +196,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
         throw error;
       }
+    },
+
+    lock: () => {
+      setAccessToken(null);
+      setStatus('locked');
     },
 
     signOut: async () => {
