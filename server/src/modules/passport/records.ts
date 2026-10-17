@@ -60,6 +60,8 @@ const inputSchemas = {
     reason: requiredText(200),
     clinic: optionalText(120),
     diagnosis: optionalText(300),
+    /** Weight measured at the visit; also added to the pet's weight history */
+    weightKg: z.number().positive().max(150).nullish(),
     notes: optionalText(1000),
   }),
 } satisfies Record<HealthRecordKind, z.ZodType>;
@@ -115,6 +117,7 @@ export const outputSchemas = {
     reason: z.string(),
     clinic: z.string().nullable(),
     diagnosis: z.string().nullable(),
+    weightKg: z.number().nullable(),
     notes: z.string().nullable(),
   }),
 } satisfies Record<HealthRecordKind, z.ZodType>;

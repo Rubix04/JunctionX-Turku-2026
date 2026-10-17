@@ -123,7 +123,10 @@ export type PassportShareRow = typeof passportShares.$inferSelect;
 
 // ---- Diet and weight (spec 3) ----
 
-/** One weighing. At most one per pet per day; a second one the same day replaces the first. */
+/**
+ * One weigh-in. Most come from vet visits (the visit's weight is copied here); owners can add
+ * their own, e.g. from the clinic's waiting-room scale. At most one per pet per day.
+ */
 export const weightEntries = sqliteTable(
   "weight_entries",
   {
@@ -134,6 +137,9 @@ export const weightEntries = sqliteTable(
     /** ISO date */
     weighedOn: text("weighed_on").notNull(),
     weightKg: real("weight_kg").notNull(),
+    source: text("source", { enum: ["vet", "owner"] }).notNull(),
+    /** The passport visit this weight came from; removed with the visit */
+    visitRecordId: text("visit_record_id").references(() => healthRecords.id, { onDelete: "cascade" }),
     note: text("note"),
     createdAt: createdAt(),
   },
@@ -151,10 +157,7 @@ export const dietTypes = [
 ] as const;
 export type DietType = (typeof dietTypes)[number];
 
-export const activityLevels = ["low", "normal", "high"] as const;
-export type ActivityLevel = (typeof activityLevels)[number];
-
-/** The pet's current diet: what it eats and the settings the portion calculator needs. */
+/** The pet's current diet and what the portion is based on: the food package's feeding table. */
 export const dietPlans = sqliteTable("diet_plans", {
   petId: text("pet_id")
     .primaryKey()
@@ -163,16 +166,16 @@ export const dietPlans = sqliteTable("diet_plans", {
   /** Who chose the diet: the vet's instructions or the owner */
   source: text("source", { enum: ["vet", "owner"] }).notNull(),
   foodName: text("food_name").notNull(),
-  /** Energy density from the food package, kcal per 100 g */
-  kcalPer100g: real("kcal_per_100g"),
+  /** Daily amount from the package's feeding table, in grams... */
+  packageDailyGrams: real("package_daily_grams"),
+  /** ...for a pet of this weight */
+  packageForWeightKg: real("package_for_weight_kg"),
   mealsPerDay: integer("meals_per_day").notNull(),
+  goal: text("goal", { enum: ["maintain", "lose"] }).notNull(),
   targetWeightKg: real("target_weight_kg"),
-  neutered: integer("neutered", { mode: "boolean" }),
-  activityLevel: text("activity_level", { enum: activityLevels }).notNull(),
+  /** Optional: grams in the owner's scoop or decilitre measure, to show portions in scoops */
+  gramsPerScoop: real("grams_per_scoop"),
   notes: text("notes"),
-  /** Set when the food changed: the old food is mixed out gradually from this date. */
-  previousFoodName: text("previous_food_name"),
-  transitionStartedOn: text("transition_started_on"),
   updatedAt: integer("updated_at", { mode: "number" }).notNull(),
   createdAt: createdAt(),
 });
