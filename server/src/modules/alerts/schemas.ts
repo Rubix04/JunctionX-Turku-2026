@@ -89,6 +89,8 @@ export const deviceInputSchema = z.object({
   latitude: z.number().min(-90).max(90).nullish(),
   longitude: z.number().min(-180).max(180).nullish(),
   seasonalAlerts: z.boolean().default(true),
+  /** Medication, follow-up visit and vaccination reminders (spec 2) */
+  reminders: z.boolean().default(true),
 });
 
 export const deviceSchema = z.object({
@@ -98,5 +100,6 @@ export const deviceSchema = z.object({
   longitude: z.number().nullable(),
   region: z.enum(regions),
   seasonalAlerts: z.boolean(),
+  reminders: z.boolean(),
   updatedAt: z.number(),
 });

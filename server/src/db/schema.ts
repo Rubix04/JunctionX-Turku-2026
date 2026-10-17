@@ -220,6 +220,8 @@ export const pushDevices = sqliteTable("push_devices", {
   latitude: real("latitude"),
   longitude: real("longitude"),
   seasonalAlerts: integer("seasonal_alerts", { mode: "boolean" }).notNull().default(true),
+  /** Medication, follow-up visit and vaccination reminders (spec 2) */
+  reminders: integer("reminders", { mode: "boolean" }).notNull().default(true),
   updatedAt: integer("updated_at", { mode: "number" }).notNull(),
   createdAt: createdAt(),
 });
@@ -349,3 +351,117 @@ export const logAttachments = sqliteTable("log_attachments", {
 export type WatchListRow = typeof watchLists.$inferSelect;
 export type DailyLogRow = typeof dailyLogs.$inferSelect;
 export type LogAttachmentRow = typeof logAttachments.$inferSelect;
+
+// ---- Care plan, medication schedules and reminders (spec 2) ----
+
+export type FollowUp = {
+  title: string;
+  /** Local Finnish time, e.g. "2026-10-22T14:30:00" */
+  dateTime: string;
+  clinicName: string;
+};
+
+export type CarePlanProduct = {
+  /** Id in the product list (spec 8), or null for a product written by hand */
+  productId: string | null;
+  name: string;
+  brand: string;
+  /** Prescription medicines go through the prescription, not the store map */
+  prescription: { issuedTo: string; pickedUpOn: string | null } | null;
+};
+
+/**
+ * What the vet found and what to do at home, in plain language, for one passport visit.
+ * Written from uploaded notes it stays a draft until the clinic checks it.
+ */
+export const carePlans = sqliteTable("care_plans", {
+  id: text("id").primaryKey(),
+  petId: text("pet_id")
+    .notNull()
+    .references(() => pets.id, { onDelete: "cascade" }),
+  visitRecordId: text("visit_record_id")
+    .notNull()
+    .unique()
+    .references(() => healthRecords.id, { onDelete: "cascade" }),
+  diagnosis: text("diagnosis").notNull(),
+  vetName: text("vet_name"),
+  checkedByClinic: integer("checked_by_clinic", { mode: "boolean" }).notNull().default(false),
+  findings: text("findings").notNull(),
+  homeCare: text("home_care", { mode: "json" }).notNull().$type<string[]>(),
+  followUp: text("follow_up", { mode: "json" }).$type<FollowUp | null>(),
+  products: text("products", { mode: "json" }).notNull().$type<CarePlanProduct[]>(),
+  /** The vet's notes as they were written or uploaded */
+  originalText: text("original_text").notNull(),
+  createdByUserId: text("created_by_user_id").references(() => users.id, { onDelete: "set null" }),
+  updatedAt: integer("updated_at", { mode: "number" }).notNull(),
+  createdAt: createdAt(),
+});
+
+/**
+ * When to give a medicine. Its doses become medication reminders, generated a couple of weeks
+ * ahead, so long-term medicines (e.g. insulin) work the same way as a 10-day course.
+ */
+export const medicationSchedules = sqliteTable("medication_schedules", {
+  id: text("id").primaryKey(),
+  petId: text("pet_id")
+    .notNull()
+    .references(() => pets.id, { onDelete: "cascade" }),
+  /** The passport medication it belongs to; removed with it */
+  medicationRecordId: text("medication_record_id").references(() => healthRecords.id, { onDelete: "cascade" }),
+  carePlanId: text("care_plan_id").references(() => carePlans.id, { onDelete: "set null" }),
+  name: text("name").notNull(),
+  /** e.g. "1 tablet · with food" */
+  detail: text("detail").notNull(),
+  /** ISO date of the first dose */
+  startDate: text("start_date").notNull(),
+  /** Null for a long-term medicine without an end */
+  totalDays: integer("total_days"),
+  /** Dose times, local Finnish time, e.g. ["08:00", "20:00"] */
+  times: text("times", { mode: "json" }).notNull().$type<string[]>(),
+  /** Set when stopped early; no doses after this date */
+  stoppedOn: text("stopped_on"),
+  /** Doses exist up to and including this date */
+  generatedUntil: text("generated_until"),
+  createdByUserId: text("created_by_user_id").references(() => users.id, { onDelete: "set null" }),
+  updatedAt: integer("updated_at", { mode: "number" }).notNull(),
+  createdAt: createdAt(),
+});
+
+export const reminderKinds = ["medication", "visit", "vaccination", "deworming"] as const;
+export type ReminderKind = (typeof reminderKinds)[number];
+export const reminderSources = ["owner", "medication", "followUp", "vaccination"] as const;
+
+/** One thing to do at a given time, shared by the household ("did you already give it?"). */
+export const reminders = sqliteTable(
+  "reminders",
+  {
+    id: text("id").primaryKey(),
+    petId: text("pet_id")
+      .notNull()
+      .references(() => pets.id, { onDelete: "cascade" }),
+    kind: text("kind", { enum: reminderKinds }).notNull(),
+    title: text("title").notNull(),
+    detail: text("detail").notNull(),
+    /** Local Finnish time, e.g. "2026-10-17T08:00:00"... */
+    dueAt: text("due_at").notNull(),
+    /** ...and the same moment in epoch ms, for sorting and push notifications */
+    dueAtMs: integer("due_at_ms", { mode: "number" }).notNull(),
+    /** Where it came from. Only the owner's own reminders can be edited or deleted. */
+    source: text("source", { enum: reminderSources }).notNull(),
+    scheduleId: text("schedule_id").references(() => medicationSchedules.id, { onDelete: "cascade" }),
+    carePlanId: text("care_plan_id").references(() => carePlans.id, { onDelete: "cascade" }),
+    /** The passport vaccination it reminds about */
+    recordId: text("record_id").references(() => healthRecords.id, { onDelete: "cascade" }),
+    doneAt: integer("done_at", { mode: "number" }),
+    doneByUserId: text("done_by_user_id").references(() => users.id, { onDelete: "set null" }),
+    pushedAt: integer("pushed_at", { mode: "number" }),
+    createdByUserId: text("created_by_user_id").references(() => users.id, { onDelete: "set null" }),
+    createdAt: createdAt(),
+  },
+  // One reminder per dose: generating doses again must not duplicate them.
+  (table) => [uniqueIndex("reminders_schedule_dose").on(table.scheduleId, table.dueAt)],
+);
+
+export type CarePlanRow = typeof carePlans.$inferSelect;
+export type MedicationScheduleRow = typeof medicationSchedules.$inferSelect;
+export type ReminderRow = typeof reminders.$inferSelect;

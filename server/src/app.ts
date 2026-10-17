@@ -13,6 +13,7 @@ import { ApiError } from "./errors.js";
 import { type BankIdentityProvider, mockBankProvider } from "./modules/auth/bank-provider.js";
 import { authRoutes } from "./modules/auth/routes.js";
 import { alertsRoutes, notificationRoutes, petAlertsRoutes } from "./modules/alerts/routes.js";
+import { careRoutes, reminderRoutes } from "./modules/care/routes.js";
 import { dietRoutes } from "./modules/diet/routes.js";
 import { exposureRoutes, knowledgeRoutes } from "./modules/knowledge/routes.js";
 import { passportRoutes, sharedPassportRoutes } from "./modules/passport/routes.js";
@@ -96,6 +97,8 @@ export const buildApp = async ({
   await app.register(notificationRoutes, { prefix: "/notifications" });
   await app.register(symptomContentRoutes, { prefix: "/symptoms" });
   await app.register(symptomRoutes, { prefix: "/pets" });
+  await app.register(careRoutes, { prefix: "/pets" });
+  await app.register(reminderRoutes, { prefix: "/reminders" });
 
   return app;
 };
