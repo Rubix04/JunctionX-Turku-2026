@@ -159,6 +159,9 @@
     "book": "Boka",
     "booked": "Bokad"
   },
+  "pets": {
+    "title": "Mina djur"
+  },
   "pet": {
     "changePhoto": "Byt profilbild",
     "years_one": "{{count}} år",
@@ -196,7 +199,15 @@
       "smallAnimal": "För smådjur"
     },
     "readMore": "Läs mer i kunskapsbanken",
-    "sharedWith": "Delas med {{names}} i ditt familjekonto"
+    "sharedWith": "Delas med {{names}} i ditt familjekonto",
+    "tabs": {
+      "overview": "Översikt",
+      "care": "Vård",
+      "log": "Logg",
+      "passport": "Pass"
+    },
+    "logToday": "Logga i dag · 30 s",
+    "shareHint": "Skicka en läslänk till veterinär eller djurvakt"
   },
   "log": {
     "title": "{{name}} · i dag",

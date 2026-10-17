@@ -159,6 +159,9 @@
     "book": "Book",
     "booked": "Booked"
   },
+  "pets": {
+    "title": "My pets"
+  },
   "pet": {
     "changePhoto": "Change profile picture",
     "years_one": "{{count}} year",
@@ -196,7 +199,15 @@
       "smallAnimal": "For small animals"
     },
     "readMore": "Read more in the knowledge base",
-    "sharedWith": "Shared with {{names}} in your family account"
+    "sharedWith": "Shared with {{names}} in your family account",
+    "tabs": {
+      "overview": "Overview",
+      "care": "Care",
+      "log": "Log",
+      "passport": "Passport"
+    },
+    "logToday": "Log today · 30 s",
+    "shareHint": "Send a read-only link to a vet or pet sitter"
   },
   "log": {
     "title": "{{name}} · today",

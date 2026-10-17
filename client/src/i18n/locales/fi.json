@@ -159,6 +159,9 @@
     "book": "Varaa",
     "booked": "Varattu"
   },
+  "pets": {
+    "title": "Lemmikkini"
+  },
   "pet": {
     "changePhoto": "Vaihda profiilikuva",
     "years_one": "{{count}} vuosi",
@@ -196,7 +199,15 @@
       "smallAnimal": "Pieneläimille"
     },
     "readMore": "Lue lisää tietopankista",
-    "sharedWith": "Jaettu perhetilillä: {{names}}"
+    "sharedWith": "Jaettu perhetilillä: {{names}}",
+    "tabs": {
+      "overview": "Yleiskatsaus",
+      "care": "Hoito",
+      "log": "Seuranta",
+      "passport": "Passi"
+    },
+    "logToday": "Kirjaa tänään · 30 s",
+    "shareHint": "Lähetä lukulinkki eläinlääkärille tai hoitajalle"
   },
   "log": {
     "title": "{{name}} · tänään",
