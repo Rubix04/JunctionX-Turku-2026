@@ -18,6 +18,7 @@ import { exposureRoutes, knowledgeRoutes } from "./modules/knowledge/routes.js";
 import { passportRoutes, sharedPassportRoutes } from "./modules/passport/routes.js";
 import { petPhotoRoutes } from "./modules/pet-photos/routes.js";
 import { petRoutes } from "./modules/pets/routes.js";
+import { symptomContentRoutes, symptomRoutes } from "./modules/symptoms/routes.js";
 import { authPlugin } from "./plugins/auth.js";
 
 declare module "fastify" {
@@ -93,6 +94,8 @@ export const buildApp = async ({
   await app.register(alertsRoutes, { prefix: "/alerts" });
   await app.register(petAlertsRoutes, { prefix: "/pets" });
   await app.register(notificationRoutes, { prefix: "/notifications" });
+  await app.register(symptomContentRoutes, { prefix: "/symptoms" });
+  await app.register(symptomRoutes, { prefix: "/pets" });
 
   return app;
 };

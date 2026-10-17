@@ -1,0 +1,719 @@
+{
+  "meta": {
+    "status": "sample",
+    "reviewedBy": null,
+    "updatedOn": "2026-10-17",
+    "notice": "SAMPLE CONTENT written by the development team for the demo. Questions, thresholds and severity rules must be reviewed and approved by a veterinarian before real use.",
+    "sources": []
+  },
+  "disclaimer": {
+    "fi": "Arvio on suuntaa antava eikä korvaa eläinlääkäriä. Jos olet huolissasi, ota yhteyttä eläinlääkäriin.",
+    "sv": "Bedömningen är vägledande och ersätter inte en veterinär. Kontakta en veterinär om du är orolig.",
+    "en": "The assessment is a suggestion and does not replace a vet. If you are worried, contact a vet."
+  },
+  "symptoms": [
+    { "id": "vomiting", "label": { "fi": "oksentelu", "sv": "kräkningar", "en": "vomiting" } },
+    { "id": "repeatedVomiting", "label": { "fi": "toistuva oksentelu", "sv": "upprepade kräkningar", "en": "repeated vomiting" } },
+    { "id": "diarrhoea", "label": { "fi": "ripuli", "sv": "diarré", "en": "diarrhoea" } },
+    { "id": "toiletLess", "label": { "fi": "vähemmän ulostamista", "sv": "mindre avföring", "en": "fewer toilet trips" } },
+    { "id": "appetiteLoss", "label": { "fi": "heikentynyt ruokahalu", "sv": "nedsatt aptit", "en": "poor appetite" } },
+    { "id": "appetiteIncrease", "label": { "fi": "lisääntynyt ruokahalu", "sv": "ökad aptit", "en": "increased appetite" } },
+    { "id": "drinkingMore", "label": { "fi": "lisääntynyt juominen", "sv": "ökat drickande", "en": "drinking more" } },
+    { "id": "drinkingLess", "label": { "fi": "vähentynyt juominen", "sv": "minskat drickande", "en": "drinking less" } },
+    { "id": "urinatingMore", "label": { "fi": "tihentynyt virtsaaminen", "sv": "täta urineringar", "en": "urinating more often" } },
+    { "id": "urinatingLess", "label": { "fi": "harventunut virtsaaminen", "sv": "färre urineringar", "en": "urinating less often" } },
+    { "id": "strainingToUrinate", "label": { "fi": "virtsaamisen ponnistelu", "sv": "krystningar vid urinering", "en": "straining to urinate" } },
+    { "id": "noUrine", "label": { "fi": "virtsaa ei tule", "sv": "ingen urin kommer", "en": "no urine coming out" } },
+    { "id": "bloodInStool", "label": { "fi": "verta ulosteessa tai oksennuksessa", "sv": "blod i avföring eller kräkning", "en": "blood in stool or vomit" } },
+    { "id": "tiredness", "label": { "fi": "väsymys", "sv": "trötthet", "en": "tiredness" } },
+    { "id": "restlessness", "label": { "fi": "levottomuus", "sv": "rastlöshet", "en": "restlessness" } },
+    { "id": "pain", "label": { "fi": "kipu", "sv": "smärta", "en": "pain" } },
+    { "id": "limping", "label": { "fi": "ontuminen", "sv": "hälta", "en": "limping" } },
+    { "id": "notUsingLeg", "label": { "fi": "jalka ei kanna", "sv": "använder inte benet", "en": "not using the leg" } },
+    { "id": "swelling", "label": { "fi": "turvotus", "sv": "svullnad", "en": "swelling" } },
+    { "id": "itching", "label": { "fi": "kutina", "sv": "klåda", "en": "itching" } },
+    { "id": "skinWorse", "label": { "fi": "ihon paheneminen", "sv": "försämrad hud", "en": "skin getting worse" } },
+    { "id": "headShaking", "label": { "fi": "pään ravistelu", "sv": "huvudskakningar", "en": "head shaking" } },
+    { "id": "pawLicking", "label": { "fi": "tassujen nuoleminen", "sv": "tasslickande", "en": "paw licking" } },
+    { "id": "woundProblem", "label": { "fi": "haavan ongelma", "sv": "problem med såret", "en": "a problem with the wound" } },
+    { "id": "woundLicking", "label": { "fi": "haavan nuoleminen", "sv": "slickar såret", "en": "licking the wound" } },
+    { "id": "weakness", "label": { "fi": "heikkous tai huojuminen", "sv": "svaghet eller vinglighet", "en": "weakness or wobbliness" } },
+    { "id": "skippedMeal", "label": { "fi": "ateria jäi syömättä", "sv": "åt inte måltiden", "en": "a skipped meal" } },
+    { "id": "coughing", "label": { "fi": "yskä", "sv": "hosta", "en": "coughing" } },
+    { "id": "drooling", "label": { "fi": "kuolaaminen", "sv": "dregling", "en": "drooling" } },
+    { "id": "staggering", "label": { "fi": "horjuminen", "sv": "vinglande", "en": "staggering" } },
+    { "id": "shivering", "label": { "fi": "vapina", "sv": "darrningar", "en": "shivering" } },
+    { "id": "heavyPanting", "label": { "fi": "voimakas läähätys", "sv": "kraftig flämtning", "en": "heavy panting" } },
+    { "id": "fever", "label": { "fi": "kuume", "sv": "feber", "en": "fever" } },
+    { "id": "hiding", "label": { "fi": "piiloutuminen", "sv": "gömmer sig", "en": "hiding" } },
+    { "id": "redPaws", "label": { "fi": "punoittavat tassut", "sv": "röda tassar", "en": "red paws" } },
+    { "id": "abdominalPain", "label": { "fi": "vatsakipu", "sv": "magsmärta", "en": "abdominal pain" } },
+    { "id": "lostPet", "label": { "fi": "kadonnut lemmikki", "sv": "försvunnet djur", "en": "a lost pet" } },
+    { "id": "injury", "label": { "fi": "vamma", "sv": "skada", "en": "an injury" } },
+    { "id": "seizures", "label": { "fi": "kouristelu", "sv": "kramper", "en": "seizures" } },
+    { "id": "breathingDifficulty", "label": { "fi": "hengitysvaikeus", "sv": "andningssvårigheter", "en": "breathing difficulty" } },
+    { "id": "unconscious", "label": { "fi": "tajuttomuus", "sv": "medvetslöshet", "en": "unconsciousness" } },
+    { "id": "heavyBleeding", "label": { "fi": "runsas verenvuoto", "sv": "kraftig blödning", "en": "heavy bleeding" } },
+    { "id": "choking", "label": { "fi": "tukehtuminen", "sv": "kvävning", "en": "choking" } },
+    { "id": "suspectedPoisoning", "label": { "fi": "epäilty myrkytys", "sv": "misstänkt förgiftning", "en": "suspected poisoning" } },
+    { "id": "swollenAbdomen", "label": { "fi": "turvonnut vatsa", "sv": "uppsvälld buk", "en": "a swollen abdomen" } }
+  ],
+  "emergencyList": [
+    {
+      "symptom": "breathingDifficulty",
+      "species": ["dog", "cat", "smallAnimal"],
+      "description": {
+        "fi": "Hengittää suu auki, ikenet sinertävät tai hengitys on vaivalloista.",
+        "sv": "Andas med öppen mun, blåaktigt tandkött eller ansträngd andning.",
+        "en": "Breathing with the mouth open, bluish gums or laboured breathing."
+      }
+    },
+    {
+      "symptom": "unconscious",
+      "species": ["dog", "cat", "smallAnimal"],
+      "description": {
+        "fi": "Ei reagoi puheeseen tai kosketukseen.",
+        "sv": "Reagerar inte på tilltal eller beröring.",
+        "en": "Does not respond to voice or touch."
+      }
+    },
+    {
+      "symptom": "seizures",
+      "species": ["dog", "cat", "smallAnimal"],
+      "description": {
+        "fi": "Kouristelee, jäykistyy tai nykii hallitsemattomasti.",
+        "sv": "Krampar, blir stel eller rycker okontrollerat.",
+        "en": "Convulsing, stiffening or twitching uncontrollably."
+      }
+    },
+    {
+      "symptom": "heavyBleeding",
+      "species": ["dog", "cat", "smallAnimal"],
+      "description": {
+        "fi": "Verenvuoto ei lakkaa painamalla muutamassa minuutissa.",
+        "sv": "Blödningen slutar inte inom några minuter med tryck.",
+        "en": "Bleeding does not stop with pressure within a few minutes."
+      }
+    },
+    {
+      "symptom": "choking",
+      "species": ["dog", "cat", "smallAnimal"],
+      "description": {
+        "fi": "Jotain on juuttunut kurkkuun, yökkäilee tai ei saa henkeä.",
+        "sv": "Något har fastnat i halsen, kväljer eller får inte luft.",
+        "en": "Something is stuck in the throat, gagging or unable to breathe."
+      }
+    },
+    {
+      "symptom": "suspectedPoisoning",
+      "species": ["dog", "cat", "smallAnimal"],
+      "description": {
+        "fi": "On syönyt jotain myrkyllistä ja oireilee. Katso tietopankista.",
+        "sv": "Har ätit något giftigt och har symtom. Se kunskapsbanken.",
+        "en": "Has eaten something toxic and has symptoms. See the knowledge base."
+      }
+    },
+    {
+      "symptom": "swollenAbdomen",
+      "species": ["dog"],
+      "description": {
+        "fi": "Vatsa turpoaa nopeasti, koira yrittää oksentaa tuloksetta ja on levoton.",
+        "sv": "Buken sväller snabbt, hunden försöker kräkas utan resultat och är rastlös.",
+        "en": "The abdomen swells quickly, the dog tries to vomit without success and is restless."
+      }
+    },
+    {
+      "symptom": "noUrine",
+      "species": ["cat"],
+      "description": {
+        "fi": "Käy hiekkalaatikolla ponnistellen, mutta virtsaa ei tule.",
+        "sv": "Går till kattlådan och krystar men ingen urin kommer.",
+        "en": "Goes to the litter box and strains, but no urine comes out."
+      }
+    }
+  ],
+  "generalQuestions": [
+    {
+      "id": "appetite",
+      "label": { "fi": "Ruokahalu", "sv": "Aptit", "en": "Appetite" },
+      "options": [
+        { "fi": "Huono", "sv": "Dålig", "en": "Low" },
+        { "fi": "Tavallinen", "sv": "Som vanligt", "en": "Usual" },
+        { "fi": "Suuri", "sv": "Stor", "en": "High" }
+      ],
+      "yellowIf": [0],
+      "symptoms": { "0": ["appetiteLoss"], "2": ["appetiteIncrease"] }
+    },
+    {
+      "id": "energy",
+      "label": { "fi": "Vireys", "sv": "Energi", "en": "Energy" },
+      "options": [
+        { "fi": "Väsynyt", "sv": "Trött", "en": "Low" },
+        { "fi": "Tavallinen", "sv": "Som vanligt", "en": "Usual" },
+        { "fi": "Levoton", "sv": "Rastlös", "en": "Restless" }
+      ],
+      "yellowIf": [0],
+      "symptoms": { "0": ["tiredness"], "2": ["restlessness"] }
+    },
+    {
+      "id": "drinking",
+      "label": { "fi": "Juominen", "sv": "Drickande", "en": "Drinking" },
+      "options": [
+        { "fi": "Vähemmän", "sv": "Mindre", "en": "Less" },
+        { "fi": "Tavallinen", "sv": "Som vanligt", "en": "Usual" },
+        { "fi": "Enemmän", "sv": "Mer", "en": "More" }
+      ],
+      "yellowIf": [0, 2],
+      "symptoms": { "0": ["drinkingLess"], "2": ["drinkingMore"] }
+    },
+    {
+      "id": "toilet",
+      "label": { "fi": "Uloste", "sv": "Avföring", "en": "Toilet" },
+      "options": [
+        { "fi": "Vähemmän", "sv": "Mindre", "en": "Less" },
+        { "fi": "Tavallinen", "sv": "Som vanligt", "en": "Usual" },
+        { "fi": "Löysä", "sv": "Lös", "en": "Loose" }
+      ],
+      "yellowIf": [0, 2],
+      "symptoms": { "0": ["toiletLess"], "2": ["diarrhoea"] }
+    },
+    {
+      "id": "pain",
+      "label": { "fi": "Kipu", "sv": "Smärta", "en": "Pain" },
+      "options": [
+        { "fi": "Ei", "sv": "Ingen", "en": "None" },
+        { "fi": "Jonkin verran", "sv": "Något", "en": "Some" },
+        { "fi": "Selvää", "sv": "Tydlig", "en": "Clear" }
+      ],
+      "usualAnswer": 0,
+      "yellowIf": [1],
+      "redIf": [2],
+      "symptoms": { "1": ["pain"], "2": ["pain"] }
+    },
+    {
+      "id": "vomiting",
+      "label": { "fi": "Oksentelu", "sv": "Kräkningar", "en": "Vomiting" },
+      "options": [
+        { "fi": "Ei", "sv": "Nej", "en": "No" },
+        { "fi": "Kerran", "sv": "En gång", "en": "Once" },
+        { "fi": "Toistuvasti", "sv": "Upprepade", "en": "Repeated" }
+      ],
+      "usualAnswer": 0,
+      "yellowIf": [1],
+      "redIf": [2],
+      "symptoms": { "1": ["vomiting"], "2": ["vomiting", "repeatedVomiting"] }
+    }
+  ],
+  "watchListTemplates": [
+    {
+      "id": "urinary-tract",
+      "species": ["cat", "dog"],
+      "condition": { "fi": "Virtsatieinfektio", "sv": "Urinvägsinfektion", "en": "Urinary tract infection" },
+      "intro": {
+        "fi": "Kun {pet} toipuu virtsatieinfektiosta, seuraa juomista, virtsaamiskertoja ja virtsaamisen ponnistelua.",
+        "sv": "Medan {pet} återhämtar sig från urinvägsinfektionen, följ drickandet, urineringarna och eventuella krystningar.",
+        "en": "While {pet} recovers from a urinary tract infection, monitor water intake, trips to the toilet and any straining to urinate."
+      },
+      "diagnosisKeywords": ["virtsatie", "kystiit", "rakkotulehd", "urinvägs", "cystit", "urinary", "cystitis", "flutd"],
+      "defaultDays": 10,
+      "questions": [
+        {
+          "id": "uti-water",
+          "label": { "fi": "Juominen", "sv": "Drickande", "en": "Water intake" },
+          "options": [
+            { "fi": "Vähemmän", "sv": "Mindre", "en": "Less" },
+            { "fi": "Tavallinen", "sv": "Som vanligt", "en": "Usual" },
+            { "fi": "Enemmän", "sv": "Mer", "en": "More" }
+          ],
+          "yellowIf": [0, 2],
+          "symptoms": { "0": ["drinkingLess"], "2": ["drinkingMore"] }
+        },
+        {
+          "id": "uti-trips",
+          "label": { "fi": "Virtsaamiskerrat", "sv": "Urineringar", "en": "Toilet trips to urinate" },
+          "options": [
+            { "fi": "Harvemmin", "sv": "Färre", "en": "Fewer" },
+            { "fi": "Tavallinen", "sv": "Som vanligt", "en": "Usual" },
+            { "fi": "Useammin", "sv": "Fler", "en": "More" }
+          ],
+          "yellowIf": [0, 2],
+          "symptoms": { "0": ["urinatingLess"], "2": ["urinatingMore"] }
+        },
+        {
+          "id": "uti-straining",
+          "label": { "fi": "Virtsaamisen ponnistelu", "sv": "Krystningar vid urinering", "en": "Straining to urinate" },
+          "options": [
+            { "fi": "Ei", "sv": "Nej", "en": "No" },
+            { "fi": "Vähän", "sv": "Lite", "en": "A little" },
+            { "fi": "Virtsaa ei tule", "sv": "Ingen urin kommer", "en": "No urine comes out" }
+          ],
+          "usualAnswer": 0,
+          "yellowIf": [1],
+          "emergencyIf": [2],
+          "symptoms": { "1": ["strainingToUrinate"], "2": ["strainingToUrinate", "noUrine"] }
+        }
+      ]
+    },
+    {
+      "id": "digestion",
+      "species": ["cat", "dog", "smallAnimal"],
+      "condition": { "fi": "Ruoansulatuskanavan häiriö", "sv": "Mag-tarmstörning", "en": "Digestive upset" },
+      "intro": {
+        "fi": "Kun {pet} toipuu vatsavaivoista, seuraa ulostetta, verta ulosteessa tai oksennuksessa ja sitä, pysyykö vesi sisällä.",
+        "sv": "Medan {pet} återhämtar sig från magbesvären, följ avföringen, blod i avföring eller kräkning och om vattnet stannar kvar.",
+        "en": "While {pet} recovers from a stomach upset, monitor the stool, any blood in stool or vomit, and whether water stays down."
+      },
+      "diagnosisKeywords": ["gastroenter", "ripuli", "oksen", "mahatauti", "suolistotulehd", "diarré", "kräk", "magsjuk", "diarrh", "vomit", "gastritis", "colitis", "koliit"],
+      "defaultDays": 7,
+      "questions": [
+        {
+          "id": "gi-stool",
+          "label": { "fi": "Ulosteen koostumus", "sv": "Avföringens konsistens", "en": "Stool" },
+          "options": [
+            { "fi": "Normaali", "sv": "Normal", "en": "Normal" },
+            { "fi": "Pehmeä", "sv": "Mjuk", "en": "Soft" },
+            { "fi": "Vetinen", "sv": "Vattnig", "en": "Watery" }
+          ],
+          "usualAnswer": 0,
+          "yellowIf": [1],
+          "redIf": [2],
+          "symptoms": { "1": ["diarrhoea"], "2": ["diarrhoea"] }
+        },
+        {
+          "id": "gi-blood",
+          "label": { "fi": "Verta ulosteessa tai oksennuksessa", "sv": "Blod i avföring eller kräkning", "en": "Blood in stool or vomit" },
+          "options": [
+            { "fi": "Ei", "sv": "Nej", "en": "No" },
+            { "fi": "Vähän", "sv": "Lite", "en": "A little" },
+            { "fi": "Runsaasti", "sv": "Mycket", "en": "A lot" }
+          ],
+          "usualAnswer": 0,
+          "redIf": [1],
+          "emergencyIf": [2],
+          "symptoms": { "1": ["bloodInStool"], "2": ["bloodInStool"] }
+        },
+        {
+          "id": "gi-water",
+          "label": { "fi": "Pysyykö vesi sisällä", "sv": "Stannar vattnet kvar", "en": "Keeping water down" },
+          "options": [
+            { "fi": "Juo normaalisti", "sv": "Dricker normalt", "en": "Drinks normally" },
+            { "fi": "Juo vähän", "sv": "Dricker lite", "en": "Drinks little" },
+            { "fi": "Oksentaa veden", "sv": "Kräks upp vattnet", "en": "Vomits the water" }
+          ],
+          "usualAnswer": 0,
+          "yellowIf": [1],
+          "redIf": [2],
+          "symptoms": { "1": ["drinkingLess"], "2": ["drinkingLess", "repeatedVomiting"] }
+        }
+      ]
+    },
+    {
+      "id": "skin-allergy",
+      "species": ["cat", "dog", "smallAnimal"],
+      "condition": { "fi": "Iho- tai korvaoireet", "sv": "Hud- eller öronbesvär", "en": "Skin or ear problem" },
+      "intro": {
+        "fi": "Hoidon aikana seuraa, väheneekö kutina, paraneeko iho ja ravisteleeko {pet} päätään.",
+        "sv": "Under behandlingen, följ om klådan minskar, om huden läker och om {pet} skakar på huvudet.",
+        "en": "During treatment, monitor whether the itching eases, the skin heals and whether {pet} shakes their head."
+      },
+      "diagnosisKeywords": ["allerg", "atop", "dermat", "kutin", "ihotulehd", "korvatulehd", "otiit", "klåda", "hudinflam", "öroninflam", "otit", "itch", "skin infection", "ear infection", "pyoderm"],
+      "defaultDays": 14,
+      "questions": [
+        {
+          "id": "skin-itching",
+          "label": { "fi": "Kutina", "sv": "Klåda", "en": "Itching" },
+          "options": [
+            { "fi": "Vähemmän kuin ennen", "sv": "Mindre än förut", "en": "Less than before" },
+            { "fi": "Kuten ennen", "sv": "Som förut", "en": "Same as before" },
+            { "fi": "Enemmän kuin ennen", "sv": "Mer än förut", "en": "More than before" }
+          ],
+          "yellowIf": [2],
+          "symptoms": { "2": ["itching"] }
+        },
+        {
+          "id": "skin-condition",
+          "label": { "fi": "Iho", "sv": "Huden", "en": "Skin" },
+          "options": [
+            { "fi": "Paranee", "sv": "Läker", "en": "Healing" },
+            { "fi": "Ennallaan", "sv": "Oförändrad", "en": "Unchanged" },
+            { "fi": "Pahempi tai uusia haavoja", "sv": "Sämre eller nya sår", "en": "Worse or new sores" }
+          ],
+          "yellowIf": [2],
+          "symptoms": { "2": ["skinWorse"] }
+        },
+        {
+          "id": "skin-head-shaking",
+          "label": { "fi": "Pään ravistelu", "sv": "Huvudskakningar", "en": "Head shaking" },
+          "options": [
+            { "fi": "Ei", "sv": "Nej", "en": "No" },
+            { "fi": "Joskus", "sv": "Ibland", "en": "Sometimes" },
+            { "fi": "Usein", "sv": "Ofta", "en": "Often" }
+          ],
+          "usualAnswer": 0,
+          "yellowIf": [2],
+          "symptoms": { "1": ["headShaking"], "2": ["headShaking"] }
+        }
+      ]
+    },
+    {
+      "id": "limping",
+      "species": ["dog", "cat"],
+      "condition": { "fi": "Ontuminen", "sv": "Hälta", "en": "Limping" },
+      "intro": {
+        "fi": "Kun {pet} toipuu, seuraa ontumista, jalan käyttöä ja turvotusta.",
+        "sv": "Medan {pet} återhämtar sig, följ hältan, hur benet används och svullnad.",
+        "en": "While {pet} recovers, monitor the limping, use of the leg and any swelling."
+      },
+      "diagnosisKeywords": ["ontu", "nyrjäh", "nivel", "artroos", "ristiside", "hält", "stukning", "artros", "korsband", "limp", "lame", "sprain", "arthritis", "cruciate", "luxat"],
+      "defaultDays": 14,
+      "questions": [
+        {
+          "id": "limp-trend",
+          "label": { "fi": "Ontuminen eiliseen verrattuna", "sv": "Hälta jämfört med i går", "en": "Limping compared with yesterday" },
+          "options": [
+            { "fi": "Vähemmän", "sv": "Mindre", "en": "Less" },
+            { "fi": "Saman verran", "sv": "Lika", "en": "The same" },
+            { "fi": "Enemmän", "sv": "Mer", "en": "Worse" }
+          ],
+          "yellowIf": [2],
+          "symptoms": { "2": ["limping"] }
+        },
+        {
+          "id": "limp-weight",
+          "label": { "fi": "Jalan käyttö", "sv": "Användning av benet", "en": "Use of the leg" },
+          "options": [
+            { "fi": "Käyttää jalkaa", "sv": "Använder benet", "en": "Uses the leg" },
+            { "fi": "Varaa vain varpaille", "sv": "Stöder bara på tårna", "en": "Touches with toes only" },
+            { "fi": "Ei käytä jalkaa", "sv": "Använder inte benet", "en": "Won't use the leg" }
+          ],
+          "usualAnswer": 0,
+          "yellowIf": [1],
+          "redIf": [2],
+          "symptoms": { "1": ["limping"], "2": ["limping", "notUsingLeg"] }
+        },
+        {
+          "id": "limp-swelling",
+          "label": { "fi": "Turvotus tai lämpö", "sv": "Svullnad eller värme", "en": "Swelling or warmth" },
+          "options": [
+            { "fi": "Ei", "sv": "Nej", "en": "No" },
+            { "fi": "Vähän", "sv": "Lite", "en": "Some" },
+            { "fi": "Selvä turvotus", "sv": "Tydlig svullnad", "en": "Clear swelling" }
+          ],
+          "usualAnswer": 0,
+          "yellowIf": [1],
+          "redIf": [2],
+          "symptoms": { "1": ["swelling"], "2": ["swelling"] }
+        }
+      ]
+    },
+    {
+      "id": "kidney",
+      "species": ["cat", "dog"],
+      "condition": { "fi": "Munuaissairaus", "sv": "Njursjukdom", "en": "Kidney disease" },
+      "intro": {
+        "fi": "Munuaissairaudessa seuraa juomista ja virtsamäärää. Muutokset kannattaa kertoa eläinlääkärille.",
+        "sv": "Vid njursjukdom, följ drickandet och urinmängden. Berätta om förändringar för veterinären.",
+        "en": "With kidney disease, monitor drinking and the amount of urine. Tell the vet about changes."
+      },
+      "diagnosisKeywords": ["munuai", "njur", "kidney", "renal", "ckd"],
+      "defaultDays": null,
+      "questions": [
+        {
+          "id": "kidney-drinking",
+          "label": { "fi": "Juominen", "sv": "Drickande", "en": "Drinking" },
+          "options": [
+            { "fi": "Vähemmän", "sv": "Mindre", "en": "Less" },
+            { "fi": "Tavallinen", "sv": "Som vanligt", "en": "Usual" },
+            { "fi": "Paljon enemmän", "sv": "Mycket mer", "en": "Much more" }
+          ],
+          "yellowIf": [2],
+          "redIf": [0],
+          "symptoms": { "0": ["drinkingLess"], "2": ["drinkingMore"] }
+        },
+        {
+          "id": "kidney-urine",
+          "label": { "fi": "Virtsamäärä", "sv": "Urinmängd", "en": "Amount of urine" },
+          "options": [
+            { "fi": "Vähemmän", "sv": "Mindre", "en": "Less" },
+            { "fi": "Tavallinen", "sv": "Som vanligt", "en": "Usual" },
+            { "fi": "Enemmän", "sv": "Mer", "en": "More" }
+          ],
+          "yellowIf": [0, 2],
+          "symptoms": { "0": ["urinatingLess"], "2": ["urinatingMore"] }
+        }
+      ]
+    },
+    {
+      "id": "diabetes",
+      "species": ["cat", "dog"],
+      "condition": { "fi": "Diabetes", "sv": "Diabetes", "en": "Diabetes" },
+      "intro": {
+        "fi": "Diabeteksessa seuraa, syökö {pet} ennen insuliinia, sekä juomista ja heikkoutta.",
+        "sv": "Vid diabetes, följ om {pet} äter före insulinet, drickandet och svaghet.",
+        "en": "With diabetes, monitor whether {pet} eats before insulin, drinking and any weakness."
+      },
+      "diagnosisKeywords": ["diabet", "sokeritau", "sockersjuk", "insulin"],
+      "defaultDays": null,
+      "questions": [
+        {
+          "id": "diabetes-meal",
+          "label": { "fi": "Söikö ennen insuliinia", "sv": "Åt före insulinet", "en": "Ate before insulin" },
+          "options": [
+            { "fi": "Kyllä", "sv": "Ja", "en": "Yes" },
+            { "fi": "Söi vähemmän", "sv": "Åt mindre", "en": "Ate less" },
+            { "fi": "Ei syönyt", "sv": "Åt inte", "en": "Didn't eat" }
+          ],
+          "usualAnswer": 0,
+          "yellowIf": [1],
+          "redIf": [2],
+          "symptoms": { "1": ["appetiteLoss"], "2": ["appetiteLoss", "skippedMeal"] }
+        },
+        {
+          "id": "diabetes-drinking",
+          "label": { "fi": "Juominen", "sv": "Drickande", "en": "Drinking" },
+          "options": [
+            { "fi": "Vähemmän", "sv": "Mindre", "en": "Less" },
+            { "fi": "Tavallinen", "sv": "Som vanligt", "en": "Usual" },
+            { "fi": "Enemmän", "sv": "Mer", "en": "More" }
+          ],
+          "yellowIf": [2],
+          "symptoms": { "0": ["drinkingLess"], "2": ["drinkingMore"] }
+        },
+        {
+          "id": "diabetes-weakness",
+          "label": { "fi": "Heikkous tai huojuminen", "sv": "Svaghet eller vinglighet", "en": "Weakness or wobbliness" },
+          "options": [
+            { "fi": "Ei", "sv": "Nej", "en": "No" },
+            { "fi": "Hieman", "sv": "Lite", "en": "Slightly" },
+            { "fi": "Hyvin heikko tai vapisee", "sv": "Mycket svag eller darrar", "en": "Very weak or shaking" }
+          ],
+          "usualAnswer": 0,
+          "redIf": [1],
+          "emergencyIf": [2],
+          "symptoms": { "1": ["weakness"], "2": ["weakness", "shivering"] }
+        }
+      ]
+    },
+    {
+      "id": "post-surgery",
+      "species": ["cat", "dog", "smallAnimal"],
+      "condition": { "fi": "Leikkauksen jälkeinen toipuminen", "sv": "Återhämtning efter operation", "en": "Recovery after surgery" },
+      "intro": {
+        "fi": "Leikkauksen jälkeen seuraa haavaa päivittäin ja estä haavan nuoleminen.",
+        "sv": "Efter operationen, titta på såret varje dag och hindra att det slickas.",
+        "en": "After surgery, check the wound every day and stop it from being licked."
+      },
+      "diagnosisKeywords": ["leikka", "kastr", "sterilo", "ompele", "operation", "kastrering", "sterilis", "surgery", "spay", "neuter", "suture"],
+      "defaultDays": 14,
+      "questions": [
+        {
+          "id": "surgery-wound",
+          "label": { "fi": "Haava", "sv": "Såret", "en": "The wound" },
+          "options": [
+            { "fi": "Puhdas ja kuiva", "sv": "Rent och torrt", "en": "Clean and dry" },
+            { "fi": "Punoittaa tai turpoaa", "sv": "Rött eller svullet", "en": "Red or swollen" },
+            { "fi": "Aukeaa, vuotaa tai märkii", "sv": "Öppnas, blöder eller vätskar", "en": "Opening, bleeding or oozing" }
+          ],
+          "usualAnswer": 0,
+          "yellowIf": [1],
+          "redIf": [2],
+          "symptoms": { "1": ["woundProblem", "swelling"], "2": ["woundProblem"] }
+        },
+        {
+          "id": "surgery-licking",
+          "label": { "fi": "Haavan nuoleminen", "sv": "Slickar såret", "en": "Licking the wound" },
+          "options": [
+            { "fi": "Ei", "sv": "Nej", "en": "No" },
+            { "fi": "Joskus", "sv": "Ibland", "en": "Sometimes" },
+            { "fi": "Paljon tai kauluri irti", "sv": "Mycket eller kragen av", "en": "A lot, or the cone is off" }
+          ],
+          "usualAnswer": 0,
+          "yellowIf": [1, 2],
+          "symptoms": { "1": ["woundLicking"], "2": ["woundLicking"] }
+        }
+      ]
+    }
+  ],
+  "severity": {
+    "conditions": [
+      {
+        "id": "kidneyDisease",
+        "label": { "fi": "munuaissairaus", "sv": "njursjukdom", "en": "kidney disease" },
+        "diagnosisKeywords": ["munuai", "njur", "kidney", "renal", "ckd"],
+        "medicationKeywords": ["benazepril", "fortekor", "telmisartan", "semintra"],
+        "rules": [
+          { "symptoms": ["appetiteLoss", "vomiting", "drinkingLess", "urinatingLess", "tiredness"], "level": "contactVet" },
+          { "symptoms": ["drinkingMore", "urinatingMore"], "level": "monitor" }
+        ]
+      },
+      {
+        "id": "diabetes",
+        "label": { "fi": "diabetes", "sv": "diabetes", "en": "diabetes" },
+        "diagnosisKeywords": ["diabet", "sokeritau", "sockersjuk"],
+        "medicationKeywords": ["insulin", "caninsulin", "prozinc", "lantus"],
+        "rules": [
+          { "symptoms": ["appetiteLoss", "vomiting", "tiredness", "staggering", "weakness"], "level": "contactVet" },
+          { "symptoms": ["drinkingMore", "urinatingMore"], "level": "monitor" }
+        ]
+      },
+      {
+        "id": "heartDisease",
+        "label": { "fi": "sydänsairaus", "sv": "hjärtsjukdom", "en": "heart disease" },
+        "diagnosisKeywords": ["sydä", "hjärt", "heart", "cardi", "kardi", "mitraal", "mitral"],
+        "medicationKeywords": ["pimobendan", "vetmedin", "furosemid"],
+        "rules": [
+          { "symptoms": ["tiredness", "coughing", "restlessness", "weakness"], "level": "contactVet" }
+        ]
+      },
+      {
+        "id": "epilepsy",
+        "label": { "fi": "epilepsia", "sv": "epilepsi", "en": "epilepsy" },
+        "diagnosisKeywords": ["epilep"],
+        "medicationKeywords": ["fenobarbit", "phenobarbit", "levetirase", "levetirace", "imepito", "pexion"],
+        "rules": [
+          { "symptoms": ["staggering", "weakness", "tiredness"], "level": "contactVet" }
+        ]
+      }
+    ],
+    "recentSurgery": {
+      "days": 14,
+      "rules": [
+        { "symptoms": ["pain", "fever", "swelling", "tiredness", "appetiteLoss", "vomiting", "woundProblem"], "level": "contactVet" }
+      ]
+    },
+    "age": [
+      {
+        "group": "young",
+        "maxAgeMonths": { "dog": 6, "cat": 6, "smallAnimal": 3 },
+        "rules": [
+          { "symptoms": ["repeatedVomiting", "diarrhoea", "appetiteLoss", "tiredness"], "level": "contactVet" }
+        ]
+      },
+      {
+        "group": "senior",
+        "minAgeMonths": { "dog": 96, "cat": 132, "smallAnimal": 48 },
+        "rules": [
+          { "symptoms": ["appetiteLoss", "repeatedVomiting", "drinkingMore"], "level": "contactVet" }
+        ]
+      }
+    ],
+    "exposure": {
+      "withinHours": 72,
+      "symptoms": ["vomiting", "repeatedVomiting", "diarrhoea", "drooling", "staggering", "shivering", "tiredness", "weakness", "appetiteLoss", "abdominalPain", "restlessness"],
+      "levelByRisk": { "caution": "contactVet", "dangerous": "emergency", "emergency": "emergency" }
+    },
+    "persistence": {
+      "days": 3,
+      "overrides": [{ "symptom": "appetiteLoss", "species": "cat", "days": 2 }],
+      "level": "contactVet"
+    },
+    "baseline": {
+      "windowDays": 21,
+      "recentDays": 3,
+      "minLogs": 5,
+      "minDeviatingDays": 2
+    },
+    "statusValidDays": 3
+  },
+  "levels": {
+    "normal": {
+      "title": { "fi": "Kaikki kuten tavallisesti", "sv": "Allt som vanligt", "en": "Everything as usual" },
+      "action": {
+        "fi": "Jatka tavalliseen tapaan ja kirjaa huomenna uudelleen.",
+        "sv": "Fortsätt som vanligt och logga igen i morgon.",
+        "en": "Carry on as usual and log again tomorrow."
+      }
+    },
+    "monitor": {
+      "title": { "fi": "Pidä silmällä", "sv": "Håll ett öga på", "en": "Keep an eye on it" },
+      "action": {
+        "fi": "Seuraa tilannetta ja kirjaa oireet tarkemmin. Ota yhteyttä eläinlääkäriin, jos oireet pahenevat.",
+        "sv": "Följ läget och logga symtomen noggrannare. Kontakta en veterinär om symtomen blir värre.",
+        "en": "Keep an eye on the situation and log the symptoms in more detail. Contact a vet if they get worse."
+      }
+    },
+    "contactVet": {
+      "title": { "fi": "Ota yhteyttä eläinlääkäriin", "sv": "Kontakta en veterinär", "en": "Contact a vet" },
+      "action": {
+        "fi": "Soita eläinlääkärille tänään. Jos klinikka on kiinni, ota yhteyttä päivystykseen.",
+        "sv": "Ring veterinären i dag. Om kliniken är stängd, kontakta jouren.",
+        "en": "Call a vet today. If the clinic is closed, contact an emergency clinic."
+      }
+    },
+    "emergency": {
+      "title": { "fi": "Hätätilanne", "sv": "Nödläge", "en": "Emergency" },
+      "action": {
+        "fi": "Soita eläinlääkäripäivystykseen nyt ja lähde matkaan.",
+        "sv": "Ring veterinärjouren nu och åk dit.",
+        "en": "Call an emergency vet clinic now and get on your way."
+      }
+    }
+  },
+  "reasons": {
+    "allClear": {
+      "fi": "Kirjauksessa ei ole poikkeavaa.",
+      "sv": "Inget avvikande i loggen.",
+      "en": "Nothing unusual in the log."
+    },
+    "emergencySymptom": {
+      "fi": "{symptom} vaatii aina kiireellistä hoitoa, riippumatta aiemmista tiedoista.",
+      "sv": "{symptom} kräver alltid akut vård, oavsett tidigare uppgifter.",
+      "en": "{symptom} always needs urgent care, whatever the history."
+    },
+    "vetThreshold": {
+      "fi": "{question}: {answer}. Eläinlääkärin ohjeiden ({condition}) mukaan tämä on raja, jota seurataan.",
+      "sv": "{question}: {answer}. Enligt veterinärens anvisningar ({condition}) är detta en gräns som följs.",
+      "en": "{question}: {answer}. This is a limit in the vet's instructions ({condition})."
+    },
+    "generalThreshold": {
+      "fi": "{question}: {answer}.",
+      "sv": "{question}: {answer}.",
+      "en": "{question}: {answer}."
+    },
+    "reportedSymptom": {
+      "fi": "Kirjattu oire: {symptom}.",
+      "sv": "Loggat symtom: {symptom}.",
+      "en": "Logged symptom: {symptom}."
+    },
+    "condition": {
+      "fi": "Arvio on korkeampi, koska lemmikillä {pet} on todettu {condition} ja oireena on {symptom}.",
+      "sv": "Bedömningen är högre eftersom {pet} har diagnostiserats med {condition} och har {symptom}.",
+      "en": "The assessment is higher because {pet} has been diagnosed with {condition} and has {symptom}."
+    },
+    "recentSurgery": {
+      "fi": "Arvio on korkeampi, koska lemmikki {pet} on leikattu {days} päivää sitten ja oireena on {symptom}.",
+      "sv": "Bedömningen är högre eftersom {pet} opererades för {days} dagar sedan och har {symptom}.",
+      "en": "The assessment is higher because {pet} had surgery {days} days ago and has {symptom}."
+    },
+    "ageYoung": {
+      "fi": "Arvio on korkeampi, koska nuori eläin voi kuivua nopeasti: {symptom}.",
+      "sv": "Bedömningen är högre eftersom unga djur snabbt kan bli uttorkade: {symptom}.",
+      "en": "The assessment is higher because young animals can dehydrate quickly: {symptom}."
+    },
+    "ageSenior": {
+      "fi": "Arvio on korkeampi, koska iäkkäällä eläimellä {symptom} voi viitata esimerkiksi munuais- tai kilpirauhasongelmaan.",
+      "sv": "Bedömningen är högre eftersom {symptom} hos ett äldre djur kan tyda på t.ex. njur- eller sköldkörtelproblem.",
+      "en": "The assessment is higher because in an older animal {symptom} can point to, for example, kidney or thyroid problems."
+    },
+    "exposure": {
+      "fi": "Lemmikki {pet} on syönyt jotain vaarallista ({substance}) {hours} tunnin sisällä ja oireena on {symptom}. Kyseessä voi olla myrkytys.",
+      "sv": "{pet} har ätit något farligt ({substance}) inom {hours} timmar och har {symptom}. Det kan vara en förgiftning.",
+      "en": "{pet} ate something dangerous ({substance}) within the last {hours} hours and has {symptom}. This may be poisoning."
+    },
+    "persistent": {
+      "fi": "{symptom} on jatkunut {days} päivää peräkkäin.",
+      "sv": "{symptom} har pågått {days} dagar i rad.",
+      "en": "{symptom} has continued for {days} days in a row."
+    },
+    "baselineDeviation": {
+      "fi": "{question} poikkeaa lemmikin {pet} tavallisesta jo {days} päivänä.",
+      "sv": "{question} avviker från det som är normalt för {pet} sedan {days} dagar.",
+      "en": "{question} has differed from what is normal for {pet} on {days} days."
+    },
+    "insufficientData": {
+      "fi": "Lemmikistä on vähän tietoja, joten arvio on varmuuden vuoksi korkeampi. Lisää ikä ja eläinlääkärikäynnit terveyspassiin.",
+      "sv": "Det finns lite uppgifter om djuret, så bedömningen är högre för säkerhets skull. Lägg till ålder och veterinärbesök i hälsopasset.",
+      "en": "There is little information about the pet, so the assessment is higher to be safe. Add the age and vet visits to the health passport."
+    }
+  }
+}

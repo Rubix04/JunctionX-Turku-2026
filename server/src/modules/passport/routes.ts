@@ -8,6 +8,7 @@ import { currentUser } from "../../plugins/auth.js";
 import { syncPetWeight, syncVisitWeight } from "../diet/service.js";
 import { petParamsSchema } from "../pets/schemas.js";
 import { getPet, toPetDto } from "../pets/service.js";
+import { startWatchListsForRecord } from "../symptoms/service.js";
 import { kindForSection } from "./records.js";
 import {
   createdShareSchema,
@@ -112,6 +113,8 @@ export const passportRoutes: FastifyPluginAsyncZod = async (app) => {
       const pet = petFor(request, request.params.petId);
       const row = createRecord(app.db, pet.id, kindForSection[request.params.section], request.body);
       syncVisitWeight(app.db, row);
+      // A new diagnosis or surgery starts its watch list (spec 1); see GET /pets/:petId/watch-lists.
+      startWatchListsForRecord(app.db, pet, row, currentUser(request).userId);
       return reply.status(201).send(toRecordDto(row) as z.infer<typeof recordSchema>);
     },
   );
