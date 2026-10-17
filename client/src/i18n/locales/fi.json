@@ -738,5 +738,9 @@
   "pinPad": {
     "delete": "Poista",
     "entered": "{{count}}/{{total}} numeroa annettu"
+  },
+  "splash": {
+    "continue": "Napauta jatkaaksesi",
+    "by": "[Vakuutusyhtiö]"
   }
 }
