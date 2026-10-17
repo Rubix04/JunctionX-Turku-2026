@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 // Timestamps are stored as epoch milliseconds.
 const createdAt = () =>
@@ -120,3 +120,62 @@ export const passportShares = sqliteTable("passport_shares", {
 
 export type HealthRecordRow = typeof healthRecords.$inferSelect;
 export type PassportShareRow = typeof passportShares.$inferSelect;
+
+// ---- Diet and weight (spec 3) ----
+
+/** One weighing. At most one per pet per day; a second one the same day replaces the first. */
+export const weightEntries = sqliteTable(
+  "weight_entries",
+  {
+    id: text("id").primaryKey(),
+    petId: text("pet_id")
+      .notNull()
+      .references(() => pets.id, { onDelete: "cascade" }),
+    /** ISO date */
+    weighedOn: text("weighed_on").notNull(),
+    weightKg: real("weight_kg").notNull(),
+    note: text("note"),
+    createdAt: createdAt(),
+  },
+  (table) => [uniqueIndex("weight_entries_pet_day").on(table.petId, table.weighedOn)],
+);
+
+export const dietTypes = [
+  "maintenance",
+  "weightLoss",
+  "kidney",
+  "urinary",
+  "hypoallergenic",
+  "gastrointestinal",
+  "diabetes",
+] as const;
+export type DietType = (typeof dietTypes)[number];
+
+export const activityLevels = ["low", "normal", "high"] as const;
+export type ActivityLevel = (typeof activityLevels)[number];
+
+/** The pet's current diet: what it eats and the settings the portion calculator needs. */
+export const dietPlans = sqliteTable("diet_plans", {
+  petId: text("pet_id")
+    .primaryKey()
+    .references(() => pets.id, { onDelete: "cascade" }),
+  dietType: text("diet_type", { enum: dietTypes }).notNull(),
+  /** Who chose the diet: the vet's instructions or the owner */
+  source: text("source", { enum: ["vet", "owner"] }).notNull(),
+  foodName: text("food_name").notNull(),
+  /** Energy density from the food package, kcal per 100 g */
+  kcalPer100g: real("kcal_per_100g"),
+  mealsPerDay: integer("meals_per_day").notNull(),
+  targetWeightKg: real("target_weight_kg"),
+  neutered: integer("neutered", { mode: "boolean" }),
+  activityLevel: text("activity_level", { enum: activityLevels }).notNull(),
+  notes: text("notes"),
+  /** Set when the food changed: the old food is mixed out gradually from this date. */
+  previousFoodName: text("previous_food_name"),
+  transitionStartedOn: text("transition_started_on"),
+  updatedAt: integer("updated_at", { mode: "number" }).notNull(),
+  createdAt: createdAt(),
+});
+
+export type WeightEntryRow = typeof weightEntries.$inferSelect;
+export type DietPlanRow = typeof dietPlans.$inferSelect;
