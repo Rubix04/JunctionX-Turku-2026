@@ -50,5 +50,10 @@
     "addPet": "Add a pet",
     "addVisit": "Add a vet visit",
     "notFound": "Page not found"
+  },
+  "trafficLight": {
+    "green": "Green · as usual",
+    "yellow": "Yellow · keep an eye",
+    "red": "Red · contact a vet"
   }
 }
