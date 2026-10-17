@@ -1,18 +1,18 @@
 {
   "expo": {
-    "name": "client",
+    "name": "TassuVahti",
     "slug": "client",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "client",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "ios": {
       "icon": "./assets/expo.icon"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#0E5A63",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -28,13 +28,22 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#0E5A63",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "imageWidth": 120,
+          "resizeMode": "contain"
         }
       ],
       "expo-localization",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "TassuVahti uses your photos for pet profile pictures and symptom logs.",
+          "cameraPermission": "TassuVahti uses the camera for pet profile pictures, symptom logs and photos of visit notes.",
+          "microphonePermission": "TassuVahti records sound with videos of your pet for the vet."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

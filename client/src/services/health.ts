@@ -12,6 +12,10 @@ const latestLogFor = (petId: string) =>
     .filter((log) => log.petId === petId)
     .sort((a, b) => b.date.localeCompare(a.date))[0] ?? null;
 
+/** Oldest first */
+export const getDailyLogs = async (petId: string): Promise<DailyLog[]> =>
+  mockDelay(mockDailyLogs.filter((l) => l.petId === petId).sort((a, b) => a.date.localeCompare(b.date)));
+
 /** Watch list questions first, then the general ones. */
 export const getLogQuestions = async (petId: string): Promise<LogQuestion[]> =>
   mockDelay([...(watchListFor(petId)?.questions ?? []), ...mockGeneralQuestions]);

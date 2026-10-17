@@ -29,7 +29,8 @@ export const apiFetch = async <T>(path: string, { method = 'GET', body }: Reques
   }
 
   const headers: Record<string, string> = {};
-  if (body !== undefined) {
+  const isForm = body instanceof FormData;
+  if (body !== undefined && !isForm) {
     headers['Content-Type'] = 'application/json';
   }
   if (accessToken) {
@@ -39,7 +40,7 @@ export const apiFetch = async <T>(path: string, { method = 'GET', body }: Reques
   const response = await fetch(`${apiUrl}${path}`, {
     method,
     headers,
-    body: body === undefined ? undefined : JSON.stringify(body),
+    body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
   });
 
   if (!response.ok) {

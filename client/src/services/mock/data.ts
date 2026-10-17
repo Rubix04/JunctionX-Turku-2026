@@ -1,5 +1,5 @@
 import type { CarePlan, MedicationCourse, Reminder, Visit } from '@/types/care';
-import type { DailyLog, WatchList } from '@/types/health';
+import type { DailyLog, LogQuestion, WatchList } from '@/types/health';
 import type { Pet } from '@/types/pet';
 
 // Demo data from the design mockups: Mirri is recovering from a urinary tract
@@ -12,7 +12,7 @@ export const mockPets: Pet[] = [
     name: 'Mirri',
     species: 'cat',
     breed: 'Domestic shorthair',
-    birthDate: '2017-04-02',
+    birthDate: '2019-05-04',
     weightKg: 4.6,
     photoUrl: null,
   },
@@ -57,11 +57,18 @@ export const mockWatchLists: WatchList[] = [
         redIf: [2],
       },
     ],
+    yellowAdvice: [
+      'Fill the water bowl to a mark in the morning and check it in the evening.',
+      'Log litter box trips again tonight, in more detail.',
+    ],
+    redWhen: 'she strains without passing urine. Then contact a vet straight away.',
+    redReason:
+      'Straining without passing urine can mean a blocked urinary tract. Your vet listed this as a reason to call right away.',
   },
 ];
 
 // Asked on every daily log, with or without a watch list.
-export const mockGeneralQuestions: WatchList['questions'] = [
+export const mockGeneralQuestions: LogQuestion[] = [
   { id: 'appetite', label: 'Appetite', options: ['Low', 'Usual', 'High'], yellowIf: [0], redIf: [] },
   { id: 'energy', label: 'Energy', options: ['Low', 'Usual', 'High'], yellowIf: [0], redIf: [] },
   { id: 'pain', label: 'Pain', options: ['None', 'Some', 'Clear'], yellowIf: [1, 2], redIf: [] },
@@ -77,10 +84,32 @@ export const mockGeneralQuestions: WatchList['questions'] = [
 export const mockDailyLogs: DailyLog[] = [
   {
     petId: 'mirri',
+    date: '2026-10-13',
+    answers: { water: 1, litter: 2, straining: 1, appetite: 1, energy: 1, pain: 1, vomiting: 0 },
+  },
+  {
+    petId: 'mirri',
+    date: '2026-10-14',
+    answers: { water: 1, litter: 1, straining: 0, appetite: 1, energy: 1, pain: 0, vomiting: 0 },
+  },
+  {
+    petId: 'mirri',
+    date: '2026-10-15',
+    answers: { water: 2, litter: 1, straining: 0, appetite: 1, energy: 1, pain: 0, vomiting: 0 },
+  },
+  {
+    petId: 'mirri',
     date: '2026-10-16',
     answers: { water: 2, litter: 1, straining: 0, appetite: 1, energy: 1, pain: 0, vomiting: 0 },
   },
 ];
+
+/** Family members who share the pet pages and reminders */
+export const mockHousehold = {
+  ownerFirstName: 'Aino',
+  ownerFullName: 'Aino Virtanen',
+  members: [{ id: 'juha', name: 'Juha', role: 'member' as const }],
+};
 
 export const mockVisits: Visit[] = [
   {
@@ -121,7 +150,22 @@ export const mockCarePlans: CarePlan[] = [
       dateTime: '2026-10-22T14:30:00',
       clinicName: 'Pet Clinic Aurora',
     },
-    originalText: '[Original visit notes from the clinic]',
+    products: [
+      {
+        productId: 'urinary-wet',
+        name: 'Urinary care wet food',
+        brand: '[Brand · product name]',
+        prescription: null,
+      },
+      {
+        productId: 'antibiotic',
+        name: 'Antibiotic',
+        brand: '',
+        prescription: { issuedTo: 'Pet Clinic Aurora', pickedUpOn: '2026-10-13' },
+      },
+    ],
+    originalText:
+      '[Original visit notes from the clinic, shown unchanged so the owner can compare them with the summary.]',
   },
 ];
 

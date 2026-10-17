@@ -17,7 +17,7 @@ const DefaultPicture = ({ species, size }: { species: Species; size: number }) =
   if (species === 'cat') {
     return (
       <Svg width={size} height={size} viewBox="0 0 64 64" accessible={false}>
-        <Circle cx="32" cy="32" r="32" fill="#F8E3C4" />
+        <Circle cx="32" cy="32" r="32" fill={colors.catTint} />
         <Path d="M15 28 17 11 29 21z" fill="#C9772B" />
         <Path d="M49 28 47 11 35 21z" fill="#C9772B" />
         <Ellipse cx="32" cy="37" rx="18" ry="15" fill="#C9772B" />
@@ -31,7 +31,7 @@ const DefaultPicture = ({ species, size }: { species: Species; size: number }) =
   if (species === 'dog') {
     return (
       <Svg width={size} height={size} viewBox="0 0 64 64" accessible={false}>
-        <Circle cx="32" cy="32" r="32" fill="#D6ECEC" />
+        <Circle cx="32" cy="32" r="32" fill={colors.dogTint} />
         <Ellipse cx="17" cy="31" rx="6" ry="12" fill="#5C3B24" transform="rotate(15 17 31)" />
         <Ellipse cx="47" cy="31" rx="6" ry="12" fill="#5C3B24" transform="rotate(-15 47 31)" />
         <Ellipse cx="32" cy="35" rx="14" ry="16" fill="#8B5E3C" />
@@ -45,7 +45,7 @@ const DefaultPicture = ({ species, size }: { species: Species; size: number }) =
 
   return (
     <Svg width={size} height={size} viewBox="0 0 64 64" accessible={false}>
-      <Circle cx="32" cy="32" r="32" fill="#E6E9F4" />
+      <Circle cx="32" cy="32" r="32" fill={colors.smallAnimalTint} />
       <Ellipse cx="24" cy="18" rx="5" ry="12" fill="#9A8C80" />
       <Ellipse cx="40" cy="18" rx="5" ry="12" fill="#9A8C80" />
       <Ellipse cx="32" cy="38" rx="15" ry="14" fill="#9A8C80" />
@@ -54,6 +54,13 @@ const DefaultPicture = ({ species, size }: { species: Species; size: number }) =
       <Path d="M30 42h4l-2 2z" fill={ink} />
     </Svg>
   );
+};
+
+/** Background behind the default picture, e.g. the pet page header */
+export const speciesTint: Record<Species, string> = {
+  cat: colors.catTint,
+  dog: colors.dogTint,
+  smallAnimal: colors.smallAnimalTint,
 };
 
 // Decorative: show the pet's name next to it.

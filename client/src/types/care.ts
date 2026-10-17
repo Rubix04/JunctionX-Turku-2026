@@ -9,6 +9,16 @@ export type Visit = {
   title: string;
   clinicName: string;
   vetName: string | null;
+  /** Uploaded notes not yet checked by the clinic */
+  draft?: boolean;
+};
+
+export type CarePlanProduct = {
+  productId: string;
+  name: string;
+  brand: string;
+  /** Prescription medicines go through the prescription, not the store map */
+  prescription: { issuedTo: string; pickedUpOn: string | null } | null;
 };
 
 export type CarePlan = {
@@ -22,6 +32,7 @@ export type CarePlan = {
   findings: string;
   homeCare: string[];
   followUp: { title: string; dateTime: string; clinicName: string } | null;
+  products: CarePlanProduct[];
   /** The vet's notes, unchanged */
   originalText: string;
 };

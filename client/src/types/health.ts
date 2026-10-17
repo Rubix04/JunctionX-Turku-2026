@@ -25,6 +25,12 @@ export type WatchList = {
   startDate: string;
   totalDays: number;
   questions: LogQuestion[];
+  /** What to do when the result is yellow, from the vet's instructions */
+  yellowAdvice: string[];
+  /** When yellow turns red */
+  redWhen: string;
+  /** Why the result is red, shown on the red result screen */
+  redReason: string;
 };
 
 export type DailyLog = {
@@ -33,6 +39,8 @@ export type DailyLog = {
   date: string;
   /** Question id -> answer */
   answers: Record<string, LogAnswer>;
+  /** Photos or videos, e.g. of limping (local file URIs until upload exists) */
+  attachments?: { uri: string; kind: 'image' | 'video' }[];
 };
 
 export type HealthStatus = {
