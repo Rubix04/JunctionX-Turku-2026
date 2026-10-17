@@ -2,6 +2,53 @@
   "common": {
     "appName": "TassuVahti",
     "tagline": "Vakar över ditt husdjur mellan veterinärbesöken.",
-    "emergency": "Nödläge"
+    "emergency": "Nödläge",
+    "back": "Tillbaka"
+  },
+  "tabs": {
+    "home": "Hem",
+    "map": "Karta",
+    "knowledge": "Är det säkert?",
+    "alerts": "Varningar",
+    "account": "Konto"
+  },
+  "auth": {
+    "signInDemo": "Logga in (demo)",
+    "signOut": "Logga ut"
+  },
+  "placeholder": {
+    "notBuilt": "Den här vyn är inte byggd än."
+  },
+  "screens": {
+    "welcome": "Välkommen",
+    "bankAuth": "Logga in med nätbankskoder",
+    "setLock": "Ställ in enhetslås",
+    "unlock": "Lås upp",
+    "home": "Hem",
+    "map": "Veterinärer och jourkliniker",
+    "knowledge": "Är det säkert?",
+    "alerts": "Säsongsvarningar",
+    "settings": "Konto och inställningar",
+    "insurance": "Försäkring och ersättningar",
+    "pet": "Djurets sida",
+    "log": "Dagens logg",
+    "logResult": "Loggresultat",
+    "trends": "Trender",
+    "carePlan": "Vårdplan",
+    "reminders": "Påminnelser",
+    "diet": "Kost och vikt",
+    "passport": "Hälsopass",
+    "sharePassport": "Dela hälsopass",
+    "photo": "Beskär profilbild",
+    "emergency": "Nödläge",
+    "firstAid": "Första hjälpen",
+    "firstAidGuide": "Guide för första hjälpen",
+    "clinic": "Klinik",
+    "substance": "Artikel i kunskapsbanken",
+    "ateThis": "Mitt djur åt det här",
+    "findInStore": "Hitta i butik",
+    "addPet": "Lägg till ett djur",
+    "addVisit": "Lägg till veterinärbesök",
+    "notFound": "Sidan hittades inte"
   }
 }
