@@ -3,6 +3,7 @@ export const colors = {
   primary: '#0E5A63', // Vahti teal: buttons, logo
   primaryDark: '#08393F',
   primaryTint: '#E6F0F0', // chips on white cards
+  primarySoft: '#D6ECEC', // hero panels, light text on teal
   accent: '#F2A33A', // Tassu amber: paw toes, highlights
   accentDark: '#9A5A0C', // amber icons on accentTint
   accentTint: '#FDF1DE',
