@@ -123,7 +123,10 @@ export type PassportShareRow = typeof passportShares.$inferSelect;
 
 // ---- Diet and weight (spec 3) ----
 
-/** One weighing. At most one per pet per day; a second one the same day replaces the first. */
+/**
+ * One weigh-in. Most come from vet visits (the visit's weight is copied here); owners can add
+ * their own, e.g. from the clinic's waiting-room scale. At most one per pet per day.
+ */
 export const weightEntries = sqliteTable(
   "weight_entries",
   {
@@ -134,6 +137,9 @@ export const weightEntries = sqliteTable(
     /** ISO date */
     weighedOn: text("weighed_on").notNull(),
     weightKg: real("weight_kg").notNull(),
+    source: text("source", { enum: ["vet", "owner"] }).notNull(),
+    /** The passport visit this weight came from; removed with the visit */
+    visitRecordId: text("visit_record_id").references(() => healthRecords.id, { onDelete: "cascade" }),
     note: text("note"),
     createdAt: createdAt(),
   },
@@ -151,10 +157,7 @@ export const dietTypes = [
 ] as const;
 export type DietType = (typeof dietTypes)[number];
 
-export const activityLevels = ["low", "normal", "high"] as const;
-export type ActivityLevel = (typeof activityLevels)[number];
-
-/** The pet's current diet: what it eats and the settings the portion calculator needs. */
+/** The pet's current diet and what the portion is based on: the food package's feeding table. */
 export const dietPlans = sqliteTable("diet_plans", {
   petId: text("pet_id")
     .primaryKey()
@@ -163,16 +166,16 @@ export const dietPlans = sqliteTable("diet_plans", {
   /** Who chose the diet: the vet's instructions or the owner */
   source: text("source", { enum: ["vet", "owner"] }).notNull(),
   foodName: text("food_name").notNull(),
-  /** Energy density from the food package, kcal per 100 g */
-  kcalPer100g: real("kcal_per_100g"),
+  /** Daily amount from the package's feeding table, in grams... */
+  packageDailyGrams: real("package_daily_grams"),
+  /** ...for a pet of this weight */
+  packageForWeightKg: real("package_for_weight_kg"),
   mealsPerDay: integer("meals_per_day").notNull(),
+  goal: text("goal", { enum: ["maintain", "lose"] }).notNull(),
   targetWeightKg: real("target_weight_kg"),
-  neutered: integer("neutered", { mode: "boolean" }),
-  activityLevel: text("activity_level", { enum: activityLevels }).notNull(),
+  /** Optional: grams in the owner's scoop or decilitre measure, to show portions in scoops */
+  gramsPerScoop: real("grams_per_scoop"),
   notes: text("notes"),
-  /** Set when the food changed: the old food is mixed out gradually from this date. */
-  previousFoodName: text("previous_food_name"),
-  transitionStartedOn: text("transition_started_on"),
   updatedAt: integer("updated_at", { mode: "number" }).notNull(),
   createdAt: createdAt(),
 });
@@ -202,3 +205,147 @@ export const exposures = sqliteTable("exposures", {
 });
 
 export type ExposureRow = typeof exposures.$inferSelect;
+
+// ---- Seasonal alerts and push notifications (spec 9) ----
+
+/** Push registration for one signed-in device. Removed with the session when it signs out. */
+export const pushDevices = sqliteTable("push_devices", {
+  sessionId: text("session_id")
+    .primaryKey()
+    .references(() => deviceSessions.id, { onDelete: "cascade" }),
+  expoPushToken: text("expo_push_token").notNull(),
+  platform: text("platform", { enum: ["ios", "android"] }).notNull(),
+  language: text("language", { enum: ["fi", "sv", "en"] }).notNull(),
+  /** Rounded to 1 decimal (about 10 km): enough to pick the region, not to locate a home. */
+  latitude: real("latitude"),
+  longitude: real("longitude"),
+  seasonalAlerts: integer("seasonal_alerts", { mode: "boolean" }).notNull().default(true),
+  updatedAt: integer("updated_at", { mode: "number" }).notNull(),
+  createdAt: createdAt(),
+});
+
+/** Which seasonal card has been pushed to which device, so each is sent once per season. */
+export const seasonalNotificationsSent = sqliteTable(
+  "seasonal_notifications_sent",
+  {
+    id: text("id").primaryKey(),
+    sessionId: text("session_id")
+      .notNull()
+      .references(() => deviceSessions.id, { onDelete: "cascade" }),
+    cardId: text("card_id").notNull(),
+    /** The year the card's window started, e.g. 2026 for Dec 2026 – Jan 2027 */
+    seasonYear: integer("season_year").notNull(),
+    sentAt: integer("sent_at", { mode: "number" }).notNull(),
+  },
+  (table) => [uniqueIndex("seasonal_sent_once").on(table.sessionId, table.cardId, table.seasonYear)],
+);
+
+export type PushDeviceRow = typeof pushDevices.$inferSelect;
+
+// ---- Symptom tracking and severity assessment (spec 1 and 12) ----
+
+export const severityLevels = ["normal", "monitor", "contactVet", "emergency"] as const;
+
+/** Text in the three app languages. Watch list questions are stored with their texts. */
+export type LocalizedText = { fi: string; sv: string; en: string };
+
+export type StoredQuestion = {
+  id: string;
+  label: LocalizedText;
+  options: [LocalizedText, LocalizedText, LocalizedText];
+  usualAnswer: 0 | 1 | 2;
+  yellowIf: (0 | 1 | 2)[];
+  redIf: (0 | 1 | 2)[];
+  emergencyIf: (0 | 1 | 2)[];
+  symptoms: Partial<Record<"0" | "1" | "2", string[]>>;
+};
+
+/**
+ * What to watch after a diagnosis (spec 1). Created from a vet-reviewed template when a visit or
+ * surgery is added to the passport, or by hand. The questions and their thresholds are copied
+ * here, so the vet's own limits for this pet can replace the template's.
+ */
+export const watchLists = sqliteTable("watch_lists", {
+  id: text("id").primaryKey(),
+  petId: text("pet_id")
+    .notNull()
+    .references(() => pets.id, { onDelete: "cascade" }),
+  /** Id in content/symptom-tracking.json, or null for a list written from the vet's instructions */
+  templateId: text("template_id"),
+  condition: text("condition", { mode: "json" }).notNull().$type<LocalizedText>(),
+  questions: text("questions", { mode: "json" }).notNull().$type<StoredQuestion[]>(),
+  /** guidance: thresholds from the reviewed template; vet: the vet's own limits for this pet */
+  source: text("source", { enum: ["guidance", "vet"] }).notNull(),
+  vetName: text("vet_name"),
+  /** The passport visit or surgery that started it; removed with it */
+  recordId: text("record_id").references(() => healthRecords.id, { onDelete: "cascade" }),
+  /** ISO dates. No end date: watched until ended, e.g. kidney disease. */
+  startDate: text("start_date").notNull(),
+  endDate: text("end_date"),
+  createdByUserId: text("created_by_user_id").references(() => users.id, { onDelete: "set null" }),
+  updatedAt: integer("updated_at", { mode: "number" }).notNull(),
+  createdAt: createdAt(),
+});
+
+/** Why the assessment came out as it did. Stored with the log, without language. */
+export type StoredReason = {
+  code: string;
+  level: (typeof severityLevels)[number];
+  params: Record<string, string | number | string[] | LocalizedText>;
+};
+
+export type StoredAssessment = {
+  level: (typeof severityLevels)[number];
+  symptoms: string[];
+  reasons: StoredReason[];
+  insufficientData: boolean;
+};
+
+/** The 30-second daily log (spec 1) and its severity assessment (spec 12). One per pet per day. */
+export const dailyLogs = sqliteTable(
+  "daily_logs",
+  {
+    id: text("id").primaryKey(),
+    petId: text("pet_id")
+      .notNull()
+      .references(() => pets.id, { onDelete: "cascade" }),
+    /** ISO date */
+    loggedOn: text("logged_on").notNull(),
+    /** Question id → answer index 0, 1 or 2 */
+    answers: text("answers", { mode: "json" }).notNull().$type<Record<string, 0 | 1 | 2>>(),
+    /** Ticked from the emergency list, e.g. breathingDifficulty */
+    emergencySymptoms: text("emergency_symptoms", { mode: "json" }).notNull().$type<string[]>(),
+    /** Other symptoms the owner added, e.g. coughing */
+    extraSymptoms: text("extra_symptoms", { mode: "json" }).notNull().$type<string[]>(),
+    note: text("note"),
+    level: text("level", { enum: severityLevels }).notNull(),
+    assessment: text("assessment", { mode: "json" }).notNull().$type<StoredAssessment>(),
+    /** What the vet found afterwards, to compare the rules with real outcomes (spec 12) */
+    outcomeLevel: text("outcome_level", { enum: severityLevels }),
+    outcomeRecordId: text("outcome_record_id").references(() => healthRecords.id, { onDelete: "set null" }),
+    outcomeNote: text("outcome_note"),
+    outcomeRecordedAt: integer("outcome_recorded_at", { mode: "number" }),
+    createdByUserId: text("created_by_user_id").references(() => users.id, { onDelete: "set null" }),
+    updatedAt: integer("updated_at", { mode: "number" }).notNull(),
+    createdAt: createdAt(),
+  },
+  (table) => [uniqueIndex("daily_logs_pet_day").on(table.petId, table.loggedOn)],
+);
+
+/** A photo or video attached to a daily log, e.g. of limping. */
+export const logAttachments = sqliteTable("log_attachments", {
+  id: text("id").primaryKey(),
+  logId: text("log_id")
+    .notNull()
+    .references(() => dailyLogs.id, { onDelete: "cascade" }),
+  /** File name in the upload folder */
+  fileKey: text("file_key").notNull().unique(),
+  mediaType: text("media_type", { enum: ["image", "video"] }).notNull(),
+  contentType: text("content_type").notNull(),
+  sizeBytes: integer("size_bytes").notNull(),
+  createdAt: createdAt(),
+});
+
+export type WatchListRow = typeof watchLists.$inferSelect;
+export type DailyLogRow = typeof dailyLogs.$inferSelect;
+export type LogAttachmentRow = typeof logAttachments.$inferSelect;

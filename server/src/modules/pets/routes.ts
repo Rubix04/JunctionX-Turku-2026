@@ -3,6 +3,8 @@ import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 
 import { currentUser } from "../../plugins/auth.js";
 import { deletePetPhotoFile } from "../pet-photos/service.js";
+import { deleteAttachmentFiles } from "../symptoms/attachments.js";
+import { attachmentKeysForPet } from "../symptoms/service.js";
 import { createPetSchema, petParamsSchema, petSchema, updatePetSchema } from "./schemas.js";
 import { createPet, deletePet, getPet, listPets, toPetDto, updatePet } from "./service.js";
 
@@ -44,8 +46,11 @@ export const petRoutes: FastifyPluginAsyncZod = async (app) => {
 
   app.delete("/:petId", { schema: { params: petParamsSchema } }, async (request, reply) => {
     const { householdId } = currentUser(request);
+    getPet(app.db, householdId, request.params.petId);
+    const attachmentKeys = attachmentKeysForPet(app.db, request.params.petId);
     const deleted = deletePet(app.db, householdId, request.params.petId);
     await deletePetPhotoFile(app.config.UPLOAD_DIR, deleted.photoKey);
+    await deleteAttachmentFiles(app.config.UPLOAD_DIR, attachmentKeys);
     return reply.status(204).send();
   });
 };

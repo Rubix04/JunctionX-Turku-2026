@@ -10,7 +10,10 @@
     "retry": "Yritä uudelleen",
     "loading": "Ladataan",
     "errorTitle": "Jokin meni pieleen",
-    "errorBody": "Tarkista yhteys ja yritä uudelleen."
+    "errorBody": "Tarkista yhteys ja yritä uudelleen.",
+    "tryAgain": "Yritä uudelleen",
+    "step": "Vaihe {{step}}/{{total}}",
+    "notAVet": "TassuVahti on tukityökalu. Se ei korvaa eläinlääkäriä."
   },
   "tabs": {
     "home": "Koti",
@@ -104,7 +107,10 @@
     "emergencyBold": "Ensiapu",
     "emergencyRest": " jokaisella näkymällä, ilman kirjautumista.",
     "signIn": "Kirjaudu verkkopankkitunnuksilla",
-    "emergencyNow": "Ensiapu nyt"
+    "emergencyNow": "Ensiapu nyt",
+    "languageButton": "Kieli: {{name}}",
+    "helpBold": "Ensiapu",
+    "helpRest": " jokaisella näkymällä, ilman kirjautumista."
   },
   "auth": {
     "step": "Vaihe {{step}}/{{total}}",
@@ -120,7 +126,8 @@
     "signOutAnyTime": "Voit kirjata laitteen ulos milloin tahansa Tili-välilehdellä.",
     "welcomeBack": "Tervetuloa takaisin, {{name}}",
     "unlockBody": "Lemmikkiesi kirjaukset ja muistutukset odottavat.",
-    "usePin": "Käytä PIN-koodia"
+    "usePin": "Käytä PIN-koodia",
+    "signOut": "Kirjaudu ulos"
   },
   "lock": {
     "face": "Kasvojentunnistus",
@@ -670,5 +677,66 @@
   "notFound": {
     "title": "Tätä sivua ei ole olemassa",
     "body": "Linkki voi olla vanha. Palaa kotinäkymään jatkaaksesi."
+  },
+  "placeholder": {
+    "notBuilt": "Tätä näkymää ei ole vielä tehty."
+  },
+  "languages": {
+    "en": "English",
+    "fi": "Suomi",
+    "sv": "Svenska"
+  },
+  "bankAuth": {
+    "title": "Vahvista henkilöllisyytesi",
+    "intro": "Valitse pankkisi. Teet tämän vain kerran tällä laitteella. Sen jälkeen TassuVahti avautuu kasvoilla, sormenjäljellä tai PIN-koodilla.",
+    "note": "Kysymme uudelleen vain uudella laitteella, pitkän tauon jälkeen tai ennen tärkeitä muutoksia, kuten vakuutustietojen muuttamista.",
+    "loadError": "Pankkien listaa ei voitu ladata.",
+    "signInError": "Kirjautuminen ei onnistunut. Tarkista yhteys ja yritä uudelleen."
+  },
+  "setLock": {
+    "identified": "Tunnistettu · {{name}}",
+    "title": "Miten TassuVahti avataan?",
+    "intro": "Istuntosi pysyy tässä puhelimessa. Valitse lukitus, jota käytät päivittäin.",
+    "methods": {
+      "face": {
+        "label": "Kasvojentunnistus",
+        "detail": "Nopein tässä puhelimessa"
+      },
+      "fingerprint": {
+        "label": "Sormenjälki",
+        "detail": "Avaa koskettamalla tunnistinta"
+      },
+      "pin": {
+        "label": "6-numeroinen PIN-koodi",
+        "detail": "Toimii kaikilla laitteilla"
+      }
+    },
+    "continue": "Ota käyttöön ja jatka",
+    "footnote": "Voit kirjata tämän laitteen ulos milloin tahansa Tili-välilehdellä.",
+    "confirmPrompt": "Vahvista lukituksen käyttöönotto",
+    "biometricFailed": "Se ei onnistunut. Yritä uudelleen tai valitse PIN-koodi.",
+    "choosePin": "Valitse 6-numeroinen PIN-koodi",
+    "confirmPin": "Anna sama PIN-koodi uudelleen",
+    "pinMismatch": "PIN-koodit eivät täsmänneet. Valitse PIN-koodi uudelleen.",
+    "saveError": "Lukitusta ei voitu tallentaa. Yritä uudelleen."
+  },
+  "unlock": {
+    "welcomeBack": "Tervetuloa takaisin, {{name}}",
+    "welcomeBackNoName": "Tervetuloa takaisin",
+    "prompt": "Avaa TassuVahti",
+    "faceButton": "Avaa kasvojentunnistuksella",
+    "fingerprintButton": "Avaa sormenjäljellä",
+    "faceHint": "Avaa katsomalla puhelinta",
+    "fingerprintHint": "Avaa koskettamalla tunnistinta",
+    "enterPin": "Anna PIN-koodisi",
+    "wrongPin": "Väärä PIN-koodi. Yritä uudelleen.",
+    "wrongPinAttemptsLeft_one": "Väärä PIN-koodi. 1 yritys jäljellä, sitten pitää kirjautua uudelleen.",
+    "wrongPinAttemptsLeft_other": "Väärä PIN-koodi. {{count}} yritystä jäljellä.",
+    "connectionError": "Yhteyttä ei saatu. Tarkista yhteys ja yritä uudelleen.",
+    "signInAgain": "Kirjaudu uudelleen verkkopankkitunnuksilla"
+  },
+  "pinPad": {
+    "delete": "Poista",
+    "entered": "{{count}}/{{total}} numeroa annettu"
   }
 }

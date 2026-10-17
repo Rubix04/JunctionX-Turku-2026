@@ -3,6 +3,7 @@ export const colors = {
   primary: '#0E5A63', // Vahti teal: buttons, logo
   primaryDark: '#08393F',
   primaryTint: '#E6F0F0', // chips on white cards
+  primarySoft: '#D6ECEC', // hero panels, light text on teal
   primaryBorder: '#B9D3D4', // watch list cards
   primaryLight: '#D6ECEC', // text on teal
   primaryLightMuted: '#B9D9DA',

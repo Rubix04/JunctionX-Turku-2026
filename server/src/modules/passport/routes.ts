@@ -5,8 +5,10 @@ import { z } from "zod";
 import { type PassportShareRow, type PetRow, pets } from "../../db/schema.js";
 import { notFound } from "../../errors.js";
 import { currentUser } from "../../plugins/auth.js";
+import { syncPetWeight, syncVisitWeight } from "../diet/service.js";
 import { petParamsSchema } from "../pets/schemas.js";
 import { getPet, toPetDto } from "../pets/service.js";
+import { startWatchListsForRecord } from "../symptoms/service.js";
 import { kindForSection } from "./records.js";
 import {
   createdShareSchema,
@@ -110,6 +112,9 @@ export const passportRoutes: FastifyPluginAsyncZod = async (app) => {
     async (request, reply) => {
       const pet = petFor(request, request.params.petId);
       const row = createRecord(app.db, pet.id, kindForSection[request.params.section], request.body);
+      syncVisitWeight(app.db, row);
+      // A new diagnosis or surgery starts its watch list (spec 1); see GET /pets/:petId/watch-lists.
+      startWatchListsForRecord(app.db, pet, row, currentUser(request).userId);
       return reply.status(201).send(toRecordDto(row) as z.infer<typeof recordSchema>);
     },
   );
@@ -121,6 +126,7 @@ export const passportRoutes: FastifyPluginAsyncZod = async (app) => {
       const { petId, section, recordId } = request.params;
       const pet = petFor(request, petId);
       const row = updateRecord(app.db, pet.id, kindForSection[section], recordId, request.body);
+      syncVisitWeight(app.db, row);
       return toRecordDto(row) as z.infer<typeof recordSchema>;
     },
   );
@@ -132,6 +138,8 @@ export const passportRoutes: FastifyPluginAsyncZod = async (app) => {
       const { petId, section, recordId } = request.params;
       const pet = petFor(request, petId);
       deleteRecord(app.db, pet.id, kindForSection[section], recordId);
+      // A visit's weight entry is removed with it (foreign key); the profile weight follows.
+      syncPetWeight(app.db, pet.id);
       return reply.status(204).send();
     },
   );

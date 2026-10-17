@@ -43,6 +43,13 @@
           "cameraPermission": "TassuVahti uses the camera for pet profile pictures, symptom logs and photos of visit notes.",
           "microphonePermission": "TassuVahti records sound with videos of your pet for the vet."
         }
+      ],
+      "expo-secure-store",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow TassuVahti to use Face ID to unlock the app."
+        }
       ]
     ],
     "experiments": {
