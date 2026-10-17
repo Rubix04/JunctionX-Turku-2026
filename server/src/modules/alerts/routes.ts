@@ -163,6 +163,7 @@ const toDeviceDto = (device: PushDeviceRow) => ({
   longitude: device.longitude,
   region: regionFor(device.latitude),
   seasonalAlerts: device.seasonalAlerts,
+  reminders: device.reminders,
   updatedAt: device.updatedAt,
 });
 
@@ -187,6 +188,7 @@ export const notificationRoutes: FastifyPluginAsyncZod = async (app) => {
       latitude: roundCoordinate(request.body.latitude),
       longitude: roundCoordinate(request.body.longitude),
       seasonalAlerts: request.body.seasonalAlerts,
+      reminders: request.body.reminders,
       updatedAt: Date.now(),
     };
     const device = app.db

@@ -57,6 +57,13 @@
       "when": 1792238984851,
       "tag": "0007_symptom_tracking",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1792246304094,
+      "tag": "0008_care_plan_and_reminders",
+      "breakpoints": true
     }
   ]
 }
