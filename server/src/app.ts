@@ -1,0 +1,74 @@
+import cors from "@fastify/cors";
+import Fastify, { type FastifyServerOptions } from "fastify";
+import {
+  hasZodFastifySchemaValidationErrors,
+  serializerCompiler,
+  validatorCompiler,
+  type ZodTypeProvider,
+} from "fastify-type-provider-zod";
+
+import type { Config } from "./config.js";
+import type { Db } from "./db/client.js";
+import { ApiError } from "./errors.js";
+import { petRoutes } from "./modules/pets/routes.js";
+import { authPlugin } from "./plugins/auth.js";
+
+declare module "fastify" {
+  interface FastifyInstance {
+    db: Db;
+    config: Config;
+  }
+}
+
+type BuildAppOptions = {
+  config: Config;
+  db: Db;
+  logger?: FastifyServerOptions["logger"];
+};
+
+export const buildApp = async ({ config, db, logger = false }: BuildAppOptions) => {
+  const app = Fastify({ logger }).withTypeProvider<ZodTypeProvider>();
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
+
+  app.decorate("db", db);
+  app.decorate("config", config);
+
+  app.setErrorHandler((error, request, reply) => {
+    if (error instanceof ApiError) {
+      return reply.status(error.statusCode).send({ error: { code: error.code, message: error.message } });
+    }
+    if (hasZodFastifySchemaValidationErrors(error)) {
+      return reply.status(400).send({
+        error: {
+          code: "VALIDATION_ERROR",
+          message: "The request is invalid",
+          details: error.validation.map((issue) => ({
+            path: issue.instancePath,
+            message: issue.message,
+          })),
+        },
+      });
+    }
+    const statusCode = (error as { statusCode?: number }).statusCode ?? 500;
+    if (statusCode >= 500) {
+      request.log.error(error);
+    }
+    return reply.status(statusCode).send({
+      error: {
+        code: statusCode >= 500 ? "INTERNAL_ERROR" : "REQUEST_ERROR",
+        message: statusCode >= 500 ? "Something went wrong" : (error as Error).message,
+      },
+    });
+  });
+
+  await app.register(cors, { origin: true });
+  await app.register(authPlugin, { secret: config.JWT_SECRET });
+
+  app.get("/health", async () => ({ status: "ok" }));
+  await app.register(petRoutes, { prefix: "/pets" });
+
+  return app;
+};
+
+export type App = Awaited<ReturnType<typeof buildApp>>;
