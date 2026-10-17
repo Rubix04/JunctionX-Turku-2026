@@ -36,6 +36,13 @@
       "when": 1792233336593,
       "tag": "0004_exposures",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1792233672906,
+      "tag": "0005_push_notifications",
+      "breakpoints": true
     }
   ]
 }

@@ -12,6 +12,7 @@ import type { Db } from "./db/client.js";
 import { ApiError } from "./errors.js";
 import { type BankIdentityProvider, mockBankProvider } from "./modules/auth/bank-provider.js";
 import { authRoutes } from "./modules/auth/routes.js";
+import { alertsRoutes, notificationRoutes, petAlertsRoutes } from "./modules/alerts/routes.js";
 import { dietRoutes } from "./modules/diet/routes.js";
 import { exposureRoutes, knowledgeRoutes } from "./modules/knowledge/routes.js";
 import { passportRoutes, sharedPassportRoutes } from "./modules/passport/routes.js";
@@ -89,6 +90,9 @@ export const buildApp = async ({
   await app.register(dietRoutes);
   await app.register(knowledgeRoutes, { prefix: "/knowledge" });
   await app.register(exposureRoutes, { prefix: "/pets" });
+  await app.register(alertsRoutes, { prefix: "/alerts" });
+  await app.register(petAlertsRoutes, { prefix: "/pets" });
+  await app.register(notificationRoutes, { prefix: "/notifications" });
 
   return app;
 };
