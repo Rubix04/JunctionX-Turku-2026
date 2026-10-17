@@ -2,8 +2,8 @@ import type { Claim, Policy } from '@/types/insurance';
 
 // Placeholder figures until the insurer's systems are connected.
 export const mockPolicies: Policy[] = [
-  { id: 'policy-mirri', petId: 'mirri', number: '[POLICY NO.]', coverLimit: 3000, usedThisYear: 412 },
-  { id: 'policy-rekku', petId: 'rekku', number: '[POLICY NO.]', coverLimit: 5000, usedThisYear: 180 },
+  { id: 'policy-mirri', petId: 'mirri', plan: 'Basic Protection', number: '[POLICY NO.]', coverLimit: 3000, usedThisYear: 412 },
+  { id: 'policy-rekku', petId: 'rekku', plan: 'Premium Protection', number: '[POLICY NO.]', coverLimit: 5000, usedThisYear: 180 },
 ];
 
 export const mockClaims: Claim[] = [
