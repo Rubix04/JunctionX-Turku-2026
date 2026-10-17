@@ -5,7 +5,6 @@ import AppText from '@/components/ui/app-text';
 import Icon from '@/components/ui/icon';
 import { changeLanguage, type Language, supportedLanguages } from '@/i18n';
 import { colors, fonts, radius, spacing } from '@/theme';
-import { currentLanguage } from '@/utils/format';
 
 const languageNames: Record<Language, string> = { en: 'English', fi: 'Suomi', sv: 'Svenska' };
 
@@ -16,8 +15,9 @@ type LanguageSwitcherProps = {
 
 // EN / FI / SV pill. The choice is remembered on this device.
 const LanguageSwitcher = ({ tone = 'default' }: LanguageSwitcherProps) => {
-  const { t } = useTranslation();
-  const active = currentLanguage();
+  // Read from the hook so the pill re-renders as soon as the language changes.
+  const { t, i18n } = useTranslation();
+  const active = (supportedLanguages as readonly string[]).includes(i18n.language) ? i18n.language : 'en';
   const onDark = tone === 'onDark';
 
   return (

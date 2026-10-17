@@ -1,7 +1,5 @@
 {
   "common": {
-    "appName": "TassuVahti",
-    "tagline": "Valvoo lemmikkisi vointia eläinlääkärikäyntien välillä.",
     "back": "Takaisin",
     "close": "Sulje",
     "cancel": "Peruuta",
@@ -11,8 +9,6 @@
     "errorTitle": "Jokin meni pieleen",
     "errorBody": "Tarkista yhteys ja yritä uudelleen.",
     "tryAgain": "Yritä uudelleen",
-    "step": "Vaihe {{step}}/{{total}}",
-    "notAVet": "TassuVahti on tukityökalu. Se ei korvaa eläinlääkäriä.",
     "language": "Kieli"
   },
   "tabs": {
@@ -23,21 +19,13 @@
   },
   "screens": {
     "home": "Koti",
-    "map": "Eläinlääkärit ja päivystykset",
-    "knowledge": "Onko turvallista?",
-    "settings": "Tili ja asetukset",
     "insurance": "Vakuutukset ja korvaukset",
-    "pet": "Lemmikin sivu",
     "log": "Päivän kirjaus",
-    "logResult": "Kirjauksen tulos",
     "trends": "Trendit",
     "carePlan": "Hoitosuunnitelma",
     "reminders": "Muistutukset",
     "diet": "Ruokinta ja paino",
     "passport": "Terveyspassi",
-    "sharePassport": "Jaa passi",
-    "photo": "Rajaa profiilikuva",
-    "firstAidGuide": "Ensiapuohje",
     "clinic": "Klinikka",
     "substance": "Tietopankin artikkeli",
     "ateThis": "Lemmikkini söi tätä",
@@ -71,13 +59,6 @@
     "catPlural": "Kissat",
     "dogPlural": "Koirat",
     "smallAnimalPlural": "Pieneläimet"
-  },
-  "seasons": {
-    "winter": "Talvi",
-    "spring": "Kevät",
-    "summer": "Kesä",
-    "autumn": "Syksy",
-    "holidays": "Joulu ja uusi vuosi"
   },
   "weekday": {
     "mon": "Maanantai",
@@ -172,42 +153,58 @@
       "male": "Uros",
       "maleNeutered": "Uros, kastroitu"
     },
-    "watchListDay": "{{condition}} · seurannan päivä {{day}}/{{total}}",
-    "noWatchList": "Ei aktiivista seurantalistaa",
-    "symptomLog": "Oirekirjaus",
-    "watchListItems_one": "Seurantalista · {{count}} kohta",
-    "watchListItems_other": "Seurantalista · {{count}} kohtaa",
-    "dailyLog": "Päivän kirjaus",
     "fromVisit": "Käynniltä {{date}}",
     "noCarePlan": "Ei vielä suunnitelmaa",
     "medication": "Lääkitys",
     "nextDose": "Seuraava {{time}}",
     "noMedication": "Muistutukset",
     "portionCalculator": "Annoslaskuri",
-    "vaccinesOk": "Rokotukset voimassa",
-    "vaccinesDue": "Rokotus erääntymässä",
     "trendsHint": "Paino, juominen",
-    "visitHistory": "Käyntihistoria",
     "addVisit": "+ Lisää käynti",
-    "addShort": "+ Lisää",
-    "draftVisit": "Luonnos · odottaa klinikan tarkistusta",
     "noVisits": "Ei vielä käyntejä",
-    "noVisitsBody": "Lisää eläinlääkärikäynnin tiedot, niin saat hoitosuunnitelman.",
-    "speciesSection": {
-      "cat": "Kissoille",
-      "dog": "Koirille",
-      "smallAnimal": "Pieneläimille"
-    },
-    "readMore": "Lue lisää tietopankista",
-    "sharedWith": "Jaettu perhetilillä: {{names}}",
     "tabs": {
       "overview": "Yleiskatsaus",
-      "care": "Hoito",
-      "log": "Seuranta",
+      "records": "Potilastiedot",
       "passport": "Passi"
     },
     "logToday": "Kirjaa tänään · 30 s",
-    "shareHint": "Lähetä lukulinkki eläinlääkärille tai hoitajalle"
+    "records": {
+      "kind": {
+        "all": "Kaikki",
+        "allergies": "Allergiat",
+        "conditions": "Sairaudet",
+        "surgeries": "Leikkaukset",
+        "medications": "Lääkitys",
+        "labs": "Laboratorio",
+        "visits": "Käynnit"
+      },
+      "severity": {
+        "mild": "Lievä reaktio",
+        "moderate": "Kohtalainen reaktio",
+        "severe": "Vakava reaktio"
+      },
+      "resolved": "Parantunut",
+      "ongoing": "Käynnissä",
+      "lab": {
+        "blood": "Verikoe",
+        "urine": "Virtsakoe",
+        "ultrasound": "Ultraääni",
+        "xray": "Röntgen"
+      },
+      "empty": "Ei merkintöjä tässä ryhmässä"
+    },
+    "passportTab": {
+      "title": "Digitaalinen passi",
+      "markings": "Väri ja tuntomerkit",
+      "registration": "Rekisterinumero",
+      "sex": "Sukupuoli",
+      "summaryTitle": "{{name}} · terveysyhteenveto",
+      "validUntil": "voimassa {{date}} asti",
+      "shareVet": "Jaa eläinlääkärille · QR-koodi",
+      "shareVetHint": "Eläinlääkäri skannaa koodin ja näkee koko historian. Linkki lakkaa toimimasta valitsemasi ajan jälkeen.",
+      "export": "Vie matkayhteenveto",
+      "full": "Koko terveyspassi"
+    }
   },
   "log": {
     "title": "{{name}} · tänään",
@@ -442,7 +439,6 @@
     }
   },
   "map": {
-    "title": "Eläinlääkärit ja päivystys",
     "youAreHere": "Sinä",
     "filter": {
       "openNow": "Avoinna nyt",
@@ -509,7 +505,6 @@
     "note": "Tuotteet tulevat eläinlääkäriltä tai vakuutusyhtiön hyväksymältä listalta, eivät mainoksista. Reseptilääkkeet hoidetaan reseptillä, eivät kauppakartan kautta."
   },
   "knowledge": {
-    "title": "Onko turvallista?",
     "searchLabel": "Hae ruokia, kasveja ja aineita",
     "searchPlaceholder": "esim. rusinat, lilja, ksylitoli",
     "clear": "Tyhjennä haku",
@@ -677,14 +672,6 @@
     "title": "Tätä sivua ei ole olemassa",
     "body": "Linkki voi olla vanha. Palaa kotinäkymään jatkaaksesi."
   },
-  "placeholder": {
-    "notBuilt": "Tätä näkymää ei ole vielä tehty."
-  },
-  "languages": {
-    "en": "English",
-    "fi": "Suomi",
-    "sv": "Svenska"
-  },
   "splash": {
     "slogan": "Valvomme niitä, jotka valvovat sinua."
   },
@@ -707,5 +694,14 @@
     "tryAgain": "Yritä uudelleen",
     "backToExplore": "Takaisin",
     "readMore": "Lue lisää: Onko turvallista?"
+  },
+  "watchList": {
+    "byVet": "Seurantalista: {{vet}}",
+    "noneBody": "Aktiivista seurantaa ei ole. Kirjaa lemmikin {{name}} vointi aina, kun jokin tuntuu oudolta.",
+    "latestLog": "Viimeisin kirjaus · {{date}}",
+    "watching": "Mitä seurataan",
+    "notLogged": "Ei kirjattu",
+    "whatToDo": "Mitä tehdä nyt",
+    "callVet": "Milloin soittaa eläinlääkärille: {{when}}"
   }
 }

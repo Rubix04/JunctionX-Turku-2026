@@ -83,7 +83,7 @@ const PetCard = ({ pet, policy, status }: { pet: Pet; policy?: Policy; status: H
       <Pressable
         accessibilityRole="button"
         accessibilityHint={t('home.viewDetails')}
-        onPress={() => router.push(`/pet/${pet.id}`)}
+        onPress={() => router.push(`/pet/${pet.id}/watch-list`)}
         style={({ pressed }) => [styles.status, pressed && styles.pressed]}
       >
         <View style={styles.statusTop}>
@@ -171,7 +171,7 @@ const HomeScreen = () => {
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={t('home.settings')}
-      onPress={() => router.push('/(tabs)/(profile)')}
+      onPress={() => router.push('/profile')}
       style={({ pressed }) => [styles.settings, pressed && styles.pressed]}
     >
       <Icon name="sliders" size={22} color={colors.primary} />

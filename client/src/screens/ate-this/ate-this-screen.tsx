@@ -141,7 +141,7 @@ const AteThisScreen = () => {
             <ListRow
               leading={<Icon name="map" size={20} color={colors.red} />}
               title={t('ateThis.emergencyMap')}
-              onPress={() => router.push('/(tabs)/(explore)?mode=emergency')}
+              onPress={() => router.push('/explore?mode=emergency')}
             />
           )}
           <ListRow

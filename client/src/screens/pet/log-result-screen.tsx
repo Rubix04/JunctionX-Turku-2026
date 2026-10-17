@@ -137,7 +137,7 @@ const LogResultScreen = () => {
             <ListGroup>
               <ListRow
                 title={t('result.otherClinics')}
-                onPress={() => router.push('/(tabs)/(explore)?mode=emergency')}
+                onPress={() => router.push('/explore?mode=emergency')}
               />
               <ListRow
                 title={t('result.showPassport', { name: pet.name })}

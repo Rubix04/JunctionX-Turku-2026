@@ -154,7 +154,7 @@ export const mockCarePlans: CarePlan[] = [
       {
         productId: 'urinary-wet',
         name: 'Urinary care wet food',
-        brand: '[Brand · product name]',
+        brand: 'Vet Diet · Urinary S/O',
         prescription: null,
       },
       {
@@ -165,7 +165,7 @@ export const mockCarePlans: CarePlan[] = [
       },
     ],
     originalText:
-      '[Original visit notes from the clinic, shown unchanged so the owner can compare them with the summary.]',
+      'Dg: cystitis bacterialis. U-sticks: leuk +++, ery ++, nitrite +. Sediment: bacteria, no crystals. Tx: amoxicillin/clavulanate 50 mg 1x2 p.o. 10 d. Wet urinary diet, increase water intake. Control 22.10. if no improvement.',
   },
 ];
 
