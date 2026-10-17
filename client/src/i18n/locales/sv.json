@@ -1,0 +1,707 @@
+{
+  "common": {
+    "back": "Tillbaka",
+    "close": "Stäng",
+    "cancel": "Avbryt",
+    "save": "Spara",
+    "retry": "Försök igen",
+    "loading": "Laddar",
+    "errorTitle": "Något gick fel",
+    "errorBody": "Kontrollera anslutningen och försök igen.",
+    "tryAgain": "Försök igen",
+    "language": "Språk"
+  },
+  "tabs": {
+    "home": "Hem",
+    "pets": "Husdjur",
+    "explore": "Utforska",
+    "profile": "Profil"
+  },
+  "screens": {
+    "home": "Hem",
+    "insurance": "Försäkringar och ersättningar",
+    "log": "Dagens logg",
+    "trends": "Trender",
+    "carePlan": "Vårdplan",
+    "reminders": "Påminnelser",
+    "diet": "Kost och vikt",
+    "passport": "Hälsopass",
+    "clinic": "Klinik",
+    "substance": "Artikel i kunskapsbanken",
+    "ateThis": "Mitt djur åt detta",
+    "findInStore": "Hitta i butik",
+    "addPet": "Lägg till ett djur",
+    "addVisit": "Lägg till ett veterinärbesök",
+    "notFound": "Sidan hittades inte"
+  },
+  "disclaimer": {
+    "app": "TassuVahti är ett stödverktyg. Det ersätter inte en veterinär.",
+    "result": "TassuVahti stöder dig mellan besöken. Det ersätter inte en veterinärs undersökning.",
+    "firstAid": "Detta är första hjälpen på vägen till veterinären. Det ersätter inte behandling.",
+    "knowledge": "Endast information. Om du är osäker, ring veterinären eller jouren."
+  },
+  "trafficLight": {
+    "green": "Grönt · som vanligt",
+    "yellow": "Gult · håll koll",
+    "red": "Rött · kontakta veterinär"
+  },
+  "risk": {
+    "harmless": "Ofarligt",
+    "caution": "Var försiktig",
+    "dangerous": "Farligt",
+    "emergency": "Akut",
+    "unknown": "Inga uppgifter"
+  },
+  "species": {
+    "cat": "Katt",
+    "dog": "Hund",
+    "smallAnimal": "Smådjur",
+    "catPlural": "Katter",
+    "dogPlural": "Hundar",
+    "smallAnimalPlural": "Smådjur"
+  },
+  "weekday": {
+    "mon": "Måndag",
+    "tue": "Tisdag",
+    "wed": "Onsdag",
+    "thu": "Torsdag",
+    "fri": "Fredag",
+    "sat": "Lördag",
+    "sun": "Söndag"
+  },
+  "auth": {
+    "landing": {
+      "bankId": "Fortsätt med BankID",
+      "emailSignIn": "Logga in med e-post",
+      "newHere": "Ny på TassuVahti?",
+      "createAccount": "Skapa konto",
+      "terms": "Genom att fortsätta godkänner du användarvillkoren och integritetspolicyn."
+    },
+    "bankId": {
+      "title": "Logga in med BankID",
+      "intro": "Välj din bank. Du bekräftar din identitet i bankens app.",
+      "waiting": "Väntar på bekräftelse i bankappen…",
+      "loadError": "Det gick inte att ladda listan över banker.",
+      "signInError": "Inloggningen misslyckades. Kontrollera anslutningen och försök igen.",
+      "note": "TassuVahti ser aldrig dina bankuppgifter."
+    },
+    "signIn": {
+      "title": "Välkommen tillbaka",
+      "intro": "Logga in med e-post och lösenord.",
+      "submit": "Logga in",
+      "noAccount": "Har du inget konto?",
+      "signUpLink": "Skapa ett",
+      "demoHint": "Demokonto: demo@tassuvahti.fi / demo1234"
+    },
+    "signUp": {
+      "title": "Skapa ditt konto",
+      "intro": "Ditt husdjurs försäkring, vårdplan och veterinärbesök på ett ställe.",
+      "name": "Fullständigt namn",
+      "confirmPassword": "Bekräfta lösenord",
+      "passwordHint": "Minst 8 tecken",
+      "submit": "Skapa konto",
+      "haveAccount": "Har du redan ett konto?",
+      "signInLink": "Logga in"
+    },
+    "email": "E-post",
+    "emailPlaceholder": "namn@exempel.se",
+    "password": "Lösenord",
+    "errors": {
+      "required": "Fyll i det här fältet.",
+      "invalidEmail": "Ange en giltig e-postadress.",
+      "passwordTooShort": "Använd minst 8 tecken.",
+      "passwordMismatch": "Lösenorden matchar inte.",
+      "invalidCredentials": "Fel e-post eller lösenord.",
+      "emailTaken": "Det finns redan ett konto med den här e-postadressen. Logga in i stället.",
+      "generic": "Något gick fel. Försök igen."
+    }
+  },
+  "home": {
+    "yourPets": "Dina djur",
+    "dayOf": "Dag {{day}} av {{total}}",
+    "recovering": "Återhämtar sig: {{condition}}",
+    "noPetsTitle": "Lägg till ditt första djur",
+    "noPetsBody": "Varje djur får en egen sida med bevakningslista, vårdplan och hälsopass.",
+    "today": "I dag",
+    "allReminders": "Alla påminnelser",
+    "nothingToday": "Inget att göra i dag",
+    "submitClaim": "Gör en skadeanmälan",
+    "active": "Aktiv",
+    "remainingCover": "Ersättning kvar i år",
+    "viewDetails": "Visa detaljer",
+    "settings": "Inställningar",
+    "allGood": "{{name}} mår bra",
+    "vetServices": "Prata med en veterinär",
+    "included": "Ingår",
+    "waitingTime": "Väntetid",
+    "approxMinutes": "Cirka {{minutes}} min",
+    "nextTime": "Nästa lediga tid",
+    "todayAt": "I dag {{time}}",
+    "book": "Boka",
+    "booked": "Bokad"
+  },
+  "pets": {
+    "title": "Mina djur"
+  },
+  "pet": {
+    "changePhoto": "Byt profilbild",
+    "years_one": "{{count}} år",
+    "years_other": "{{count}} år",
+    "sex": {
+      "female": "Hona",
+      "femaleNeutered": "Hona, steriliserad",
+      "male": "Hane",
+      "maleNeutered": "Hane, kastrerad"
+    },
+    "fromVisit": "Från besöket {{date}}",
+    "noCarePlan": "Ingen plan än",
+    "medication": "Medicinering",
+    "nextDose": "Nästa {{time}}",
+    "noMedication": "Påminnelser",
+    "portionCalculator": "Portionsräknare",
+    "trendsHint": "Vikt, vatten",
+    "addVisit": "+ Lägg till besök",
+    "noVisits": "Inga besök än",
+    "tabs": {
+      "overview": "Översikt",
+      "records": "Journal",
+      "passport": "Pass"
+    },
+    "logToday": "Logga i dag · 30 s",
+    "records": {
+      "kind": {
+        "all": "Alla",
+        "allergies": "Allergier",
+        "conditions": "Sjukdomar",
+        "surgeries": "Operationer",
+        "medications": "Mediciner",
+        "labs": "Provsvar",
+        "visits": "Besök"
+      },
+      "severity": {
+        "mild": "Lindrig reaktion",
+        "moderate": "Måttlig reaktion",
+        "severe": "Allvarlig reaktion"
+      },
+      "resolved": "Läkt",
+      "ongoing": "Pågående",
+      "lab": {
+        "blood": "Blodprov",
+        "urine": "Urinprov",
+        "ultrasound": "Ultraljud",
+        "xray": "Röntgen"
+      },
+      "empty": "Inga anteckningar i den här kategorin"
+    },
+    "passportTab": {
+      "title": "Digitalt pass",
+      "markings": "Färg och kännetecken",
+      "registration": "Registreringsnummer",
+      "sex": "Kön",
+      "summaryTitle": "{{name}} · hälsosammanfattning",
+      "validUntil": "giltigt till {{date}}",
+      "shareVet": "Dela med veterinär · QR-kod",
+      "shareVetHint": "Veterinären skannar koden och ser hela historiken. Länken slutar fungera efter tiden du väljer.",
+      "export": "Exportera resesammanfattning",
+      "full": "Hela hälsopasset"
+    }
+  },
+  "log": {
+    "title": "{{name}} · i dag",
+    "duration": "Cirka 30 sekunder",
+    "watchList": "Bevakningslista",
+    "fromVet": "· enligt {{vet}}s instruktioner",
+    "general": "Allmänt",
+    "addPhoto": "Lägg till bild",
+    "addVideo": "Lägg till video",
+    "photo": "Bild",
+    "video": "Video",
+    "removeAttachment": "Ta bort",
+    "save": "Spara dagens logg"
+  },
+  "result": {
+    "greenTitle": "Grönt: {{name}} mår som vanligt",
+    "greenBody": "Allt du loggade i dag är som vanligt.",
+    "greenAdvice": "Fortsätt logga en gång om dagen så märks förändringar tidigt.",
+    "yellowTitle": "Gult: håll koll på {{name}}",
+    "yellowBody": "Något är inte riktigt som vanligt. Det är värt att hålla koll på.",
+    "yellowAdvice": "Håll noga koll på {{name}} i dag och logga mer detaljerat i morgon.",
+    "redTitle": "Rött: kontakta veterinär nu",
+    "redBody": "Dina svar motsvarar ett skäl som veterinären angav för att ringa direkt.",
+    "noticed": "Vi märkte: {{items}}.",
+    "notEmergency": "Det här är inte ett akutfall.",
+    "whatToDo": "Vad du ska göra nu",
+    "turnsRedIf": "Blir rött om",
+    "why": {
+      "green": "Varför grönt?",
+      "yellow": "Varför gult?",
+      "red": "Varför rött?"
+    },
+    "whyBody": "Baserat på {{vet}}s gränsvärden för denna sjukdom ({{condition}}), de senaste loggarna och den nuvarande medicineringen. Appen föreslår, veterinärens instruktioner sätter gränserna.",
+    "whyBodyGeneral": "Baserat på allmänna gränser för aptit, ork, smärta och kräkningar. Lägg till ett veterinärbesök för att få gränser för just ditt djur.",
+    "remindMe": "Påminn mig kl. 19.00",
+    "reminderSet": "Påminnelse kl. 19.00",
+    "reminderTitle": "Logga igen mer detaljerat",
+    "reminderDetail": "Från det gula resultatet",
+    "nearestClinic": "Närmaste öppna jour",
+    "otherClinics": "Andra jourer på kartan",
+    "showPassport": "Visa {{name}}s hälsopass för veterinären",
+    "ifUnsure": "Om du är osäker, ring. Kliniken kan säga om du ska komma in."
+  },
+  "trends": {
+    "title": "{{name}} · trender",
+    "range": "Tidsperiod",
+    "byWeek": "Per vecka",
+    "months": "3 månader",
+    "water": "Vattenintag",
+    "waterUnit": "ml per dag, medel",
+    "waterA11y": "Vattenintag, ml per dag: {{values}}",
+    "watchLevel": "Veterinärens bevakningsgräns",
+    "now": "Nu",
+    "weight": "Vikt",
+    "ideal": "kg · ideal {{from}}–{{to}}",
+    "weightDown": "Ned {{kg}} kg på {{weeks}} veckor.",
+    "weightUp": "Upp {{kg}} kg på {{weeks}} veckor.",
+    "weightSteady": "Vikten är stabil.",
+    "dailyStatus": "Daglig status · senaste 14 dagarna",
+    "today": "I dag",
+    "noLog": "Ingen logg",
+    "legend": {
+      "green": "Grönt",
+      "yellow": "Gult",
+      "red": "Rött"
+    },
+    "sampleData": "Exempeldata för prototypen"
+  },
+  "carePlan": {
+    "noneTitle": "Ingen vårdplan än",
+    "noneBody": "Lägg till anteckningarna från {{name}}s besök. Vi gör en plan som du kan följa hemma.",
+    "visitOn": "{{name}} · besök {{date}}",
+    "checked": "Kontrollerad av kliniken",
+    "draft": "Utkast · väntar på kliniken",
+    "found": "Vad som hittades",
+    "atHome": "Vad du gör hemma",
+    "followUp": "Återbesök",
+    "remindMe": "Påminn mig",
+    "reminderOn": "Påminnelse på",
+    "recommended": "Rekommenderat av veterinären",
+    "findInStore": "Hitta i butik",
+    "prescription": "{{name}} · recept",
+    "pickedUp": "Skickat till {{place}} · hämtat {{date}}",
+    "pickUp": "Skickat till {{place}} · kom ihåg att hämta",
+    "original": "Veterinärens ursprungliga text"
+  },
+  "reminders": {
+    "course": "{{name}} · {{medicine}}kur",
+    "dosesGiven": "{{given}} av {{total}} doser givna",
+    "given": "Givet ✓",
+    "givenQuestion": "Givet?",
+    "givenA11y": "{{name}} givet. Tryck för att ångra.",
+    "notGivenA11y": "Markera {{name}} som givet",
+    "givenBy": "Givet av {{name}}",
+    "you": "dig",
+    "comingUp": "Kommande",
+    "nothingComing": "Inget kommande",
+    "book": "Boka",
+    "familySees": "Din familj ser samma påminnelser och markeringar."
+  },
+  "diet": {
+    "recommendedBy": "Rekommenderat av {{vet}}",
+    "changeSlowlyTitle": "Byt foder långsamt.",
+    "changeSlowlyBody": "Blanda lite mer av det nya fodret i det gamla varje dag under ungefär en vecka. Ett plötsligt byte kan ge magbesvär.",
+    "seeTrend": "Se trend",
+    "now": "Nu",
+    "vetTarget": "Veterinärens mål",
+    "idealRange": "Idealvikt, kg",
+    "logWeight": "Logga dagens vikt",
+    "weightKg": "Vikt (kg)",
+    "weightInvalid": "Ange vikten i kilogram, t.ex. 4,6",
+    "calculator": "Portionsräknare",
+    "dailyEnergy": "Dagligt energibehov",
+    "setByVet": "Satt av veterinären",
+    "estimated": "Uppskattat utifrån vikten",
+    "addWeightFirst": "Lägg först till en vikt",
+    "foodEnergy": "Fodrets energi",
+    "fromPackage": "Från förpackningen",
+    "less": "Mindre: {{label}}",
+    "more": "Mer: {{label}}",
+    "mealsPerDay": "Måltider per dag",
+    "meals_one": "{{count}} måltid",
+    "meals_other": "{{count}} måltider",
+    "perMeal": "Per måltid",
+    "totalPerDay": "Totalt {{grams}} g per dag."
+  },
+  "passport": {
+    "born": "Född",
+    "microchip": "Mikrochip",
+    "owner": "Ägare",
+    "insurance": "Försäkring",
+    "share": "Dela med veterinär eller djurpensionat",
+    "empty": "Inga hälsouppgifter än",
+    "vaccinations": "Vaccinationer",
+    "given": "Givet {{date}} · {{clinic}}",
+    "vaccine": {
+      "valid": "Giltig",
+      "dueSoon": "Snart dags",
+      "expired": "Utgången"
+    },
+    "medication": "Medicinering",
+    "ongoing": "pågår",
+    "for": "mot {{reason}}",
+    "allergies": "Allergier",
+    "noneKnown": "Inga kända",
+    "updated": "Uppdaterad {{date}}",
+    "surgeries": "Operationer",
+    "none": "Inga",
+    "visits": "Tidigare besök"
+  },
+  "share": {
+    "title": "Dela {{name}}s pass",
+    "include": "Vad som delas",
+    "section": {
+      "vaccinations": "Vaccinationer",
+      "medicationAllergies": "Medicinering och allergier",
+      "surgeriesVisits": "Operationer och tidigare besök",
+      "logs": "Symtomloggar, senaste 14 dagarna"
+    },
+    "worksFor": "Länken fungerar i",
+    "hours24": "24 timmar",
+    "days7": "7 dagar",
+    "days30": "30 dagar",
+    "consent": "Alla som har länken eller QR-koden kan läsa det du valt tills länken går ut. Du kan sluta dela när som helst under Konto.",
+    "agreeCreate": "Jag godkänner, skapa delningslänk",
+    "qrA11y": "QR-kod för delningslänken",
+    "showAtClinic": "Visa detta på kliniken",
+    "expires": "Går ut om {{duration}}. Du får ett meddelande när den öppnas.",
+    "sendLink": "Skicka länk",
+    "stop": "Sluta dela",
+    "message": "{{name}}s hälsopass: {{url}}"
+  },
+  "photo": {
+    "title": "Flytta och skala",
+    "use": "Använd",
+    "preview": "{{name}}s nya profilbild",
+    "hintDefault": "Ta en bild eller välj en från galleriet. Du kan flytta och skala den innan du sparar.",
+    "hintChange": "Ser det bra ut? Tryck på Använd för att spara, eller välj en annan.",
+    "camera": "Kamera",
+    "gallery": "Galleri",
+    "remove": "Ta bort",
+    "footnote": "Visas på hemskärmen, i djurväljaren, i påminnelser och i hälsopasset. När du tar bort en bild raderas den också från lagringen."
+  },
+  "addPet": {
+    "addPhoto": "Lägg till profilbild",
+    "photo": "Bild",
+    "photoHint": "Ta en bild eller välj en från galleriet. Utan bild visar vi en bild enligt art.",
+    "species": "Art",
+    "name": "Namn",
+    "namePlaceholder": "t.ex. Rekku",
+    "nameRequired": "Ge ditt djur ett namn",
+    "birthDate": "Födelsedatum",
+    "datePlaceholder": "dd.mm.åååå",
+    "birthInvalid": "Använd formatet dd.mm.åååå",
+    "weight": "Vikt (kg)",
+    "weightInvalid": "Ange kilogram, t.ex. 4,6",
+    "breed": "Ras",
+    "breedPlaceholder": "Sök ras",
+    "policyFound": "Vi hittade en djurförsäkring utan profil. Vill du koppla den till det här djuret?",
+    "link": "Koppla",
+    "linked": "Kopplad ✓",
+    "create": "Skapa djurets sida"
+  },
+  "addVisit": {
+    "intro": "Lägg till anteckningarna från {{name}}s besök. Vi gör en vårdplan och en bevakningslista av dem.",
+    "source": {
+      "file": "Ladda upp fil",
+      "photo": "Bild av anteckningar",
+      "text": "Skriv själv"
+    },
+    "textPlaceholder": "Klistra in eller skriv vad veterinären skrev: diagnos, medicin, vård hemma och återbesök.",
+    "send": "Skicka för sammanfattning",
+    "photoName": "Bild av besöksanteckningar",
+    "typedName": "Skrivna besöksanteckningar",
+    "uploaded": "Uppladdad",
+    "draftTitle": "Besöksanteckningar",
+    "step": {
+      "read": "Läst diagnos, medicin och återbesök",
+      "draft": "Gjort ett utkast till vårdplan på klarspråk",
+      "clinic": "Väntar på klinikens kontroll",
+      "clinicHint": "Vanligtvis inom en arbetsdag"
+    },
+    "aiNote": "Appen sammanfattar bara vad veterinären skrev. Den ställer aldrig diagnoser. Tills kliniken har kontrollerat utkastet är det märkt \"Utkast\".",
+    "preview": "Förhandsgranska utkastet"
+  },
+  "explore": {
+    "title": "Utforska",
+    "sections": {
+      "vets": "Veterinärer",
+      "safe": "Är det säkert?",
+      "quizzes": "Quiz"
+    }
+  },
+  "map": {
+    "youAreHere": "Du",
+    "filter": {
+      "openNow": "Öppet nu",
+      "emergency": "Jour 24 h",
+      "contracted": "Endast avtalskliniker",
+      "within": "Inom {{km}} km"
+    },
+    "legend": {
+      "contracted": "Avtalsklinik",
+      "other": "Annan klinik",
+      "emergency": "Jour 24 h"
+    },
+    "noResults": "Inga kliniker matchar",
+    "noResultsBody": "Prova att ta bort ett filter.",
+    "registryNote": "Avtalsklinikerna kommer från försäkringsbolagets register."
+  },
+  "clinic": {
+    "emergency24h": "Jour 24 h",
+    "distance": "{{km}} km",
+    "drive": "{{minutes}} min med bil",
+    "openNow": "Öppet nu",
+    "closed": "Stängt",
+    "contracted": "Avtalsklinik",
+    "directPayment": "Direktersättning",
+    "directPaymentShort": "Direktersättning",
+    "call": "Ring",
+    "callHint": "Ringer {{name}}",
+    "directions": "Vägbeskrivning",
+    "openCardHint": "Öppnar klinikens uppgifter",
+    "book": "Boka tid",
+    "directPaymentNote": "Kliniken sköter försäkringsersättningen direkt. Du betalar bara självrisken.",
+    "noDirectPaymentNote": "Betala på kliniken och ansök om ersättning med kvittot efteråt.",
+    "hours": "Öppettider",
+    "open24h": "Öppet dygnet runt, alla dagar",
+    "open24hBody": "Ring i förväg så att kliniken kan förbereda sig.",
+    "details": "Uppgifter",
+    "address": "Adress",
+    "phone": "Telefon",
+    "species": "Behandlar",
+    "expertise": "Specialkunskap",
+    "notContracted": "Ingen avtalsklinik. Försäkringen ersätter ändå besöket, men du ansöker om ersättning själv."
+  },
+  "store": {
+    "vetRecommended": "Rekommenderat av veterinär",
+    "filter": {
+      "openNow": "Öppet nu",
+      "near": "Inom 5 km",
+      "online": "Beställ på nätet"
+    },
+    "stock": {
+      "inStock": "I lager",
+      "lowStock": "Få kvar",
+      "outOfStock": "Slut",
+      "sellsBrand": "Säljer märket"
+    },
+    "kind": {
+      "petStore": "Djuraffär",
+      "pharmacy": "Apotek",
+      "clinic": "Veterinärklinik"
+    },
+    "orderOnline": "Beställ på nätet",
+    "partner": "Kommersiell partner",
+    "noResults": "Inga butiker matchar",
+    "note": "Produkterna kommer från veterinären eller försäkringsbolagets godkända lista, inte från reklam. Receptbelagda läkemedel går via receptet, inte via butikskartan."
+  },
+  "knowledge": {
+    "searchLabel": "Sök livsmedel, växter och ämnen",
+    "searchPlaceholder": "t.ex. russin, lilja, xylitol",
+    "clear": "Rensa sökningen",
+    "riskFor": "Risk för",
+    "category": {
+      "foods": "Livsmedel",
+      "plants": "Växter",
+      "mushrooms": "Svampar",
+      "household": "Hushåll",
+      "medicines": "Läkemedel",
+      "garden": "Trädgårdskemikalier"
+    },
+    "ateSomething": "Mitt djur åt något",
+    "noResults": "Inget hittades för \"{{query}}\"",
+    "noResultsBody": "Prova ett annat namn. Om djuret åt något okänt, ring veterinären.",
+    "sampleNotice": "Exempelinnehåll för prototypen. Veterinärer och giftinformationsexperter granskar varje artikel före lansering."
+  },
+  "substance": {
+    "alsoCalled": "Även: {{names}}",
+    "riskBySpecies": "Risk per art",
+    "why": "Varför det är farligt",
+    "symptoms": "Symtom",
+    "onset": "Symtomen börjar: {{onset}}",
+    "whatToDo": "Vad du ska göra nu",
+    "noVomiting": "Framkalla inte kräkning om inte veterinären säger det.",
+    "sources": "Källor: {{sources}}",
+    "updated": "Granskat innehåll · uppdaterat {{date}}",
+    "sample": "Exempelinnehåll, inte granskat än · uppdaterat {{date}}",
+    "ateThis": "Mitt djur åt detta"
+  },
+  "ateThis": {
+    "whichPet": "Vilket djur?",
+    "what": "Vad åt det?",
+    "change": "Byt",
+    "howMuch": "Hur mycket?",
+    "type": "Typ",
+    "amount": "Mängd",
+    "amountIn": "Mängd ({{unit}})",
+    "amountPlaceholder": "Lämna tomt om du inte vet",
+    "unit": {
+      "g": "gram",
+      "piece": "stycken"
+    },
+    "weightUsed": "Använder {{name}}s vikt, {{kg}} kg.",
+    "noWeight": "Lägg till djurets vikt för en dosbaserad uppskattning.",
+    "noPets": "Lägg till ett djur för att få ett svar för rätt art.",
+    "check": "Kontrollera risken",
+    "action": {
+      "goToEmergencyNow": "Åk till jouren nu",
+      "callVetNow": "Ring veterinären nu",
+      "monitor": "Håll noga koll på {{name}}",
+      "noAction": "Inga åtgärder behövs"
+    },
+    "dose": "{{amount}} {{unit}} {{substance}} är cirka {{mgPerKg}} mg {{compound}} per kg.",
+    "noDose": "Baserat på risken med {{substance}} för {{species}}, det värsta realistiska fallet.",
+    "note": {
+      "noSpeciesData": "Det finns inga uppgifter för den här arten, så vi behandlar det som farligt.",
+      "amountUnknown": "Utan mängd utgår vi från det värsta realistiska fallet.",
+      "weightUnknown": "Utan djurets vikt kan vi inte räkna ut dosen.",
+      "noDoseData": "Det finns inga tillförlitliga dosuppgifter, så mängden ändrar inte risken."
+    },
+    "emergencyMap": "Jourer på kartan",
+    "readEntry": "Läs om {{substance}}",
+    "again": "Kontrollera något annat"
+  },
+  "insurance": {
+    "policies": "Försäkringar",
+    "petInsurance": "{{name}} · Djurförsäkring",
+    "cover": "Veterinärvård",
+    "perYear": "{{amount}} / år",
+    "used": "Använt i år",
+    "usedOf": "{{used}} av {{limit}} använt i år",
+    "noPolicies": "Inga försäkringar än",
+    "claims": "Ersättningar",
+    "channel": {
+      "directPayment": "kliniken skötte det direkt",
+      "receipt": "kvitto uppladdat"
+    },
+    "status": {
+      "paid": "Betald",
+      "inReview": "Behandlas",
+      "needsInfo": "Behöver uppgifter"
+    },
+    "noClaims": "Inga ersättningsansökningar än",
+    "makeClaim": "Ansök om ersättning",
+    "directPaymentNote": "Avtalskliniker med direktersättning: du behöver inte ansöka i efterhand.",
+    "bankIdNote": "Ändring av försäkringsuppgifter kräver ny bankidentifiering."
+  },
+  "profile": {
+    "pets_one": "{{count}} husdjur",
+    "pets_other": "{{count}} husdjur",
+    "policies_one": "{{count}} aktiv försäkring",
+    "policies_other": "{{count}} aktiva försäkringar",
+    "openClaims_one": "{{count}} öppet ersättningsärende",
+    "openClaims_other": "{{count}} öppna ersättningsärenden",
+    "noOpenClaims": "Inga öppna ersättningsärenden",
+    "signOut": "Logga ut",
+    "version": "TassuVahti {{version}}",
+    "myAccount": "Mitt konto",
+    "aboutUs": "Om oss",
+    "team": "Veterinärer och rådgivare",
+    "faq": "Vanliga frågor",
+    "support": "Kundtjänst",
+    "accessibility": "Tillgänglighetsredogörelse",
+    "referTitle": "Tipsa en vän",
+    "refer": "Rekommendera appen till en vän",
+    "referHint": "Dela en länk med en vän som har djur",
+    "referMessage": "Jag använder TassuVahti för att hålla koll på mitt djurs hälsa och försäkring. Testa: https://tassuvahti.fi",
+    "account": {
+      "name": "Namn",
+      "signIn": "Inloggad med",
+      "signInValue": "Bankkoder eller e-post",
+      "family": "Familjekonto",
+      "you": "Du · ägare",
+      "member": "Familjemedlem",
+      "familyHint": "Alla i familjekontot ser samma djursidor och påminnelser.",
+      "yourPets": "Dina djur"
+    },
+    "teamIntro": "Våra veterinärer och rådgivare svarar på samtal och chatt och granskar innehållet i appen.",
+    "roles": {
+      "vet": "Veterinär",
+      "nurse": "Djursjukskötare",
+      "behaviour": "Beteenderådgivare"
+    },
+    "speaks": "Språk: {{languages}}",
+    "faqItems": [
+      {
+        "q": "Hur gör jag en skadeanmälan?",
+        "a": "Öppna Hem och tryck på Gör en skadeanmälan på djurets kort. Lägg till besöket och ett foto av kvittot. På avtalskliniker med direktreglering behöver du inte anmäla något."
+      },
+      {
+        "q": "Vad täcker min försäkring?",
+        "a": "Veterinärvård upp till ditt årliga belopp. Hur mycket som finns kvar ser du på Hem och under Försäkringar och ersättningar."
+      },
+      {
+        "q": "Vem kan se mitt djurs uppgifter?",
+        "a": "Bara du och de familjemedlemmar du lägger till. Du bestämmer själv när du delar hälsopasset med en veterinär eller djurvakt och kan sluta dela när som helst."
+      },
+      {
+        "q": "Ersätter appen en veterinär?",
+        "a": "Nej. TassuVahti hjälper dig att hålla koll på djuret mellan besöken. Om du är orolig, kontakta alltid en veterinär."
+      },
+      {
+        "q": "Hur byter jag språk?",
+        "a": "Gå till Profil och välj Suomi, Svenska eller English under Språk."
+      }
+    ],
+    "supportIntro": "Vi hjälper gärna till med försäkring, ersättningar och appen.",
+    "phone": "Telefon",
+    "email": "E-post",
+    "hours": "Öppettider",
+    "hoursValue": "mån–fre 8–18 · lör 10–15",
+    "call": "Ring oss",
+    "sendEmail": "Skicka e-post",
+    "emergencyNote": "Är ditt djur akut sjukt? Hitta närmaste jourklinik under Utforska.",
+    "accessibilityBody": [
+      "Vi vill att alla ska kunna använda TassuVahti. Appen strävar efter att uppfylla WCAG 2.1 AA.",
+      "Hälsoläget visas alltid med färg, ikon och ord, så det går att läsa utan färgseende. Texten följer storleken du valt i telefonen, och alla knappar fungerar med skärmläsare som VoiceOver och TalkBack.",
+      "Kända brister: klinikkartan är en bild, så använd kliniklistan under den.",
+      "Hittade du något som inte fungerar för dig? Berätta via Kundtjänst så åtgärdar vi det."
+    ],
+    "accessibilityUpdated": "Redogörelsen uppdaterad 18.10.2026"
+  },
+  "notFound": {
+    "title": "Den här sidan finns inte",
+    "body": "Länken kan vara gammal. Gå tillbaka till hemskärmen för att fortsätta."
+  },
+  "splash": {
+    "slogan": "Vi vakar över dem som vakar över dig."
+  },
+  "quiz": {
+    "intro": "Läs en kort lektion och testa dig sedan med vardagliga situationer.",
+    "questions_one": "{{count}} fråga",
+    "questions_other": "{{count}} frågor",
+    "best": "Bästa {{score}}/{{total}}",
+    "beforeYouStart": "Innan du börjar",
+    "start_one": "Starta · {{count}} fråga",
+    "start_other": "Starta · {{count}} frågor",
+    "questionOf": "Fråga {{current}} av {{total}}",
+    "correct": "Rätt!",
+    "notQuite": "Inte riktigt",
+    "next": "Nästa fråga",
+    "seeResult": "Se resultat",
+    "score": "{{score}} / {{total}}",
+    "perfect": "Alla rätt! Du vet vad du ska göra.",
+    "goodTry": "Bra försök. Läs förklaringarna igen och försök en gång till.",
+    "tryAgain": "Försök igen",
+    "backToExplore": "Tillbaka",
+    "readMore": "Läs mer i Är det säkert?"
+  },
+  "watchList": {
+    "byVet": "Bevakningslista från {{vet}}",
+    "noneBody": "Det finns ingen aktiv bevakning. Logga hur {{name}} mår när något verkar fel.",
+    "latestLog": "Senaste logg · {{date}}",
+    "watching": "Det här bevakar vi",
+    "notLogged": "Inte loggat",
+    "whatToDo": "Vad du gör nu",
+    "callVet": "När du ska ringa veterinär: {{when}}"
+  }
+}

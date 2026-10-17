@@ -1,0 +1,707 @@
+{
+  "common": {
+    "back": "Takaisin",
+    "close": "Sulje",
+    "cancel": "Peruuta",
+    "save": "Tallenna",
+    "retry": "Yritä uudelleen",
+    "loading": "Ladataan",
+    "errorTitle": "Jokin meni pieleen",
+    "errorBody": "Tarkista yhteys ja yritä uudelleen.",
+    "tryAgain": "Yritä uudelleen",
+    "language": "Kieli"
+  },
+  "tabs": {
+    "home": "Koti",
+    "pets": "Lemmikit",
+    "explore": "Tutki",
+    "profile": "Profiili"
+  },
+  "screens": {
+    "home": "Koti",
+    "insurance": "Vakuutukset ja korvaukset",
+    "log": "Päivän kirjaus",
+    "trends": "Trendit",
+    "carePlan": "Hoitosuunnitelma",
+    "reminders": "Muistutukset",
+    "diet": "Ruokinta ja paino",
+    "passport": "Terveyspassi",
+    "clinic": "Klinikka",
+    "substance": "Tietopankin artikkeli",
+    "ateThis": "Lemmikkini söi tätä",
+    "findInStore": "Etsi kaupasta",
+    "addPet": "Lisää lemmikki",
+    "addVisit": "Lisää eläinlääkärikäynti",
+    "notFound": "Sivua ei löytynyt"
+  },
+  "disclaimer": {
+    "app": "TassuVahti on tukityökalu. Se ei korvaa eläinlääkäriä.",
+    "result": "TassuVahti tukee sinua käyntien välillä. Se ei korvaa eläinlääkärin tutkimusta.",
+    "firstAid": "Tämä on ensiapua matkalla eläinlääkäriin. Se ei korvaa hoitoa.",
+    "knowledge": "Vain tiedoksi. Jos olet epävarma, soita eläinlääkärille tai päivystykseen."
+  },
+  "trafficLight": {
+    "green": "Vihreä · kuten tavallisesti",
+    "yellow": "Keltainen · seuraa tilannetta",
+    "red": "Punainen · ota yhteys eläinlääkäriin"
+  },
+  "risk": {
+    "harmless": "Vaaraton",
+    "caution": "Varo",
+    "dangerous": "Vaarallinen",
+    "emergency": "Hätätilanne",
+    "unknown": "Ei tietoa"
+  },
+  "species": {
+    "cat": "Kissa",
+    "dog": "Koira",
+    "smallAnimal": "Pieneläin",
+    "catPlural": "Kissat",
+    "dogPlural": "Koirat",
+    "smallAnimalPlural": "Pieneläimet"
+  },
+  "weekday": {
+    "mon": "Maanantai",
+    "tue": "Tiistai",
+    "wed": "Keskiviikko",
+    "thu": "Torstai",
+    "fri": "Perjantai",
+    "sat": "Lauantai",
+    "sun": "Sunnuntai"
+  },
+  "auth": {
+    "landing": {
+      "bankId": "Jatka BankID:llä",
+      "emailSignIn": "Kirjaudu sähköpostilla",
+      "newHere": "Uusi TassuVahdissa?",
+      "createAccount": "Luo tili",
+      "terms": "Jatkamalla hyväksyt käyttöehdot ja tietosuojaselosteen."
+    },
+    "bankId": {
+      "title": "Kirjaudu BankID:llä",
+      "intro": "Valitse pankkisi. Vahvistat henkilöllisyytesi pankin sovelluksessa.",
+      "waiting": "Odotetaan vahvistusta pankin sovelluksessa…",
+      "loadError": "Pankkilistaa ei voitu ladata.",
+      "signInError": "Kirjautuminen ei onnistunut. Tarkista yhteys ja yritä uudelleen.",
+      "note": "TassuVahti ei koskaan näe pankkitunnuksiasi."
+    },
+    "signIn": {
+      "title": "Tervetuloa takaisin",
+      "intro": "Kirjaudu sähköpostilla ja salasanalla.",
+      "submit": "Kirjaudu sisään",
+      "noAccount": "Eikö sinulla ole tiliä?",
+      "signUpLink": "Luo tili",
+      "demoHint": "Demotili: demo@tassuvahti.fi / demo1234"
+    },
+    "signUp": {
+      "title": "Luo tili",
+      "intro": "Lemmikkisi vakuutus, hoito-ohjeet ja eläinlääkärikäynnit yhdessä paikassa.",
+      "name": "Koko nimi",
+      "confirmPassword": "Vahvista salasana",
+      "passwordHint": "Vähintään 8 merkkiä",
+      "submit": "Luo tili",
+      "haveAccount": "Onko sinulla jo tili?",
+      "signInLink": "Kirjaudu sisään"
+    },
+    "email": "Sähköposti",
+    "emailPlaceholder": "nimi@esimerkki.fi",
+    "password": "Salasana",
+    "errors": {
+      "required": "Täytä tämä kenttä.",
+      "invalidEmail": "Anna kelvollinen sähköpostiosoite.",
+      "passwordTooShort": "Käytä vähintään 8 merkkiä.",
+      "passwordMismatch": "Salasanat eivät täsmää.",
+      "invalidCredentials": "Sähköposti tai salasana on väärin.",
+      "emailTaken": "Tällä sähköpostilla on jo tili. Kirjaudu sisään.",
+      "generic": "Jokin meni vikaan. Yritä uudelleen."
+    }
+  },
+  "home": {
+    "yourPets": "Lemmikkisi",
+    "dayOf": "Päivä {{day}}/{{total}}",
+    "recovering": "Toipuu: {{condition}}",
+    "noPetsTitle": "Lisää ensimmäinen lemmikkisi",
+    "noPetsBody": "Jokainen lemmikki saa oman sivun, jossa on seurantalista, hoitosuunnitelma ja terveyspassi.",
+    "today": "Tänään",
+    "allReminders": "Kaikki muistutukset",
+    "nothingToday": "Ei tehtäviä tänään",
+    "submitClaim": "Tee korvaushakemus",
+    "active": "Voimassa",
+    "remainingCover": "Korvausta jäljellä tänä vuonna",
+    "viewDetails": "Näytä tiedot",
+    "settings": "Asetukset",
+    "allGood": "{{name}} voi hyvin",
+    "vetServices": "Kysy eläinlääkäriltä",
+    "included": "Sisältyy",
+    "waitingTime": "Odotusaika",
+    "approxMinutes": "Noin {{minutes}} min",
+    "nextTime": "Seuraava vapaa aika",
+    "todayAt": "Tänään {{time}}",
+    "book": "Varaa",
+    "booked": "Varattu"
+  },
+  "pets": {
+    "title": "Lemmikkini"
+  },
+  "pet": {
+    "changePhoto": "Vaihda profiilikuva",
+    "years_one": "{{count}} vuosi",
+    "years_other": "{{count}} vuotta",
+    "sex": {
+      "female": "Naaras",
+      "femaleNeutered": "Naaras, steriloitu",
+      "male": "Uros",
+      "maleNeutered": "Uros, kastroitu"
+    },
+    "fromVisit": "Käynniltä {{date}}",
+    "noCarePlan": "Ei vielä suunnitelmaa",
+    "medication": "Lääkitys",
+    "nextDose": "Seuraava {{time}}",
+    "noMedication": "Muistutukset",
+    "portionCalculator": "Annoslaskuri",
+    "trendsHint": "Paino, juominen",
+    "addVisit": "+ Lisää käynti",
+    "noVisits": "Ei vielä käyntejä",
+    "tabs": {
+      "overview": "Yleiskatsaus",
+      "records": "Potilastiedot",
+      "passport": "Passi"
+    },
+    "logToday": "Kirjaa tänään · 30 s",
+    "records": {
+      "kind": {
+        "all": "Kaikki",
+        "allergies": "Allergiat",
+        "conditions": "Sairaudet",
+        "surgeries": "Leikkaukset",
+        "medications": "Lääkitys",
+        "labs": "Laboratorio",
+        "visits": "Käynnit"
+      },
+      "severity": {
+        "mild": "Lievä reaktio",
+        "moderate": "Kohtalainen reaktio",
+        "severe": "Vakava reaktio"
+      },
+      "resolved": "Parantunut",
+      "ongoing": "Käynnissä",
+      "lab": {
+        "blood": "Verikoe",
+        "urine": "Virtsakoe",
+        "ultrasound": "Ultraääni",
+        "xray": "Röntgen"
+      },
+      "empty": "Ei merkintöjä tässä ryhmässä"
+    },
+    "passportTab": {
+      "title": "Digitaalinen passi",
+      "markings": "Väri ja tuntomerkit",
+      "registration": "Rekisterinumero",
+      "sex": "Sukupuoli",
+      "summaryTitle": "{{name}} · terveysyhteenveto",
+      "validUntil": "voimassa {{date}} asti",
+      "shareVet": "Jaa eläinlääkärille · QR-koodi",
+      "shareVetHint": "Eläinlääkäri skannaa koodin ja näkee koko historian. Linkki lakkaa toimimasta valitsemasi ajan jälkeen.",
+      "export": "Vie matkayhteenveto",
+      "full": "Koko terveyspassi"
+    }
+  },
+  "log": {
+    "title": "{{name}} · tänään",
+    "duration": "Noin 30 sekuntia",
+    "watchList": "Seurantalista",
+    "fromVet": "· eläinlääkärin {{vet}} ohjeista",
+    "general": "Yleinen",
+    "addPhoto": "Lisää kuva",
+    "addVideo": "Lisää video",
+    "photo": "Kuva",
+    "video": "Video",
+    "removeAttachment": "Poista",
+    "save": "Tallenna päivän kirjaus"
+  },
+  "result": {
+    "greenTitle": "Vihreä: {{name}} voi tavalliseen tapaan",
+    "greenBody": "Kaikki kirjaamasi on tänään tavallista.",
+    "greenAdvice": "Jatka kirjaamista kerran päivässä, niin muutokset huomataan ajoissa.",
+    "yellowTitle": "Keltainen: seuraa lemmikin {{name}} vointia",
+    "yellowBody": "Jokin ei ole aivan tavallista. Tätä kannattaa seurata.",
+    "yellowAdvice": "Seuraa lemmikkiä {{name}} tarkasti tänään ja kirjaa huomenna tarkemmin.",
+    "redTitle": "Punainen: ota heti yhteys eläinlääkäriin",
+    "redBody": "Vastauksesi vastaavat syytä, jonka vuoksi eläinlääkäri pyysi soittamaan heti.",
+    "noticed": "Huomasimme: {{items}}.",
+    "notEmergency": "Tämä ei ole hätätilanne.",
+    "whatToDo": "Mitä tehdä nyt",
+    "turnsRedIf": "Muuttuu punaiseksi, jos",
+    "why": {
+      "green": "Miksi vihreä?",
+      "yellow": "Miksi keltainen?",
+      "red": "Miksi punainen?"
+    },
+    "whyBody": "Perustuu eläinlääkärin {{vet}} raja-arvoihin tälle sairaudelle ({{condition}}), viimeisimpiin kirjauksiin ja nykyiseen lääkitykseen. Sovellus ehdottaa, eläinlääkärin ohjeet asettavat rajat.",
+    "whyBodyGeneral": "Perustuu yleisiin rajoihin ruokahalulle, vireydelle, kivulle ja oksentelulle. Lisää eläinlääkärikäynti, niin saat lemmikillesi omat rajat.",
+    "remindMe": "Muistuta klo 19.00",
+    "reminderSet": "Muistutus asetettu klo 19.00",
+    "reminderTitle": "Kirjaa uudelleen tarkemmin",
+    "reminderDetail": "Keltaisesta tuloksesta",
+    "nearestClinic": "Lähin avoinna oleva päivystys",
+    "otherClinics": "Muut päivystykset kartalla",
+    "showPassport": "Näytä lemmikin {{name}} terveyspassi eläinlääkärille",
+    "ifUnsure": "Jos olet epävarma, soita. Klinikka kertoo, pitääkö tulla paikan päälle."
+  },
+  "trends": {
+    "title": "{{name}} · trendit",
+    "range": "Aikaväli",
+    "byWeek": "Viikoittain",
+    "months": "3 kuukautta",
+    "water": "Juominen",
+    "waterUnit": "ml päivässä, keskiarvo",
+    "waterA11y": "Juominen, ml päivässä: {{values}}",
+    "watchLevel": "Eläinlääkärin seurantaraja",
+    "now": "Nyt",
+    "weight": "Paino",
+    "ideal": "kg · ihanne {{from}}–{{to}}",
+    "weightDown": "Laskenut {{kg}} kg {{weeks}} viikossa.",
+    "weightUp": "Noussut {{kg}} kg {{weeks}} viikossa.",
+    "weightSteady": "Paino on pysynyt tasaisena.",
+    "dailyStatus": "Päivittäinen tila · viimeiset 14 päivää",
+    "today": "Tänään",
+    "noLog": "Ei kirjausta",
+    "legend": {
+      "green": "Vihreä",
+      "yellow": "Keltainen",
+      "red": "Punainen"
+    },
+    "sampleData": "Esimerkkidataa prototyyppiä varten"
+  },
+  "carePlan": {
+    "noneTitle": "Ei vielä hoitosuunnitelmaa",
+    "noneBody": "Lisää lemmikin {{name}} käynnin tiedot. Teemme niistä suunnitelman, jota voit noudattaa kotona.",
+    "visitOn": "{{name}} · käynti {{date}}",
+    "checked": "Klinikka tarkistanut",
+    "draft": "Luonnos · odottaa klinikkaa",
+    "found": "Mitä löydettiin",
+    "atHome": "Mitä tehdä kotona",
+    "followUp": "Jälkitarkastus",
+    "remindMe": "Muistuta",
+    "reminderOn": "Muistutus päällä",
+    "recommended": "Eläinlääkärin suosittelemat",
+    "findInStore": "Etsi kaupasta",
+    "prescription": "{{name}} · resepti",
+    "pickedUp": "Lähetetty: {{place}} · noudettu {{date}}",
+    "pickUp": "Lähetetty: {{place}} · muista noutaa",
+    "original": "Eläinlääkärin alkuperäinen teksti"
+  },
+  "reminders": {
+    "course": "{{name}} · {{medicine}}kuuri",
+    "dosesGiven": "{{given}}/{{total}} annosta annettu",
+    "given": "Annettu ✓",
+    "givenQuestion": "Annettu?",
+    "givenA11y": "{{name}} annettu. Napauta peruaksesi.",
+    "notGivenA11y": "Merkitse {{name}} annetuksi",
+    "givenBy": "Antoi: {{name}}",
+    "you": "sinä",
+    "comingUp": "Tulossa",
+    "nothingComing": "Ei tulevia muistutuksia",
+    "book": "Varaa",
+    "familySees": "Perheesi näkee samat muistutukset ja kuittaukset."
+  },
+  "diet": {
+    "recommendedBy": "Suositellut: {{vet}}",
+    "changeSlowlyTitle": "Vaihda ruokaa hitaasti.",
+    "changeSlowlyBody": "Sekoita uutta ruokaa vanhaan joka päivä vähän enemmän noin viikon ajan. Äkillinen vaihto voi sotkea vatsan.",
+    "seeTrend": "Katso trendi",
+    "now": "Nyt",
+    "vetTarget": "Eläinlääkärin tavoite",
+    "idealRange": "Ihannepaino, kg",
+    "logWeight": "Kirjaa tämän päivän paino",
+    "weightKg": "Paino (kg)",
+    "weightInvalid": "Syötä paino kilogrammoina, esim. 4,6",
+    "calculator": "Annoslaskuri",
+    "dailyEnergy": "Päivän energiantarve",
+    "setByVet": "Eläinlääkärin asettama",
+    "estimated": "Arvioitu painon mukaan",
+    "addWeightFirst": "Lisää ensin paino",
+    "foodEnergy": "Ruoan energia",
+    "fromPackage": "Pakkauksesta",
+    "less": "Vähemmän: {{label}}",
+    "more": "Enemmän: {{label}}",
+    "mealsPerDay": "Ateriaa päivässä",
+    "meals_one": "{{count}} ateria",
+    "meals_other": "{{count}} ateriaa",
+    "perMeal": "Per ateria",
+    "totalPerDay": "Yhteensä {{grams}} g päivässä."
+  },
+  "passport": {
+    "born": "Syntynyt",
+    "microchip": "Mikrosiru",
+    "owner": "Omistaja",
+    "insurance": "Vakuutus",
+    "share": "Jaa eläinlääkärille tai hoitolaan",
+    "empty": "Ei vielä terveystietoja",
+    "vaccinations": "Rokotukset",
+    "given": "Annettu {{date}} · {{clinic}}",
+    "vaccine": {
+      "valid": "Voimassa",
+      "dueSoon": "Erääntymässä",
+      "expired": "Vanhentunut"
+    },
+    "medication": "Lääkitys",
+    "ongoing": "jatkuva",
+    "for": "{{reason}}",
+    "allergies": "Allergiat",
+    "noneKnown": "Ei tiedossa",
+    "updated": "Päivitetty {{date}}",
+    "surgeries": "Leikkaukset",
+    "none": "Ei mitään",
+    "visits": "Aiemmat käynnit"
+  },
+  "share": {
+    "title": "Jaa lemmikin {{name}} passi",
+    "include": "Mitä jaetaan",
+    "section": {
+      "vaccinations": "Rokotukset",
+      "medicationAllergies": "Lääkitys ja allergiat",
+      "surgeriesVisits": "Leikkaukset ja aiemmat käynnit",
+      "logs": "Oirekirjaukset, viimeiset 14 päivää"
+    },
+    "worksFor": "Linkki toimii",
+    "hours24": "24 tuntia",
+    "days7": "7 päivää",
+    "days30": "30 päivää",
+    "consent": "Kuka tahansa, jolla on linkki tai QR-koodi, voi lukea valitsemasi tiedot, kunnes linkki vanhenee. Voit lopettaa jakamisen milloin tahansa Tili-välilehdellä.",
+    "agreeCreate": "Hyväksyn, luo jakolinkki",
+    "qrA11y": "Jakolinkin QR-koodi",
+    "showAtClinic": "Näytä tämä klinikalla",
+    "expires": "Vanhenee {{duration}} kuluttua. Saat ilmoituksen, kun linkki avataan.",
+    "sendLink": "Lähetä linkki",
+    "stop": "Lopeta jakaminen",
+    "message": "Lemmikin {{name}} terveyspassi: {{url}}"
+  },
+  "photo": {
+    "title": "Siirrä ja skaalaa",
+    "use": "Käytä",
+    "preview": "Lemmikin {{name}} uusi profiilikuva",
+    "hintDefault": "Ota kuva tai valitse se galleriasta. Voit siirtää ja skaalata kuvaa ennen tallennusta.",
+    "hintChange": "Näyttääkö hyvältä? Tallenna napauttamalla Käytä tai valitse toinen.",
+    "camera": "Kamera",
+    "gallery": "Galleria",
+    "remove": "Poista",
+    "footnote": "Näkyy kotinäkymässä, lemmikin valinnassa, muistutuksissa ja terveyspassissa. Kuvan poistaminen poistaa sen myös tallennustilasta."
+  },
+  "addPet": {
+    "addPhoto": "Lisää profiilikuva",
+    "photo": "Kuva",
+    "photoHint": "Ota kuva tai valitse se galleriasta. Ilman kuvaa näytämme lajin mukaisen kuvan.",
+    "species": "Laji",
+    "name": "Nimi",
+    "namePlaceholder": "esim. Rekku",
+    "nameRequired": "Anna lemmikille nimi",
+    "birthDate": "Syntymäpäivä",
+    "datePlaceholder": "pp.kk.vvvv",
+    "birthInvalid": "Käytä muotoa pp.kk.vvvv",
+    "weight": "Paino (kg)",
+    "weightInvalid": "Syötä kilogrammat, esim. 4,6",
+    "breed": "Rotu",
+    "breedPlaceholder": "Hae rotua",
+    "policyFound": "Löysimme lemmikkivakuutuksen ilman profiilia. Liitetäänkö se tähän lemmikkiin?",
+    "link": "Liitä",
+    "linked": "Liitetty ✓",
+    "create": "Luo lemmikin sivu"
+  },
+  "addVisit": {
+    "intro": "Lisää lemmikin {{name}} käynnin tiedot. Teemme niistä hoitosuunnitelman ja seurantalistan.",
+    "source": {
+      "file": "Lataa tiedosto",
+      "photo": "Kuva muistiinpanoista",
+      "text": "Kirjoita itse"
+    },
+    "textPlaceholder": "Liitä tai kirjoita, mitä eläinlääkäri kirjoitti: diagnoosi, lääkitys, kotihoito ja jälkitarkastus.",
+    "send": "Lähetä tiivistettäväksi",
+    "photoName": "Kuva käynnin muistiinpanoista",
+    "typedName": "Kirjoitetut käyntitiedot",
+    "uploaded": "Ladattu",
+    "draftTitle": "Käynnin muistiinpanot",
+    "step": {
+      "read": "Luettu diagnoosi, lääkitys ja jälkitarkastus",
+      "draft": "Laadittu selkokielinen hoitosuunnitelma",
+      "clinic": "Odottaa klinikan tarkistusta",
+      "clinicHint": "Yleensä yhden arkipäivän kuluessa"
+    },
+    "aiNote": "Sovellus vain tiivistää, mitä eläinlääkäri kirjoitti. Se ei koskaan tee diagnoosia. Kunnes klinikka tarkistaa luonnoksen, se on merkitty \"Luonnos\".",
+    "preview": "Esikatsele luonnosta"
+  },
+  "explore": {
+    "title": "Tutki",
+    "sections": {
+      "vets": "Eläinlääkärit",
+      "safe": "Onko turvallista?",
+      "quizzes": "Visat"
+    }
+  },
+  "map": {
+    "youAreHere": "Sinä",
+    "filter": {
+      "openNow": "Avoinna nyt",
+      "emergency": "24 h päivystys",
+      "contracted": "Vain sopimusklinikat",
+      "within": "Alle {{km}} km"
+    },
+    "legend": {
+      "contracted": "Sopimusklinikka",
+      "other": "Muu klinikka",
+      "emergency": "24 h päivystys"
+    },
+    "noResults": "Ei sopivia klinikoita",
+    "noResultsBody": "Kokeile poistaa jokin suodatin.",
+    "registryNote": "Sopimusklinikat tulevat vakuutusyhtiön rekisteristä."
+  },
+  "clinic": {
+    "emergency24h": "24 h päivystys",
+    "distance": "{{km}} km",
+    "drive": "{{minutes}} min autolla",
+    "openNow": "Avoinna nyt",
+    "closed": "Suljettu",
+    "contracted": "Sopimusklinikka",
+    "directPayment": "Suorakorvaus",
+    "directPaymentShort": "Suorakorvaus",
+    "call": "Soita",
+    "callHint": "Soittaa: {{name}}",
+    "directions": "Reittiohjeet",
+    "openCardHint": "Avaa klinikan tiedot",
+    "book": "Varaa aika",
+    "directPaymentNote": "Tämä klinikka hoitaa vakuutuskorvauksen suoraan. Maksat vain omavastuun.",
+    "noDirectPaymentNote": "Maksa klinikalla ja hae korvausta kuitilla jälkikäteen.",
+    "hours": "Aukioloajat",
+    "open24h": "Avoinna 24 tuntia, joka päivä",
+    "open24hBody": "Soita etukäteen, jotta klinikka voi valmistautua.",
+    "details": "Tiedot",
+    "address": "Osoite",
+    "phone": "Puhelin",
+    "species": "Hoitaa",
+    "expertise": "Erikoisosaaminen",
+    "notContracted": "Ei sopimusklinikka. Vakuutus korvaa käynnin silti, mutta haet korvauksen itse."
+  },
+  "store": {
+    "vetRecommended": "Eläinlääkärin suosittelema",
+    "filter": {
+      "openNow": "Avoinna nyt",
+      "near": "Alle 5 km",
+      "online": "Tilaa verkosta"
+    },
+    "stock": {
+      "inStock": "Varastossa",
+      "lowStock": "Vähän jäljellä",
+      "outOfStock": "Loppu",
+      "sellsBrand": "Myy merkkiä"
+    },
+    "kind": {
+      "petStore": "Eläinkauppa",
+      "pharmacy": "Apteekki",
+      "clinic": "Eläinklinikka"
+    },
+    "orderOnline": "Tilaa verkosta",
+    "partner": "Kaupallinen kumppani",
+    "noResults": "Ei sopivia kauppoja",
+    "note": "Tuotteet tulevat eläinlääkäriltä tai vakuutusyhtiön hyväksymältä listalta, eivät mainoksista. Reseptilääkkeet hoidetaan reseptillä, eivät kauppakartan kautta."
+  },
+  "knowledge": {
+    "searchLabel": "Hae ruokia, kasveja ja aineita",
+    "searchPlaceholder": "esim. rusinat, lilja, ksylitoli",
+    "clear": "Tyhjennä haku",
+    "riskFor": "Riski lemmikille",
+    "category": {
+      "foods": "Ruoat",
+      "plants": "Kasvit",
+      "mushrooms": "Sienet",
+      "household": "Kodin aineet",
+      "medicines": "Lääkkeet",
+      "garden": "Puutarhakemikaalit"
+    },
+    "ateSomething": "Lemmikkini söi jotain",
+    "noResults": "Haulla \"{{query}}\" ei löytynyt mitään",
+    "noResultsBody": "Kokeile toista nimeä. Jos lemmikki söi jotain tuntematonta, soita eläinlääkärille.",
+    "sampleNotice": "Esimerkkisisältöä prototyyppiä varten. Eläinlääkärit ja myrkytystietoasiantuntijat tarkistavat jokaisen artikkelin ennen julkaisua."
+  },
+  "substance": {
+    "alsoCalled": "Myös: {{names}}",
+    "riskBySpecies": "Riski lajeittain",
+    "why": "Miksi se on vaarallista",
+    "symptoms": "Oireet",
+    "onset": "Oireet alkavat: {{onset}}",
+    "whatToDo": "Mitä tehdä nyt",
+    "noVomiting": "Älä oksennuta lemmikkiä, ellei eläinlääkäri neuvo.",
+    "sources": "Lähteet: {{sources}}",
+    "updated": "Tarkistettu sisältö · päivitetty {{date}}",
+    "sample": "Esimerkkisisältö, ei vielä tarkistettu · päivitetty {{date}}",
+    "ateThis": "Lemmikkini söi tätä"
+  },
+  "ateThis": {
+    "whichPet": "Mikä lemmikki?",
+    "what": "Mitä se söi?",
+    "change": "Vaihda",
+    "howMuch": "Kuinka paljon?",
+    "type": "Tyyppi",
+    "amount": "Määrä",
+    "amountIn": "Määrä ({{unit}})",
+    "amountPlaceholder": "Jätä tyhjäksi, jos et tiedä",
+    "unit": {
+      "g": "grammaa",
+      "piece": "kappaletta"
+    },
+    "weightUsed": "Käyttää lemmikin {{name}} painoa, {{kg}} kg.",
+    "noWeight": "Lisää lemmikin paino annokseen perustuvaa arviota varten.",
+    "noPets": "Lisää lemmikki saadaksesi lajikohtaisen vastauksen.",
+    "check": "Tarkista riski",
+    "action": {
+      "goToEmergencyNow": "Lähde heti päivystykseen",
+      "callVetNow": "Soita eläinlääkärille nyt",
+      "monitor": "Seuraa lemmikkiä {{name}} tarkasti",
+      "noAction": "Toimenpiteitä ei tarvita"
+    },
+    "dose": "{{amount}} {{unit}} ({{substance}}) on noin {{mgPerKg}} mg {{compound}} painokiloa kohden.",
+    "noDose": "Perustuu aineen {{substance}} riskiin lajille {{species}}, pahimpaan realistiseen tilanteeseen.",
+    "note": {
+      "noSpeciesData": "Tälle lajille ei ole tietoa, joten pidämme ainetta vaarallisena.",
+      "amountUnknown": "Ilman määrää oletamme pahimman realistisen tilanteen.",
+      "weightUnknown": "Ilman lemmikin painoa annosta ei voi laskea.",
+      "noDoseData": "Luotettavaa annostietoa ei ole, joten määrä ei muuta riskiä."
+    },
+    "emergencyMap": "Päivystykset kartalla",
+    "readEntry": "Lue lisää: {{substance}}",
+    "again": "Tarkista jotain muuta"
+  },
+  "insurance": {
+    "policies": "Vakuutukset",
+    "petInsurance": "{{name}} · Lemmikkivakuutus",
+    "cover": "Eläinlääkärikulut",
+    "perYear": "{{amount}} / vuosi",
+    "used": "Käytetty tänä vuonna",
+    "usedOf": "{{used}}/{{limit}} käytetty tänä vuonna",
+    "noPolicies": "Ei vielä vakuutuksia",
+    "claims": "Korvaukset",
+    "channel": {
+      "directPayment": "klinikka hoiti suoraan",
+      "receipt": "kuitti ladattu"
+    },
+    "status": {
+      "paid": "Maksettu",
+      "inReview": "Käsittelyssä",
+      "needsInfo": "Tarvitaan lisätietoja"
+    },
+    "noClaims": "Ei vielä korvaushakemuksia",
+    "makeClaim": "Hae korvausta",
+    "directPaymentNote": "Sopimusklinikat, joissa on suorakorvaus: korvausta ei tarvitse hakea jälkikäteen.",
+    "bankIdNote": "Vakuutustietojen muuttaminen vaatii uuden pankkitunnistautumisen."
+  },
+  "profile": {
+    "pets_one": "{{count}} lemmikki",
+    "pets_other": "{{count}} lemmikkiä",
+    "policies_one": "{{count}} voimassa oleva vakuutus",
+    "policies_other": "{{count}} voimassa olevaa vakuutusta",
+    "openClaims_one": "{{count}} avoin korvaushakemus",
+    "openClaims_other": "{{count}} avointa korvaushakemusta",
+    "noOpenClaims": "Ei avoimia korvaushakemuksia",
+    "signOut": "Kirjaudu ulos",
+    "version": "TassuVahti {{version}}",
+    "myAccount": "Oma tili",
+    "aboutUs": "Meistä",
+    "team": "Eläinlääkärit ja neuvojat",
+    "faq": "Usein kysyttyä",
+    "support": "Asiakaspalvelu",
+    "accessibility": "Saavutettavuusseloste",
+    "referTitle": "Suosittele ystävälle",
+    "refer": "Suosittele sovellusta ystävälle",
+    "referHint": "Jaa linkki ystävälle, jolla on lemmikki",
+    "referMessage": "Seuraan lemmikkini terveyttä ja vakuutusta TassuVahdilla. Kokeile: https://tassuvahti.fi",
+    "account": {
+      "name": "Nimi",
+      "signIn": "Kirjautumistapa",
+      "signInValue": "Pankkitunnukset tai sähköposti",
+      "family": "Perhetili",
+      "you": "Sinä · omistaja",
+      "member": "Perheenjäsen",
+      "familyHint": "Kaikki perhetilin jäsenet näkevät samat lemmikkisivut ja muistutukset.",
+      "yourPets": "Lemmikkisi"
+    },
+    "teamIntro": "Eläinlääkärimme ja neuvojamme vastaavat puheluihin ja chattiin sekä tarkistavat sovelluksen sisällön.",
+    "roles": {
+      "vet": "Eläinlääkäri",
+      "nurse": "Eläinhoitaja",
+      "behaviour": "Käytösneuvoja"
+    },
+    "speaks": "Kielet: {{languages}}",
+    "faqItems": [
+      {
+        "q": "Miten teen korvaushakemuksen?",
+        "a": "Avaa Koti ja napauta lemmikin kortilla Tee korvaushakemus. Lisää käynnin tiedot ja kuva kuitista. Suorakorvausta käyttävillä sopimusklinikoilla hakemusta ei tarvita."
+      },
+      {
+        "q": "Mitä vakuutukseni kattaa?",
+        "a": "Eläinlääkärikulut vuosittaiseen enimmäismäärään asti. Jäljellä olevan korvauksen näet Koti-näkymästä ja kohdasta Vakuutukset ja korvaukset."
+      },
+      {
+        "q": "Kuka näkee lemmikkini tiedot?",
+        "a": "Vain sinä ja lisäämäsi perheenjäsenet. Päätät itse, milloin jaat terveyspassin eläinlääkärille tai hoitajalle, ja voit lopettaa jakamisen milloin tahansa."
+      },
+      {
+        "q": "Korvaako sovellus eläinlääkärin?",
+        "a": "Ei. TassuVahti auttaa seuraamaan lemmikkiä käyntien välillä. Jos olet huolissasi, ota aina yhteyttä eläinlääkäriin."
+      },
+      {
+        "q": "Miten vaihdan kielen?",
+        "a": "Avaa Profiili ja valitse kohdasta Kieli Suomi, Svenska tai English."
+      }
+    ],
+    "supportIntro": "Autamme mielellämme vakuutus-, korvaus- ja sovellusasioissa.",
+    "phone": "Puhelin",
+    "email": "Sähköposti",
+    "hours": "Aukioloajat",
+    "hoursValue": "ma–pe 8–18 · la 10–15",
+    "call": "Soita meille",
+    "sendEmail": "Lähetä sähköpostia",
+    "emergencyNote": "Onko lemmikkisi äkillisesti sairas? Löydät lähimmän päivystyksen Tutki-välilehdeltä.",
+    "accessibilityBody": [
+      "Haluamme, että kaikki voivat käyttää TassuVahtia. Sovellus pyrkii täyttämään WCAG 2.1 AA -ohjeet.",
+      "Terveystila näytetään aina värin, kuvakkeen ja sanan avulla, joten sen voi lukea ilman värinäköä. Teksti noudattaa puhelimen kokoasetusta, ja kaikki painikkeet toimivat ruudunlukijoilla, kuten VoiceOver ja TalkBack.",
+      "Tunnetut puutteet: klinikkakartta on kuva, joten käytä sen alla olevaa klinikkalistaa.",
+      "Huomasitko jotain, mikä ei toimi sinulle? Kerro asiakaspalveluun, niin korjaamme sen."
+    ],
+    "accessibilityUpdated": "Seloste päivitetty 18.10.2026"
+  },
+  "notFound": {
+    "title": "Tätä sivua ei ole olemassa",
+    "body": "Linkki voi olla vanha. Palaa kotinäkymään jatkaaksesi."
+  },
+  "splash": {
+    "slogan": "Valvomme niitä, jotka valvovat sinua."
+  },
+  "quiz": {
+    "intro": "Lue lyhyt opas ja testaa sitten osaamisesi arjen tilanteilla.",
+    "questions_one": "{{count}} kysymys",
+    "questions_other": "{{count}} kysymystä",
+    "best": "Paras {{score}}/{{total}}",
+    "beforeYouStart": "Ennen kuin aloitat",
+    "start_one": "Aloita · {{count}} kysymys",
+    "start_other": "Aloita · {{count}} kysymystä",
+    "questionOf": "Kysymys {{current}}/{{total}}",
+    "correct": "Oikein!",
+    "notQuite": "Ei aivan",
+    "next": "Seuraava kysymys",
+    "seeResult": "Katso tulos",
+    "score": "{{score}} / {{total}}",
+    "perfect": "Kaikki oikein! Tiedät, mitä tehdä.",
+    "goodTry": "Hyvä yritys. Lue selitykset uudelleen ja kokeile vielä kerran.",
+    "tryAgain": "Yritä uudelleen",
+    "backToExplore": "Takaisin",
+    "readMore": "Lue lisää: Onko turvallista?"
+  },
+  "watchList": {
+    "byVet": "Seurantalista: {{vet}}",
+    "noneBody": "Aktiivista seurantaa ei ole. Kirjaa lemmikin {{name}} vointi aina, kun jokin tuntuu oudolta.",
+    "latestLog": "Viimeisin kirjaus · {{date}}",
+    "watching": "Mitä seurataan",
+    "notLogged": "Ei kirjattu",
+    "whatToDo": "Mitä tehdä nyt",
+    "callVet": "Milloin soittaa eläinlääkärille: {{when}}"
+  }
+}

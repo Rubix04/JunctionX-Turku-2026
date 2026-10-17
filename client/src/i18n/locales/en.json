@@ -1,0 +1,707 @@
+{
+  "common": {
+    "back": "Back",
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "retry": "Try again",
+    "loading": "Loading",
+    "errorTitle": "Something went wrong",
+    "errorBody": "Check your connection and try again.",
+    "tryAgain": "Try again",
+    "language": "Language"
+  },
+  "tabs": {
+    "home": "Home",
+    "pets": "Pets",
+    "explore": "Explore",
+    "profile": "Profile"
+  },
+  "screens": {
+    "home": "Home",
+    "insurance": "Insurance & claims",
+    "log": "Daily log",
+    "trends": "Trends",
+    "carePlan": "Care plan",
+    "reminders": "Reminders",
+    "diet": "Diet & weight",
+    "passport": "Health passport",
+    "clinic": "Clinic",
+    "substance": "Knowledge base entry",
+    "ateThis": "My pet ate this",
+    "findInStore": "Find in store",
+    "addPet": "Add a pet",
+    "addVisit": "Add a vet visit",
+    "notFound": "Page not found"
+  },
+  "disclaimer": {
+    "app": "TassuVahti is a support tool. It does not replace a veterinarian.",
+    "result": "TassuVahti supports you between visits. It does not replace a vet's examination.",
+    "firstAid": "This is first aid on the way to the vet. It does not replace treatment.",
+    "knowledge": "Information only. If you are unsure, call a vet or the emergency clinic."
+  },
+  "trafficLight": {
+    "green": "Green · as usual",
+    "yellow": "Yellow · keep an eye",
+    "red": "Red · contact a vet"
+  },
+  "risk": {
+    "harmless": "Harmless",
+    "caution": "Caution",
+    "dangerous": "Dangerous",
+    "emergency": "Emergency",
+    "unknown": "No data"
+  },
+  "species": {
+    "cat": "Cat",
+    "dog": "Dog",
+    "smallAnimal": "Small animal",
+    "catPlural": "Cats",
+    "dogPlural": "Dogs",
+    "smallAnimalPlural": "Small animals"
+  },
+  "weekday": {
+    "mon": "Monday",
+    "tue": "Tuesday",
+    "wed": "Wednesday",
+    "thu": "Thursday",
+    "fri": "Friday",
+    "sat": "Saturday",
+    "sun": "Sunday"
+  },
+  "auth": {
+    "landing": {
+      "bankId": "Continue with BankID",
+      "emailSignIn": "Log in with email",
+      "newHere": "New to TassuVahti?",
+      "createAccount": "Create an account",
+      "terms": "By continuing you accept the terms of use and privacy policy."
+    },
+    "bankId": {
+      "title": "Log in with BankID",
+      "intro": "Choose your bank. You'll confirm it's you in your bank's app.",
+      "waiting": "Waiting for confirmation in your bank app…",
+      "loadError": "Couldn't load the list of banks.",
+      "signInError": "Sign-in didn't work. Check your connection and try again.",
+      "note": "TassuVahti never sees your bank credentials."
+    },
+    "signIn": {
+      "title": "Welcome back",
+      "intro": "Log in with your email and password.",
+      "submit": "Log in",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Create one",
+      "demoHint": "Demo account: demo@tassuvahti.fi / demo1234"
+    },
+    "signUp": {
+      "title": "Create your account",
+      "intro": "Your pet's insurance, care plan and vet visits in one place.",
+      "name": "Full name",
+      "confirmPassword": "Confirm password",
+      "passwordHint": "At least 8 characters",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Log in"
+    },
+    "email": "Email",
+    "emailPlaceholder": "name@example.com",
+    "password": "Password",
+    "errors": {
+      "required": "Fill in this field.",
+      "invalidEmail": "Enter a valid email address.",
+      "passwordTooShort": "Use at least 8 characters.",
+      "passwordMismatch": "The passwords don't match.",
+      "invalidCredentials": "Email or password is wrong.",
+      "emailTaken": "An account with this email already exists. Log in instead.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "home": {
+    "yourPets": "Your pets",
+    "dayOf": "Day {{day}} of {{total}}",
+    "recovering": "Recovering from a {{condition}}",
+    "noPetsTitle": "Add your first pet",
+    "noPetsBody": "Each pet gets its own page with a watch list, care plan and health passport.",
+    "today": "Today",
+    "allReminders": "All reminders",
+    "nothingToday": "Nothing due today",
+    "submitClaim": "Submit a claim",
+    "active": "Active",
+    "remainingCover": "Cover left this year",
+    "viewDetails": "View details",
+    "settings": "Settings",
+    "allGood": "{{name}} is doing well",
+    "vetServices": "Talk to a vet",
+    "included": "Included",
+    "waitingTime": "Waiting time",
+    "approxMinutes": "Approx. {{minutes}} min",
+    "nextTime": "Next available time",
+    "todayAt": "Today {{time}}",
+    "book": "Book",
+    "booked": "Booked"
+  },
+  "pets": {
+    "title": "My pets"
+  },
+  "pet": {
+    "changePhoto": "Change profile picture",
+    "years_one": "{{count}} year",
+    "years_other": "{{count}} years",
+    "sex": {
+      "female": "Female",
+      "femaleNeutered": "Female, spayed",
+      "male": "Male",
+      "maleNeutered": "Male, neutered"
+    },
+    "fromVisit": "From visit {{date}}",
+    "noCarePlan": "No plan yet",
+    "medication": "Medication",
+    "nextDose": "Next {{time}}",
+    "noMedication": "Reminders",
+    "portionCalculator": "Portion calculator",
+    "trendsHint": "Weight, water",
+    "addVisit": "+ Add visit",
+    "noVisits": "No visits yet",
+    "tabs": {
+      "overview": "Overview",
+      "records": "Records",
+      "passport": "Passport"
+    },
+    "logToday": "Log today · 30 s",
+    "records": {
+      "kind": {
+        "all": "All",
+        "allergies": "Allergies",
+        "conditions": "Conditions",
+        "surgeries": "Surgeries",
+        "medications": "Medication",
+        "labs": "Lab reports",
+        "visits": "Visits"
+      },
+      "severity": {
+        "mild": "Mild reaction",
+        "moderate": "Moderate reaction",
+        "severe": "Severe reaction"
+      },
+      "resolved": "Resolved",
+      "ongoing": "Ongoing",
+      "lab": {
+        "blood": "Blood test",
+        "urine": "Urine test",
+        "ultrasound": "Ultrasound",
+        "xray": "X-ray"
+      },
+      "empty": "No records in this category"
+    },
+    "passportTab": {
+      "title": "Digital passport",
+      "markings": "Colour and markings",
+      "registration": "Pedigree registration",
+      "sex": "Sex",
+      "summaryTitle": "{{name}} · health summary",
+      "validUntil": "valid until {{date}}",
+      "shareVet": "Share with a vet · QR code",
+      "shareVetHint": "The vet scans the code to see the full history. The link stops working after the time you choose.",
+      "export": "Export travel summary",
+      "full": "Full health passport"
+    }
+  },
+  "log": {
+    "title": "{{name}} · today",
+    "duration": "About 30 seconds",
+    "watchList": "Watch list",
+    "fromVet": "· from {{vet}}'s instructions",
+    "general": "General",
+    "addPhoto": "Add photo",
+    "addVideo": "Add video",
+    "photo": "Photo",
+    "video": "Video",
+    "removeAttachment": "Remove",
+    "save": "Save today's log"
+  },
+  "result": {
+    "greenTitle": "Green: {{name}} is as usual",
+    "greenBody": "Everything you logged is as usual today.",
+    "greenAdvice": "Keep logging once a day so changes show up early.",
+    "yellowTitle": "Yellow: keep an eye on {{name}}",
+    "yellowBody": "Something is not quite as usual. That is something to watch.",
+    "yellowAdvice": "Watch {{name}} closely today and log again tomorrow, in more detail.",
+    "redTitle": "Red: contact a vet now",
+    "redBody": "Your answers match a reason your vet gave to call right away.",
+    "noticed": "What we noticed: {{items}}.",
+    "notEmergency": "This is not an emergency.",
+    "whatToDo": "What to do now",
+    "turnsRedIf": "Turns red if",
+    "why": {
+      "green": "Why green?",
+      "yellow": "Why yellow?",
+      "red": "Why red?"
+    },
+    "whyBody": "Based on {{vet}}'s thresholds for this {{condition}}, your latest logs and the current medication. The app suggests; your vet's instructions set the limits.",
+    "whyBodyGeneral": "Based on general limits for appetite, energy, pain and vomiting. Add a vet visit to get limits made for your pet.",
+    "remindMe": "Remind me at 19:00",
+    "reminderSet": "Reminder set for 19:00",
+    "reminderTitle": "Log again in more detail",
+    "reminderDetail": "From the yellow result",
+    "nearestClinic": "Nearest open emergency clinic",
+    "otherClinics": "Other emergency clinics on the map",
+    "showPassport": "Show {{name}}'s health passport to the vet",
+    "ifUnsure": "If you are unsure, call. The clinic can tell you whether to come in."
+  },
+  "trends": {
+    "title": "{{name}} · trends",
+    "range": "Time range",
+    "byWeek": "By week",
+    "months": "3 months",
+    "water": "Water intake",
+    "waterUnit": "ml per day, average",
+    "waterA11y": "Water intake, ml per day: {{values}}",
+    "watchLevel": "Vet's watch level",
+    "now": "Now",
+    "weight": "Weight",
+    "ideal": "kg · ideal {{from}}–{{to}}",
+    "weightDown": "Down {{kg}} kg in {{weeks}} weeks.",
+    "weightUp": "Up {{kg}} kg in {{weeks}} weeks.",
+    "weightSteady": "Weight is steady.",
+    "dailyStatus": "Daily status · last 14 days",
+    "today": "Today",
+    "noLog": "No log",
+    "legend": {
+      "green": "Green",
+      "yellow": "Yellow",
+      "red": "Red"
+    },
+    "sampleData": "Sample data for the prototype"
+  },
+  "carePlan": {
+    "noneTitle": "No care plan yet",
+    "noneBody": "Add the notes from {{name}}'s vet visit. We turn them into a plan you can follow at home.",
+    "visitOn": "{{name}} · visit {{date}}",
+    "checked": "Checked by the clinic",
+    "draft": "Draft · waiting for the clinic",
+    "found": "What was found",
+    "atHome": "What to do at home",
+    "followUp": "Follow-up",
+    "remindMe": "Remind me",
+    "reminderOn": "Reminder on",
+    "recommended": "Recommended by the vet",
+    "findInStore": "Find in store",
+    "prescription": "{{name}} · prescription",
+    "pickedUp": "Sent to {{place}} · picked up {{date}}",
+    "pickUp": "Sent to {{place}} · remember to pick it up",
+    "original": "The vet's original text"
+  },
+  "reminders": {
+    "course": "{{name}} · {{medicine}} course",
+    "dosesGiven": "{{given}} of {{total}} doses given",
+    "given": "Given ✓",
+    "givenQuestion": "Given?",
+    "givenA11y": "{{name}} given. Tap to undo.",
+    "notGivenA11y": "Mark {{name}} as given",
+    "givenBy": "Given by {{name}}",
+    "you": "you",
+    "comingUp": "Coming up",
+    "nothingComing": "Nothing coming up",
+    "book": "Book",
+    "familySees": "Your family sees the same reminders and ticks."
+  },
+  "diet": {
+    "recommendedBy": "Recommended by {{vet}}",
+    "changeSlowlyTitle": "Change food slowly.",
+    "changeSlowlyBody": "Mix a little more of the new food into the old one each day over about a week. A sudden switch can upset the stomach.",
+    "seeTrend": "See trend",
+    "now": "Now",
+    "vetTarget": "Vet's target",
+    "idealRange": "Ideal range, kg",
+    "logWeight": "Log today's weight",
+    "weightKg": "Weight (kg)",
+    "weightInvalid": "Enter the weight in kilograms, e.g. 4.6",
+    "calculator": "Portion calculator",
+    "dailyEnergy": "Daily energy",
+    "setByVet": "Set by your vet",
+    "estimated": "Estimated from weight",
+    "addWeightFirst": "Add a weight first",
+    "foodEnergy": "Food energy",
+    "fromPackage": "From the package",
+    "less": "Less {{label}}",
+    "more": "More {{label}}",
+    "mealsPerDay": "Meals per day",
+    "meals_one": "{{count}} meal",
+    "meals_other": "{{count}} meals",
+    "perMeal": "Per meal",
+    "totalPerDay": "{{grams}} g a day in total."
+  },
+  "passport": {
+    "born": "Born",
+    "microchip": "Microchip",
+    "owner": "Owner",
+    "insurance": "Insurance",
+    "share": "Share with a vet or pet care",
+    "empty": "No health records yet",
+    "vaccinations": "Vaccinations",
+    "given": "Given {{date}} · {{clinic}}",
+    "vaccine": {
+      "valid": "Valid",
+      "dueSoon": "Due soon",
+      "expired": "Expired"
+    },
+    "medication": "Medication",
+    "ongoing": "ongoing",
+    "for": "for {{reason}}",
+    "allergies": "Allergies",
+    "noneKnown": "None known",
+    "updated": "Updated {{date}}",
+    "surgeries": "Surgeries",
+    "none": "None",
+    "visits": "Previous visits"
+  },
+  "share": {
+    "title": "Share {{name}}'s passport",
+    "include": "What to include",
+    "section": {
+      "vaccinations": "Vaccinations",
+      "medicationAllergies": "Medication & allergies",
+      "surgeriesVisits": "Surgeries & previous visits",
+      "logs": "Symptom logs, last 14 days"
+    },
+    "worksFor": "Link works for",
+    "hours24": "24 hours",
+    "days7": "7 days",
+    "days30": "30 days",
+    "consent": "Anyone with the link or QR code can read what you chose until it expires. You can stop sharing any time in Account.",
+    "agreeCreate": "I agree, create share link",
+    "qrA11y": "QR code for the share link",
+    "showAtClinic": "Show this at the clinic",
+    "expires": "Expires in {{duration}}. You'll get a notice when it's opened.",
+    "sendLink": "Send link",
+    "stop": "Stop sharing",
+    "message": "{{name}}'s health passport: {{url}}"
+  },
+  "photo": {
+    "title": "Move and scale",
+    "use": "Use",
+    "preview": "{{name}}'s new profile picture",
+    "hintDefault": "Take a photo or choose one from your gallery. You can move and scale it before saving.",
+    "hintChange": "Looks good? Tap Use to save, or pick another one.",
+    "camera": "Camera",
+    "gallery": "Gallery",
+    "remove": "Remove",
+    "footnote": "Shown on home, in the pet switcher, reminders and the health passport. Removing a photo also deletes it from storage."
+  },
+  "addPet": {
+    "addPhoto": "Add profile picture",
+    "photo": "Photo",
+    "photoHint": "Take a photo or choose one from your gallery. Without one, we show a picture based on species.",
+    "species": "Species",
+    "name": "Name",
+    "namePlaceholder": "e.g. Rekku",
+    "nameRequired": "Give your pet a name",
+    "birthDate": "Birth date",
+    "datePlaceholder": "dd.mm.yyyy",
+    "birthInvalid": "Use the format dd.mm.yyyy",
+    "weight": "Weight (kg)",
+    "weightInvalid": "Enter kilograms, e.g. 4.6",
+    "breed": "Breed",
+    "breedPlaceholder": "Search breeds",
+    "policyFound": "We found a pet policy without a profile. Link it to this pet?",
+    "link": "Link",
+    "linked": "Linked ✓",
+    "create": "Create pet page"
+  },
+  "addVisit": {
+    "intro": "Add {{name}}'s visit notes. We turn them into a care plan and a watch list.",
+    "source": {
+      "file": "Upload file",
+      "photo": "Photo of notes",
+      "text": "Type it in"
+    },
+    "textPlaceholder": "Paste or type what the vet wrote: diagnosis, medicine, what to do at home, follow-up.",
+    "send": "Send for summary",
+    "photoName": "Photo of visit notes",
+    "typedName": "Typed visit notes",
+    "uploaded": "Uploaded",
+    "draftTitle": "Visit notes",
+    "step": {
+      "read": "Read diagnosis, medicine and follow-up",
+      "draft": "Drafted a plain-language care plan",
+      "clinic": "Waiting for the clinic to check it",
+      "clinicHint": "Usually within a working day"
+    },
+    "aiNote": "The app only summarises what your vet wrote. It never makes a diagnosis. Until the clinic checks the draft, it is marked \"Draft\".",
+    "preview": "Preview the draft plan"
+  },
+  "explore": {
+    "title": "Explore",
+    "sections": {
+      "vets": "Vets",
+      "safe": "Is it safe?",
+      "quizzes": "Quizzes"
+    }
+  },
+  "map": {
+    "youAreHere": "You",
+    "filter": {
+      "openNow": "Open now",
+      "emergency": "24 h emergency",
+      "contracted": "Contracted only",
+      "within": "Within {{km}} km"
+    },
+    "legend": {
+      "contracted": "Contracted clinic",
+      "other": "Other clinic",
+      "emergency": "24 h emergency"
+    },
+    "noResults": "No clinics match",
+    "noResultsBody": "Try removing a filter.",
+    "registryNote": "Contracted clinics come from the insurance company's registry."
+  },
+  "clinic": {
+    "emergency24h": "24 h emergency",
+    "distance": "{{km}} km",
+    "drive": "{{minutes}} min by car",
+    "openNow": "Open now",
+    "closed": "Closed",
+    "contracted": "Contracted clinic",
+    "directPayment": "Direct payment",
+    "directPaymentShort": "Direct pay",
+    "call": "Call",
+    "callHint": "Calls {{name}}",
+    "directions": "Directions",
+    "openCardHint": "Opens the clinic card",
+    "book": "Book an appointment",
+    "directPaymentNote": "This clinic settles the insurance claim directly. You only pay the deductible.",
+    "noDirectPaymentNote": "Pay at the clinic and make a claim with the receipt afterwards.",
+    "hours": "Opening hours",
+    "open24h": "Open 24 hours, every day",
+    "open24hBody": "Call ahead so the clinic can prepare.",
+    "details": "Details",
+    "address": "Address",
+    "phone": "Phone",
+    "species": "Treats",
+    "expertise": "Special expertise",
+    "notContracted": "Not a contracted clinic. Your insurance still covers the visit, but you make the claim yourself."
+  },
+  "store": {
+    "vetRecommended": "Vet recommended",
+    "filter": {
+      "openNow": "Open now",
+      "near": "Within 5 km",
+      "online": "Order online"
+    },
+    "stock": {
+      "inStock": "In stock",
+      "lowStock": "Few left",
+      "outOfStock": "Out of stock",
+      "sellsBrand": "Sells the brand"
+    },
+    "kind": {
+      "petStore": "Pet store",
+      "pharmacy": "Pharmacy",
+      "clinic": "Vet clinic"
+    },
+    "orderOnline": "Order online",
+    "partner": "Commercial partner",
+    "noResults": "No stores match",
+    "note": "Products come from your vet or the insurer's approved list, not from advertising. Prescription medicines go through the prescription, not the store map."
+  },
+  "knowledge": {
+    "searchLabel": "Search foods, plants and substances",
+    "searchPlaceholder": "e.g. raisins, lily, xylitol",
+    "clear": "Clear search",
+    "riskFor": "Risk for",
+    "category": {
+      "foods": "Foods",
+      "plants": "Plants",
+      "mushrooms": "Mushrooms",
+      "household": "Household",
+      "medicines": "Medicines",
+      "garden": "Garden chemicals"
+    },
+    "ateSomething": "My pet ate something",
+    "noResults": "Nothing found for \"{{query}}\"",
+    "noResultsBody": "Try another name. If your pet ate something unknown, call a vet.",
+    "sampleNotice": "Sample content for the prototype. Vets and poison information experts review every entry before release."
+  },
+  "substance": {
+    "alsoCalled": "Also: {{names}}",
+    "riskBySpecies": "Risk by species",
+    "why": "Why it is dangerous",
+    "symptoms": "Symptoms",
+    "onset": "Symptoms start: {{onset}}",
+    "whatToDo": "What to do now",
+    "noVomiting": "Don't make your pet vomit unless a vet tells you to.",
+    "sources": "Sources: {{sources}}",
+    "updated": "Reviewed content · updated {{date}}",
+    "sample": "Sample content, not yet reviewed · updated {{date}}",
+    "ateThis": "My pet ate this"
+  },
+  "ateThis": {
+    "whichPet": "Which pet?",
+    "what": "What did it eat?",
+    "change": "Change",
+    "howMuch": "How much?",
+    "type": "Type",
+    "amount": "Amount",
+    "amountIn": "Amount ({{unit}})",
+    "amountPlaceholder": "Leave empty if you don't know",
+    "unit": {
+      "g": "grams",
+      "piece": "pieces"
+    },
+    "weightUsed": "Uses {{name}}'s weight, {{kg}} kg.",
+    "noWeight": "Add your pet's weight for a dose-based estimate.",
+    "noPets": "Add a pet to get a species-specific answer.",
+    "check": "Check the risk",
+    "action": {
+      "goToEmergencyNow": "Go to the emergency clinic now",
+      "callVetNow": "Call a vet now",
+      "monitor": "Watch {{name}} closely",
+      "noAction": "No action needed"
+    },
+    "dose": "{{amount}} {{unit}} of {{substance}} is about {{mgPerKg}} mg of {{compound}} per kg.",
+    "noDose": "Based on the risk of {{substance}} for a {{species}}, the worst realistic case.",
+    "note": {
+      "noSpeciesData": "There is no data for this species, so we treat it as dangerous.",
+      "amountUnknown": "Without the amount, we assume the worst realistic case.",
+      "weightUnknown": "Without your pet's weight, we can't calculate the dose.",
+      "noDoseData": "There is no reliable dose data, so the amount doesn't change the risk."
+    },
+    "emergencyMap": "Emergency clinics on the map",
+    "readEntry": "Read about {{substance}}",
+    "again": "Check something else"
+  },
+  "insurance": {
+    "policies": "Policies",
+    "petInsurance": "{{name}} · Pet insurance",
+    "cover": "Vet care cover",
+    "perYear": "{{amount}} / year",
+    "used": "Used this year",
+    "usedOf": "{{used}} of {{limit}} used this year",
+    "noPolicies": "No policies yet",
+    "claims": "Claims",
+    "channel": {
+      "directPayment": "settled directly by the clinic",
+      "receipt": "receipt uploaded"
+    },
+    "status": {
+      "paid": "Paid",
+      "inReview": "In review",
+      "needsInfo": "Needs info"
+    },
+    "noClaims": "No claims yet",
+    "makeClaim": "Make a claim",
+    "directPaymentNote": "Contracted clinics with direct payment: no need to claim afterwards.",
+    "bankIdNote": "Changing policy details asks for bank ID again."
+  },
+  "profile": {
+    "pets_one": "{{count}} pet",
+    "pets_other": "{{count}} pets",
+    "policies_one": "{{count}} active policy",
+    "policies_other": "{{count}} active policies",
+    "openClaims_one": "{{count}} open claim",
+    "openClaims_other": "{{count}} open claims",
+    "noOpenClaims": "No open claims",
+    "signOut": "Sign out",
+    "version": "TassuVahti {{version}}",
+    "myAccount": "My account",
+    "aboutUs": "About us",
+    "team": "Vets and advisors",
+    "faq": "FAQ",
+    "support": "Customer service",
+    "accessibility": "Accessibility statement",
+    "referTitle": "Refer a friend",
+    "refer": "Recommend the app to a friend",
+    "referHint": "Share a link with a friend who has a pet",
+    "referMessage": "I use TassuVahti to keep track of my pet’s health and insurance. Try it: https://tassuvahti.fi",
+    "account": {
+      "name": "Name",
+      "signIn": "Signed in with",
+      "signInValue": "BankID or email",
+      "family": "Family account",
+      "you": "You · owner",
+      "member": "Family member",
+      "familyHint": "Everyone in the family account sees the same pet pages and reminders.",
+      "yourPets": "Your pets"
+    },
+    "teamIntro": "Our vets and advisors answer your calls and chats and review the content in the app.",
+    "roles": {
+      "vet": "Veterinarian",
+      "nurse": "Vet nurse",
+      "behaviour": "Behaviour advisor"
+    },
+    "speaks": "Speaks {{languages}}",
+    "faqItems": [
+      {
+        "q": "How do I make a claim?",
+        "a": "Open Home and tap Submit a claim on your pet’s card. Add the visit details and a photo of the receipt. At contracted clinics with direct payment you don’t need to claim at all."
+      },
+      {
+        "q": "What does my insurance cover?",
+        "a": "Vet care up to your yearly limit. You can see how much cover you have left on the Home screen and in Insurance & claims."
+      },
+      {
+        "q": "Who can see my pet’s information?",
+        "a": "Only you and the family members you add. You decide when to share the health passport with a vet or pet sitter, and you can stop sharing at any time."
+      },
+      {
+        "q": "Does the app replace a vet?",
+        "a": "No. TassuVahti helps you keep an eye on your pet between visits. If you are worried, always contact a vet."
+      },
+      {
+        "q": "How do I change the language?",
+        "a": "Go to Profile and pick Suomi, Svenska or English under Language."
+      }
+    ],
+    "supportIntro": "We’re happy to help with insurance, claims and the app.",
+    "phone": "Phone",
+    "email": "Email",
+    "hours": "Opening hours",
+    "hoursValue": "Mon–Fri 8–18 · Sat 10–15",
+    "call": "Call us",
+    "sendEmail": "Send an email",
+    "emergencyNote": "Is your pet acutely ill? Find the nearest emergency clinic in Explore.",
+    "accessibilityBody": [
+      "We want everyone to be able to use TassuVahti. The app aims to meet the WCAG 2.1 AA guidelines.",
+      "Health status is always shown with a colour, an icon and a word, so it can be read without colour vision. Text follows the size set on your phone, and every button works with screen readers such as VoiceOver and TalkBack.",
+      "Known issues: the clinic map is a picture, so use the clinic list below it instead.",
+      "Found something that doesn’t work for you? Tell us through Customer service and we’ll fix it."
+    ],
+    "accessibilityUpdated": "Statement updated 18 Oct 2026"
+  },
+  "notFound": {
+    "title": "This page doesn't exist",
+    "body": "The link may be old. Go back home to continue."
+  },
+  "splash": {
+    "slogan": "Watching over the ones who watch over you."
+  },
+  "quiz": {
+    "intro": "Read a short lesson, then test yourself with real-life situations.",
+    "questions_one": "{{count}} question",
+    "questions_other": "{{count}} questions",
+    "best": "Best {{score}}/{{total}}",
+    "beforeYouStart": "Before you start",
+    "start_one": "Start · {{count}} question",
+    "start_other": "Start · {{count}} questions",
+    "questionOf": "Question {{current}} of {{total}}",
+    "correct": "Correct!",
+    "notQuite": "Not quite",
+    "next": "Next question",
+    "seeResult": "See result",
+    "score": "{{score}} / {{total}}",
+    "perfect": "All right! You know what to do.",
+    "goodTry": "Good try. Read the explanations again and give it another go.",
+    "tryAgain": "Try again",
+    "backToExplore": "Back to Explore",
+    "readMore": "Read more in Is it safe?"
+  },
+  "watchList": {
+    "byVet": "Watch list from {{vet}}",
+    "noneBody": "There is no active watch list. Log how {{name}} is doing whenever something seems off.",
+    "latestLog": "Latest log · {{date}}",
+    "watching": "What we’re watching",
+    "notLogged": "Not logged",
+    "whatToDo": "What to do now",
+    "callVet": "When to call a vet: {{when}}"
+  }
+}
