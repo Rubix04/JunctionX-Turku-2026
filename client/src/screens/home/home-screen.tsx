@@ -1,9 +1,8 @@
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import EmergencyButton from '@/components/features/emergency-button';
 import GivenButton from '@/components/features/given-button';
 import PetSwitcher from '@/components/features/pet-switcher';
 import TrafficLightBadge from '@/components/features/traffic-light-badge';
@@ -11,7 +10,6 @@ import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
 import Card from '@/components/ui/card';
 import Chip from '@/components/ui/chip';
-import Icon from '@/components/ui/icon';
 import IconTile from '@/components/ui/icon-tile';
 import SectionLabel from '@/components/ui/section-label';
 import Screen, { ScreenSection } from '@/components/ui/screen';
@@ -125,7 +123,6 @@ const HomeScreen = () => {
           {t('home.greeting', { name: displayName?.split(' ')[0] ?? '' })}
         </AppText>
       </View>
-      <EmergencyButton />
     </View>
   );
 
@@ -201,20 +198,17 @@ const HomeScreen = () => {
         )}
 
         {seasonal && (
-          <Link href="/(tabs)/(alerts)" asChild>
-            <Pressable accessibilityRole="link" style={styles.seasonal}>
-              <IconTile name="leaf" tone="dark" />
-              <View style={styles.flex}>
-                <AppText variant="label" color={colors.onDark}>
-                  {`${t(`seasons.${season}`)}: ${localize(seasonal.title).toLowerCase()}`}
-                </AppText>
-                <AppText variant="caption" color={colors.onDarkMuted}>
-                  {t('home.seasonalHint')}
-                </AppText>
-              </View>
-              <Icon name="chevronRight" size={18} color={colors.onDarkMuted} />
-            </Pressable>
-          </Link>
+          <View style={styles.seasonal}>
+            <IconTile name="leaf" tone="dark" />
+            <View style={styles.flex}>
+              <AppText variant="label" color={colors.onDark}>
+                {`${t(`seasons.${season}`)}: ${localize(seasonal.title).toLowerCase()}`}
+              </AppText>
+              <AppText variant="caption" color={colors.onDarkMuted}>
+                {t('home.seasonalHint')}
+              </AppText>
+            </View>
+          </View>
         )}
       </ScreenSection>
     </Screen>

@@ -2,7 +2,6 @@
   "common": {
     "appName": "TassuVahti",
     "tagline": "Watching over your pet between vet visits.",
-    "emergency": "Emergency",
     "back": "Back",
     "close": "Close",
     "cancel": "Cancel",
@@ -17,16 +16,11 @@
   },
   "tabs": {
     "home": "Home",
-    "map": "Map",
-    "knowledge": "Is it safe?",
-    "alerts": "Alerts",
-    "account": "Account"
+    "pets": "Pets",
+    "explore": "Explore",
+    "profile": "Profile"
   },
   "screens": {
-    "welcome": "Welcome",
-    "bankAuth": "Sign in with online banking",
-    "setLock": "Set device lock",
-    "unlock": "Unlock",
     "home": "Home",
     "map": "Vets and emergency clinics",
     "knowledge": "Is it safe?",
@@ -43,8 +37,6 @@
     "passport": "Health passport",
     "sharePassport": "Share passport",
     "photo": "Crop profile picture",
-    "emergency": "Emergency",
-    "firstAid": "First aid",
     "firstAidGuide": "First aid guide",
     "clinic": "Clinic",
     "substance": "Knowledge base entry",
@@ -96,56 +88,9 @@
     "sat": "Saturday",
     "sun": "Sunday"
   },
-  "welcome": {
-    "language": "Language: {{language}}",
-    "chooseLanguage": "Choose language",
-    "title": "Your vet's advice, turned into a daily care plan.",
-    "watchListBold": "A watch list",
-    "watchListRest": " made for your pet's diagnosis, logged in 30 seconds a day.",
-    "trafficLightBold": "A clear traffic light",
-    "trafficLightRest": " that tells you when it is time to call a vet.",
-    "emergencyBold": "Emergency help",
-    "emergencyRest": " on every screen, no sign-in needed.",
-    "signIn": "Sign in with online banking",
-    "emergencyNow": "Emergency help now",
-    "languageButton": "Language: {{name}}",
-    "helpBold": "Emergency help",
-    "helpRest": " on every screen, no sign-in needed."
-  },
   "auth": {
-    "step": "Step {{step}} of {{total}}",
-    "confirmTitle": "Confirm it's you",
-    "confirmBody": "Choose your bank. You only do this once on this device; after that TassuVahti opens with your face, fingerprint or PIN.",
-    "mobileCertificate": "Mobile certificate",
-    "whenAskedAgain": "We ask again only on a new device, after a long break, or before sensitive changes such as your insurance details.",
-    "identified": "Identified · {{name}}",
-    "lockTitle": "How should TassuVahti open?",
-    "lockBody": "Your session stays on this phone. Pick the lock you use every day.",
-    "deviceLock": "Device lock",
-    "turnOn": "Turn on and continue",
-    "signOutAnyTime": "You can sign this device out any time in Account.",
-    "welcomeBack": "Welcome back, {{name}}",
-    "unlockBody": "Your pets' logs and reminders are waiting.",
-    "usePin": "Use PIN instead",
-    "signOut": "Sign out"
-  },
-  "lock": {
-    "face": "Face recognition",
-    "faceHint": "Fastest on this phone",
-    "fingerprint": "Fingerprint",
-    "fingerprintHint": "Touch the sensor to open",
-    "pin": "6-digit PIN",
-    "pinHint": "Works on every device",
-    "prompt": {
-      "face": "Look at your phone to unlock",
-      "fingerprint": "Touch the sensor to unlock",
-      "pin": "Tap to enter your PIN"
-    },
-    "unlockWith": {
-      "face": "Unlock with face recognition",
-      "fingerprint": "Unlock with fingerprint",
-      "pin": "Unlock with PIN"
-    }
+    "title": "Sign in",
+    "continueWithBankId": "Continue with BankID"
   },
   "home": {
     "greeting": "Hi {{name}}",
@@ -206,7 +151,6 @@
       "smallAnimal": "For small animals"
     },
     "readMore": "Read more in the knowledge base",
-    "openFirstAid": "Open the first aid guide",
     "sharedWith": "Shared with {{names}} in your family account"
   },
   "log": {
@@ -249,7 +193,6 @@
     "nearestClinic": "Nearest open emergency clinic",
     "otherClinics": "Other emergency clinics on the map",
     "showPassport": "Show {{name}}'s health passport to the vet",
-    "firstAid": "First aid guides",
     "ifUnsure": "If you are unsure, call. The clinic can tell you whether to come in."
   },
   "trends": {
@@ -565,8 +508,6 @@
       "noDoseData": "There is no reliable dose data, so the amount doesn't change the risk."
     },
     "emergencyMap": "Emergency clinics on the map",
-    "quickAssessment": "Quick symptom check",
-    "firstAid": "First aid for poisoning",
     "readEntry": "Read about {{substance}}",
     "again": "Check something else"
   },
@@ -578,45 +519,10 @@
     "prevention": "How to prevent it",
     "watchFor": "What to watch for",
     "logMatch": "{{names}}'s recent log mentions a symptom from this card. Keep an eye on it.",
-    "whatIf": "If it happens",
     "isItSafe": "Is it safe?",
     "updated": "Updated {{date}} · maintained by a vet",
     "none": "No alerts for your pets this season",
     "maintained": "Cards are filtered by your pets' species. Content is maintained by a veterinarian."
-  },
-  "emergency": {
-    "title": "Emergency",
-    "body": "No sign-in needed. If your pet is in danger, call the emergency clinic first.",
-    "nearest": "Nearest open emergency clinic",
-    "whatsHappening": "What is happening?",
-    "openGuide": "Open the first aid guide",
-    "goNow": "Go to a vet now",
-    "allGuides": "All first aid guides"
-  },
-  "firstAid": {
-    "title": "First aid",
-    "intro": "Step-by-step guides for the way to the vet. Choose your pet's size: the technique depends on it.",
-    "sizeLabel": "Pet size",
-    "size": {
-      "cat": "Cat",
-      "smallDog": "Small dog",
-      "largeDog": "Large dog"
-    },
-    "stepOf": "Step {{step}} of {{total}}",
-    "readAloud": "Read aloud",
-    "readingAloud": "Reading aloud",
-    "previous": "Previous",
-    "next": "Next step",
-    "startOver": "Start over",
-    "rhythmHint": "Press to the beat: {{bpm}} a minute. After 30 presses, give 2 breaths.",
-    "breaths": "Give 2 breaths now, then continue.",
-    "startRhythm": "Start the rhythm",
-    "stopRhythm": "Stop",
-    "callClinic": "Call {{name}}",
-    "checkSubstance": "Check what it ate",
-    "sample": "Sample guide, not yet reviewed by a vet",
-    "updated": "Updated {{date}}",
-    "notFound": "Guide not found"
   },
   "insurance": {
     "policies": "Policies",
@@ -651,7 +557,6 @@
     "member": "Family member",
     "familyHint": "Everyone in the family account sees the same pet pages and reminders.",
     "language": "Language",
-    "deviceLock": "Device lock",
     "notifications": "Notifications",
     "notify": {
       "medication": "Medication reminders",
@@ -669,7 +574,6 @@
     "vetConsentHint": "Lets the clinic check care plans and send visit notes",
     "privacyNotice": "Privacy notice",
     "privacyNoticeHint": "How your and your pets' data is used (GDPR)",
-    "lockNow": "Lock the app",
     "signOut": "Sign this device out",
     "signOutHint": "Signing out removes the session from this phone. You'll need online banking to sign in again.",
     "version": "TassuVahti {{version}}"
@@ -685,59 +589,6 @@
     "en": "English",
     "fi": "Suomi",
     "sv": "Svenska"
-  },
-  "bankAuth": {
-    "title": "Confirm it’s you",
-    "intro": "Choose your bank. You only do this once on this device; after that TassuVahti opens with your face, fingerprint or PIN.",
-    "note": "We ask again only on a new device, after a long break, or before sensitive changes such as your insurance details.",
-    "loadError": "Couldn’t load the list of banks.",
-    "signInError": "Sign-in didn’t work. Check your connection and try again."
-  },
-  "setLock": {
-    "identified": "Identified · {{name}}",
-    "title": "How should TassuVahti open?",
-    "intro": "Your session stays on this phone. Pick the lock you use every day.",
-    "methods": {
-      "face": {
-        "label": "Face recognition",
-        "detail": "Fastest on this phone"
-      },
-      "fingerprint": {
-        "label": "Fingerprint",
-        "detail": "Touch the sensor to open"
-      },
-      "pin": {
-        "label": "6-digit PIN",
-        "detail": "Works on every device"
-      }
-    },
-    "continue": "Turn on and continue",
-    "footnote": "You can sign this device out any time in Account.",
-    "confirmPrompt": "Confirm to turn on the lock",
-    "biometricFailed": "That didn’t work. Try again or choose a PIN.",
-    "choosePin": "Choose a 6-digit PIN",
-    "confirmPin": "Enter the same PIN again",
-    "pinMismatch": "The PINs didn’t match. Choose a PIN again.",
-    "saveError": "Couldn’t save the lock. Try again."
-  },
-  "unlock": {
-    "welcomeBack": "Welcome back, {{name}}",
-    "welcomeBackNoName": "Welcome back",
-    "prompt": "Unlock TassuVahti",
-    "faceButton": "Unlock with face recognition",
-    "fingerprintButton": "Unlock with fingerprint",
-    "faceHint": "Look at your phone to unlock",
-    "fingerprintHint": "Touch the sensor to unlock",
-    "enterPin": "Enter your PIN",
-    "wrongPin": "Wrong PIN. Try again.",
-    "wrongPinAttemptsLeft_one": "Wrong PIN. 1 try left before you need to sign in again.",
-    "wrongPinAttemptsLeft_other": "Wrong PIN. {{count}} tries left.",
-    "connectionError": "Couldn’t connect. Check your connection and try again.",
-    "signInAgain": "Sign in again with online banking"
-  },
-  "pinPad": {
-    "delete": "Delete",
-    "entered": "{{count}} of {{total}} digits entered"
   },
   "splash": {
     "slogan": "Watching over the ones who watch over you.",

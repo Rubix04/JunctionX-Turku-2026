@@ -22,7 +22,6 @@ type PlaceholderScreenProps = {
   title: string;
   links?: PlaceholderLink[];
   action?: PlaceholderAction;
-  showEmergency?: boolean;
 };
 
 // Temporary screen used while the real screens are built.
@@ -31,13 +30,12 @@ const PlaceholderScreen = ({
   title,
   links = [],
   action,
-  showEmergency = true,
 }: PlaceholderScreenProps) => {
   const { t } = useTranslation();
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <ScreenHeader title={title} showEmergency={showEmergency} />
+      <ScreenHeader title={title} />
       <ScrollView contentContainerStyle={styles.content}>
         <AppText variant="bodySmall" color={colors.muted}>
           {t('placeholder.notBuilt')}

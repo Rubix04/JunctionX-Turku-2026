@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
-import EmergencyButton from '@/components/features/emergency-button';
 import RiskBadge from '@/components/features/risk-badge';
 import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
@@ -56,7 +55,6 @@ const KnowledgeScreen = () => {
           <AppText variant="h1" accessibilityRole="header" style={styles.flex}>
             {t('knowledge.title')}
           </AppText>
-          <EmergencyButton />
         </View>
       }
     >

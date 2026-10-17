@@ -1,40 +1,40 @@
-// Brand colors from the design mockups (Brand & logo board).
+// Brand colors: deep blue on warm off-white, with warm sand and orange accents.
 export const colors = {
-  primary: '#0E5A63', // Vahti teal: buttons, logo
-  primaryDark: '#08393F',
-  primaryTint: '#E6F0F0', // chips on white cards
-  primarySoft: '#D6ECEC', // hero panels, light text on teal
-  primaryBorder: '#B9D3D4', // watch list cards
-  primaryLight: '#D6ECEC', // text on teal
-  primaryLightMuted: '#B9D9DA',
-  accent: '#F2A33A', // Tassu amber: paw toes, highlights
-  accentDark: '#9A5A0C', // amber icons on accentTint
-  accentTint: '#FDF1DE',
-  accentBorder: '#F1D3A6',
-  accentText: '#7A4505', // text on accentTint
-  accentBody: '#4A2D05', // body text on accentTint notes
+  primary: '#0B5AA0', // Deep blue: buttons, logo, headings
+  primaryDark: '#083F70',
+  primaryTint: '#E8EEF7', // chips on white cards
+  primarySoft: '#DCE6F3', // hero panels, light text on teal
+  primaryBorder: '#BFD0E6', // watch list cards
+  primaryLight: '#DCE6F3', // text on blue
+  primaryLightMuted: '#B8CBE4',
+  accent: '#EE9B5A', // Warm orange: paw toes, highlights
+  accentDark: '#9A5418', // amber icons on accentTint
+  accentTint: '#F5EDE1', // warm sand: active tab, soft panels,
+  accentBorder: '#E6D3B5',
+  accentText: '#7A4210', // text on accentTint
+  accentBody: '#4A2A0C', // body text on accentTint notes
 
-  text: '#14232B', // Ink: main text
-  textSecondary: '#3C4A50', // card body text
-  muted: '#56656C', // captions, labels
-  noteText: '#23383F', // text on primaryTint notes
+  text: '#1B2733', // Ink: main text
+  textSecondary: '#3A4652', // card body text
+  muted: '#5E6670', // captions, labels
+  noteText: '#22364F', // text on primaryTint notes
   onDark: '#FFFFFF',
-  onDarkMuted: '#C3CED2',
-  onDarkFaint: '#A9B6BA',
+  onDarkMuted: '#C5CFDB',
+  onDarkFaint: '#A8B5C4',
 
-  background: '#F5F7F6', // Mist: screen background
+  background: '#FAF8F5', // Warm off-white: screen background
   surface: '#FFFFFF', // cards, tab bar
-  surfaceDark: '#14232B', // dark promo card
-  surfaceDarkRaised: '#2B3D45',
+  surfaceDark: '#13263A', // dark promo card
+  surfaceDarkRaised: '#2A3D52',
   photoBackground: '#0B1418', // photo crop screen
   photoSurface: '#1C2A30',
   photoBorder: '#2E3F46',
-  segmentBackground: '#E3E8E6',
-  divider: '#EEF1EF', // between rows inside a card
-  border: '#DDE3E0', // card borders
-  borderStrong: '#C9D3D0', // outline buttons
-  borderDashed: '#8FA0A6', // 'add' placeholders
-  radioOff: '#A5B1B5',
+  segmentBackground: '#EEE9E1',
+  divider: '#F1EEE9', // between rows inside a card
+  border: '#E6E1D9', // card borders
+  borderStrong: '#D2CBC0', // outline buttons
+  borderDashed: '#A39A8E', // 'add' placeholders
+  radioOff: '#ADA79F',
 
   // Traffic light. Always pair with an icon and a word.
   green: '#1F7A4A', // as usual
@@ -53,9 +53,9 @@ export const colors = {
   redOnPhoto: '#FFB4AB',
 
   // Header tints behind the default pet pictures
-  catTint: '#F8E3C4',
-  dogTint: '#D6ECEC',
-  smallAnimalTint: '#E6E9F4',
+  catTint: '#F6E1CF',
+  dogTint: '#DCE6F3',
+  smallAnimalTint: '#E3EBE1',
 } as const;
 
 export type ColorName = keyof typeof colors;

@@ -2,7 +2,6 @@
   "common": {
     "appName": "TassuVahti",
     "tagline": "Vakar över ditt djur mellan veterinärbesöken.",
-    "emergency": "Akut",
     "back": "Tillbaka",
     "close": "Stäng",
     "cancel": "Avbryt",
@@ -17,16 +16,11 @@
   },
   "tabs": {
     "home": "Hem",
-    "map": "Karta",
-    "knowledge": "Är det säkert?",
-    "alerts": "Tips",
-    "account": "Konto"
+    "pets": "Husdjur",
+    "explore": "Utforska",
+    "profile": "Profil"
   },
   "screens": {
-    "welcome": "Välkommen",
-    "bankAuth": "Logga in med nätbankskoder",
-    "setLock": "Enhetens lås",
-    "unlock": "Lås upp",
     "home": "Hem",
     "map": "Veterinärer och jourer",
     "knowledge": "Är det säkert?",
@@ -43,8 +37,6 @@
     "passport": "Hälsopass",
     "sharePassport": "Dela passet",
     "photo": "Beskär profilbild",
-    "emergency": "Akut",
-    "firstAid": "Första hjälpen",
     "firstAidGuide": "Guide för första hjälpen",
     "clinic": "Klinik",
     "substance": "Artikel i kunskapsbanken",
@@ -96,56 +88,9 @@
     "sat": "Lördag",
     "sun": "Söndag"
   },
-  "welcome": {
-    "language": "Språk: {{language}}",
-    "chooseLanguage": "Välj språk",
-    "title": "Veterinärens råd blir en daglig vårdplan.",
-    "watchListBold": "En bevakningslista",
-    "watchListRest": " för ditt djurs diagnos, ifylld på 30 sekunder om dagen.",
-    "trafficLightBold": "Ett tydligt trafikljus",
-    "trafficLightRest": " som visar när det är dags att kontakta veterinären.",
-    "emergencyBold": "Akut hjälp",
-    "emergencyRest": " på varje skärm, utan inloggning.",
-    "signIn": "Logga in med nätbankskoder",
-    "emergencyNow": "Akut hjälp nu",
-    "languageButton": "Språk: {{name}}",
-    "helpBold": "Akut hjälp",
-    "helpRest": " på varje skärm, utan inloggning."
-  },
   "auth": {
-    "step": "Steg {{step}} av {{total}}",
-    "confirmTitle": "Bekräfta att det är du",
-    "confirmBody": "Välj din bank. Du gör detta bara en gång på den här enheten. Sedan öppnas TassuVahti med ansikte, fingeravtryck eller PIN-kod.",
-    "mobileCertificate": "Mobilcertifikat",
-    "whenAskedAgain": "Vi frågar igen bara på en ny enhet, efter ett långt uppehåll eller före känsliga ändringar som försäkringsuppgifter.",
-    "identified": "Identifierad · {{name}}",
-    "lockTitle": "Hur ska TassuVahti öppnas?",
-    "lockBody": "Sessionen stannar på den här telefonen. Välj det lås du använder varje dag.",
-    "deviceLock": "Enhetens lås",
-    "turnOn": "Aktivera och fortsätt",
-    "signOutAnyTime": "Du kan logga ut enheten när som helst under Konto.",
-    "welcomeBack": "Välkommen tillbaka, {{name}}",
-    "unlockBody": "Dina djurs loggar och påminnelser väntar.",
-    "usePin": "Använd PIN-kod i stället",
-    "signOut": "Logga ut"
-  },
-  "lock": {
-    "face": "Ansiktsigenkänning",
-    "faceHint": "Snabbast på den här telefonen",
-    "fingerprint": "Fingeravtryck",
-    "fingerprintHint": "Rör vid sensorn för att öppna",
-    "pin": "6-siffrig PIN-kod",
-    "pinHint": "Fungerar på alla enheter",
-    "prompt": {
-      "face": "Titta på telefonen för att låsa upp",
-      "fingerprint": "Rör vid sensorn för att låsa upp",
-      "pin": "Tryck för att ange PIN-koden"
-    },
-    "unlockWith": {
-      "face": "Lås upp med ansiktsigenkänning",
-      "fingerprint": "Lås upp med fingeravtryck",
-      "pin": "Lås upp med PIN-kod"
-    }
+    "title": "Logga in",
+    "continueWithBankId": "Fortsätt med BankID"
   },
   "home": {
     "greeting": "Hej {{name}}",
@@ -206,7 +151,6 @@
       "smallAnimal": "För smådjur"
     },
     "readMore": "Läs mer i kunskapsbanken",
-    "openFirstAid": "Öppna guiden för första hjälpen",
     "sharedWith": "Delas med {{names}} i ditt familjekonto"
   },
   "log": {
@@ -249,7 +193,6 @@
     "nearestClinic": "Närmaste öppna jour",
     "otherClinics": "Andra jourer på kartan",
     "showPassport": "Visa {{name}}s hälsopass för veterinären",
-    "firstAid": "Guider för första hjälpen",
     "ifUnsure": "Om du är osäker, ring. Kliniken kan säga om du ska komma in."
   },
   "trends": {
@@ -565,8 +508,6 @@
       "noDoseData": "Det finns inga tillförlitliga dosuppgifter, så mängden ändrar inte risken."
     },
     "emergencyMap": "Jourer på kartan",
-    "quickAssessment": "Snabb symtomkontroll",
-    "firstAid": "Första hjälpen vid förgiftning",
     "readEntry": "Läs om {{substance}}",
     "again": "Kontrollera något annat"
   },
@@ -578,45 +519,10 @@
     "prevention": "Så förebygger du",
     "watchFor": "Vad du ska hålla koll på",
     "logMatch": "{{names}}s senaste logg nämner ett symtom från det här kortet. Håll koll.",
-    "whatIf": "Om det händer",
     "isItSafe": "Är det säkert?",
     "updated": "Uppdaterat {{date}} · underhålls av en veterinär",
     "none": "Inga tips för dina djur den här säsongen",
     "maintained": "Korten filtreras enligt dina djurs art. Innehållet underhålls av en veterinär."
-  },
-  "emergency": {
-    "title": "Akut",
-    "body": "Ingen inloggning behövs. Om ditt djur är i fara, ring jouren först.",
-    "nearest": "Närmaste öppna jour",
-    "whatsHappening": "Vad händer?",
-    "openGuide": "Öppna guiden för första hjälpen",
-    "goNow": "Åk till veterinären nu",
-    "allGuides": "Alla guider för första hjälpen"
-  },
-  "firstAid": {
-    "title": "Första hjälpen",
-    "intro": "Steg-för-steg-guider för vägen till veterinären. Välj djurets storlek: tekniken beror på den.",
-    "sizeLabel": "Djurets storlek",
-    "size": {
-      "cat": "Katt",
-      "smallDog": "Liten hund",
-      "largeDog": "Stor hund"
-    },
-    "stepOf": "Steg {{step}} av {{total}}",
-    "readAloud": "Läs upp",
-    "readingAloud": "Läser upp",
-    "previous": "Föregående",
-    "next": "Nästa steg",
-    "startOver": "Börja om",
-    "rhythmHint": "Tryck i takt: {{bpm}} gånger i minuten. Efter 30 tryck, ge 2 inblåsningar.",
-    "breaths": "Ge 2 inblåsningar nu och fortsätt sedan.",
-    "startRhythm": "Starta takten",
-    "stopRhythm": "Stoppa",
-    "callClinic": "Ring {{name}}",
-    "checkSubstance": "Kontrollera vad det åt",
-    "sample": "Exempelguide, inte granskad av veterinär än",
-    "updated": "Uppdaterad {{date}}",
-    "notFound": "Guiden hittades inte"
   },
   "insurance": {
     "policies": "Försäkringar",
@@ -651,7 +557,6 @@
     "member": "Familjemedlem",
     "familyHint": "Alla i familjekontot ser samma djursidor och påminnelser.",
     "language": "Språk",
-    "deviceLock": "Enhetens lås",
     "notifications": "Aviseringar",
     "notify": {
       "medication": "Medicinpåminnelser",
@@ -669,7 +574,6 @@
     "vetConsentHint": "Kliniken kan kontrollera vårdplaner och skicka besöksanteckningar",
     "privacyNotice": "Dataskyddsbeskrivning",
     "privacyNoticeHint": "Hur dina och dina djurs uppgifter används (GDPR)",
-    "lockNow": "Lås appen",
     "signOut": "Logga ut den här enheten",
     "signOutHint": "Utloggningen tar bort sessionen från telefonen. Du behöver nätbankskoder för att logga in igen.",
     "version": "TassuVahti {{version}}"
@@ -685,59 +589,6 @@
     "en": "English",
     "fi": "Suomi",
     "sv": "Svenska"
-  },
-  "bankAuth": {
-    "title": "Bekräfta att det är du",
-    "intro": "Välj din bank. Du gör det bara en gång på den här enheten. Sedan öppnas TassuVahti med ansikte, fingeravtryck eller PIN-kod.",
-    "note": "Vi frågar igen bara på en ny enhet, efter ett långt uppehåll eller före känsliga ändringar som dina försäkringsuppgifter.",
-    "loadError": "Det gick inte att läsa in listan över banker.",
-    "signInError": "Inloggningen misslyckades. Kontrollera anslutningen och försök igen."
-  },
-  "setLock": {
-    "identified": "Identifierad · {{name}}",
-    "title": "Hur ska TassuVahti öppnas?",
-    "intro": "Din session stannar på den här telefonen. Välj det lås du använder varje dag.",
-    "methods": {
-      "face": {
-        "label": "Ansiktsigenkänning",
-        "detail": "Snabbast på den här telefonen"
-      },
-      "fingerprint": {
-        "label": "Fingeravtryck",
-        "detail": "Rör vid sensorn för att öppna"
-      },
-      "pin": {
-        "label": "6-siffrig PIN-kod",
-        "detail": "Fungerar på alla enheter"
-      }
-    },
-    "continue": "Aktivera och fortsätt",
-    "footnote": "Du kan logga ut den här enheten när som helst under Konto.",
-    "confirmPrompt": "Bekräfta för att aktivera låset",
-    "biometricFailed": "Det fungerade inte. Försök igen eller välj en PIN-kod.",
-    "choosePin": "Välj en 6-siffrig PIN-kod",
-    "confirmPin": "Ange samma PIN-kod igen",
-    "pinMismatch": "PIN-koderna stämde inte överens. Välj en PIN-kod igen.",
-    "saveError": "Det gick inte att spara låset. Försök igen."
-  },
-  "unlock": {
-    "welcomeBack": "Välkommen tillbaka, {{name}}",
-    "welcomeBackNoName": "Välkommen tillbaka",
-    "prompt": "Lås upp TassuVahti",
-    "faceButton": "Lås upp med ansiktsigenkänning",
-    "fingerprintButton": "Lås upp med fingeravtryck",
-    "faceHint": "Titta på telefonen för att låsa upp",
-    "fingerprintHint": "Rör vid sensorn för att låsa upp",
-    "enterPin": "Ange din PIN-kod",
-    "wrongPin": "Fel PIN-kod. Försök igen.",
-    "wrongPinAttemptsLeft_one": "Fel PIN-kod. 1 försök kvar innan du måste logga in igen.",
-    "wrongPinAttemptsLeft_other": "Fel PIN-kod. {{count}} försök kvar.",
-    "connectionError": "Det gick inte att ansluta. Kontrollera anslutningen och försök igen.",
-    "signInAgain": "Logga in igen med nätbankskoder"
-  },
-  "pinPad": {
-    "delete": "Radera",
-    "entered": "{{count}} av {{total}} siffror angivna"
   },
   "splash": {
     "slogan": "Vi vakar över dem som vakar över dig.",

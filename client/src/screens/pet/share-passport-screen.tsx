@@ -67,7 +67,6 @@ const SharePassportScreen = () => {
     <ScreenHeader
       title={t('share.title', { name: pet?.name ?? '' })}
       backIcon="close"
-      showEmergency={false}
     />
   );
 

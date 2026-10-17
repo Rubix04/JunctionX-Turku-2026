@@ -173,13 +173,6 @@ const paths = {
       <Path d="M11 18h2" />
     </>
   ),
-  face: (
-    <Path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M9 9v1.5M15 9v1.5M12 9v4h-1M9.5 16a3.5 3.5 0 0 0 5 0" />
-  ),
-  fingerprint: (
-    <Path d="M7 11a5 5 0 0 1 10 0v2M12 11v6M9 21c1-2 1-4 1-6M15 20.5c.5-1.5.8-3.4.9-5.5M4.5 15a14 14 0 0 0 .5-4 7 7 0 0 1 12-5" />
-  ),
-  pin: <Path d="M5 10.5h14v10H5zM8 10.5V7.5a4 4 0 0 1 8 0v3M12 14.5v2" />,
   list: <Path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01" />,
   trafficLight: (
     <>
@@ -270,12 +263,6 @@ const paths = {
       <Rect x="13.5" y="3.5" width="7" height="7" rx="1" />
       <Rect x="3.5" y="13.5" width="7" height="7" rx="1" />
       <Path d="M14 14h2v2h-2zM18 18h2v2h-2zM14 18h2M18 14h2" />
-    </>
-  ),
-  backspace: (
-    <>
-      <Path d="M9 5h11a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H9l-6-7z" />
-      <Path d="M12 9.5l5 5M17 9.5l-5 5" />
     </>
   ),
 } satisfies Record<string, ReactNode>;

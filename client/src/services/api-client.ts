@@ -21,13 +21,6 @@ export const setAccessToken = (token: string | null) => {
 // For requests that don't go through apiFetch, e.g. images loaded by expo-image.
 export const getAccessToken = () => accessToken;
 
-/**
- * Sensitive actions (e.g. changing insurance details) answer 403 BANK_REAUTH_REQUIRED when the
- * last bank sign-in is too old. Confirm with the bank (useAuth().confirmWithBank) and retry.
- */
-export const isBankReauthRequired = (error: unknown) =>
-  error instanceof ApiError && error.status === 403 && error.code === 'BANK_REAUTH_REQUIRED';
-
 // Gets a new access token when the old one has expired. Resolves false if the
 // session is gone. Set by AuthProvider.
 let refreshAccessToken: (() => Promise<boolean>) | null = null;

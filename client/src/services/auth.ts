@@ -3,7 +3,7 @@ import * as Device from 'expo-device';
 import { useMockData } from '@/constants/config';
 import { apiFetch } from '@/services/api-client';
 import { mockDelay } from '@/services/mock/delay';
-import type { AccessTokenResponse, Bank, SignedInDevice, SignInResponse } from '@/types/auth';
+import type { Bank, SignedInDevice, SignInResponse } from '@/types/auth';
 
 // Backend: server/src/modules/auth. Its bank provider is simulated: every bank
 // signs in a test person straight away. Uses mock data when no API URL is set.
@@ -63,17 +63,6 @@ export const signOutSession = async (): Promise<void> => {
     return;
   }
   await apiFetch<void>('/auth/logout', { method: 'POST' });
-};
-
-/**
- * Confirms a sensitive action (e.g. changing insurance details) with online banking.
- * Must be the same person as the signed-in user.
- */
-export const reauthenticateWithBank = async (bankId: string): Promise<AccessTokenResponse> => {
-  if (useMockData) {
-    return mockDelay({ accessToken: 'mock-access-token', expiresIn: 900 }, 600);
-  }
-  return apiFetch<AccessTokenResponse>('/auth/bank/reauth', { method: 'POST', body: { bankId } });
 };
 
 const mockDevices: SignedInDevice[] = [

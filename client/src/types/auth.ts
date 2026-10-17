@@ -15,15 +15,9 @@ export type SignInResponse = {
   accessToken: string;
   /** Seconds until the access token expires */
   expiresIn: number;
-  /** Single use. Kept in secure storage behind the device lock. */
+  /** Single use. Kept in secure storage. */
   refreshToken: string;
   user: User;
-};
-
-/** POST /auth/bank/reauth: a new access token after confirming a sensitive action. */
-export type AccessTokenResponse = {
-  accessToken: string;
-  expiresIn: number;
 };
 
 /** A signed-in device, listed in Account (GET /auth/devices). */
@@ -38,5 +32,3 @@ export type SignedInDevice = {
   current: boolean;
 };
 
-/** How the app is unlocked on this device after the first bank sign-in. */
-export type LockMethod = 'face' | 'fingerprint' | 'pin';

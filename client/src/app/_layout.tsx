@@ -47,13 +47,10 @@ const RootNavigator = () => {
           <Stack.Screen name="add-visit" options={{ presentation: 'fullScreenModal' }} />
         </Stack.Protected>
 
-        {/* Sign-in and unlock. (auth)/_layout.tsx picks the screens for each status. */}
+        {/* BankID and email sign-in / sign-up. */}
         <Stack.Protected guard={!isSignedIn}>
           <Stack.Screen name="(auth)" />
         </Stack.Protected>
-
-        {/* Emergency mode must open without signing in. Keep it outside both guards. */}
-        <Stack.Screen name="emergency" />
       </Stack>
 
       {/* Rendered over the stack so the first screen is ready underneath when it fades out. */}

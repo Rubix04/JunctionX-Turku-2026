@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import EmergencyButton from '@/components/features/emergency-button';
 import AppText from '@/components/ui/app-text';
 import Icon from '@/components/ui/icon';
 import { colors, spacing, touchTarget } from '@/theme';
@@ -11,22 +10,19 @@ import { colors, spacing, touchTarget } from '@/theme';
 type ScreenHeaderProps = {
   title?: string;
   subtitle?: string;
-  // Hide on emergency screens, where the button would point to itself.
-  showEmergency?: boolean;
   /** 'close' for modals */
   backIcon?: 'back' | 'close';
   onBack?: () => void;
   /** White round back button, for screens with a coloured hero */
   onColor?: boolean;
-  /** Replaces the Emergency button, e.g. a timestamp */
+  /** Shown on the right, e.g. a timestamp */
   trailing?: ReactNode;
 };
 
-// Back button, title and the Emergency button, as at the top of most mockup screens.
+// Back button, title and an optional trailing element, as at the top of most screens.
 const ScreenHeader = ({
   title,
   subtitle,
-  showEmergency = true,
   backIcon = 'back',
   onBack,
   onColor = false,
@@ -59,7 +55,7 @@ const ScreenHeader = ({
           </AppText>
         ) : null}
       </View>
-      {trailing ?? (showEmergency && <EmergencyButton />)}
+      {trailing}
     </View>
   );
 };
