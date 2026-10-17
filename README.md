@@ -1,154 +1,141 @@
-# TassuVahti
+# TassuVahti: your vet's advice, turned into a daily care plan
 
-Group Gabagoolers
+> **TassuVahti turns every vet visit into a daily care plan, and tells you exactly when it's time to go back.**
 
-TassuVahti ("PawWatch") is a pet health app for an insurance company. It turns the information from a vet visit into a personal care plan, tells the owner what to watch for at home, and makes it clear when it is time to contact a vet.
+Group Gabagoolers · JunctionX Turku 2026
 
-Built with **React Native**, **Expo Router** and **TypeScript**.
+**TassuVahti** ("PawGuard") is a pet health app for insurance customers. It turns the information from a vet visit into a personal care plan, tells the owner what to watch for at home, and makes it clear when it's time to contact a vet.
 
 - **Design mockups:** https://claude.ai/artifact/YTMRtqRmMMjpkMBSAiRFrp
 - **Languages:** English, Finnish, Swedish
 
-## Main Features
+## The problem
 
-- **Symptom tracking:** a watch list based on the pet's diagnosis, a 30-second daily log and a green / yellow / red traffic light.
-- **Care plan:** the vet's notes in plain language, medication reminders and follow-up visits.
-- **Diet and weight:** diet recommendations, weight tracking and a portion calculator.
-- **Health passport:** vaccinations, medication, allergies, surgeries and visits, shareable with a vet or pet care.
-- **Emergency mode:** a red Emergency button on every screen, quick assessment and first aid guides. Works without signing in.
-- **Maps:** contracted vets and emergency clinics, and stores that sell vet-recommended products.
-- **Knowledge base:** dangerous foods, plants and substances, with species-specific risk levels.
-- **Seasonal alerts:** tips by season and location.
-- **Multiple pets:** one page per pet, separate dog and cat content, shared with the family account.
-- **Sign-in:** online banking the first time, then face recognition, fingerprint or PIN.
+A vet visit lasts 20 minutes. Recovery lasts weeks.
+
+- **Owners forget the instructions.** Diagnoses, doses and "watch out for…" lists are given verbally or on a printout that gets lost.
+- **Owners don't know when to worry.** Is one vomit normal? Is drinking more a problem for a cat with kidney disease? Owners either panic and rush in, or wait too long.
+- **Medicines get missed or given twice.** In a family, nobody knows whether the morning dose was already given.
+- **Insurers only see the bill.** Problems caught late are more expensive to treat, and the customer only hears from their insurer when something has already gone wrong.
+
+## The solution
+
+TassuVahti stays with the pet between vet visits.
+
+- **Care plan after every visit.** What was found, what to do at home and when the follow-up is, in plain language, with the vet's original notes kept alongside.
+- **A 30-second daily log.** Appetite, energy, drinking, toilet, pain and vomiting, plus questions specific to the diagnosis. For example, after a urinary tract infection: water intake, litter box trips, straining.
+- **A traffic light that knows the pet's history.** Green, yellow or red, with the reason given in plain words: *"The assessment is higher because Mirri has been diagnosed with kidney disease and has a poor appetite."* The same symptom is judged differently for a healthy young dog and an old cat with kidney disease. Emergency symptoms always override.
+- **Reminders the whole family shares.** Medication doses, follow-up visits and vaccinations, with a "Did you already give it?" mark so a dose is never given twice.
+- **Health passport.** Vaccinations, medication, allergies, surgeries and visits in one place, shared with a vet or pet sitter through a time-limited link.
+- **Diet and weight.** Diet suggestions based on the diagnosis, and portions from the food package's own feeding table.
+- **"Is it safe?"** A searchable list of dangerous foods, plants and substances, with risk levels per species: lilies are an emergency for cats but not for dogs.
+- **Seasonal alerts.** Ticks in spring, blue-green algae in summer, antifreeze in winter, matched to the pet's species, age and region.
+- **Vets near you.** Contracted clinics, 24-hour emergency clinics and direct payment, sorted by opening status and distance.
+- **Insurance in the same app.** Remaining yearly cover, claims and remote vet services.
+
+## Why insurers care
+
+- **Earlier care costs less.** A yellow light today is cheaper than an emergency visit next week.
+- **Treatment is actually followed.** Medication reminders and follow-up visits keep recovery on track.
+- **Customers hear from their insurer every day,** not only when a bill arrives.
+- **Contracted clinics with direct payment** are easy to find, steering care to partner clinics.
+
+## Safety first
+
+- **The app suggests; the vet decides.** The vet's own limits for a pet always take priority, and every assessment says that it does not replace a vet.
+- **The precautionary principle.** When too little is known about the pet, the app chooses the more serious level.
+- **Medical content is kept separate from code.** It is versioned, carries sources and dates, and is marked as sample material until a veterinarian reviews it.
+
+## Technology
+
+| Layer | Stack |
+|---|---|
+| Mobile app | React Native, Expo SDK 58, Expo Router, TypeScript |
+| Languages | Finnish, Swedish, English |
+| Back-end | Node.js, TypeScript, Fastify 5, Zod validation |
+| Database | SQLite with Drizzle ORM and versioned migrations |
+| Sign-in | Online banking (simulated identity provider), rotating single-use refresh tokens, sessions per device |
+| Notifications | Expo push notifications for reminders and seasonal alerts |
+| Images | Server-side cropping and resizing; location data removed from photos |
+| Quality | 208 automated back-end tests (Vitest) |
+
+**Privacy by design:**
+- The national ID number is never stored, only a one-way keyed hash of it.
+- Sharing the passport is an explicit, revocable consent.
+- Location is used only to sort clinics and is never saved.
 
 ## Project Structure
 
 ```
 tassuvahti/
-├── client/ <-- frontend
+├── client/                           # Mobile app (React Native + Expo)
 │   ├── src/
-│   │   ├── app/                      # Expo Router pages
-│   │   │   ├── (auth)/               # Unauthenticated flow
-│   │   │   │   ├── welcome.tsx       # Welcome + language switch
-│   │   │   │   ├── bank-auth.tsx     # Online banking sign-in (first time)
-│   │   │   │   ├── set-lock.tsx      # Choose face / fingerprint / PIN
-│   │   │   │   ├── unlock.tsx        # Returning user unlock
-│   │   │   │   └── _layout.tsx       # Stack layout for auth screens
-│   │   │   ├── (tabs)/               # Tab navigation group
-│   │   │   │   ├── (home)/           # Home tab
-│   │   │   │   │   ├── _layout.tsx
-│   │   │   │   │   └── index.tsx
-│   │   │   │   ├── (map)/            # Map tab: vets and emergency clinics
-│   │   │   │   │   ├── _layout.tsx
-│   │   │   │   │   └── index.tsx
-│   │   │   │   ├── (knowledge)/      # "Is it safe?" tab: knowledge base
-│   │   │   │   │   ├── _layout.tsx
-│   │   │   │   │   └── index.tsx
-│   │   │   │   ├── (alerts)/         # Seasonal alerts tab
-│   │   │   │   │   ├── _layout.tsx
-│   │   │   │   │   └── index.tsx
-│   │   │   │   ├── (account)/        # Account tab
-│   │   │   │   │   ├── _layout.tsx
-│   │   │   │   │   ├── index.tsx     # Settings
-│   │   │   │   │   └── insurance.tsx # Insurance and claims
-│   │   │   │   └── _layout.tsx       # Tab layout
-│   │   │   ├── pet/                  # Pet-specific pages
-│   │   │   │   └── [petId]/          # Route param: pet id
-│   │   │   │       ├── index.tsx     # Pet page
-│   │   │   │       ├── log.tsx       # Daily log
-│   │   │   │       ├── log-result.tsx # Traffic light result
-│   │   │   │       ├── trends.tsx
-│   │   │   │       ├── care-plan.tsx
-│   │   │   │       ├── reminders.tsx
-│   │   │   │       ├── diet.tsx
-│   │   │   │       ├── passport.tsx
-│   │   │   │       ├── share-passport.tsx
-│   │   │   │       └── photo.tsx     # Crop profile picture
-│   │   │   ├── emergency/            # Emergency mode, no sign-in required
-│   │   │   │   ├── index.tsx         # Stage 1: quick assessment
-│   │   │   │   ├── first-aid.tsx     # Stage 2: first aid topics
-│   │   │   │   └── [topic].tsx       # Route param: first aid guide, e.g. cpr
-│   │   │   ├── clinic/
-│   │   │   │   └── [id].tsx          # Clinic card
-│   │   │   ├── substance/
-│   │   │   │   └── [id].tsx          # Knowledge base entry
-│   │   │   ├── ate-this.tsx          # "My pet ate this", full-screen modal
-│   │   │   ├── find-in-store.tsx     # Map of stores for a product
-│   │   │   ├── add-pet.tsx           # Add a pet, full-screen modal
-│   │   │   ├── add-visit.tsx         # Add a vet visit, full-screen modal
-│   │   │   ├── _layout.tsx           # Root layout
-│   │   │   └── +not-found.tsx        # 404 page
-│   │   ├── components/               # Reusable UI components
-│   │   │   ├── ui/                   # Basic UI elements
-│   │   │   └── features/             # Feature-specific components
-│   │   ├── screens/                  # Screen UI (app/ files only re-export these)
-│   │   │   ├── auth/
-│   │   │   ├── home/
-│   │   │   ├── map/
-│   │   │   ├── knowledge/
-│   │   │   ├── alerts/
-│   │   │   ├── account/
-│   │   │   ├── pet/
-│   │   │   ├── emergency/
-│   │   │   ├── clinic/
-│   │   │   ├── substance/
-│   │   │   ├── ate-this/
-│   │   │   ├── find-in-store/
-│   │   │   ├── add-pet/
-│   │   │   └── add-visit/
-│   │   ├── services/                 # API calls and external services
-│   │   ├── utils/                    # Helper functions
-│   │   ├── hooks/                    # Custom React hooks
-│   │   ├── context/                  # React Context providers
-│   │   ├── types/                    # TypeScript type definitions
-│   │   ├── theme/                    # Design system (colors, fonts)
-│   │   ├── constants/                # App-wide constants
-│   │   └── i18n/                     # Localization
-│   │       ├── index.ts              # i18n setup
-│   │       └── locales/
-│   │           ├── en.json           # English
-│   │           ├── fi.json           # Finnish
-│   │           └── sv.json           # Swedish
-│   ├── assets/                       # Images and app icons
-│   │   └── images/
-│   │       ├── icon.png              # App icon
-│   │       ├── splash-icon.png       # Splash screen logo
-│   │       ├── android-icon-*.png    # Android adaptive icon
-│   │       ├── favicon.png           # Web favicon
-│   │       ├── brand/                # Logo versions
-│   │       ├── tabIcons/             # Bottom tab icons
-│   │       ├── illustrations/        # Onboarding illustrations
-│   │       └── placeholders/         # Default pet pictures (cat, dog, small animal)
-│   ├── .env                          # Local values, NOT committed (in .gitignore)
-│   └── .env.example                  # Variable names only, committed
-├── server/ <-- backend
-│   └── (empty for now)
+│   │   ├── app/                      # Expo Router pages (only re-export screens)
+│   │   │   ├── (auth)/               # Landing page, BankID, email sign-in and sign-up
+│   │   │   ├── (tabs)/               # The four tabs
+│   │   │   │   ├── (home)/           # Home: policy and health card, vet services
+│   │   │   │   ├── pets/             # Pets list
+│   │   │   │   ├── explore/          # Vets map, "Is it safe?", quizzes
+│   │   │   │   └── profile/          # Account, insurance, team, FAQ, support, accessibility
+│   │   │   ├── pet/[petId]/          # Pet page: log, care plan, reminders, diet, passport, trends
+│   │   │   ├── clinic/[id].tsx       # Clinic card
+│   │   │   ├── substance/[id].tsx    # Knowledge base entry
+│   │   │   ├── quiz/[id].tsx         # Scenario quiz
+│   │   │   ├── ate-this.tsx          # "My pet ate this"
+│   │   │   ├── find-in-store.tsx     # Stores for a recommended product
+│   │   │   ├── add-pet.tsx
+│   │   │   └── add-visit.tsx
+│   │   ├── screens/                  # Screen UI, one folder per area
+│   │   ├── components/               # ui/ basic elements, features/ feature components
+│   │   ├── services/                 # API calls; mock/ data when no API URL is set
+│   │   ├── types/                    # TypeScript types
+│   │   ├── theme/                    # Colors, fonts, spacing
+│   │   ├── i18n/                     # Translations: en.json, fi.json, sv.json
+│   │   ├── hooks/ utils/ context/ constants/
+│   ├── assets/                       # Images, icons, video
+│   └── .env.example                  # EXPO_PUBLIC_API_URL; leave empty for mock data
+└── server/                           # Back-end (Node.js + Fastify)
+    ├── src/
+    │   ├── modules/                  # One folder per feature
+    │   │   ├── auth/                 # Online banking sign-in, sessions, devices
+    │   │   ├── pets/  pet-photos/    # Pets and profile pictures
+    │   │   ├── passport/             # Health passport and share links
+    │   │   ├── symptoms/             # Watch lists, daily log, severity assessment
+    │   │   ├── care/                 # Care plans, medication schedules, reminders
+    │   │   ├── diet/                 # Diets, portions, weight
+    │   │   ├── knowledge/            # Dangerous substances, "My pet ate this"
+    │   │   ├── alerts/               # Seasonal alerts and push notifications
+    │   │   ├── emergency/            # First aid guides, quick assessment, vet summary
+    │   │   └── clinics/              # Contracted vets and emergency clinics
+    │   └── db/                       # Database schema and connection
+    ├── content/                      # Medical content and sample registries (JSON, vet-reviewed)
+    ├── drizzle/                      # Database migrations
+    ├── test/                         # Vitest tests
+    └── .env.example
 ```
 
 Each screen folder in `screens/` holds one file per screen, named `<name>-screen.tsx`, e.g. `screens/pet/daily-log-screen.tsx`.
 
 ### Routing rules
 
-- **Emergency first:** everything under `emergency/` must open without signing in. Keep it outside any auth guard in the root `_layout.tsx`.
-- **Emergency button:** the red Emergency button is shown on every screen. Use the shared component from `components/features/`, don't build a new one per screen.
 - **Pet pages:** use the `[petId]` route param. Show dog or cat content based on the pet's species.
+- **Route files:** keep pages in `app/` thin; the UI lives in `screens/`.
 
 ## Design System
 
 The full design is in the [mockups](https://claude.ai/artifact/YTMRtqRmMMjpkMBSAiRFrp). Colors and fonts live in `src/theme/`. Don't hard-code them in screens.
 
-| Token        | Value     | Use                                            |
-| ------------ | --------- | ---------------------------------------------- |
-| `primary`    | `#0E5A63` | Vahti teal, buttons, logo                      |
-| `accent`     | `#F2A33A` | Tassu amber, paw toes                          |
-| `text`       | `#14232B` | Ink, main text                                 |
-| `muted`      | `#56656C` | Secondary text                                 |
-| `background` | `#F5F7F6` | Mist, screen background                        |
-| `border`     | `#DDE3E0` | Card borders                                   |
-| `green`      | `#1F7A4A` | Traffic light: as usual                        |
-| `yellow`     | `#F4C542` | Traffic light: keep an eye                     |
-| `red`        | `#B3261E` | Traffic light: contact a vet, Emergency button |
+| Token        | Value     | Use                                  |
+| ------------ | --------- | ------------------------------------ |
+| `primary`    | `#0B5AA0` | Deep blue: buttons, logo, headings   |
+| `accent`     | `#EE9B5A` | Warm orange: paw toes, highlights    |
+| `text`       | `#1B2733` | Ink, main text                       |
+| `muted`      | `#5E6670` | Captions, labels                     |
+| `background` | `#FAF8F5` | Warm off-white screen background     |
+| `border`     | `#E6E1D9` | Card borders                         |
+| `green`      | `#1F7A4A` | Traffic light: as usual              |
+| `yellow`     | `#F4C542` | Traffic light: keep an eye           |
+| `red`        | `#B3261E` | Traffic light: contact a vet         |
 
 - **Fonts:** Sora for headings, Figtree for body text and UI.
 - **Traffic light:** always pair the color with an icon and a word, so it works without color vision.
@@ -156,12 +143,28 @@ The full design is in the [mockups](https://claude.ai/artifact/YTMRtqRmMMjpkMBSA
 
 ## Getting Started
 
+The app runs on its own with mock data. Start the server too to use real sign-in and saved data.
+
+**Server** (first terminal):
+
+```bash
+cd server
+npm install
+cp .env.example .env   # then set JWT_SECRET and IDENTITY_HASH_SECRET (32+ characters each)
+npm run dev            # http://localhost:3000/health should answer {"status":"ok"}
+npm test               # runs the back-end tests
+```
+
+**App** (second terminal):
+
 ```bash
 cd client
 npm install
-cp .env.example .env   # then fill in your own values
+cp .env.example .env   # set EXPO_PUBLIC_API_URL, or leave it empty for mock data
 npx expo start
 ```
+
+`EXPO_PUBLIC_API_URL` depends on where the app runs: `http://localhost:3000` in a browser, `http://10.0.2.2:3000` in the Android emulator, or your computer's network address (e.g. `http://192.168.1.10:3000`) on a phone.
 
 ## Coding Conventions
 
