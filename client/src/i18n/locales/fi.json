@@ -1,1 +1,7 @@
-{}
+{
+  "common": {
+    "appName": "TassuVahti",
+    "tagline": "Valvoo lemmikkiäsi eläinlääkärikäyntien välillä.",
+    "emergency": "Hätätilanne"
+  }
+}

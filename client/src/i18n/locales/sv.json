@@ -1,1 +1,7 @@
-{}
+{
+  "common": {
+    "appName": "TassuVahti",
+    "tagline": "Vakar över ditt husdjur mellan veterinärbesöken.",
+    "emergency": "Nödläge"
+  }
+}
