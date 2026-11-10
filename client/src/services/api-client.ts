@@ -1,3 +1,6 @@
+import { fetch as expoFetch } from 'expo/fetch';
+import { Platform } from 'react-native';
+
 import { apiUrl } from '@/constants/config';
 
 // Error body sent by the backend: { error: { code, message } }
@@ -65,7 +68,8 @@ export const apiFetch = async <T>(
     headers.Authorization = `Bearer ${accessToken}`;
   }
 
-  const response = await fetch(`${apiUrl}${path}`, {
+  const fetchRequest = isFormData && Platform.OS !== 'web' ? expoFetch : fetch;
+  const response = await fetchRequest(`${apiUrl}${path}`, {
     method,
     headers,
     body: body === undefined ? undefined : isFormData ? (body as FormData) : JSON.stringify(body),
