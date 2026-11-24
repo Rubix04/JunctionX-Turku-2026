@@ -1,11 +1,24 @@
+import { DR_LAINE } from '@/services/mock/clinics';
+import { tr } from '@/services/mock/delay';
 import type { DietPlan, Trends, WeightEntry } from '@/types/diet';
+
+/** Week number label for the water chart, e.g. "vk 39" in Finnish */
+const week = (n: number) => tr({ en: `W${n}`, fi: `vk ${n}`, sv: `v. ${n}` });
 
 export const mockDietPlans: DietPlan[] = [
   {
     petId: 'mirri',
-    name: 'Urinary diet, mostly wet food',
-    reason: "Wet food adds water to every meal, which helps flush Mirri's bladder while she heals.",
-    recommendedBy: 'Dr. Laine',
+    name: tr({
+      en: 'Urinary diet, mostly wet food',
+      fi: 'Virtsatieruokavalio, pääosin märkäruokaa',
+      sv: 'Urinvägsdiet, mest våtfoder',
+    }),
+    reason: tr({
+      en: "Wet food adds water to every meal, which helps flush Mirri's bladder while she heals.",
+      fi: 'Märkäruoka lisää vettä jokaiseen ateriaan, mikä auttaa huuhtelemaan Mirrin rakkoa paranemisen aikana.',
+      sv: 'Våtfoder ger vatten i varje måltid, vilket hjälper till att skölja Mirris urinblåsa medan hon läker.',
+    }),
+    recommendedBy: DR_LAINE,
     dailyKcal: 200,
     foodKcalPer100g: 85,
     mealsPerDay: 3,
@@ -15,8 +28,12 @@ export const mockDietPlans: DietPlan[] = [
   },
   {
     petId: 'rekku',
-    name: 'Maintenance diet',
-    reason: 'A complete adult dog food. Keep treats under a tenth of the daily energy.',
+    name: tr({ en: 'Maintenance diet', fi: 'Ylläpitoruokavalio', sv: 'Underhållsdiet' }),
+    reason: tr({
+      en: 'A complete adult dog food. Keep treats under a tenth of the daily energy.',
+      fi: 'Täysravinto aikuiselle koiralle. Pidä herkut alle kymmenesosassa päivän energiasta.',
+      sv: 'Ett helfoder för vuxna hundar. Håll godbitarna under en tiondel av dagens energi.',
+    }),
     recommendedBy: null,
     dailyKcal: null,
     foodKcalPer100g: 370,
@@ -49,10 +66,10 @@ export const mockTrends: Trends[] = [
   {
     petId: 'mirri',
     waterByWeek: [
-      { label: 'W39', ml: 215 },
-      { label: 'W40', ml: 210 },
-      { label: 'W41', ml: 220 },
-      { label: 'W42', ml: 265 },
+      { label: week(39), ml: 215 },
+      { label: week(40), ml: 210 },
+      { label: week(41), ml: 220 },
+      { label: week(42), ml: 265 },
       { label: 'now', ml: 290 },
     ],
     waterByMonth: [
