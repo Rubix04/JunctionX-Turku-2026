@@ -1,0 +1,35 @@
+ELÄINKLINIKKA AURORA · Aurakatu 5, 20100 Turku · puh. 02 000 0002
+KÄYNTIYHTEENVETO (kuvitteellinen demoasiakirja)
+
+Potilas: Mirri, kissa, eurooppalainen, naaras (steriloitu), s. 2.4.2017
+Omistaja: Aino Virtanen
+Käyntipäivä: {visitDate}
+Eläinlääkäri: ELL Laura Laine
+
+Käynnin syy
+Omistajan mukaan Mirri on käynyt hiekkalaatikolla tavallista useammin kahden päivän ajan ja virtsannut vain vähän kerrallaan. Kerran virtsassa oli punertava sävy. Syö ja juo normaalisti, ei oksentelua.
+
+Tutkimukset
+Yleistila hyvä, lämpö 38,6 °C, paino 4,6 kg. Rakko pieni ja hieman aristava tunnusteltaessa. Virtsanäyte (kystosenteesi): bakteereja ja valkosoluja runsaasti, ei kiteitä, pH 6,5. Virtsan ominaispaino 1.045.
+
+Diagnoosi
+Bakteerin aiheuttama virtsatieinfektio (kystiitti). Ei viitteitä virtsatietukoksesta.
+
+Hoito
+Antibiootti 1 tabletti 2 kertaa päivässä ruoan kanssa 5 vuorokauden ajan, kuuri päättyy {courseEnd}. Kipulääke tarvittaessa 1–2 päivää.
+
+Kotihoito-ohjeet
+- Raikasta vettä useassa paikassa, kupit erillään ruokakupista.
+- Märkäruokaa 2 kertaa päivässä, jotta Mirri saa enemmän nestettä.
+- Seuraa hiekkalaatikkokäyntejä ja virtsan väriä päivittäin.
+- Anna koko antibioottikuuri loppuun, vaikka oireet helpottaisivat.
+
+Seuranta
+Oireiden pitäisi helpottaa 2–3 vuorokaudessa. Jos oireet palaavat kuurin jälkeen, ota yhteyttä klinikalle.
+Kontrollikäynti ja uusi virtsanäyte: {followUp}.
+
+Ota heti yhteyttä tai lähde päivystykseen, jos
+- Mirri ponnistelee eikä virtsaa tule, tai
+- Mirri lakkaa syömästä, oksentaa toistuvasti tai on hyvin väsynyt.
+
+ELL Laura Laine, Eläinklinikka Aurora
