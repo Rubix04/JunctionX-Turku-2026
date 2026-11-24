@@ -428,7 +428,14 @@
       "clinicHint": "Usually within a working day"
     },
     "aiNote": "The app only summarises what your vet wrote. It never makes a diagnosis. Until the clinic checks the draft, it is marked \"Draft\".",
-    "preview": "Preview the draft plan"
+    "preview": "Preview the draft plan",
+    "error": {
+      "notVetDocument": "This does not look like a document from a vet visit. Try another photo or type the notes in.",
+      "busy": "Reading the notes is busy right now. Try again in a moment, or type the notes in.",
+      "failed": "The notes could not be read. Try again, or type them in."
+    },
+    "checkThese": "Check these with the clinic:",
+    "sampleResult": "Demo: this is a sample result, not read from your document."
   },
   "explore": {
     "title": "Explore",

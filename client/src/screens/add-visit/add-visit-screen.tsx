@@ -1,6 +1,6 @@
 import * as DocumentPicker from 'expo-document-picker';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
@@ -12,13 +12,25 @@ import Icon, { type IconName } from '@/components/ui/icon';
 import Note from '@/components/ui/note';
 import Screen from '@/components/ui/screen';
 import { useAsync } from '@/hooks/use-async';
-import { addVisitDraft } from '@/services/care';
+import { ApiError } from '@/services/api-client';
+import { scanVisitNotes } from '@/services/care';
 import { getPets } from '@/services/pets';
 import { colors, fonts, radius, spacing } from '@/theme';
+import type { ScannedVisit, VisitNotesInput } from '@/types/care';
 import { pickMedia } from '@/utils/pick-media';
 
 type Source = 'file' | 'photo' | 'text';
 type Upload = { name: string; kind: 'pdf' | 'image' | 'text' };
+
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** Which message to show when reading the notes fails */
+const errorKey = (error: unknown) => {
+  const code = error instanceof ApiError ? error.code : null;
+  if (code === 'NOT_A_VET_DOCUMENT') return 'addVisit.error.notVetDocument';
+  if (code === 'SCAN_BUSY' || code === 'SCAN_UNAVAILABLE') return 'addVisit.error.busy';
+  return 'addVisit.error.failed';
+};
 
 const sources: { id: Source; icon: IconName }[] = [
   { id: 'file', icon: 'file' },
@@ -61,31 +73,47 @@ const AddVisitScreen = () => {
   const [text, setText] = useState('');
   const [upload, setUpload] = useState<Upload | null>(null);
   const [progress, setProgress] = useState(0);
+  const [result, setResult] = useState<ScannedVisit | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const pet = pets?.find((p) => p.id === petId) ?? pets?.[0];
 
-  // Fake processing: one step per second until it waits for the clinic.
-  useEffect(() => {
-    if (!upload || progress >= 2) return;
-    const timer = setTimeout(() => setProgress((p) => p + 1), 1000);
-    return () => clearTimeout(timer);
-  }, [upload, progress]);
-
-  const start = async (picked: Upload) => {
+  // Sends the notes to be read; the steps follow the real progress.
+  const start = async (picked: Upload, input: VisitNotesInput) => {
+    if (!pet) return;
     setUpload(picked);
     setProgress(0);
-    if (pet) await addVisitDraft(pet.id, t('addVisit.draftTitle'), '');
+    setResult(null);
+    setError(null);
+    try {
+      // Keep the first step on screen for a moment, so the progress can be followed.
+      const [scanned] = await Promise.all([scanVisitNotes(pet.id, input), wait(1200)]);
+      setResult(scanned);
+      setProgress(1);
+      await wait(700);
+      setProgress(2);
+    } catch (e) {
+      setUpload(null);
+      setError(t(errorKey(e)));
+    }
   };
 
   const chooseSource = async (id: Source) => {
     setSource(id);
+    setError(null);
     if (id === 'file') {
-      const result = await DocumentPicker.getDocumentAsync({ type: ['application/pdf', 'image/*'] });
-      const asset = result.canceled ? null : result.assets[0];
-      if (asset) start({ name: asset.name, kind: asset.mimeType?.startsWith('image') ? 'image' : 'pdf' });
+      const picked = await DocumentPicker.getDocumentAsync({ type: ['application/pdf', 'image/*'] });
+      const asset = picked.canceled ? null : picked.assets[0];
+      if (asset) {
+        const kind = asset.mimeType?.startsWith('image') ? 'image' : 'pdf';
+        start({ name: asset.name, kind }, { kind, uri: asset.uri, name: asset.name, mimeType: asset.mimeType });
+      }
     } else if (id === 'photo') {
       const media = await pickMedia({ source: 'camera', kind: 'image' });
-      if (media) start({ name: t('addVisit.photoName'), kind: 'image' });
+      if (media) {
+        const name = t('addVisit.photoName');
+        start({ name, kind: 'image' }, { kind: 'image', uri: media.uri, name: 'visit-notes.jpg' });
+      }
     }
   };
 
@@ -105,7 +133,7 @@ const AddVisitScreen = () => {
             label={t('addVisit.send')}
             size="large"
             disabled={text.trim().length < 10}
-            onPress={() => start({ name: t('addVisit.typedName'), kind: 'text' })}
+            onPress={() => start({ name: t('addVisit.typedName'), kind: 'text' }, { kind: 'text', text: text.trim() })}
           />
         ) : undefined
       }
@@ -179,6 +207,22 @@ const AddVisitScreen = () => {
             ))}
           </View>
         </>
+      )}
+
+      {error && (
+        <Note icon="alertTriangle" tone="red">
+          {error}
+        </Note>
+      )}
+      {result && result.uncertain.length > 0 && (
+        <Note icon="alertTriangle" tone="amber">
+          {[t('addVisit.checkThese'), ...result.uncertain.map((item) => `• ${item}`)].join('\n')}
+        </Note>
+      )}
+      {result?.source === 'sample' && (
+        <AppText variant="caption" color={colors.muted}>
+          {t('addVisit.sampleResult')}
+        </AppText>
       )}
 
       <Note>{t('addVisit.aiNote')}</Note>

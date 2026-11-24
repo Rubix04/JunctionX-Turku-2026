@@ -19,6 +19,10 @@ const envSchema = z.object({
   PUSH_MODE: z.enum(["off", "log", "expo"]).default("log"),
   /** Optional Expo access token, if push security is enabled in the Expo project */
   EXPO_ACCESS_TOKEN: z.string().optional(),
+  /** Claude API key for reading vet documents. Without it, scans return the sample result. */
+  ANTHROPIC_API_KEY: z.string().optional(),
+  /** auto: Claude when ANTHROPIC_API_KEY is set, otherwise the sample; claude or mock to force one */
+  VISIT_SCAN_MODE: z.enum(["auto", "claude", "mock"]).default("auto"),
 });
 
 export type Config = z.infer<typeof envSchema>;

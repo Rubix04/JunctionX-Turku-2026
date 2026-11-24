@@ -428,7 +428,14 @@
       "clinicHint": "Vanligtvis inom en arbetsdag"
     },
     "aiNote": "Appen sammanfattar bara vad veterinären skrev. Den ställer aldrig diagnoser. Tills kliniken har kontrollerat utkastet är det märkt \"Utkast\".",
-    "preview": "Förhandsgranska utkastet"
+    "preview": "Förhandsgranska utkastet",
+    "error": {
+      "notVetDocument": "Det här ser inte ut som ett dokument från ett veterinärbesök. Prova en annan bild eller skriv in anteckningarna.",
+      "busy": "Läsningen av anteckningarna är upptagen just nu. Försök igen om en stund eller skriv in anteckningarna.",
+      "failed": "Anteckningarna kunde inte läsas. Försök igen eller skriv in dem."
+    },
+    "checkThese": "Kontrollera dessa med kliniken:",
+    "sampleResult": "Demo: detta är ett exempelresultat, inte läst från ditt dokument."
   },
   "explore": {
     "title": "Utforska",

@@ -37,6 +37,23 @@ export type CarePlan = {
   originalText: string;
 };
 
+/** A vet document to read: a photo or PDF picked on the phone, or pasted text. */
+export type VisitNotesInput =
+  | { kind: 'image' | 'pdf'; uri: string; name: string; mimeType?: string | null }
+  | { kind: 'text'; text: string };
+
+/** What reading a vet document produced: a draft visit and care plan (server/src/modules/visit-scan). */
+export type ScannedVisit = {
+  /** "claude" when the AI read the document; "sample" in demo mode */
+  source: 'claude' | 'sample';
+  visit: Visit;
+  carePlan: CarePlan;
+  /** Procedures done at the visit, as read from the document */
+  procedures: string[];
+  /** Things the AI could not read for sure; the owner should check them with the clinic */
+  uncertain: string[];
+};
+
 export type ReminderKind = 'medication' | 'visit' | 'vaccination' | 'deworming';
 
 export type Reminder = {
