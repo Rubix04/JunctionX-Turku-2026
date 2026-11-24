@@ -1,3 +1,4 @@
+import { tr } from '@/services/mock/delay';
 import type { Clinic, DayHours, Product, Store } from '@/types/clinic';
 
 // Demo clinics and stores around Turku. Names, numbers and positions are made up;
@@ -9,10 +10,15 @@ const weekdays = (open: string, close: string, saturday: DayHours = null, sunday
   sunday,
 ];
 
+// Used in the other mock data too (visits, care plan, passport).
+export const AURORA = tr({ en: 'Pet Clinic Aurora', fi: 'Eläinklinikka Aurora', sv: 'Djurkliniken Aurora' });
+export const KAARINA = tr({ en: 'Kaarina Dog Clinic', fi: 'Kaarinan koiraklinikka', sv: 'S:t Karins hundklinik' });
+export const DR_LAINE = tr({ en: 'Dr. Laine', fi: 'ELL Laine', sv: 'Vet. med. Laine' });
+
 export const mockClinics: Clinic[] = [
   {
     id: 'meri',
-    name: 'Animal Hospital Meri',
+    name: tr({ en: 'Animal Hospital Meri', fi: 'Eläinsairaala Meri', sv: 'Djursjukhuset Meri' }),
     address: 'Satamakatu 12, Turku',
     phone: '+358400000001',
     distanceKm: 3.2,
@@ -23,13 +29,17 @@ export const mockClinics: Clinic[] = [
     directPayment: true,
     emergency24h: true,
     species: ['dog', 'cat', 'smallAnimal'],
-    expertise: ['Surgery', 'Intensive care', 'Imaging'],
+    expertise: [
+      tr({ en: 'Surgery', fi: 'Kirurgia', sv: 'Kirurgi' }),
+      tr({ en: 'Intensive care', fi: 'Tehohoito', sv: 'Intensivvård' }),
+      tr({ en: 'Imaging', fi: 'Kuvantaminen', sv: 'Bilddiagnostik' }),
+    ],
     hours: weekdays('00:00', '24:00'),
     bookingUrl: 'https://example.com/book/meri',
   },
   {
     id: 'aurora',
-    name: 'Pet Clinic Aurora',
+    name: AURORA,
     address: 'Aurakatu 5, Turku',
     phone: '+358400000002',
     distanceKm: 1.4,
@@ -40,13 +50,16 @@ export const mockClinics: Clinic[] = [
     directPayment: true,
     emergency24h: false,
     species: ['dog', 'cat'],
-    expertise: ['Internal medicine', 'Dentistry'],
+    expertise: [
+      tr({ en: 'Internal medicine', fi: 'Sisätaudit', sv: 'Internmedicin' }),
+      tr({ en: 'Dentistry', fi: 'Hammashoito', sv: 'Tandvård' }),
+    ],
     hours: weekdays('08:00', '20:00', { open: '10:00', close: '16:00' }),
     bookingUrl: 'https://example.com/book/aurora',
   },
   {
     id: 'kissaklinikka',
-    name: 'Cat Clinic Kehrä',
+    name: tr({ en: 'Cat Clinic Kehrä', fi: 'Kissaklinikka Kehrä', sv: 'Kattkliniken Kehrä' }),
     address: 'Hämeenkatu 30, Turku',
     phone: '+358400000003',
     distanceKm: 2.1,
@@ -57,13 +70,16 @@ export const mockClinics: Clinic[] = [
     directPayment: false,
     emergency24h: false,
     species: ['cat'],
-    expertise: ['Feline medicine', 'Kidneys and thyroid'],
+    expertise: [
+      tr({ en: 'Feline medicine', fi: 'Kissojen sairaudet', sv: 'Kattmedicin' }),
+      tr({ en: 'Kidneys and thyroid', fi: 'Munuaiset ja kilpirauhanen', sv: 'Njurar och sköldkörtel' }),
+    ],
     hours: weekdays('09:00', '17:00'),
     bookingUrl: 'https://example.com/book/kehra',
   },
   {
     id: 'pikkueläin',
-    name: 'Small Animal Vet Pikku',
+    name: tr({ en: 'Small Animal Vet Pikku', fi: 'Pieneläinklinikka Pikku', sv: 'Smådjursveterinären Pikku' }),
     address: 'Uudenmaankatu 18, Turku',
     phone: '+358400000004',
     distanceKm: 2.8,
@@ -74,13 +90,16 @@ export const mockClinics: Clinic[] = [
     directPayment: false,
     emergency24h: false,
     species: ['smallAnimal', 'cat', 'dog'],
-    expertise: ['Rabbits and rodents', 'Exotics'],
+    expertise: [
+      tr({ en: 'Rabbits and rodents', fi: 'Kanit ja jyrsijät', sv: 'Kaniner och gnagare' }),
+      tr({ en: 'Exotics', fi: 'Eksoottiset eläimet', sv: 'Exotiska djur' }),
+    ],
     hours: weekdays('08:00', '16:00'),
     bookingUrl: null,
   },
   {
     id: 'raisio',
-    name: 'Raisio Emergency Vets',
+    name: tr({ en: 'Raisio Emergency Vets', fi: 'Raision eläinlääkäripäivystys', sv: 'Reso veterinärjour' }),
     address: 'Kauppakatu 3, Raisio',
     phone: '+358400000005',
     distanceKm: 9.6,
@@ -91,13 +110,13 @@ export const mockClinics: Clinic[] = [
     directPayment: false,
     emergency24h: true,
     species: ['dog', 'cat'],
-    expertise: ['Emergency care'],
+    expertise: [tr({ en: 'Emergency care', fi: 'Päivystys', sv: 'Akutvård' })],
     hours: weekdays('00:00', '24:00'),
     bookingUrl: null,
   },
   {
     id: 'kaarina',
-    name: 'Kaarina Dog Clinic',
+    name: KAARINA,
     address: 'Piispanlähteentie 4, Kaarina',
     phone: '+358400000006',
     distanceKm: 7.4,
@@ -108,21 +127,28 @@ export const mockClinics: Clinic[] = [
     directPayment: true,
     emergency24h: false,
     species: ['dog'],
-    expertise: ['Orthopaedics', 'Joints and limping'],
+    expertise: [
+      tr({ en: 'Orthopaedics', fi: 'Ortopedia', sv: 'Ortopedi' }),
+      tr({ en: 'Joints and limping', fi: 'Nivelet ja ontuminen', sv: 'Leder och hälta' }),
+    ],
     hours: weekdays('08:00', '18:00', { open: '09:00', close: '14:00' }),
     bookingUrl: 'https://example.com/book/kaarina',
   },
 ];
 
 export const mockProducts: Product[] = [
-  { id: 'urinary-wet', name: 'Urinary care wet food', brand: 'Vet Diet · Urinary S/O' },
-  { id: 'joint-supplement', name: 'Joint supplement', brand: 'FlexiPaw' },
+  {
+    id: 'urinary-wet',
+    name: tr({ en: 'Urinary care wet food', fi: 'Virtsateitä tukeva märkäruoka', sv: 'Våtfoder för urinvägarna' }),
+    brand: 'Vet Diet · Urinary S/O',
+  },
+  { id: 'joint-supplement', name: tr({ en: 'Joint supplement', fi: 'Nivellisä', sv: 'Ledtillskott' }), brand: 'FlexiPaw' },
 ];
 
 export const mockStores: Store[] = [
   {
     id: 'musti-centre',
-    name: 'Pet store Centre',
+    name: tr({ en: 'Pet store Centre', fi: 'Lemmikkikauppa Keskusta', sv: 'Djuraffär Centrum' }),
     chain: 'PetCorner',
     kind: 'petStore',
     address: 'Yliopistonkatu 20, Turku',
@@ -137,7 +163,7 @@ export const mockStores: Store[] = [
   },
   {
     id: 'pharmacy-kauppatori',
-    name: 'Pharmacy Kauppatori',
+    name: tr({ en: 'Pharmacy Kauppatori', fi: 'Apteekki Kauppatori', sv: 'Apoteket Salutorget' }),
     chain: 'Apteekki',
     kind: 'pharmacy',
     address: 'Kauppatori 1, Turku',
@@ -152,7 +178,7 @@ export const mockStores: Store[] = [
   },
   {
     id: 'store-skanssi',
-    name: 'Pet store Skanssi',
+    name: tr({ en: 'Pet store Skanssi', fi: 'Lemmikkikauppa Skanssi', sv: 'Djuraffär Skanssi' }),
     chain: 'Tassutori',
     kind: 'petStore',
     address: 'Skanssinkatu 10, Turku',
@@ -167,7 +193,7 @@ export const mockStores: Store[] = [
   },
   {
     id: 'store-raisio',
-    name: 'Pet store Mylly',
+    name: tr({ en: 'Pet store Mylly', fi: 'Lemmikkikauppa Mylly', sv: 'Djuraffär Mylly' }),
     chain: 'Karvakaveri',
     kind: 'petStore',
     address: 'Myllynkatu 1, Raisio',
