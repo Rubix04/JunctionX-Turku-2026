@@ -173,7 +173,7 @@
       "records": "Potilastiedot",
       "passport": "Passi"
     },
-    "logToday": "Kirjaa tänään · 30 s",
+    "logToday": "Kirjaa tänään",
     "records": {
       "kind": {
         "health": "Terveys",

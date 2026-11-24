@@ -173,7 +173,7 @@
       "records": "Journal",
       "passport": "Pass"
     },
-    "logToday": "Logga i dag · 30 s",
+    "logToday": "Logga i dag",
     "records": {
       "kind": {
         "health": "Hälsa",
