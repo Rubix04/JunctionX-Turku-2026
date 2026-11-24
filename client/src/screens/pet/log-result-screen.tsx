@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import ClinicCard from '@/components/features/clinic-card';
 import Disclaimer from '@/components/features/disclaimer';
+import InsightCard from '@/components/features/insight-card';
 import ScreenHeader from '@/components/features/screen-header';
 import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
@@ -18,6 +19,7 @@ import { useAsync } from '@/hooks/use-async';
 import { addReminder } from '@/services/care';
 import { getEmergencyClinics } from '@/services/clinics';
 import { getHealthStatus, getLogQuestions } from '@/services/health';
+import { getInsights } from '@/services/insights';
 import { getPet } from '@/services/pets';
 import { colors, fonts, radius, spacing } from '@/theme';
 import type { TrafficLightLevel } from '@/types/health';
@@ -56,13 +58,17 @@ const LogResultScreen = () => {
   const { data, error, reload } = useAsync(() => loadResult(petId), [petId]);
   const [whyOpen, setWhyOpen] = useState(false);
   const [reminderSet, setReminderSet] = useState(false);
+  // The AI reads the vet's data and the logs together; it can raise the level, never lower it.
+  const { data: insight, loading: analysing } = useAsync(() => getInsights(petId), [petId]);
 
   if (!data) {
     return <Screen>{error ? <ErrorView onRetry={reload} /> : <LoadingView />}</Screen>;
   }
 
   const { pet, status, questions, clinic } = data;
-  const level: TrafficLightLevel = levelParam && levels.includes(levelParam) ? levelParam : status.level;
+  const ruleLevel: TrafficLightLevel = levelParam && levels.includes(levelParam) ? levelParam : status.level;
+  const level = insight && levels.indexOf(insight.level) < levels.indexOf(ruleLevel) ? insight.level : ruleLevel;
+  const raisedByAi = level !== ruleLevel;
   const hero = heroColors[level];
   const watchList = status.watchList;
   const log = status.latestLog;
@@ -116,7 +122,9 @@ const LogResultScreen = () => {
           {t(`result.${level}Title`, { name: pet.name })}
         </AppText>
         <AppText color={hero.body}>
-          {level === 'red' && watchList
+          {raisedByAi && insight
+            ? insight.summary
+            : level === 'red' && watchList
             ? watchList.redReason
             : flagged.length
               ? t('result.noticed', { items: flagged.map((q) => `${q.label.toLowerCase()}: ${q.options[log!.answers[q.id]].toLowerCase()}`).join(', ') })
@@ -130,6 +138,7 @@ const LogResultScreen = () => {
       </View>
 
       <ScreenSection>
+        <InsightCard insight={insight} loading={analysing} />
         {level === 'red' ? (
           <>
             <SectionLabel label={t('result.nearestClinic')} />

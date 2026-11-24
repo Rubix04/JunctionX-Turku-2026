@@ -696,5 +696,55 @@
     "notLogged": "Inte loggat",
     "whatToDo": "Vad du gör nu",
     "callVet": "När du ska ringa veterinär: {{when}}"
+  },
+  "insights": {
+    "title": "AI-analys",
+    "analysing": "AI:n läser uppgifterna…",
+    "raised": "AI:n höjde nivån",
+    "noticed": "AI:n märkte",
+    "why": "Varför?",
+    "fromVet": "Från veterinären",
+    "fromBehaviour": "Från dagsloggarna",
+    "watchForTitle": "Håll koll på",
+    "callVetTitle": "Ring kliniken om",
+    "sample": "Exempelanalys. Med en API-nyckel skriver AI:n den utifrån samma data.",
+    "disclaimer": "AI:ns bedömning, inte en diagnos.",
+    "comparison": {
+      "asExpected": "Återhämtar sig som väntat",
+      "slower": "Långsammare än veterinären väntade",
+      "worse": "Kan bli sämre"
+    },
+    "streak": "{{label}}: {{answer}} {{days}} dagar i rad.",
+    "today": "{{label}} i senaste loggen: {{answer}}.",
+    "severalSigns": "{{count}} förändringar i samma logg. Tillsammans väger de tyngre än var för sig.",
+    "allUsual": "Allt var som vanligt i senaste loggen ({{date}}).",
+    "noLogs": "Inga loggar för {{name}} de senaste två veckorna.",
+    "afterCourse": "Symtomen började {{days}} dagar efter att kuren med {{medicine}} tog slut. Sjukdomen kan vara på väg tillbaka.",
+    "vet": {
+      "watching": "Följer upp {{condition}} enligt {{vet}}.",
+      "plan": "Senaste vårdplan: {{diagnosis}} ({{clinic}}).",
+      "instruction": "Veterinärens råd: {{text}}",
+      "courseUntil": "Kur med {{medicine}} till {{date}}.",
+      "courseEnded": "Kuren med {{medicine}} tog slut {{date}}."
+    },
+    "summary": {
+      "asExpected": "{{name}} återhämtar sig från {{condition}} som veterinären väntade.",
+      "slower": "{{name}} återhämtar sig från {{condition}} långsammare än veterinären väntade.",
+      "worse": "{{condition}} hos {{name}} kan bli sämre.",
+      "green": "{{name}} har mått bra.",
+      "yellow": "En del av loggarna för {{name}} avviker från det vanliga.",
+      "red": "Loggarna för {{name}} tyder på att ni bör kontakta en veterinär."
+    },
+    "callVet": {
+      "worse": "Symtomen blir värre eller nya kommer",
+      "noFood": "Djuret äter eller dricker inte på ett dygn"
+    },
+    "trend": {
+      "aboveWatch": "Vattenintag {{dl}} dl om dagen, {{change}} % från veckan innan och över veterinärens gräns.",
+      "normal": "Vattenintag {{dl}} dl om dagen, {{change}} % från veckan innan."
+    },
+    "vetSummary": {
+      "logs": "{{count}} dagsloggar på {{days}} dagar."
+    }
   }
 }

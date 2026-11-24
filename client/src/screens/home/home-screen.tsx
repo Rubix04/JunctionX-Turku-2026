@@ -20,6 +20,7 @@ import { useReloadOnFocus } from '@/hooks/use-reload-on-focus';
 import { getSeasonalAlerts } from '@/services/alerts';
 import { getCarePlan, getReminders, setReminderDone } from '@/services/care';
 import { getHealthStatus } from '@/services/health';
+import { getInsights } from '@/services/insights';
 import { getPolicies } from '@/services/insurance';
 import { getPets } from '@/services/pets';
 import { getVetServices } from '@/services/vet-services';
@@ -50,6 +51,9 @@ const StatusCard = ({ pet, status }: { pet: Pet; status: HealthStatus }) => {
   const { t } = useTranslation();
   const watchList = status.watchList;
   const loggedToday = status.latestLog?.date === todayIso();
+  // The AI analysis comes a moment later; until then the rules' level shows.
+  const { data: insight } = useAsync(() => getInsights(pet.id), [pet.id, status]);
+  const level = insight?.level ?? status.level;
 
   return (
     <Card>
@@ -60,7 +64,7 @@ const StatusCard = ({ pet, status }: { pet: Pet; status: HealthStatus }) => {
         style={({ pressed }) => [styles.status, pressed && styles.pressed]}
       >
         <View style={styles.statusTop}>
-          <TrafficLightBadge level={status.level} />
+          <TrafficLightBadge level={level} />
           {watchList && (
             <AppText variant="caption" color={colors.muted}>
               {t('home.dayOf', {
@@ -78,6 +82,18 @@ const StatusCard = ({ pet, status }: { pet: Pet; status: HealthStatus }) => {
           </AppText>
           <Icon name="chevronRight" size={20} color={colors.muted} />
         </View>
+        {insight ? (
+          <AppText variant="bodySmall" color={colors.textSecondary} numberOfLines={3}>
+            {`✦ ${insight.raisedByAi ? `${t('insights.noticed')}: ` : ''}${insight.summary} `}
+            <AppText variant="bodySmall" color={colors.primary}>
+              {t('insights.why')}
+            </AppText>
+          </AppText>
+        ) : (
+          <AppText variant="caption" color={colors.muted}>
+            {`✦ ${t('insights.analysing')}`}
+          </AppText>
+        )}
       </Pressable>
       <View style={styles.actions}>
         <Button

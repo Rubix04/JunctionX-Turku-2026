@@ -696,5 +696,55 @@
     "notLogged": "Not logged",
     "whatToDo": "What to do now",
     "callVet": "When to call a vet: {{when}}"
+  },
+  "insights": {
+    "title": "AI analysis",
+    "analysing": "AI is reading the data…",
+    "raised": "AI raised the level",
+    "noticed": "AI noticed",
+    "why": "Why?",
+    "fromVet": "From the vet",
+    "fromBehaviour": "From the daily logs",
+    "watchForTitle": "Keep an eye on",
+    "callVetTitle": "Call the clinic if",
+    "sample": "Sample analysis. With an API key, the AI writes it from the same data.",
+    "disclaimer": "The AI's assessment, not a diagnosis.",
+    "comparison": {
+      "asExpected": "Recovering as expected",
+      "slower": "Slower than the vet expected",
+      "worse": "May be getting worse"
+    },
+    "streak": "{{label}}: {{answer}} {{days}} days in a row.",
+    "today": "{{label}} in the latest log: {{answer}}.",
+    "severalSigns": "{{count}} changes in the same log. Together they count for more than each alone.",
+    "allUsual": "Everything was as usual in the latest log ({{date}}).",
+    "noLogs": "{{name}} has no logs from the last two weeks.",
+    "afterCourse": "The symptoms started {{days}} days after the {{medicine}} course ended. The illness may be coming back.",
+    "vet": {
+      "watching": "Watching {{condition}}, as {{vet}} asked.",
+      "plan": "Latest care plan: {{diagnosis}} ({{clinic}}).",
+      "instruction": "The vet's advice: {{text}}",
+      "courseUntil": "{{medicine}} course until {{date}}.",
+      "courseEnded": "{{medicine}} course ended {{date}}."
+    },
+    "summary": {
+      "asExpected": "{{name}} is recovering from {{condition}} as the vet expected.",
+      "slower": "{{name}} is recovering from {{condition}} more slowly than the vet expected.",
+      "worse": "{{name}}'s {{condition}} may be getting worse.",
+      "green": "{{name}} has been doing well.",
+      "yellow": "Some of {{name}}'s logs differ from usual.",
+      "red": "{{name}}'s logs suggest contacting a vet."
+    },
+    "callVet": {
+      "worse": "The symptoms get worse or new ones appear",
+      "noFood": "Your pet does not eat or drink for a day"
+    },
+    "trend": {
+      "aboveWatch": "Water intake {{dl}} dl a day, {{change}} % from the week before and above the vet's watch level.",
+      "normal": "Water intake {{dl}} dl a day, {{change}} % from the week before."
+    },
+    "vetSummary": {
+      "logs": "{{count}} daily logs in {{days}} days."
+    }
   }
 }

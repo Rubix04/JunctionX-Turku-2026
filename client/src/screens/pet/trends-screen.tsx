@@ -12,6 +12,7 @@ import { ErrorView, LoadingView } from '@/components/ui/state-views';
 import { useAsync } from '@/hooks/use-async';
 import { getDietPlan, getTrends, getWeights } from '@/services/diet';
 import { getDailyLogs, getLogQuestions } from '@/services/health';
+import { getInsights } from '@/services/insights';
 import { getPet } from '@/services/pets';
 import { colors, fonts, radius, spacing } from '@/theme';
 import type { TrafficLightLevel } from '@/types/health';
@@ -62,6 +63,7 @@ const TrendsScreen = () => {
   const { t } = useTranslation();
   const { petId } = useLocalSearchParams<{ petId: string }>();
   const { data, error, reload } = useAsync(() => loadTrends(petId), [petId]);
+  const { data: insight } = useAsync(() => getInsights(petId), [petId]);
   const [range, setRange] = useState<Range>('week');
 
   const header = <ScreenHeader title={data ? t('trends.title', { name: data.pet.name }) : t('screens.trends')} />;
@@ -119,6 +121,11 @@ const TrendsScreen = () => {
 
       {water.length > 0 && (
         <Card title={t('trends.water')} note={t('trends.waterUnit')}>
+          {insight?.trendNote && (
+            <AppText variant="bodySmall" color={colors.textSecondary}>
+              {`✦ ${insight.trendNote}`}
+            </AppText>
+          )}
           <View style={styles.bars} accessibilityLabel={t('trends.waterA11y', { values: water.map((w) => `${waterLabel(w.label)} ${dl(w.ml)}`).join(', ') })}>
             {watch && (
               <>

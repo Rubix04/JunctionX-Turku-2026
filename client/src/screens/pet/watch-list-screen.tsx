@@ -2,6 +2,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
+import InsightCard from '@/components/features/insight-card';
 import ScreenHeader from '@/components/features/screen-header';
 import TrafficLightBadge from '@/components/features/traffic-light-badge';
 import AppText from '@/components/ui/app-text';
@@ -16,6 +17,7 @@ import { ErrorView, LoadingView } from '@/components/ui/state-views';
 import { useAsync } from '@/hooks/use-async';
 import { useReloadOnFocus } from '@/hooks/use-reload-on-focus';
 import { getHealthStatus, getLogQuestions } from '@/services/health';
+import { getInsights } from '@/services/insights';
 import { getPet } from '@/services/pets';
 import { colors, radius, spacing } from '@/theme';
 import type { LogQuestion } from '@/types/health';
@@ -37,7 +39,9 @@ const WatchListScreen = () => {
   const { t } = useTranslation();
   const { petId } = useLocalSearchParams<{ petId: string }>();
   const { data, error, reload } = useAsync(() => loadWatchList(petId), [petId]);
+  const { data: insight, loading: analysing, reload: reloadInsight } = useAsync(() => getInsights(petId), [petId]);
   useReloadOnFocus(reload);
+  useReloadOnFocus(reloadInsight);
 
   if (!data) {
     return <Screen header={<ScreenHeader />}>{error ? <ErrorView onRetry={reload} /> : <LoadingView />}</Screen>;
@@ -55,7 +59,7 @@ const WatchListScreen = () => {
       footer={<Button label={t('pet.logToday')} icon="edit" size="large" onPress={() => router.push(`/pet/${pet.id}/log`)} />}
     >
       <Card>
-        <TrafficLightBadge level={status.level} />
+        <TrafficLightBadge level={insight?.level ?? status.level} />
         <AppText variant="h2">
           {watchList
             ? t('home.recovering', { condition: watchList.condition.toLowerCase() })
@@ -81,6 +85,8 @@ const WatchListScreen = () => {
           </AppText>
         )}
       </Card>
+
+      <InsightCard insight={insight} loading={analysing} />
 
       <SectionLabel
         label={latest ? t('watchList.latestLog', { date: formatLongDate(latest.date) }) : t('watchList.watching')}

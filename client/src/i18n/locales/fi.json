@@ -696,5 +696,55 @@
     "notLogged": "Ei kirjattu",
     "whatToDo": "Mitä tehdä nyt",
     "callVet": "Milloin soittaa eläinlääkärille: {{when}}"
+  },
+  "insights": {
+    "title": "Tekoälyn analyysi",
+    "analysing": "Tekoäly analysoi tietoja…",
+    "raised": "Tekoäly nosti tason",
+    "noticed": "Tekoäly huomasi",
+    "why": "Miksi?",
+    "fromVet": "Eläinlääkäriltä",
+    "fromBehaviour": "Kirjauksista",
+    "watchForTitle": "Seuraa",
+    "callVetTitle": "Soita klinikalle, jos",
+    "sample": "Esimerkkianalyysi. API-avaimella tekoäly kirjoittaa sen samasta datasta.",
+    "disclaimer": "Tekoälyn arvio, ei diagnoosi.",
+    "comparison": {
+      "asExpected": "Toipuu odotetusti",
+      "slower": "Hitaampaa kuin eläinlääkäri odotti",
+      "worse": "Voi olla huononemassa"
+    },
+    "streak": "{{label}}: {{answer}} {{days}} päivää peräkkäin.",
+    "today": "{{label}} viimeisimmässä kirjauksessa: {{answer}}.",
+    "severalSigns": "Samassa kirjauksessa on {{count}} muutosta. Yhdessä ne painavat enemmän kuin yksinään.",
+    "allUsual": "Viimeisimmässä kirjauksessa ({{date}}) kaikki oli tavallista.",
+    "noLogs": "Lemmikin {{name}} vointia ei ole kirjattu kahteen viikkoon.",
+    "afterCourse": "Oireet alkoivat {{days}} päivää {{medicine}}kuurin päättymisen jälkeen. Sairaus voi olla palaamassa.",
+    "vet": {
+      "watching": "Seurannassa {{condition}}, kuten {{vet}} ohjeisti.",
+      "plan": "Viimeisin hoitosuunnitelma: {{diagnosis}} ({{clinic}}).",
+      "instruction": "Eläinlääkärin ohje: {{text}}",
+      "courseUntil": "{{medicine}}kuuri {{date}} asti.",
+      "courseEnded": "{{medicine}}kuuri päättyi {{date}}."
+    },
+    "summary": {
+      "asExpected": "Lemmikin {{name}} toipuminen ({{condition}}) etenee odotetusti.",
+      "slower": "Lemmikin {{name}} toipuminen ({{condition}}) on hitaampaa kuin eläinlääkäri odotti.",
+      "worse": "Lemmikin {{name}} vointi ({{condition}}) voi olla huononemassa.",
+      "green": "{{name}} on voinut hyvin.",
+      "yellow": "Osa lemmikin {{name}} kirjauksista poikkeaa tavallisesta.",
+      "red": "Lemmikin {{name}} kirjausten perusteella eläinlääkäriin kannattaa olla yhteydessä."
+    },
+    "callVet": {
+      "worse": "Oireet pahenevat tai tulee uusia oireita",
+      "noFood": "Lemmikki ei syö tai juo vuorokauteen"
+    },
+    "trend": {
+      "aboveWatch": "Juominen {{dl}} dl päivässä, {{change}} % edellisestä viikosta ja yli eläinlääkärin seurantarajan.",
+      "normal": "Juominen {{dl}} dl päivässä, {{change}} % edellisestä viikosta."
+    },
+    "vetSummary": {
+      "logs": "{{count}} päiväkirjausta {{days}} päivässä."
+    }
   }
 }
