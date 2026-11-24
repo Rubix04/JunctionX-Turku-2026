@@ -1,3 +1,4 @@
+import { File as ExpoFile } from 'expo-file-system';
 import { Platform } from 'react-native';
 
 import { useMockData } from '@/constants/config';
@@ -85,13 +86,12 @@ export const scanVisitNotes = async (petId: string, input: VisitNotesInput): Pro
   if (input.kind === 'text') {
     body = { text: input.text };
   } else {
-    const type = input.mimeType ?? (input.kind === 'pdf' ? 'application/pdf' : 'image/jpeg');
     body = new FormData();
     if (Platform.OS === 'web') {
       body.append('file', await (await fetch(input.uri)).blob(), input.name);
     } else {
-      // React Native's FormData sends a local file from { uri, name, type }.
-      body.append('file', { uri: input.uri, name: input.name, type } as unknown as Blob);
+      // apiFetch sends FormData with expo/fetch on native, which takes a File, not { uri, name, type }.
+      body.append('file', new ExpoFile(input.uri), input.name);
     }
   }
   const scanned = await apiFetch<Omit<ScannedVisit, 'carePlan'> & { carePlan: ApiCarePlan }>(
