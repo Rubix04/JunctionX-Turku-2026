@@ -32,16 +32,4 @@ export const mockVetServices: VetService[] = [
     icon: 'pill',
     availability: { kind: 'slot', at: at(3, 10, 40) },
   },
-  {
-    id: 'behaviour-advice',
-    title: { en: 'Behaviour advice', fi: 'Käytösneuvonta', sv: 'Beteenderådgivning' },
-    description: {
-      en: "Get help with your dog or cat's behaviour.",
-      fi: 'Apua koiran tai kissan käytökseen.',
-      sv: 'Få hjälp med din hunds eller katts beteende.',
-    },
-    price: 29,
-    icon: 'heart',
-    availability: { kind: 'slot', at: at(0, 15, 30) },
-  },
 ];

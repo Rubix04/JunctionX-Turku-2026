@@ -125,9 +125,6 @@
     "today": "Tänään",
     "allReminders": "Kaikki muistutukset",
     "nothingToday": "Ei tehtäviä tänään",
-    "submitClaim": "Tee korvaushakemus",
-    "active": "Voimassa",
-    "remainingCover": "Korvausta jäljellä tänä vuonna",
     "viewDetails": "Näytä tiedot",
     "settings": "Asetukset",
     "allGood": "{{name}} voi hyvin",
@@ -138,7 +135,14 @@
     "nextTime": "Seuraava vapaa aika",
     "todayAt": "Tänään {{time}}",
     "book": "Varaa",
-    "booked": "Varattu"
+    "booked": "Varattu",
+    "loggedToday": "Kirjattu tänään",
+    "addVisit": "Lisää käynti",
+    "careAdvice": "Hoito-ohjeet",
+    "wholePlan": "Hoitosuunnitelma",
+    "seasonal": "Nyt ajankohtaista",
+    "insurance": "Vakuutus",
+    "coverLeft": "{{amount}} korvausta jäljellä tänä vuonna"
   },
   "pets": {
     "title": "Lemmikkini"

@@ -175,7 +175,21 @@ const OverviewTab = ({
         </View>
       </Pressable>
 
-      <Button label={t('pet.logToday')} icon="edit" onPress={() => router.push(`/pet/${pet.id}/log`)} />
+      <View style={styles.actions}>
+        <Button
+          label={t('pet.logToday')}
+          icon="edit"
+          onPress={() => router.push(`/pet/${pet.id}/log`)}
+          style={styles.flex}
+        />
+        <Button
+          label={t('home.addVisit')}
+          icon="plus"
+          variant="outline"
+          onPress={() => router.push(`/add-visit?petId=${pet.id}`)}
+          style={styles.flex}
+        />
+      </View>
 
       <ListGroup>
         <ListRow
@@ -462,6 +476,7 @@ const PetScreen = () => {
 export default PetScreen;
 
 const styles = StyleSheet.create({
+  actions: { flexDirection: 'row', gap: spacing.sm },
   flex: { flex: 1 },
   center: { textAlign: 'center' },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },

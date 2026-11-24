@@ -125,9 +125,6 @@
     "today": "Today",
     "allReminders": "All reminders",
     "nothingToday": "Nothing due today",
-    "submitClaim": "Submit a claim",
-    "active": "Active",
-    "remainingCover": "Cover left this year",
     "viewDetails": "View details",
     "settings": "Settings",
     "allGood": "{{name}} is doing well",
@@ -138,7 +135,14 @@
     "nextTime": "Next available time",
     "todayAt": "Today {{time}}",
     "book": "Book",
-    "booked": "Booked"
+    "booked": "Booked",
+    "loggedToday": "Logged today",
+    "addVisit": "Add vet visit",
+    "careAdvice": "Care at home",
+    "wholePlan": "Care plan",
+    "seasonal": "Right now",
+    "insurance": "Insurance",
+    "coverLeft": "{{amount}} cover left this year"
   },
   "pets": {
     "title": "My pets"

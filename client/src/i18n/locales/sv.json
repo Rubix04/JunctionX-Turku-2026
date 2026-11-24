@@ -125,9 +125,6 @@
     "today": "I dag",
     "allReminders": "Alla påminnelser",
     "nothingToday": "Inget att göra i dag",
-    "submitClaim": "Gör en skadeanmälan",
-    "active": "Aktiv",
-    "remainingCover": "Ersättning kvar i år",
     "viewDetails": "Visa detaljer",
     "settings": "Inställningar",
     "allGood": "{{name}} mår bra",
@@ -138,7 +135,14 @@
     "nextTime": "Nästa lediga tid",
     "todayAt": "I dag {{time}}",
     "book": "Boka",
-    "booked": "Bokad"
+    "booked": "Bokad",
+    "loggedToday": "Loggat i dag",
+    "addVisit": "Lägg till besök",
+    "careAdvice": "Vård hemma",
+    "wholePlan": "Vårdplan",
+    "seasonal": "Aktuellt nu",
+    "insurance": "Försäkring",
+    "coverLeft": "{{amount}} ersättning kvar i år"
   },
   "pets": {
     "title": "Mina djur"
