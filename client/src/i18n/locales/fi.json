@@ -142,9 +142,7 @@
     "wholePlan": "Hoitosuunnitelma",
     "seasonal": "Nyt ajankohtaista",
     "insurance": "Vakuutus",
-    "coverLeft": "{{amount}} korvausta jäljellä tänä vuonna",
-    "safeTitle": "Söikö lemmikki jotain?",
-    "safeSubtitle": "Tarkista, onko se turvallista"
+    "coverLeft": "{{amount}} korvausta jäljellä tänä vuonna"
   },
   "pets": {
     "title": "Lemmikkini"
@@ -165,6 +163,8 @@
     "nextDose": "Seuraava {{time}}",
     "noMedication": "Muistutukset",
     "portionCalculator": "Annoslaskuri",
+    "safeTitle": "Söikö {{name}} jotain?",
+    "safeSubtitle": "Tarkista, onko se turvallista",
     "trendsHint": "Paino, juominen",
     "addVisit": "+ Lisää käynti",
     "noVisits": "Ei vielä käyntejä",

@@ -142,9 +142,7 @@
     "wholePlan": "Care plan",
     "seasonal": "Right now",
     "insurance": "Insurance",
-    "coverLeft": "{{amount}} cover left this year",
-    "safeTitle": "Did your pet eat something?",
-    "safeSubtitle": "Check if it is safe"
+    "coverLeft": "{{amount}} cover left this year"
   },
   "pets": {
     "title": "My pets"
@@ -165,6 +163,8 @@
     "nextDose": "Next {{time}}",
     "noMedication": "Reminders",
     "portionCalculator": "Portion calculator",
+    "safeTitle": "Did {{name}} eat something?",
+    "safeSubtitle": "Check if it is safe",
     "trendsHint": "Weight, water",
     "addVisit": "+ Add visit",
     "noVisits": "No visits yet",

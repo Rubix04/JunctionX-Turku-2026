@@ -142,9 +142,7 @@
     "wholePlan": "Vårdplan",
     "seasonal": "Aktuellt nu",
     "insurance": "Försäkring",
-    "coverLeft": "{{amount}} ersättning kvar i år",
-    "safeTitle": "Har ditt djur ätit något?",
-    "safeSubtitle": "Kolla om det är farligt"
+    "coverLeft": "{{amount}} ersättning kvar i år"
   },
   "pets": {
     "title": "Mina djur"
@@ -165,6 +163,8 @@
     "nextDose": "Nästa {{time}}",
     "noMedication": "Påminnelser",
     "portionCalculator": "Portionsräknare",
+    "safeTitle": "Har {{name}} ätit något?",
+    "safeSubtitle": "Kolla om det är farligt",
     "trendsHint": "Vikt, vatten",
     "addVisit": "+ Lägg till besök",
     "noVisits": "Inga besök än",

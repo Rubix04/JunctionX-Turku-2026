@@ -228,6 +228,12 @@ const OverviewTab = ({
           subtitle={t('pet.trendsHint')}
           href={`/pet/${pet.id}/trends`}
         />
+        <ListRow
+          leading={<IconTile name="search" />}
+          title={t('pet.safeTitle', { name: pet.name })}
+          subtitle={t('pet.safeSubtitle')}
+          href="/safe"
+        />
       </ListGroup>
     </>
   );

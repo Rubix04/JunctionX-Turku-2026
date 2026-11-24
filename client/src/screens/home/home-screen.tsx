@@ -24,7 +24,7 @@ import { getInsights } from '@/services/insights';
 import { getPolicies } from '@/services/insurance';
 import { getPets } from '@/services/pets';
 import { getVetServices } from '@/services/vet-services';
-import { colors, radius, spacing } from '@/theme';
+import { colors, fonts, radius, spacing } from '@/theme';
 import type { SeasonalAlert } from '@/types/alerts';
 import type { CarePlan } from '@/types/care';
 import type { HealthStatus } from '@/types/health';
@@ -143,27 +143,39 @@ const CareSection = ({ pet, plan }: { pet: Pet; plan: CarePlan }) => {
 // Seasonal risks right now (spec 9), e.g. road salt in winter or ticks in spring.
 const seasonIcons = { winter: 'snowflake', spring: 'sprout', summer: 'sun', autumn: 'leaf' } as const;
 
-const AlertCard = ({ alert }: { alert: SeasonalAlert }) => {
+// One line per alert; tapping it opens the risk and two tips.
+const AlertRow = ({ alert }: { alert: SeasonalAlert }) => {
+  const [open, setOpen] = useState(false);
   return (
-    <Card style={styles.alert}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ expanded: open }}
+      onPress={() => setOpen(!open)}
+      style={({ pressed }) => [styles.alert, pressed && styles.pressed]}
+    >
       <View style={styles.row}>
-        <IconTile name={seasonIcons[alert.season]} tone="amber" />
-        <AppText variant="label" style={styles.flex}>
+        <Icon name={seasonIcons[alert.season]} size={18} color={colors.yellowText} />
+        <AppText variant="bodySmall" style={[styles.flex, styles.alertTitle]} numberOfLines={open ? undefined : 1}>
           {alert.title}
         </AppText>
+        <Icon name="chevronDown" size={16} color={colors.muted} />
       </View>
-      <AppText variant="bodySmall" color={colors.textSecondary}>
-        {alert.risk}
-      </AppText>
-      {alert.prevention.slice(0, 2).map((tip) => (
-        <View key={tip} style={styles.tip}>
-          <Icon name="check" size={16} color={colors.primary} />
-          <AppText variant="bodySmall" style={styles.flex}>
-            {tip}
+      {open && (
+        <>
+          <AppText variant="bodySmall" color={colors.textSecondary}>
+            {alert.risk}
           </AppText>
-        </View>
-      ))}
-    </Card>
+          {alert.prevention.slice(0, 2).map((tip) => (
+            <View key={tip} style={styles.tip}>
+              <Icon name="check" size={16} color={colors.primary} />
+              <AppText variant="bodySmall" style={styles.flex}>
+                {tip}
+              </AppText>
+            </View>
+          ))}
+        </>
+      )}
+    </Pressable>
   );
 };
 
@@ -333,20 +345,13 @@ const HomeScreen = () => {
         {pet && alerts[index].length > 0 && (
           <>
             <SectionLabel label={t('home.seasonal')} />
-            {alerts[index].map((alert) => (
-              <AlertCard key={alert.id} alert={alert} />
-            ))}
+            <ListGroup>
+              {alerts[index].map((alert) => (
+                <AlertRow key={alert.id} alert={alert} />
+              ))}
+            </ListGroup>
           </>
         )}
-
-        <ListGroup>
-          <ListRow
-            leading={<IconTile name="search" />}
-            title={t('home.safeTitle')}
-            subtitle={t('home.safeSubtitle')}
-            href="/safe"
-          />
-        </ListGroup>
 
         <SectionLabel label={t('home.vetServices')} />
         {services.map((service) => (
@@ -391,7 +396,8 @@ const styles = StyleSheet.create({
   content: { gap: spacing.lg },
   actions: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
   careRow: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.md, padding: 14 },
-  alert: { gap: spacing.sm },
+  alert: { paddingVertical: spacing.md, paddingHorizontal: 14, gap: spacing.sm },
+  alertTitle: { fontFamily: fonts.bodyBold },
   tip: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm },
   divider: { height: 1, backgroundColor: colors.divider },
   status: { gap: spacing.sm },
