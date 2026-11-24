@@ -105,6 +105,10 @@ const contentSchema = z
         overrides: z.array(z.object({ symptom: z.string(), species: z.enum(species), days: z.number().int().min(2) })),
         level: z.enum(severityLevels),
       }),
+      /** Several symptoms on the same day count more than each alone */
+      severalSigns: z.object({ count: z.number().int().min(2), level: z.enum(severityLevels) }),
+      /** Symptoms soon after a medication course ended can mean the illness is coming back */
+      afterMedication: z.object({ days: z.number().int().positive(), level: z.enum(severityLevels) }),
       /** The pet's own normal, learned from earlier logs */
       baseline: z.object({
         windowDays: z.number().int().positive(),
@@ -130,6 +134,8 @@ const contentSchema = z
         "exposure",
         "persistent",
         "baselineDeviation",
+        "severalSigns",
+        "afterMedication",
         "insufficientData",
       ]),
       localized,

@@ -429,6 +429,9 @@ export const historyFor = (db: Db, pet: PetRow, date: string) => {
         .filter((r) => r.kind === "medication" && upTo("startDate")(r))
         .filter((r) => !data(r).endDate || (data(r).endDate as string) >= date)
         .map((r) => data(r).name ?? ""),
+      endedMedications: records
+        .filter((r) => r.kind === "medication" && data(r).endDate && (data(r).endDate as string) < date)
+        .map((r) => ({ name: data(r).name ?? "", endDate: data(r).endDate as string })),
       surgeryDates: records
         .filter((r) => r.kind === "surgery" && upTo("performedOn")(r))
         .map((r) => data(r).performedOn as string),

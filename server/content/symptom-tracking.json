@@ -607,6 +607,8 @@
       "overrides": [{ "symptom": "appetiteLoss", "species": "cat", "days": 2 }],
       "level": "contactVet"
     },
+    "severalSigns": { "count": 3, "level": "contactVet" },
+    "afterMedication": { "days": 7, "level": "contactVet" },
     "baseline": {
       "windowDays": 21,
       "recentDays": 3,
@@ -709,6 +711,16 @@
       "fi": "{question} poikkeaa lemmikin {pet} tavallisesta jo {days} päivänä.",
       "sv": "{question} avviker från det som är normalt för {pet} sedan {days} dagar.",
       "en": "{question} has differed from what is normal for {pet} on {days} days."
+    },
+    "severalSigns": {
+      "fi": "{pet} on näyttänyt tänään useita oireita yhtä aikaa: {symptom}.",
+      "sv": "{pet} har visat flera symtom samtidigt i dag: {symptom}.",
+      "en": "{pet} has shown several symptoms at the same time today: {symptom}."
+    },
+    "afterMedication": {
+      "fi": "{medication}-kuuri päättyi {days} päivää sitten, ja nyt näkyy {symptom}. Sairaus voi olla palaamassa.",
+      "sv": "Kuren med {medication} tog slut för {days} dagar sedan, och nu syns {symptom}. Sjukdomen kan vara på väg tillbaka.",
+      "en": "The {medication} course ended {days} days ago, and now there is {symptom}. The illness may be coming back."
     },
     "insufficientData": {
       "fi": "Lemmikistä on vähän tietoja, joten arvio on varmuuden vuoksi korkeampi. Lisää ikä ja eläinlääkärikäynnit terveyspassiin.",
