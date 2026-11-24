@@ -28,7 +28,9 @@ const envSchema = z.object({
 export type Config = z.infer<typeof envSchema>;
 
 export const loadConfig = (env: NodeJS.ProcessEnv = process.env): Config => {
-  const result = envSchema.safeParse(env);
+  // An empty line like "PUBLIC_BASE_URL=" (as in .env.example) means "not set".
+  const set = Object.fromEntries(Object.entries(env).filter(([, value]) => value !== undefined && value.trim() !== ""));
+  const result = envSchema.safeParse(set);
   if (!result.success) {
     const problems = result.error.issues.map((issue) => `  ${issue.path.join(".")}: ${issue.message}`);
     throw new Error(`Invalid environment configuration:\n${problems.join("\n")}`);
