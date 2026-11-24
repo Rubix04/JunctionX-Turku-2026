@@ -1,14 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
+import VetServiceCard from '@/components/features/vet-service-card';
 import AppText from '@/components/ui/app-text';
-import Screen from '@/components/ui/screen';
+import SectionLabel from '@/components/ui/section-label';
+import Screen, { ScreenSection } from '@/components/ui/screen';
+import { useAsync } from '@/hooks/use-async';
 import MapSection from '@/screens/explore/map-section';
+import { getVetServices } from '@/services/vet-services';
 import { colors, spacing } from '@/theme';
 
-// Vets on a map. The knowledge base moved to its own screen (/safe), opened from home.
+// Remote vet services first, then vets on a map. The knowledge base is on its own screen (/safe).
 const ExploreScreen = () => {
   const { t } = useTranslation();
+  const { data: services } = useAsync(getVetServices, []);
 
   const header = (
     <View style={styles.header}>
@@ -20,6 +25,14 @@ const ExploreScreen = () => {
 
   return (
     <Screen inTabs header={header} noPadding contentStyle={styles.content} background={colors.background}>
+      {services && services.length > 0 && (
+        <ScreenSection>
+          <SectionLabel label={t('home.vetServices')} />
+          {services.map((service) => (
+            <VetServiceCard key={service.id} service={service} />
+          ))}
+        </ScreenSection>
+      )}
       <MapSection />
     </Screen>
   );

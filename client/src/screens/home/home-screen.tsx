@@ -10,8 +10,7 @@ import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
 import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import IconTile from '@/components/ui/icon-tile';
-import { ListGroup, ListRow } from '@/components/ui/list-group';
+import { ListGroup } from '@/components/ui/list-group';
 import SectionLabel from '@/components/ui/section-label';
 import Screen, { ScreenSection } from '@/components/ui/screen';
 import { ErrorView, LoadingView } from '@/components/ui/state-views';
@@ -23,27 +22,23 @@ import { getHealthStatus } from '@/services/health';
 import { getInsights } from '@/services/insights';
 import { getPolicies } from '@/services/insurance';
 import { getPets } from '@/services/pets';
-import { getVetServices } from '@/services/vet-services';
-import { colors, fonts, radius, spacing } from '@/theme';
+import { colors, fonts, spacing } from '@/theme';
 import type { SeasonalAlert } from '@/types/alerts';
-import type { CarePlan } from '@/types/care';
 import type { HealthStatus } from '@/types/health';
 import type { Policy } from '@/types/insurance';
 import type { Pet } from '@/types/pet';
-import type { VetService } from '@/types/vet-service';
-import { daysBetween, formatDayMonth, formatEuros, formatTime, localize, todayIso } from '@/utils/format';
+import { daysBetween, formatEuros, formatTime, todayIso } from '@/utils/format';
 
 const loadHome = async () => {
   const pets = await getPets();
-  const [statuses, carePlans, alerts, reminders, policies, services] = await Promise.all([
+  const [statuses, carePlans, alerts, reminders, policies] = await Promise.all([
     Promise.all(pets.map((pet) => getHealthStatus(pet.id))),
     Promise.all(pets.map((pet) => getCarePlan(pet.id))),
     Promise.all(pets.map((pet) => getSeasonalAlerts(pet).catch(() => []))),
     getReminders(),
     getPolicies(),
-    getVetServices(),
   ]);
-  return { pets, statuses, carePlans, alerts, reminders, policies, services };
+  return { pets, statuses, carePlans, alerts, reminders, policies };
 };
 
 // Health status of the selected pet, and the two things done most: today's log and a vet visit.
@@ -83,7 +78,7 @@ const StatusCard = ({ pet, status }: { pet: Pet; status: HealthStatus }) => {
           <Icon name="chevronRight" size={20} color={colors.muted} />
         </View>
         {insight ? (
-          <AppText variant="bodySmall" color={colors.textSecondary} numberOfLines={3}>
+          <AppText variant="bodySmall" color={colors.textSecondary} numberOfLines={2}>
             {`✦ ${insight.raisedByAi ? `${t('insights.noticed')}: ` : ''}${insight.summary} `}
             <AppText variant="bodySmall" color={colors.primary}>
               {t('insights.why')}
@@ -114,29 +109,6 @@ const StatusCard = ({ pet, status }: { pet: Pet; status: HealthStatus }) => {
         />
       </View>
     </Card>
-  );
-};
-
-// What the vet told to do at home, from the latest care plan.
-const CareSection = ({ pet, plan }: { pet: Pet; plan: CarePlan }) => {
-  const { t } = useTranslation();
-  if (!plan.homeCare.length) return null;
-
-  return (
-    <>
-      <SectionLabel
-        label={t('home.careAdvice')}
-        action={{ label: t('home.wholePlan'), href: `/pet/${pet.id}/care-plan` }}
-      />
-      <ListGroup>
-        {plan.homeCare.slice(0, 3).map((item) => (
-          <View key={item} style={styles.careRow}>
-            <Icon name="check" size={18} color={colors.primary} />
-            <AppText style={styles.flex}>{item}</AppText>
-          </View>
-        ))}
-      </ListGroup>
-    </>
   );
 };
 
@@ -179,70 +151,22 @@ const AlertRow = ({ alert }: { alert: SeasonalAlert }) => {
   );
 };
 
-// Insurance in one row; the details are on the insurance page.
-const PolicyRow = ({ policy }: { policy: Policy }) => {
+// Insurance as one small line at the bottom; the details are on the insurance page.
+const PolicyLine = ({ policy }: { policy: Policy }) => {
   const { t } = useTranslation();
   const remaining = Math.max(0, policy.coverLimit - policy.usedThisYear);
   return (
-    <ListGroup>
-      <ListRow
-        leading={<IconTile name="shieldCheck" />}
-        title={policy.plan}
-        subtitle={t('home.coverLeft', { amount: formatEuros(remaining) })}
-        href="/profile/insurance"
-      />
-    </ListGroup>
-  );
-};
-
-const ServiceCard = ({ service }: { service: VetService }) => {
-  const { t } = useTranslation();
-  const [booked, setBooked] = useState(false);
-  const { availability } = service;
-
-  let when: string;
-  if (availability.kind === 'queue') {
-    when = t('home.approxMinutes', { minutes: availability.minutes });
-  } else {
-    const time = formatTime(availability.at);
-    when = availability.at.startsWith(todayIso())
-      ? t('home.todayAt', { time })
-      : `${formatDayMonth(availability.at)} ${time}`;
-  }
-
-  return (
-    <Card style={styles.service}>
-      <View style={styles.serviceTop}>
-        <View style={styles.serviceTexts}>
-          <AppText variant="title" color={colors.primary}>
-            {localize(service.title)}
-          </AppText>
-          <AppText variant="bodySmall" color={colors.textSecondary}>
-            {localize(service.description)}
-          </AppText>
-          <AppText variant="label">{service.price ? formatEuros(service.price) : t('home.included')}</AppText>
-        </View>
-        <View style={styles.serviceAvatar}>
-          <Icon name={service.icon} size={28} color={colors.primary} />
-        </View>
-      </View>
-      <View style={styles.divider} />
-      <View style={styles.serviceBottom}>
-        <View style={styles.flex}>
-          <AppText variant="caption" color={colors.muted}>
-            {t(availability.kind === 'queue' ? 'home.waitingTime' : 'home.nextTime')}
-          </AppText>
-          <AppText variant="body">{when}</AppText>
-        </View>
-        <Button
-          label={t(booked ? 'home.booked' : 'home.book')}
-          icon={booked ? 'check' : undefined}
-          variant={booked ? 'outline' : 'primary'}
-          onPress={() => setBooked(!booked)}
-          style={styles.book}
-        />
-      </View>
-    </Card>
+    <Pressable
+      accessibilityRole="link"
+      onPress={() => router.push('/profile/insurance')}
+      style={({ pressed }) => [styles.policy, pressed && styles.pressed]}
+    >
+      <Icon name="shieldCheck" size={16} color={colors.muted} />
+      <AppText variant="caption" color={colors.muted} style={styles.flex}>
+        {`${policy.plan} · ${t('home.coverLeft', { amount: formatEuros(remaining) })}`}
+      </AppText>
+      <Icon name="chevronRight" size={16} color={colors.muted} />
+    </Pressable>
   );
 };
 
@@ -271,7 +195,7 @@ const HomeScreen = () => {
     );
   }
 
-  const { pets, statuses, carePlans, alerts, reminders, policies, services } = data;
+  const { pets, statuses, carePlans, alerts, reminders, policies } = data;
   const index = Math.max(
     0,
     pets.findIndex((p) => p.id === selectedId),
@@ -279,6 +203,10 @@ const HomeScreen = () => {
   const pet = pets[index];
   const policy = pet ? policies.find((p) => p.petId === pet.id) : undefined;
   const todaysReminders = reminders.filter((r) => r.dueAt.startsWith(todayIso()));
+  // Today's list: reminders for all pets, then two of the selected pet's care instructions.
+  const plan = pet ? carePlans[index] : null;
+  const careItems = plan?.homeCare.slice(0, 2) ?? [];
+  const alert = pet ? alerts[index][0] : undefined;
 
   const toggleDone = async (reminderId: string, done: boolean) => {
     await setReminderDone(reminderId, done);
@@ -310,60 +238,59 @@ const HomeScreen = () => {
           </Card>
         )}
 
-        {pet && carePlans[index] && <CareSection pet={pet} plan={carePlans[index]} />}
-
-        {todaysReminders.length > 0 && (
+        {(todaysReminders.length > 0 || careItems.length > 0) && (
           <>
             <SectionLabel
               label={t('home.today')}
-              action={pet ? { label: t('home.allReminders'), href: `/pet/${pet.id}/reminders` } : undefined}
+              action={
+                pet && plan
+                  ? { label: t('home.wholePlan'), href: `/pet/${pet.id}/care-plan` }
+                  : pet
+                    ? { label: t('home.allReminders'), href: `/pet/${pet.id}/reminders` }
+                    : undefined
+              }
             />
-            {todaysReminders.map((reminder) => {
-              const reminderPet = pets.find((p) => p.id === reminder.petId);
-              return (
-                <View key={reminder.id} style={styles.reminder}>
-                  <IconTile name={reminder.kind === 'medication' ? 'pill' : 'calendar'} tone="amber" />
-                  <View style={styles.flex}>
-                    <AppText variant="label">{`${reminderPet?.name ?? ''} · ${reminder.title.toLowerCase()}`}</AppText>
-                    <AppText variant="caption" color={colors.muted}>
-                      {`${reminder.detail} · ${formatTime(reminder.dueAt)}`}
-                    </AppText>
-                  </View>
-                  {reminder.kind === 'medication' && (
-                    <GivenButton
-                      given={reminder.done}
-                      medicineName={reminder.title}
-                      onToggle={() => toggleDone(reminder.id, !reminder.done)}
-                    />
-                  )}
-                </View>
-              );
-            })}
-          </>
-        )}
-
-        {pet && alerts[index].length > 0 && (
-          <>
-            <SectionLabel label={t('home.seasonal')} />
             <ListGroup>
-              {alerts[index].map((alert) => (
-                <AlertRow key={alert.id} alert={alert} />
+              {todaysReminders.map((reminder) => {
+                const reminderPet = pets.find((p) => p.id === reminder.petId);
+                return (
+                  <View key={reminder.id} style={styles.todayRow}>
+                    <Icon name={reminder.kind === 'medication' ? 'pill' : 'calendar'} size={18} color={colors.yellowText} />
+                    <View style={styles.flex}>
+                      <AppText variant="label">{`${reminderPet?.name ?? ''} · ${reminder.title.toLowerCase()}`}</AppText>
+                      <AppText variant="caption" color={colors.muted}>
+                        {`${reminder.detail} · ${formatTime(reminder.dueAt)}`}
+                      </AppText>
+                    </View>
+                    {reminder.kind === 'medication' && (
+                      <GivenButton
+                        given={reminder.done}
+                        medicineName={reminder.title}
+                        onToggle={() => toggleDone(reminder.id, !reminder.done)}
+                      />
+                    )}
+                  </View>
+                );
+              })}
+              {careItems.map((item) => (
+                <View key={item} style={styles.todayRow}>
+                  <Icon name="check" size={18} color={colors.primary} />
+                  <AppText variant="bodySmall" style={styles.flex}>
+                    {item}
+                  </AppText>
+                </View>
               ))}
             </ListGroup>
           </>
         )}
 
-        <SectionLabel label={t('home.vetServices')} />
-        {services.map((service) => (
-          <ServiceCard key={service.id} service={service} />
-        ))}
-
-        {policy && (
-          <>
-            <SectionLabel label={t('home.insurance')} />
-            <PolicyRow policy={policy} />
-          </>
+        {alert && (
+          <ListGroup>
+            <AlertRow alert={alert} />
+          </ListGroup>
         )}
+
+        {policy && <PolicyLine policy={policy} />}
       </ScreenSection>
     </Screen>
   );
@@ -395,38 +322,14 @@ const styles = StyleSheet.create({
   },
   content: { gap: spacing.lg },
   actions: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
-  careRow: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.md, padding: 14 },
+  todayRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md, paddingHorizontal: 14 },
+  policy: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, paddingHorizontal: spacing.xs },
   alert: { paddingVertical: spacing.md, paddingHorizontal: 14, gap: spacing.sm },
   alertTitle: { fontFamily: fonts.bodyBold },
   tip: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm },
-  divider: { height: 1, backgroundColor: colors.divider },
   status: { gap: spacing.sm },
   statusTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   noPets: { alignItems: 'center' },
   centerText: { textAlign: 'center' },
   pressed: { opacity: 0.7 },
-  reminder: {
-    padding: spacing.md,
-    paddingHorizontal: 14,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-  },
-  service: { gap: spacing.md },
-  serviceTop: { flexDirection: 'row', gap: spacing.md },
-  serviceTexts: { flex: 1, gap: spacing.xs },
-  serviceAvatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: colors.primaryTint,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  serviceBottom: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  book: { minWidth: 110, borderRadius: radius.pill },
 });
