@@ -176,6 +176,7 @@
     "logToday": "Logga i dag · 30 s",
     "records": {
       "kind": {
+        "health": "Hälsa",
         "all": "Alla",
         "allergies": "Allergier",
         "conditions": "Sjukdomar",
@@ -260,8 +261,8 @@
     "byWeek": "Per vecka",
     "months": "3 månader",
     "water": "Vattenintag",
-    "waterUnit": "ml per dag, medel",
-    "waterA11y": "Vattenintag, ml per dag: {{values}}",
+    "waterUnit": "dl per dag, medel",
+    "waterA11y": "Vattenintag, dl per dag: {{values}}",
     "watchLevel": "Veterinärens bevakningsgräns",
     "now": "Nu",
     "weight": "Vikt",

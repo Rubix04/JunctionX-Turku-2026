@@ -176,6 +176,7 @@
     "logToday": "Kirjaa tänään · 30 s",
     "records": {
       "kind": {
+        "health": "Terveys",
         "all": "Kaikki",
         "allergies": "Allergiat",
         "conditions": "Sairaudet",
@@ -260,8 +261,8 @@
     "byWeek": "Viikoittain",
     "months": "3 kuukautta",
     "water": "Juominen",
-    "waterUnit": "ml päivässä, keskiarvo",
-    "waterA11y": "Juominen, ml päivässä: {{values}}",
+    "waterUnit": "dl päivässä, keskiarvo",
+    "waterA11y": "Juominen, dl päivässä: {{values}}",
     "watchLevel": "Eläinlääkärin seurantaraja",
     "now": "Nyt",
     "weight": "Paino",

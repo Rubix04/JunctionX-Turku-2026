@@ -176,6 +176,7 @@
     "logToday": "Log today · 30 s",
     "records": {
       "kind": {
+        "health": "Health",
         "all": "All",
         "allergies": "Allergies",
         "conditions": "Conditions",
@@ -260,8 +261,8 @@
     "byWeek": "By week",
     "months": "3 months",
     "water": "Water intake",
-    "waterUnit": "ml per day, average",
-    "waterA11y": "Water intake, ml per day: {{values}}",
+    "waterUnit": "dl per day, average",
+    "waterA11y": "Water intake, dl per day: {{values}}",
     "watchLevel": "Vet's watch level",
     "now": "Now",
     "weight": "Weight",

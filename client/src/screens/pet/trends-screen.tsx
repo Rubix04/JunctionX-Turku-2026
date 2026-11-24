@@ -76,6 +76,8 @@ const TrendsScreen = () => {
   const water = trends ? (range === 'week' ? trends.waterByWeek : trends.waterByMonth) : [];
   const waterMax = Math.max(300, ...water.map((w) => w.ml));
   const watch = trends?.waterWatchMl ?? null;
+  // Shown in decilitres: "2,2" reads easier than "215". The data stays in millilitres.
+  const dl = (ml: number) => formatNumber(ml / 100);
   const waterLabel = (label: string) =>
     label === 'now'
       ? t('trends.now')
@@ -117,7 +119,7 @@ const TrendsScreen = () => {
 
       {water.length > 0 && (
         <Card title={t('trends.water')} note={t('trends.waterUnit')}>
-          <View style={styles.bars} accessibilityLabel={t('trends.waterA11y', { values: water.map((w) => `${waterLabel(w.label)} ${w.ml}`).join(', ') })}>
+          <View style={styles.bars} accessibilityLabel={t('trends.waterA11y', { values: water.map((w) => `${waterLabel(w.label)} ${dl(w.ml)}`).join(', ') })}>
             {watch && (
               <>
                 <View style={[styles.watchLine, { bottom: (watch / waterMax) * CHART_HEIGHT }]} />
@@ -133,7 +135,7 @@ const TrendsScreen = () => {
             {water.map((w) => (
               <View key={w.label} style={styles.barColumn}>
                 <AppText variant="caption" color={colors.textSecondary} style={styles.barValue}>
-                  {w.ml}
+                  {dl(w.ml)}
                 </AppText>
                 <View
                   style={[

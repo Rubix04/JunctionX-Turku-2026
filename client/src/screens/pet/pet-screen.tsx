@@ -2,7 +2,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import type { TFunction } from 'i18next';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, Share, StyleSheet, View } from 'react-native';
+import { Pressable, Share, StyleSheet, View } from 'react-native';
 
 import PetAvatar, { speciesTint } from '@/components/features/pet-avatar';
 import TrafficLightBadge from '@/components/features/traffic-light-badge';
@@ -57,8 +57,16 @@ const loadPetPage = async (petId: string) => {
 const petTabs = ['overview', 'records', 'passport'] as const;
 type PetTab = (typeof petTabs)[number];
 
-const recordKinds = ['allergies', 'conditions', 'surgeries', 'medications', 'labs', 'visits'] as const;
-type RecordKind = (typeof recordKinds)[number];
+type RecordKind = 'allergies' | 'conditions' | 'surgeries' | 'medications' | 'labs' | 'visits';
+
+// Four filters fit without scrolling sideways; "health" groups the rest of the record kinds.
+const recordFilters = ['visits', 'medications', 'health'] as const;
+type RecordFilter = (typeof recordFilters)[number];
+const filterKinds: Record<RecordFilter, RecordKind[]> = {
+  visits: ['visits'],
+  medications: ['medications'],
+  health: ['conditions', 'allergies', 'surgeries', 'labs'],
+};
 
 const recordIcons: Record<RecordKind, IconName> = {
   allergies: 'alertTriangle',
@@ -227,13 +235,13 @@ const OverviewTab = ({
 
 const RecordsTab = ({ pet, records, carePlan }: { pet: Pet; records: MedicalRecord[]; carePlan: CarePlan | null }) => {
   const { t } = useTranslation();
-  const [filter, setFilter] = useState<RecordKind | null>(null);
-  const shown = filter ? records.filter((r) => r.kind === filter) : records;
+  const [filter, setFilter] = useState<RecordFilter | null>(null);
+  const shown = filter ? records.filter((r) => filterKinds[filter].includes(r.kind)) : records;
 
   return (
     <>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
-        {[null, ...recordKinds].map((kind) => {
+      <View style={styles.chips}>
+        {[null, ...recordFilters].map((kind) => {
           const selected = filter === kind;
           return (
             <Pressable
@@ -249,7 +257,7 @@ const RecordsTab = ({ pet, records, carePlan }: { pet: Pet; records: MedicalReco
             </Pressable>
           );
         })}
-      </ScrollView>
+      </View>
 
       {shown.length ? (
         <ListGroup>
@@ -516,7 +524,7 @@ const styles = StyleSheet.create({
   },
   statusTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   pressed: { opacity: 0.7 },
-  chips: { gap: spacing.sm },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   chip: { minHeight: 40, paddingHorizontal: 14, borderRadius: radius.pill, borderWidth: 1, justifyContent: 'center' },
   chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipOff: { backgroundColor: colors.surface, borderColor: colors.border },
