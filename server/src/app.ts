@@ -14,6 +14,8 @@ import { type BankIdentityProvider, mockBankProvider } from "./modules/auth/bank
 import { authRoutes } from "./modules/auth/routes.js";
 import { alertsRoutes, notificationRoutes, petAlertsRoutes } from "./modules/alerts/routes.js";
 import { careRoutes, reminderRoutes } from "./modules/care/routes.js";
+import { readerFromConfig, type VisitNotesReader } from "./modules/visit-scan/readers.js";
+import { visitScanRoutes } from "./modules/visit-scan/routes.js";
 import { emergencyRoutes, petEmergencyRoutes } from "./modules/emergency/routes.js";
 import { clinicRoutes } from "./modules/clinics/routes.js";
 import { dietRoutes } from "./modules/diet/routes.js";
@@ -37,6 +39,8 @@ type BuildAppOptions = {
   logger?: FastifyServerOptions["logger"];
   /** Online banking identification. Defaults to the mock until a real FTN broker is connected. */
   bankProvider?: BankIdentityProvider;
+  /** Reads vet documents. Defaults to Claude when ANTHROPIC_API_KEY is set, otherwise the sample. */
+  visitNotesReader?: VisitNotesReader;
 };
 
 export const buildApp = async ({
@@ -44,6 +48,7 @@ export const buildApp = async ({
   db,
   logger = false,
   bankProvider = mockBankProvider,
+  visitNotesReader = readerFromConfig(config),
 }: BuildAppOptions) => {
   const app = Fastify({ logger }).withTypeProvider<ZodTypeProvider>();
   app.setValidatorCompiler(validatorCompiler);
@@ -101,6 +106,7 @@ export const buildApp = async ({
   await app.register(symptomContentRoutes, { prefix: "/symptoms" });
   await app.register(symptomRoutes, { prefix: "/pets" });
   await app.register(careRoutes, { prefix: "/pets" });
+  await app.register(visitScanRoutes, { prefix: "/pets", reader: visitNotesReader });
   await app.register(reminderRoutes, { prefix: "/reminders" });
   await app.register(emergencyRoutes, { prefix: "/emergency" });
   await app.register(petEmergencyRoutes, { prefix: "/pets" });

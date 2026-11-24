@@ -8,9 +8,10 @@ import { loadConfig } from "../src/config.js";
 import { createDb } from "../src/db/client.js";
 import { households, users } from "../src/db/schema.js";
 import { createDeviceSession } from "../src/modules/auth/service.js";
+import type { VisitNotesReader } from "../src/modules/visit-scan/readers.js";
 
 /** A fresh app with an in-memory database and a temporary upload folder. Close it after the test. */
-export const createTestApp = async (env: Record<string, string> = {}) => {
+export const createTestApp = async (env: Record<string, string> = {}, options: { visitNotesReader?: VisitNotesReader } = {}) => {
   const uploadDir = mkdtempSync(join(tmpdir(), "tassuvahti-test-"));
   const config = loadConfig({
     NODE_ENV: "test",
@@ -21,7 +22,7 @@ export const createTestApp = async (env: Record<string, string> = {}) => {
     ...env,
   });
   const { db, close } = createDb(config.DATABASE_PATH);
-  const app = await buildApp({ config, db });
+  const app = await buildApp({ config, db, ...options });
   app.addHook("onClose", async () => {
     close();
     rmSync(uploadDir, { recursive: true, force: true });

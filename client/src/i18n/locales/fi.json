@@ -428,7 +428,14 @@
       "clinicHint": "Yleensä yhden arkipäivän kuluessa"
     },
     "aiNote": "Sovellus vain tiivistää, mitä eläinlääkäri kirjoitti. Se ei koskaan tee diagnoosia. Kunnes klinikka tarkistaa luonnoksen, se on merkitty \"Luonnos\".",
-    "preview": "Esikatsele luonnosta"
+    "preview": "Esikatsele luonnosta",
+    "error": {
+      "notVetDocument": "Tämä ei näytä eläinlääkärikäynnin dokumentilta. Kokeile toista kuvaa tai kirjoita tiedot itse.",
+      "busy": "Muistiinpanojen luku on juuri nyt ruuhkautunut. Yritä hetken päästä uudelleen tai kirjoita tiedot itse.",
+      "failed": "Muistiinpanoja ei voitu lukea. Yritä uudelleen tai kirjoita ne itse."
+    },
+    "checkThese": "Tarkista nämä klinikalta:",
+    "sampleResult": "Demo: tämä on esimerkkitulos, jota ei luettu dokumentistasi."
   },
   "explore": {
     "title": "Tutki",

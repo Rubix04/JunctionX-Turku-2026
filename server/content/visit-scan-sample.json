@@ -1,0 +1,65 @@
+{
+  "meta": {
+    "status": "sample",
+    "notice": "SAMPLE RESULT returned in demo mode (no ANTHROPIC_API_KEY). Made-up visit notes for a urinary tract infection; {pet} is replaced with the pet's name."
+  },
+  "results": {
+    "fi": {
+      "isVetDocument": true,
+      "visitDate": null,
+      "clinicName": "Pet Clinic Aurora",
+      "vetName": "ELL Laine",
+      "diagnosis": "Virtsatieinfektio",
+      "findings": "Virtsanäytteessä oli bakteereja, jotka ärsyttävät virtsarakkoa. Siksi {pet} käy laatikolla usein ja virtsaa vain vähän kerrallaan. Käynnillä otettiin virtsanäyte ja tehtiin yleistutkimus.",
+      "procedures": ["Yleistutkimus", "Virtsanäyte"],
+      "homeCare": [
+        "Anna antibioottia aamuin illoin 10 päivän ajan, vaikka vointi paranisi aiemmin.",
+        "Tue juomista: raikasta vettä useaan paikkaan ja märkäruokaa.",
+        "Seuraa juomista, laatikkokäyntejä ja virtsaamisen ponnistelua päivittäin."
+      ],
+      "medications": [{ "name": "Antibiootti", "dosage": "1 tabletti 2 kertaa päivässä ruoan kanssa", "durationDays": 10, "prescription": true }],
+      "followUp": { "title": "Kontrollikäynti ja virtsanäyte", "date": null, "time": null },
+      "products": [{ "name": "Virtsateitä tukeva märkäruoka", "brand": null }],
+      "uncertain": ["Kontrollikäynnin päivämäärä ei näkynyt dokumentissa. Tarkista se klinikalta."],
+      "transcript": "Dg: kystiitti (bakteeri). Virtsanäyte: bakteereja +++. Hoito: antibiootti 1 tbl x 2, 10 vrk. Märkäruoka, juomisen tukeminen. Kontrolli + virtsanäyte n. 10 vrk päästä."
+    },
+    "sv": {
+      "isVetDocument": true,
+      "visitDate": null,
+      "clinicName": "Pet Clinic Aurora",
+      "vetName": "Vet. med. Laine",
+      "diagnosis": "Urinvägsinfektion",
+      "findings": "Urinprovet visade bakterier som irriterar urinblåsan. Därför går {pet} ofta på lådan och kissar lite åt gången. Vid besöket togs ett urinprov och en allmän undersökning gjordes.",
+      "procedures": ["Allmän undersökning", "Urinprov"],
+      "homeCare": [
+        "Ge antibiotikan morgon och kväll i 10 dagar, även om djuret verkar må bättre.",
+        "Hjälp djuret att dricka: färskt vatten på flera ställen och våtfoder.",
+        "Följ drickandet, besöken på lådan och krystningar varje dag."
+      ],
+      "medications": [{ "name": "Antibiotika", "dosage": "1 tablett 2 gånger om dagen med mat", "durationDays": 10, "prescription": true }],
+      "followUp": { "title": "Återbesök och urinprov", "date": null, "time": null },
+      "products": [{ "name": "Våtfoder för urinvägarna", "brand": null }],
+      "uncertain": ["Datumet för återbesöket syntes inte i dokumentet. Kontrollera det med kliniken."],
+      "transcript": "Dg: cystit (bakteriell). Urinprov: bakterier +++. Behandling: antibiotika 1 tabl x 2, 10 dygn. Våtfoder, stöd drickandet. Återbesök + urinprov om ca 10 dygn."
+    },
+    "en": {
+      "isVetDocument": true,
+      "visitDate": null,
+      "clinicName": "Pet Clinic Aurora",
+      "vetName": "Dr. Laine",
+      "diagnosis": "Urinary tract infection",
+      "findings": "The urine sample showed bacteria that are irritating the bladder. That is why {pet} visits the litter box often and passes only small amounts. A urine sample was taken and a general examination was done at the visit.",
+      "procedures": ["General examination", "Urine sample"],
+      "homeCare": [
+        "Give the antibiotic morning and evening for 10 days, even if your pet seems better.",
+        "Help your pet drink: fresh water in several places, and wet food.",
+        "Log drinking, litter box trips and straining every day."
+      ],
+      "medications": [{ "name": "Antibiotic", "dosage": "1 tablet twice a day with food", "durationDays": 10, "prescription": true }],
+      "followUp": { "title": "Check-up and urine test", "date": null, "time": null },
+      "products": [{ "name": "Urinary care wet food", "brand": null }],
+      "uncertain": ["The date of the check-up was not visible in the document. Check it with the clinic."],
+      "transcript": "Dx: cystitis (bacterial). Urine sample: bacteria +++. Treatment: antibiotic 1 tab x 2, 10 days. Wet food, encourage drinking. Re-check + urine sample in about 10 days."
+    }
+  }
+}
