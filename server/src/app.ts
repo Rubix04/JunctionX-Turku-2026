@@ -14,6 +14,8 @@ import { type BankIdentityProvider, mockBankProvider } from "./modules/auth/bank
 import { authRoutes } from "./modules/auth/routes.js";
 import { alertsRoutes, notificationRoutes, petAlertsRoutes } from "./modules/alerts/routes.js";
 import { careRoutes, reminderRoutes } from "./modules/care/routes.js";
+import { type InsightWriter, writerFromConfig } from "./modules/insights/readers.js";
+import { insightsRoutes } from "./modules/insights/routes.js";
 import { readerFromConfig, type VisitNotesReader } from "./modules/visit-scan/readers.js";
 import { visitScanRoutes } from "./modules/visit-scan/routes.js";
 import { emergencyRoutes, petEmergencyRoutes } from "./modules/emergency/routes.js";
@@ -42,6 +44,8 @@ type BuildAppOptions = {
   bankProvider?: BankIdentityProvider;
   /** Reads vet documents. Defaults to Claude when ANTHROPIC_API_KEY is set, otherwise the sample. */
   visitNotesReader?: VisitNotesReader;
+  /** Writes the AI analysis of visits and daily logs; chosen the same way. */
+  insightWriter?: InsightWriter;
 };
 
 export const buildApp = async ({
@@ -50,6 +54,7 @@ export const buildApp = async ({
   logger = false,
   bankProvider = mockBankProvider,
   visitNotesReader = readerFromConfig(config),
+  insightWriter = writerFromConfig(config),
 }: BuildAppOptions) => {
   // The simulated bank signs everyone in as the same test person, so in production it would put
   // every user into one shared household. Production needs a real identity provider (or DEMO_MODE).
@@ -118,6 +123,7 @@ export const buildApp = async ({
   await app.register(symptomRoutes, { prefix: "/pets" });
   await app.register(careRoutes, { prefix: "/pets" });
   await app.register(visitScanRoutes, { prefix: "/pets", reader: visitNotesReader });
+  await app.register(insightsRoutes, { prefix: "/pets", writer: insightWriter });
   await app.register(reminderRoutes, { prefix: "/reminders" });
   await app.register(emergencyRoutes, { prefix: "/emergency" });
   await app.register(petEmergencyRoutes, { prefix: "/pets" });

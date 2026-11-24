@@ -8,10 +8,14 @@ import { loadConfig } from "../src/config.js";
 import { createDb } from "../src/db/client.js";
 import { households, users } from "../src/db/schema.js";
 import { createDeviceSession } from "../src/modules/auth/service.js";
+import type { InsightWriter } from "../src/modules/insights/readers.js";
 import type { VisitNotesReader } from "../src/modules/visit-scan/readers.js";
 
 /** A fresh app with an in-memory database and a temporary upload folder. Close it after the test. */
-export const createTestApp = async (env: Record<string, string> = {}, options: { visitNotesReader?: VisitNotesReader } = {}) => {
+export const createTestApp = async (
+  env: Record<string, string> = {},
+  options: { visitNotesReader?: VisitNotesReader; insightWriter?: InsightWriter } = {},
+) => {
   const uploadDir = mkdtempSync(join(tmpdir(), "tassuvahti-test-"));
   const config = loadConfig({
     NODE_ENV: "test",
