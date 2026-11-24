@@ -323,6 +323,15 @@ const HomeScreen = () => {
           </>
         )}
 
+        <ListGroup>
+          <ListRow
+            leading={<IconTile name="search" />}
+            title={t('home.safeTitle')}
+            subtitle={t('home.safeSubtitle')}
+            href="/safe"
+          />
+        </ListGroup>
+
         <SectionLabel label={t('home.vetServices')} />
         {services.map((service) => (
           <ServiceCard key={service.id} service={service} />

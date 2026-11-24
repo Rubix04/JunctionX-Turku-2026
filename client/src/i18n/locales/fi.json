@@ -14,7 +14,7 @@
   "tabs": {
     "home": "Koti",
     "pets": "Lemmikit",
-    "explore": "Tutki",
+    "explore": "Lääkäriasemat",
     "profile": "Profiili"
   },
   "screens": {
@@ -142,7 +142,9 @@
     "wholePlan": "Hoitosuunnitelma",
     "seasonal": "Nyt ajankohtaista",
     "insurance": "Vakuutus",
-    "coverLeft": "{{amount}} korvausta jäljellä tänä vuonna"
+    "coverLeft": "{{amount}} korvausta jäljellä tänä vuonna",
+    "safeTitle": "Söikö lemmikki jotain?",
+    "safeSubtitle": "Tarkista, onko se turvallista"
   },
   "pets": {
     "title": "Lemmikkini"
@@ -442,11 +444,10 @@
     "sampleResult": "Demo: tämä on esimerkkitulos, jota ei luettu dokumentistasi."
   },
   "explore": {
-    "title": "Tutki",
+    "title": "Lääkäriasemat",
     "sections": {
       "vets": "Eläinlääkärit",
-      "safe": "Onko turvallista?",
-      "quizzes": "Visat"
+      "safe": "Onko turvallista?"
     }
   },
   "map": {
@@ -685,26 +686,6 @@
   },
   "splash": {
     "slogan": "Valvomme niitä, jotka valvovat sinua."
-  },
-  "quiz": {
-    "intro": "Lue lyhyt opas ja testaa sitten osaamisesi arjen tilanteilla.",
-    "questions_one": "{{count}} kysymys",
-    "questions_other": "{{count}} kysymystä",
-    "best": "Paras {{score}}/{{total}}",
-    "beforeYouStart": "Ennen kuin aloitat",
-    "start_one": "Aloita · {{count}} kysymys",
-    "start_other": "Aloita · {{count}} kysymystä",
-    "questionOf": "Kysymys {{current}}/{{total}}",
-    "correct": "Oikein!",
-    "notQuite": "Ei aivan",
-    "next": "Seuraava kysymys",
-    "seeResult": "Katso tulos",
-    "score": "{{score}} / {{total}}",
-    "perfect": "Kaikki oikein! Tiedät, mitä tehdä.",
-    "goodTry": "Hyvä yritys. Lue selitykset uudelleen ja kokeile vielä kerran.",
-    "tryAgain": "Yritä uudelleen",
-    "backToExplore": "Takaisin",
-    "readMore": "Lue lisää: Onko turvallista?"
   },
   "watchList": {
     "byVet": "Seurantalista: {{vet}}",

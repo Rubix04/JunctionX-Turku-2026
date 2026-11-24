@@ -14,7 +14,7 @@
   "tabs": {
     "home": "Hem",
     "pets": "Husdjur",
-    "explore": "Utforska",
+    "explore": "Kliniker",
     "profile": "Profil"
   },
   "screens": {
@@ -142,7 +142,9 @@
     "wholePlan": "Vårdplan",
     "seasonal": "Aktuellt nu",
     "insurance": "Försäkring",
-    "coverLeft": "{{amount}} ersättning kvar i år"
+    "coverLeft": "{{amount}} ersättning kvar i år",
+    "safeTitle": "Har ditt djur ätit något?",
+    "safeSubtitle": "Kolla om det är farligt"
   },
   "pets": {
     "title": "Mina djur"
@@ -442,11 +444,10 @@
     "sampleResult": "Demo: detta är ett exempelresultat, inte läst från ditt dokument."
   },
   "explore": {
-    "title": "Utforska",
+    "title": "Kliniker",
     "sections": {
       "vets": "Veterinärer",
-      "safe": "Är det säkert?",
-      "quizzes": "Quiz"
+      "safe": "Är det säkert?"
     }
   },
   "map": {
@@ -685,26 +686,6 @@
   },
   "splash": {
     "slogan": "Vi vakar över dem som vakar över dig."
-  },
-  "quiz": {
-    "intro": "Läs en kort lektion och testa dig sedan med vardagliga situationer.",
-    "questions_one": "{{count}} fråga",
-    "questions_other": "{{count}} frågor",
-    "best": "Bästa {{score}}/{{total}}",
-    "beforeYouStart": "Innan du börjar",
-    "start_one": "Starta · {{count}} fråga",
-    "start_other": "Starta · {{count}} frågor",
-    "questionOf": "Fråga {{current}} av {{total}}",
-    "correct": "Rätt!",
-    "notQuite": "Inte riktigt",
-    "next": "Nästa fråga",
-    "seeResult": "Se resultat",
-    "score": "{{score}} / {{total}}",
-    "perfect": "Alla rätt! Du vet vad du ska göra.",
-    "goodTry": "Bra försök. Läs förklaringarna igen och försök en gång till.",
-    "tryAgain": "Försök igen",
-    "backToExplore": "Tillbaka",
-    "readMore": "Läs mer i Är det säkert?"
   },
   "watchList": {
     "byVet": "Bevakningslista från {{vet}}",

@@ -14,7 +14,7 @@
   "tabs": {
     "home": "Home",
     "pets": "Pets",
-    "explore": "Explore",
+    "explore": "Clinics",
     "profile": "Profile"
   },
   "screens": {
@@ -142,7 +142,9 @@
     "wholePlan": "Care plan",
     "seasonal": "Right now",
     "insurance": "Insurance",
-    "coverLeft": "{{amount}} cover left this year"
+    "coverLeft": "{{amount}} cover left this year",
+    "safeTitle": "Did your pet eat something?",
+    "safeSubtitle": "Check if it is safe"
   },
   "pets": {
     "title": "My pets"
@@ -442,11 +444,10 @@
     "sampleResult": "Demo: this is a sample result, not read from your document."
   },
   "explore": {
-    "title": "Explore",
+    "title": "Clinics",
     "sections": {
       "vets": "Vets",
-      "safe": "Is it safe?",
-      "quizzes": "Quizzes"
+      "safe": "Is it safe?"
     }
   },
   "map": {
@@ -685,26 +686,6 @@
   },
   "splash": {
     "slogan": "Watching over the ones who watch over you."
-  },
-  "quiz": {
-    "intro": "Read a short lesson, then test yourself with real-life situations.",
-    "questions_one": "{{count}} question",
-    "questions_other": "{{count}} questions",
-    "best": "Best {{score}}/{{total}}",
-    "beforeYouStart": "Before you start",
-    "start_one": "Start · {{count}} question",
-    "start_other": "Start · {{count}} questions",
-    "questionOf": "Question {{current}} of {{total}}",
-    "correct": "Correct!",
-    "notQuite": "Not quite",
-    "next": "Next question",
-    "seeResult": "See result",
-    "score": "{{score}} / {{total}}",
-    "perfect": "All right! You know what to do.",
-    "goodTry": "Good try. Read the explanations again and give it another go.",
-    "tryAgain": "Try again",
-    "backToExplore": "Back to Explore",
-    "readMore": "Read more in Is it safe?"
   },
   "watchList": {
     "byVet": "Watch list from {{vet}}",
