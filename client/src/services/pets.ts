@@ -2,6 +2,7 @@ import { useMockData } from '@/constants/config';
 import { apiFetch } from '@/services/api-client';
 import { mockPets } from '@/services/mock/data';
 import { mockDelay } from '@/services/mock/delay';
+import { deletePetPhoto, uploadPetPhoto } from '@/services/pet-photos';
 import type { CreatePetInput, Pet, UpdatePetInput } from '@/types/pet';
 
 // Backend: server/src/modules/pets. Uses mock data when no API URL is set.
@@ -62,18 +63,12 @@ export const deletePet = async (petId: string): Promise<void> => {
 
 /**
  * Sets or removes the profile picture (spec 13). Removing also deletes it from storage.
- * Backend: POST/DELETE /pets/:petId/photo.
+ * Backend: PUT/DELETE /pets/:petId/photo.
  */
 export const updatePetPhoto = async (petId: string, uri: string | null): Promise<Pet> => {
-  if (useMockData) {
-    return mockDelay(Object.assign(findMockPet(petId), { photoUrl: uri }));
-  }
   if (!uri) {
-    await apiFetch<void>(`/pets/${petId}/photo`, { method: 'DELETE' });
+    await deletePetPhoto(petId);
     return getPet(petId);
   }
-  const body = new FormData();
-  body.append('file', { uri, name: 'photo.jpg', type: 'image/jpeg' } as unknown as Blob);
-  await apiFetch<void>(`/pets/${petId}/photo`, { method: 'POST', body });
-  return getPet(petId);
+  return uploadPetPhoto(petId, uri);
 };

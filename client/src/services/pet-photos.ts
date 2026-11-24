@@ -1,4 +1,5 @@
 import type { ImageSource } from 'expo-image';
+import { File as ExpoFile } from 'expo-file-system';
 import { Platform } from 'react-native';
 
 import { apiUrl, useMockData } from '@/constants/config';
@@ -53,8 +54,8 @@ export const uploadPetPhoto = async (petId: string, localUri: string, crop?: Pho
     const blob = await (await fetch(localUri)).blob();
     form.append('photo', blob, 'photo.jpg');
   } else {
-    // React Native's FormData sends a local file from { uri, name, type }.
-    form.append('photo', { uri: localUri, name: 'photo.jpg', type: 'image/jpeg' } as unknown as Blob);
+    const file = new ExpoFile(localUri);
+    form.append('photo', file, file.name || 'photo.jpg');
   }
   return apiFetch<Pet>(`/pets/${petId}/photo`, { method: 'PUT', body: form });
 };
