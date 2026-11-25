@@ -262,6 +262,7 @@ export const mockReminders: Reminder[] = [
     detail: ONE_TABLET_WITH_FOOD,
     dueAt: '2026-10-17T08:00:00',
     done: true,
+    doneBy: 'Juha',
   },
   {
     id: 'mirri-antibiotic-pm',
