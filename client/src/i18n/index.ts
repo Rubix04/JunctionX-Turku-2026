@@ -1,5 +1,5 @@
 import { getLocales } from 'expo-localization';
-import i18n from 'i18next';
+import { createInstance } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 import { getStoredItem, setStoredItem, storageKeys } from '@/services/secure-storage';
@@ -19,6 +19,9 @@ const getDeviceLanguage = (): Language =>
   getLocales()
     .map((locale) => locale.languageCode)
     .find(isSupported) ?? 'en';
+
+// The app's own i18next instance; the rest of the app imports it from '@/i18n'.
+const i18n = createInstance();
 
 i18n.use(initReactI18next).init({
   resources: {

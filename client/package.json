@@ -5,7 +5,6 @@
   "dependencies": {
     "@expo-google-fonts/figtree": "^0.4.1",
     "@expo-google-fonts/sora": "^0.4.2",
-    "@expo/ui": "~58.0.20",
     "expo": "~58.0.14",
     "expo-constants": "~58.0.12",
     "expo-crypto": "~58.0.7",
@@ -20,10 +19,8 @@
     "expo-localization": "~58.0.4",
     "expo-router": "~58.0.23",
     "expo-secure-store": "~58.0.2",
-    "expo-speech": "~58.0.3",
     "expo-splash-screen": "~58.0.10",
     "expo-status-bar": "~58.0.3",
-    "expo-symbols": "~58.0.4",
     "expo-system-ui": "~58.0.6",
     "expo-video": "~58.0.11",
     "expo-web-browser": "~58.0.6",
@@ -52,7 +49,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint && npm run content:check",
+    "content:sync": "node scripts/sync-content.mjs",
+    "content:check": "node scripts/sync-content.mjs --check"
   },
   "private": true
 }

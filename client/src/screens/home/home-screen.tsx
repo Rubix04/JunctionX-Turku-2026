@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import GivenButton from '@/components/features/given-button';
+import PetStatusCard from '@/components/features/pet-status-card';
 import PetSwitcher from '@/components/features/pet-switcher';
-import TrafficLightBadge from '@/components/features/traffic-light-badge';
 import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
 import Card from '@/components/ui/card';
@@ -20,7 +20,6 @@ import { useReloadOnFocus } from '@/hooks/use-reload-on-focus';
 import { getSeasonalAlerts } from '@/services/alerts';
 import { getCarePlan, getReminders, setReminderDone } from '@/services/care';
 import { getHealthStatus } from '@/services/health';
-import { getInsights } from '@/services/insights';
 import { getPolicies } from '@/services/insurance';
 import { getPets } from '@/services/pets';
 import { colors, fonts, spacing } from '@/theme';
@@ -28,7 +27,7 @@ import type { SeasonalAlert } from '@/types/alerts';
 import type { HealthStatus } from '@/types/health';
 import type { Policy } from '@/types/insurance';
 import type { Pet } from '@/types/pet';
-import { daysBetween, formatEuros, formatTime, todayIso } from '@/utils/format';
+import { formatEuros, formatTime, todayIso } from '@/utils/format';
 
 const loadHome = async () => {
   const pets = await getPets();
@@ -45,52 +44,10 @@ const loadHome = async () => {
 // Health status of the selected pet, and the two things done most: today's log and a vet visit.
 const StatusCard = ({ pet, status }: { pet: Pet; status: HealthStatus }) => {
   const { t } = useTranslation();
-  const watchList = status.watchList;
   const loggedToday = status.latestLog?.date === todayIso();
-  // The AI analysis comes a moment later; until then the rules' level shows.
-  const { data: insight } = useAsync(() => getInsights(pet.id), [pet.id, status]);
-  const level = insight?.level ?? status.level;
 
   return (
-    <Card>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityHint={t('home.viewDetails')}
-        onPress={() => router.push(`/pet/${pet.id}/watch-list`)}
-        style={({ pressed }) => [styles.status, pressed && styles.pressed]}
-      >
-        <View style={styles.statusTop}>
-          <TrafficLightBadge level={level} />
-          {watchList && (
-            <AppText variant="caption" color={colors.muted}>
-              {t('home.dayOf', {
-                day: Math.min(daysBetween(watchList.startDate, todayIso()) + 1, watchList.totalDays),
-                total: watchList.totalDays,
-              })}
-            </AppText>
-          )}
-        </View>
-        <View style={styles.row}>
-          <AppText variant="label" style={styles.flex}>
-            {watchList
-              ? t('home.recovering', { condition: watchList.condition.toLowerCase() })
-              : t('home.allGood', { name: pet.name })}
-          </AppText>
-          <Icon name="chevronRight" size={20} color={colors.muted} />
-        </View>
-        {insight ? (
-          <AppText variant="bodySmall" color={colors.textSecondary} numberOfLines={2}>
-            {`✦ ${insight.raisedByAi ? `${t('insights.noticed')}: ` : ''}${insight.summary} `}
-            <AppText variant="bodySmall" color={colors.primary}>
-              {t('insights.why')}
-            </AppText>
-          </AppText>
-        ) : (
-          <AppText variant="caption" color={colors.muted}>
-            {`✦ ${t('insights.analysing')}`}
-          </AppText>
-        )}
-      </Pressable>
+    <PetStatusCard pet={pet} status={status}>
       <View style={styles.actions}>
         <Button
           label={t(loggedToday ? 'home.loggedToday' : 'pet.logToday')}
@@ -109,7 +66,7 @@ const StatusCard = ({ pet, status }: { pet: Pet; status: HealthStatus }) => {
           style={styles.flex}
         />
       </View>
-    </Card>
+    </PetStatusCard>
   );
 };
 
@@ -323,14 +280,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   content: { gap: spacing.lg },
-  actions: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
+  actions: { flexDirection: 'row', gap: spacing.sm },
   todayRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md, paddingHorizontal: 14 },
   policy: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, paddingHorizontal: spacing.xs },
   alert: { paddingVertical: spacing.md, paddingHorizontal: 14, gap: spacing.sm },
   alertTitle: { fontFamily: fonts.bodyBold },
   tip: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm },
-  status: { gap: spacing.sm },
-  statusTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   noPets: { alignItems: 'center' },
   centerText: { textAlign: 'center' },
   pressed: { opacity: 0.7 },

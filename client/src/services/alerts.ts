@@ -2,6 +2,7 @@ import { useMockData } from '@/constants/config';
 import { apiFetch } from '@/services/api-client';
 import { mockDelay } from '@/services/mock/delay';
 // Copy of server/content/seasonal-alerts.json, used when the app runs without the backend.
+// Edit the server file, then run `npm run content:sync`.
 import content from '@/services/mock/seasonal-alerts.json';
 import type { Season, SeasonalAlert } from '@/types/alerts';
 import type { Pet } from '@/types/pet';

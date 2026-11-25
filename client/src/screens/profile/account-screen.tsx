@@ -9,7 +9,7 @@ import SectionLabel from '@/components/ui/section-label';
 import Screen from '@/components/ui/screen';
 import { useAuth } from '@/context/auth-context';
 import { useAsync } from '@/hooks/use-async';
-import { mockHousehold } from '@/services/mock/data';
+import { getHouseholdMembers } from '@/services/household';
 import { getPets } from '@/services/pets';
 import { colors } from '@/theme';
 
@@ -18,6 +18,7 @@ const AccountScreen = () => {
   const { t } = useTranslation();
   const { displayName } = useAuth();
   const { data: pets } = useAsync(getPets, []);
+  const { data: members } = useAsync(getHouseholdMembers, []);
 
   return (
     <Screen header={<ScreenHeader title={t('profile.myAccount')} />}>
@@ -33,7 +34,7 @@ const AccountScreen = () => {
       <SectionLabel label={t('profile.account.family')} />
       <ListGroup>
         <ListRow leading={<IconTile name="user" tone="amber" />} title={displayName ?? ''} subtitle={t('profile.account.you')} />
-        {mockHousehold.members.map((member) => (
+        {members?.map((member) => (
           <ListRow
             key={member.id}
             leading={<IconTile name="users" tone="amber" />}

@@ -139,10 +139,7 @@
     "booked": "Booked",
     "loggedToday": "Logged today",
     "addVisit": "Add vet visit",
-    "careAdvice": "Care at home",
     "wholePlan": "Care plan",
-    "seasonal": "Right now",
-    "insurance": "Insurance",
     "coverLeft": "{{amount}} cover left this year"
   },
   "pets": {

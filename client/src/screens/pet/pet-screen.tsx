@@ -5,14 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, Share, StyleSheet, View } from 'react-native';
 
 import PetAvatar, { speciesTint } from '@/components/features/pet-avatar';
-import TrafficLightBadge from '@/components/features/traffic-light-badge';
+import PetStatusCard from '@/components/features/pet-status-card';
+import VaccinationPill from '@/components/features/vaccination-pill';
 import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
 import Card from '@/components/ui/card';
+import Chip from '@/components/ui/chip';
 import Icon, { type IconName } from '@/components/ui/icon';
 import IconTile from '@/components/ui/icon-tile';
 import { DateTile, ListGroup, ListRow } from '@/components/ui/list-group';
-import Pill from '@/components/ui/pill';
 import SectionLabel from '@/components/ui/section-label';
 import Screen, { ScreenSection } from '@/components/ui/screen';
 import SegmentedControl from '@/components/ui/segmented-control';
@@ -22,16 +23,15 @@ import { useReloadOnFocus } from '@/hooks/use-reload-on-focus';
 import { getCarePlan, getReminders, getVisits } from '@/services/care';
 import { getDietPlan } from '@/services/diet';
 import { getHealthStatus } from '@/services/health';
-import { getPassport, vaccinationStatus } from '@/services/passport';
+import { getPassport } from '@/services/passport';
 import { getPet } from '@/services/pets';
-import { colors, fonts, radius, spacing, touchTarget } from '@/theme';
+import { colors, fonts, spacing, touchTarget } from '@/theme';
 import type { CarePlan, Visit } from '@/types/care';
 import type { HealthStatus } from '@/types/health';
 import type { Passport } from '@/types/passport';
 import type { Pet } from '@/types/pet';
 import {
   ageInYears,
-  daysBetween,
   formatDayMonth,
   formatLongDate,
   formatMonthShort,
@@ -152,36 +152,11 @@ const OverviewTab = ({
   dietName: string | null;
 }) => {
   const { t } = useTranslation();
-  const watchList = status.watchList;
   const today = todayIso();
 
   return (
     <>
-      <Pressable
-        accessibilityRole="link"
-        onPress={() => router.push(`/pet/${pet.id}/watch-list`)}
-        style={({ pressed }) => [styles.statusCard, pressed && styles.pressed]}
-      >
-        <View style={styles.statusTop}>
-          <TrafficLightBadge level={status.level} />
-          {watchList && (
-            <AppText variant="caption" color={colors.muted}>
-              {t('home.dayOf', {
-                day: Math.min(daysBetween(watchList.startDate, today) + 1, watchList.totalDays),
-                total: watchList.totalDays,
-              })}
-            </AppText>
-          )}
-        </View>
-        <View style={styles.row}>
-          <AppText variant="label" style={styles.flex}>
-            {watchList
-              ? t('home.recovering', { condition: watchList.condition.toLowerCase() })
-              : t('home.allGood', { name: pet.name })}
-          </AppText>
-          <Icon name="chevronRight" size={20} color={colors.muted} />
-        </View>
-      </Pressable>
+      <PetStatusCard pet={pet} status={status} />
 
       <View style={styles.actions}>
         <Button
@@ -250,17 +225,13 @@ const RecordsTab = ({ pet, records, carePlan }: { pet: Pet; records: MedicalReco
         {[null, ...recordFilters].map((kind) => {
           const selected = filter === kind;
           return (
-            <Pressable
+            <Chip
               key={kind ?? 'all'}
-              accessibilityRole="radio"
-              accessibilityState={{ selected }}
+              role="radio"
+              label={t(`pet.records.kind.${kind ?? 'all'}`)}
+              selected={selected}
               onPress={() => setFilter(kind)}
-              style={[styles.chip, selected ? styles.chipOn : styles.chipOff]}
-            >
-              <AppText variant="bodySmall" color={selected ? colors.onDark : colors.text} style={styles.chipText}>
-                {t(`pet.records.kind.${kind ?? 'all'}`)}
-              </AppText>
-            </Pressable>
+            />
           );
         })}
       </View>
@@ -363,22 +334,14 @@ const PassportTab = ({ pet, passport }: { pet: Pet; passport: Passport | null })
       <SectionLabel label={t('passport.vaccinations')} />
       {passport.vaccinations.length ? (
         <ListGroup>
-          {passport.vaccinations.map((v) => {
-            const state = vaccinationStatus(v.validUntil);
-            return (
-              <ListRow
-                key={v.id}
-                title={v.name}
-                subtitle={t('pet.passportTab.validUntil', { date: formatLongDate(v.validUntil) })}
-                trailing={
-                  <Pill
-                    label={t(`passport.vaccine.${state}`)}
-                    tone={state === 'valid' ? 'green' : state === 'dueSoon' ? 'amber' : 'red'}
-                  />
-                }
-              />
-            );
-          })}
+          {passport.vaccinations.map((v) => (
+            <ListRow
+              key={v.id}
+              title={v.name}
+              subtitle={t('pet.passportTab.validUntil', { date: formatLongDate(v.validUntil) })}
+              trailing={<VaccinationPill validUntil={v.validUntil} />}
+            />
+          ))}
         </ListGroup>
       ) : (
         <EmptyView title={t('passport.none')} />
@@ -520,21 +483,7 @@ const styles = StyleSheet.create({
   },
   identityTexts: { flex: 1, gap: spacing.xs },
   name: { fontSize: 30 },
-  statusCard: {
-    padding: spacing.lg,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    gap: spacing.sm,
-  },
-  statusTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  pressed: { opacity: 0.7 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  chip: { minHeight: 40, paddingHorizontal: 14, borderRadius: radius.pill, borderWidth: 1, justifyContent: 'center' },
-  chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipOff: { backgroundColor: colors.surface, borderColor: colors.border },
-  chipText: { fontFamily: fonts.bodySemiBold },
   fact: { gap: 2 },
   mono: { fontFamily: fonts.bodySemiBold, letterSpacing: 1 },
 });

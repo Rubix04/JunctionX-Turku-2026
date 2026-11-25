@@ -7,6 +7,7 @@ import SchematicMap from '@/components/features/schematic-map';
 import ScreenHeader from '@/components/features/screen-header';
 import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
+import Chip from '@/components/ui/chip';
 import IconTile from '@/components/ui/icon-tile';
 import Note from '@/components/ui/note';
 import Pill, { type PillTone } from '@/components/ui/pill';
@@ -14,7 +15,7 @@ import Screen, { ScreenSection } from '@/components/ui/screen';
 import { EmptyView, ErrorView, LoadingView } from '@/components/ui/state-views';
 import { useAsync } from '@/hooks/use-async';
 import { getProduct, getStoresForProduct } from '@/services/clinics';
-import { colors, fonts, radius, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 import type { StockStatus, Store } from '@/types/clinic';
 import { formatNumber } from '@/utils/format';
 import { callNumber, openDirections } from '@/utils/links';
@@ -73,17 +74,7 @@ const FindInStoreScreen = () => {
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>
         {(['openNow', 'near', 'online'] as const).map((key) => (
-          <Pressable
-            key={key}
-            accessibilityRole="checkbox"
-            accessibilityState={{ checked: filters[key] }}
-            onPress={() => toggle(key)}
-            style={[styles.chip, filters[key] ? styles.chipOn : styles.chipOff]}
-          >
-            <AppText variant="bodySmall" color={filters[key] ? colors.onDark : colors.text} style={styles.chipText}>
-              {t(`store.filter.${key}`)}
-            </AppText>
-          </Pressable>
+          <Chip key={key} label={t(`store.filter.${key}`)} selected={filters[key]} onPress={() => toggle(key)} />
         ))}
       </ScrollView>
 
@@ -162,10 +153,6 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   filters: { paddingHorizontal: spacing.xl, gap: spacing.sm },
-  chip: { minHeight: 40, paddingHorizontal: 14, borderRadius: radius.pill, borderWidth: 1, justifyContent: 'center' },
-  chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipOff: { backgroundColor: colors.surface, borderColor: colors.border },
-  chipText: { fontFamily: fonts.bodySemiBold },
   store: {
     padding: 14,
     borderRadius: radius.lg,

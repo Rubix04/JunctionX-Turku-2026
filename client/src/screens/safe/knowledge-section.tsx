@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 import RiskBadge from '@/components/features/risk-badge';
-import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
+import Chip from '@/components/ui/chip';
 import Icon from '@/components/ui/icon';
 import { ListGroup, ListRow } from '@/components/ui/list-group';
 import Note from '@/components/ui/note';
@@ -73,17 +73,12 @@ const KnowledgeSection = () => {
         {knowledgeCategories.map((c) => {
           const selected = category === c;
           return (
-            <Pressable
+            <Chip
               key={c}
-              accessibilityRole="checkbox"
-              accessibilityState={{ checked: selected }}
+              label={t(`knowledge.category.${c}`)}
+              selected={selected}
               onPress={() => setCategory(selected ? null : c)}
-              style={[styles.chip, selected ? styles.chipOn : styles.chipOff]}
-            >
-              <AppText variant="bodySmall" color={selected ? colors.onDark : colors.text} style={styles.chipText}>
-                {t(`knowledge.category.${c}`)}
-              </AppText>
-            </Pressable>
+            />
           );
         })}
       </ScrollView>
@@ -137,9 +132,5 @@ const styles = StyleSheet.create({
   searchInput: { flex: 1, minHeight: 50, fontFamily: fonts.body, fontSize: 16, color: colors.text },
   clear: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   categories: { paddingHorizontal: spacing.xl, gap: spacing.sm },
-  chip: { minHeight: 40, paddingHorizontal: 14, borderRadius: radius.pill, borderWidth: 1, justifyContent: 'center' },
-  chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipOff: { backgroundColor: colors.surface, borderColor: colors.border },
-  chipText: { fontFamily: fonts.bodySemiBold },
   stale: { opacity: 0.6 },
 });

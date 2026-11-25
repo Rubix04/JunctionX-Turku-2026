@@ -6,13 +6,14 @@ import Icon, { type IconName } from '@/components/ui/icon';
 import { colors, radius, typography } from '@/theme';
 
 // The selected tab gets a sand pill behind its icon, so the highlight never gets cut off by the tab bar.
-const tabIcon =
-  (name: IconName) =>
-  ({ color, focused }: { color: ColorValue; focused: boolean }) => (
+const tabIcon = (name: IconName) => {
+  const TabIcon = ({ color, focused }: { color: ColorValue; focused: boolean }) => (
     <View style={[styles.pill, focused && styles.pillOn]}>
       <Icon name={name} color={color} />
     </View>
   );
+  return TabIcon;
+};
 
 // Home is the only index route now, so "/" always opens it; this also makes it the first tab in history.
 export const unstable_settings = { initialRouteName: '(home)' };

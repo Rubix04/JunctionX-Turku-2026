@@ -53,14 +53,6 @@ export const updatePet = async (petId: string, input: UpdatePetInput): Promise<P
   return apiFetch<Pet>(`/pets/${petId}`, { method: 'PATCH', body: input });
 };
 
-export const deletePet = async (petId: string): Promise<void> => {
-  if (useMockData) {
-    mockPets.splice(mockPets.indexOf(findMockPet(petId)), 1);
-    return mockDelay(undefined);
-  }
-  return apiFetch<void>(`/pets/${petId}`, { method: 'DELETE' });
-};
-
 /**
  * Sets or removes the profile picture (spec 13). Removing also deletes it from storage.
  * Backend: PUT/DELETE /pets/:petId/photo.

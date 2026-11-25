@@ -139,10 +139,7 @@
     "booked": "Varattu",
     "loggedToday": "Kirjattu tänään",
     "addVisit": "Lisää käynti",
-    "careAdvice": "Hoito-ohjeet",
     "wholePlan": "Hoitosuunnitelma",
-    "seasonal": "Nyt ajankohtaista",
-    "insurance": "Vakuutus",
     "coverLeft": "{{amount}} korvausta jäljellä tänä vuonna"
   },
   "pets": {
