@@ -28,8 +28,6 @@ const LAND = '#EEF0EA';
 const WATER = '#BFDCE6';
 const PARK = '#D5E6CC';
 const BLOCK = '#E2E4DE';
-const ROAD = '#FFFFFF';
-const HIGHWAY = '#F3DFA8';
 const YOU = '#2F7BEA';
 
 const pinColors = {
@@ -73,13 +71,6 @@ const SchematicMap = ({ pins, selectedId, onSelect, height = 240 }: SchematicMap
         </G>
         {/* Aurajoki flowing to the sea */}
         <Path d="M82 0 C 74 9, 64 18, 56 25 S 40 38, 31 46 S 20 55, 16 60" stroke={WATER} strokeWidth="3.2" fill="none" />
-        {/* Streets, the ring road and the roads out of town */}
-        <G stroke={ROAD} fill="none" strokeLinecap="round">
-          <Path d="M48 29 L12 12 M48 29 L86 48 M48 29 L57 4 M48 29 L26 40 M48 29 L70 36" strokeWidth="1.3" />
-          <Path d="M34 22 H62 M38 36 H60 M44 14 V44" strokeWidth="0.8" />
-          <Path d="M8 32 C 14 12, 60 2, 94 20" strokeWidth="1.6" />
-        </G>
-        <Path d="M0 18 C 30 20, 62 8, 100 12" stroke={HIGHWAY} strokeWidth="2.2" fill="none" />
       </Svg>
       {pins.map((pin) => {
         const selected = pin.id === selectedId;
