@@ -32,12 +32,9 @@ import {
   symptomLabel,
   type WatchListTemplate,
 } from "./content.js";
+import { addDays } from "../care/time.js";
 
 export type Language = "fi" | "sv" | "en";
-
-const DAY_MS = 24 * 60 * 60 * 1000;
-const addDays = (isoDate: string, days: number) =>
-  new Date(Date.parse(`${isoDate}T00:00:00Z`) + days * DAY_MS).toISOString().slice(0, 10);
 
 export const contentStatus = () => ({ status: symptomContent.meta.status, updatedOn: symptomContent.meta.updatedOn });
 

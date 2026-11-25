@@ -72,10 +72,9 @@ import {
   trends,
   updateWatchList,
 } from "./service.js";
+import { addDays } from "../care/time.js";
 
-const DAY_MS = 24 * 60 * 60 * 1000;
-const daysBefore = (isoDate: string, days: number) =>
-  new Date(Date.parse(`${isoDate}T00:00:00Z`) - days * DAY_MS).toISOString().slice(0, 10);
+const daysBefore = (isoDate: string, days: number) => addDays(isoDate, -days);
 
 /**
  * Public symptom content (spec 1), like the knowledge base. Registered under /symptoms.

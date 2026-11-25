@@ -1,14 +1,14 @@
 import type { DietType, HealthRecordRow, Species } from "../../db/schema.js";
 import { badRequest } from "../../errors.js";
 import { type DietContent, dietContent } from "./content.js";
+import { addDays } from "../care/time.js";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 const daysBetween = (fromIso: string, toIso: string) =>
   Math.round((Date.parse(`${toIso}T00:00:00Z`) - Date.parse(`${fromIso}T00:00:00Z`)) / DAY_MS);
 
-export const addDays = (isoDate: string, days: number) =>
-  new Date(Date.parse(`${isoDate}T00:00:00Z`) + days * DAY_MS).toISOString().slice(0, 10);
+export { addDays };
 
 /** Whole months between a birth date and today, or null if unknown. */
 export const ageInMonths = (birthDate: string | null, today: string) => {

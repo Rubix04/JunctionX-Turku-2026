@@ -6,6 +6,7 @@ import type {
   StoredReason,
 } from "../../db/schema.js";
 import { type Answer, type SeverityLevel, type SeverityRule, type SymptomContent, symptomContent } from "./content.js";
+import { addDays } from "../care/time.js";
 
 // Severity assessment (spec 12). Pure functions: the routes gather the pet's history and pass it in.
 //
@@ -25,8 +26,6 @@ export const trafficLightFor = (level: SeverityLevel): "green" | "yellow" | "red
   level === "normal" ? "green" : level === "monitor" ? "yellow" : "red";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-const addDays = (isoDate: string, days: number) =>
-  new Date(Date.parse(`${isoDate}T00:00:00Z`) + days * DAY_MS).toISOString().slice(0, 10);
 export const daysBetween = (from: string, to: string) =>
   Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / DAY_MS);
 
