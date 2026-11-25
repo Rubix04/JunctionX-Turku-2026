@@ -6,11 +6,12 @@ import {
   mockCarePlans,
   mockMedicationCourses,
   mockReminders,
+  mockScanSample,
   mockVisits,
 } from '@/services/mock/data';
 import { mockDelay } from '@/services/mock/delay';
 import type { CarePlan, MedicationCourse, Reminder, ScannedVisit, Visit, VisitNotesInput } from '@/types/care';
-import { currentLanguage } from '@/utils/format';
+import { currentLanguage, todayIso } from '@/utils/format';
 
 // Visits, care plans and reminders. Visits, care plans and reading vet documents use the backend
 // (server/src/modules/care and visit-scan) when an API URL is set; the rest is mock only.
@@ -62,17 +63,18 @@ export const getCarePlan = async (petId: string): Promise<CarePlan | null> => {
  */
 export const scanVisitNotes = async (petId: string, input: VisitNotesInput): Promise<ScannedVisit> => {
   if (useMockData) {
-    const template = mockCarePlans[0];
+    // The same neutral sample for every pet (not another pet's real plan), dated today in local time.
+    const sample = mockScanSample;
     const visit: Visit = {
       id: `visit-${Date.now()}`,
       petId,
-      date: new Date().toISOString().slice(0, 10),
-      title: template.diagnosis,
-      clinicName: template.clinicName,
-      vetName: template.vetName,
+      date: todayIso(),
+      title: sample.diagnosis,
+      clinicName: sample.clinicName,
+      vetName: sample.vetName,
       draft: true,
     };
-    const carePlan: CarePlan = { ...template, petId, visitId: visit.id, checkedByClinic: false };
+    const carePlan: CarePlan = { ...sample, petId, visitId: visit.id, checkedByClinic: false };
     mockVisits.push(visit);
     // First in the list, so getCarePlan finds this one.
     mockCarePlans.unshift(carePlan);
@@ -99,29 +101,88 @@ export const scanVisitNotes = async (petId: string, input: VisitNotesInput): Pro
   return { ...scanned, carePlan: toCarePlan(scanned.carePlan) };
 };
 
-export const getMedicationCourse = async (petId: string): Promise<MedicationCourse | null> =>
-  mockDelay(mockMedicationCourses.find((c) => c.petId === petId) ?? null);
+/** The backend's medication schedule. Long-term medicines have no total. */
+type ApiSchedule = Omit<MedicationCourse, 'dosesTotal' | 'totalDays'> & {
+  dosesTotal: number | null;
+  totalDays: number | null;
+};
 
-/** All pets' reminders, soonest first. Pass a pet id to filter. */
-export const getReminders = async (petId?: string): Promise<Reminder[]> =>
-  mockDelay(
+/** The medicine being given now, when it is a course with a known length. Backend: GET /pets/:petId/medication-course */
+export const getMedicationCourse = async (petId: string): Promise<MedicationCourse | null> => {
+  if (!useMockData) {
+    const { course } = await apiFetch<{ course: ApiSchedule | null }>(`/pets/${petId}/medication-course`);
+    return course && course.dosesTotal !== null && course.totalDays !== null
+      ? {
+          petId: course.petId,
+          name: course.name,
+          dosesTotal: course.dosesTotal,
+          dosesGiven: course.dosesGiven,
+          startDate: course.startDate,
+          totalDays: course.totalDays,
+        }
+      : null;
+  }
+  return mockDelay(mockMedicationCourses.find((c) => c.petId === petId) ?? null);
+};
+
+/** Keeps the fields the app uses from the backend's reminder */
+const toReminder = (r: Reminder): Reminder => ({
+  id: r.id,
+  petId: r.petId,
+  kind: r.kind,
+  title: r.title,
+  detail: r.detail,
+  dueAt: r.dueAt,
+  done: r.done,
+  doneBy: r.doneBy ?? null,
+});
+
+/**
+ * All pets' reminders, soonest first. Pass a pet id to filter.
+ * Backend: GET /reminders (a week back, so missed doses show, to 30 days ahead).
+ */
+export const getReminders = async (petId?: string): Promise<Reminder[]> => {
+  if (!useMockData) {
+    const query = new URLSearchParams({ lang: currentLanguage(), ...(petId ? { petId } : {}) });
+    const { reminders } = await apiFetch<{ reminders: Reminder[] }>(`/reminders?${query}`);
+    return reminders.map(toReminder);
+  }
+  return mockDelay(
     mockReminders
       .filter((r) => !petId || r.petId === petId)
       .sort((a, b) => a.dueAt.localeCompare(b.dueAt)),
   );
+};
 
 export const addReminder = async (input: Omit<Reminder, 'id' | 'done' | 'doneBy'>): Promise<Reminder> => {
+  if (!useMockData) {
+    const created = await apiFetch<Reminder>(`/reminders?lang=${currentLanguage()}`, {
+      method: 'POST',
+      body: { ...input, detail: input.detail || undefined },
+    });
+    return toReminder(created);
+  }
   const reminder: Reminder = { ...input, id: `reminder-${Date.now()}`, done: false, doneBy: null };
   mockReminders.push(reminder);
   return mockDelay(reminder);
 };
 
-/** Ticks a reminder done (or undoes it). `doneBy` is the signed-in family member's name. */
+/**
+ * Ticks a reminder done (or undoes it). `doneBy` is the signed-in family member's name; the
+ * backend records who it was from the session instead.
+ */
 export const setReminderDone = async (
   reminderId: string,
   done: boolean,
   doneBy: string | null,
 ): Promise<Reminder> => {
+  if (!useMockData) {
+    const updated = await apiFetch<Reminder>(`/reminders/${reminderId}?lang=${currentLanguage()}`, {
+      method: 'PATCH',
+      body: { done },
+    });
+    return toReminder(updated);
+  }
   const reminder = mockReminders.find((r) => r.id === reminderId);
   if (!reminder) {
     throw new Error(`Reminder ${reminderId} not found`);

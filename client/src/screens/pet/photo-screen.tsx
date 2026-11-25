@@ -12,6 +12,7 @@ import Icon, { type IconName } from '@/components/ui/icon';
 import { useAsync } from '@/hooks/use-async';
 import { getPet, updatePetPhoto } from '@/services/pets';
 import { colors, fonts, radius, spacing, touchTarget } from '@/theme';
+import { alertSaveFailed } from '@/utils/notify';
 import { pickMedia } from '@/utils/pick-media';
 
 const PhotoAction = ({ icon, label, onPress, danger = false }: { icon: IconName; label: string; onPress: () => void; danger?: boolean }) => (
@@ -39,7 +40,12 @@ const PhotoScreen = () => {
   };
 
   const use = async () => {
-    await updatePetPhoto(petId, photo);
+    try {
+      await updatePetPhoto(petId, photo);
+    } catch {
+      alertSaveFailed();
+      return;
+    }
     router.back();
   };
 

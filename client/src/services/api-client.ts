@@ -43,6 +43,11 @@ const refreshOnce = () => {
   return refreshing ?? Promise.resolve(false);
 };
 
+/** A request that gets no answer in this time fails, so screens show an error instead of spinning. */
+const TIMEOUT_MS = 20_000;
+/** Uploads (photos, visit notes read by AI) may take longer. */
+const UPLOAD_TIMEOUT_MS = 90_000;
+
 type RequestOptions = {
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
   body?: unknown;
@@ -75,11 +80,24 @@ export const apiFetch = async <T>(
   }
 
   const fetchRequest = isFormData && Platform.OS !== 'web' ? expoFetch : fetch;
-  const response = await fetchRequest(`${apiUrl}${path}`, {
-    method,
-    headers,
-    body: body === undefined ? undefined : isFormData ? (body as FormData) : JSON.stringify(body),
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), isFormData ? UPLOAD_TIMEOUT_MS : TIMEOUT_MS);
+  let response: Response;
+  try {
+    response = (await fetchRequest(`${apiUrl}${path}`, {
+      method,
+      headers,
+      body: body === undefined ? undefined : isFormData ? (body as FormData) : JSON.stringify(body),
+      signal: controller.signal,
+    })) as Response;
+  } catch (error) {
+    if (controller.signal.aborted) {
+      throw new ApiError(0, 'TIMEOUT', 'The server did not answer in time');
+    }
+    throw error;
+  } finally {
+    clearTimeout(timer);
+  }
 
   const canRefresh = retryOnUnauthorized && accessToken !== null && !isAuthCall;
   if (response.status === 401 && canRefresh && (await refreshOnce())) {

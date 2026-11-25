@@ -9,7 +9,9 @@
     "errorTitle": "Jokin meni pieleen",
     "errorBody": "Tarkista yhteys ja yritä uudelleen.",
     "tryAgain": "Yritä uudelleen",
-    "language": "Kieli"
+    "language": "Kieli",
+    "saveFailedTitle": "Tallennus ei onnistunut",
+    "saveFailedBody": "Tarkista yhteys ja yritä uudelleen. Mitään ei muutettu."
   },
   "tabs": {
     "home": "Koti",
@@ -165,7 +167,7 @@
     "safeTitle": "Söikö {{name}} jotain?",
     "safeSubtitle": "Tarkista, onko se turvallista",
     "trendsHint": "Paino, juominen",
-    "addVisit": "+ Lisää käynti",
+    "addVisit": "Lisää käynti",
     "noVisits": "Ei vielä käyntejä",
     "tabs": {
       "overview": "Yleiskatsaus",
@@ -187,7 +189,8 @@
       "severity": {
         "mild": "Lievä reaktio",
         "moderate": "Kohtalainen reaktio",
-        "severe": "Vakava reaktio"
+        "severe": "Vakava reaktio",
+        "unknown": "Reaktio ei tiedossa"
       },
       "resolved": "Parantunut",
       "ongoing": "Käynnissä",
@@ -350,7 +353,8 @@
     "vaccine": {
       "valid": "Voimassa",
       "dueSoon": "Erääntymässä",
-      "expired": "Vanhentunut"
+      "expired": "Vanhentunut",
+      "noExpiry": "Ei vanhene"
     },
     "medication": "Lääkitys",
     "ongoing": "jatkuva",
@@ -711,7 +715,7 @@
     "hoursValue": "ma–pe 8–18 · la 10–15",
     "call": "Soita meille",
     "sendEmail": "Lähetä sähköpostia",
-    "emergencyNote": "Onko lemmikkisi äkillisesti sairas? Löydät lähimmän päivystyksen Tutki-välilehdeltä.",
+    "emergencyNote": "Onko lemmikkisi äkillisesti sairas? Löydät lähimmän päivystyksen Lääkäriasemat-välilehdeltä.",
     "accessibilityBody": [
       "Haluamme, että kaikki voivat käyttää TassuVahtia. Sovellus pyrkii täyttämään WCAG 2.1 AA -ohjeet.",
       "Terveystila näytetään aina värin, kuvakkeen ja sanan avulla, joten sen voi lukea ilman värinäköä. Teksti noudattaa puhelimen kokoasetusta, ja kaikki painikkeet toimivat ruudunlukijoilla, kuten VoiceOver ja TalkBack.",
@@ -785,5 +789,13 @@
     "vetSummary": {
       "logs": "{{count}} päiväkirjausta {{days}} päivässä."
     }
+  },
+  "links": {
+    "cantCall": "Tällä laitteella ei voi soittaa",
+    "callManually": "Soita puhelimella numeroon {{number}}.",
+    "cantOpenMaps": "Karttaa ei voi avata",
+    "cantEmail": "Sähköpostisovellusta ei löytynyt",
+    "emailManually": "Lähetä viestisi osoitteeseen {{address}}.",
+    "cantOpenPage": "Sivua ei voi avata"
   }
 }

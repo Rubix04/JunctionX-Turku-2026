@@ -27,6 +27,7 @@ import {
   formatTime,
   parseDate,
 } from '@/utils/format';
+import { alertSaveFailed } from '@/utils/notify';
 
 const loadPlan = async (petId: string) => {
   const [pet, plan, visits, reminders] = await Promise.all([
@@ -87,6 +88,8 @@ const CarePlanScreen = () => {
       });
       setReminderAdded(true);
       reload();
+    } catch {
+      alertSaveFailed();
     } finally {
       savingReminder.current = false;
       setAddingReminder(false);

@@ -24,6 +24,7 @@ import { getPet } from '@/services/pets';
 import { colors, fonts, radius, spacing } from '@/theme';
 import type { TrafficLightLevel } from '@/types/health';
 import { formatDayMonth, formatTime, todayIso } from '@/utils/format';
+import { alertSaveFailed } from '@/utils/notify';
 
 const loadResult = async (petId: string) => {
   const [pet, status, questions, clinics] = await Promise.all([
@@ -101,6 +102,8 @@ const LogResultScreen = () => {
         dueAt: `${todayIso()}T19:00:00`,
       });
       setReminderSet(true);
+    } catch {
+      alertSaveFailed();
     } finally {
       savingReminder.current = false;
     }
