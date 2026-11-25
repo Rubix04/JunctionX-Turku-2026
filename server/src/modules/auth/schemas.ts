@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { demoLanguages } from "./demo-texts.js";
+
 const bankId = z.string().min(1).max(40);
 // Only meaningful with the mock provider: chooses which test person signs in.
 const testPersonId = z.string().max(40).optional();
@@ -9,6 +11,8 @@ export const bankSignInSchema = z.object({
   /** Shown in the list of signed-in devices, e.g. "Maija's iPhone". */
   deviceName: z.string().trim().min(1).max(80),
   testPersonId,
+  /** The app's language. In demo mode a new account's example history is written in it. */
+  language: z.enum(demoLanguages).optional(),
 });
 
 export const bankReauthSchema = z.object({ bankId, testPersonId });

@@ -7,6 +7,7 @@ import { type DeviceSessionRow, deviceSessions, households, pets, type UserRow, 
 import { notFound, unauthorized } from "../../errors.js";
 import type { BankIdentity } from "./bank-provider.js";
 import { seedDemoHistory } from "./demo-seed.js";
+import type { DemoLanguage } from "./demo-texts.js";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -36,7 +37,7 @@ const DEMO_PETS = [
 export const findOrCreateUser = (
   db: Db,
   identity: BankIdentity,
-  options: { secret: string; seedDemoPets: boolean },
+  options: { secret: string; seedDemoPets: boolean; language?: DemoLanguage },
 ): UserRow => {
   const identityHash = hashIdentity(identity.personId, options.secret);
   const existing = db.select().from(users).where(eq(users.identityHash, identityHash)).get();
@@ -61,7 +62,7 @@ export const findOrCreateUser = (
   });
   if (options.seedDemoPets) {
     try {
-      seedDemoHistory(db, created.householdId, created.id);
+      seedDemoHistory(db, created.householdId, created.id, options.language);
     } catch (error) {
       // Undo the half-made account (everything cascades from the household), so the next
       // sign-in creates it again with its demo history instead of an account that never gets one.
