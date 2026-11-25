@@ -15,7 +15,7 @@ import { useAuth } from '@/context/auth-context';
 import { useAsync } from '@/hooks/use-async';
 import { getMedicationCourse, getReminders, getVisits, setReminderDone } from '@/services/care';
 import { getClinics } from '@/services/clinics';
-import { mockHousehold } from '@/services/mock/data';
+import { getHouseholdMembers } from '@/services/household';
 import { getPets } from '@/services/pets';
 import { colors, fonts, radius, spacing } from '@/theme';
 import type { ReminderKind, Visit } from '@/types/care';
@@ -24,16 +24,17 @@ import type { Pet } from '@/types/pet';
 import { daysBetween, formatShortWeekdayDate, formatTime, todayIso } from '@/utils/format';
 
 const loadReminders = async (petId: string) => {
-  const [pets, reminders, course, clinics] = await Promise.all([
+  const [pets, reminders, course, clinics, members] = await Promise.all([
     getPets(),
     getReminders(),
     getMedicationCourse(petId),
     getClinics(),
+    getHouseholdMembers(),
   ]);
   // Each pet's visits, newest first, to find the clinic it usually goes to.
   const visits = await Promise.all(pets.map((p) => getVisits(p.id).catch((): Visit[] => [])));
   const visitsByPet = Object.fromEntries(pets.map((p, i) => [p.id, visits[i]]));
-  return { pets, reminders, course, clinics, visitsByPet };
+  return { pets, reminders, course, clinics, visitsByPet, members };
 };
 
 /**
@@ -77,7 +78,7 @@ const RemindersScreen = () => {
     return <Screen header={header}>{error ? <ErrorView onRetry={reload} /> : <LoadingView />}</Screen>;
   }
 
-  const { pets, reminders, course, clinics, visitsByPet } = data;
+  const { pets, reminders, course, clinics, visitsByPet, members } = data;
   const petName = (id: string) => pets.find((p) => p.id === id)?.name ?? '';
   const today = todayIso();
   const todays = reminders.filter((r) => r.dueAt.startsWith(today));
@@ -188,7 +189,7 @@ const RemindersScreen = () => {
         <EmptyView title={t('reminders.nothingComing')} />
       )}
 
-      {mockHousehold.members.length > 0 && (
+      {members.length > 0 && (
         <AppText variant="caption" color={colors.muted}>
           {t('reminders.familySees')}
         </AppText>
