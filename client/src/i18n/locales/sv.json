@@ -414,7 +414,7 @@
     "weightInvalid": "Ange kilogram, t.ex. 4,6",
     "breed": "Ras",
     "breedPlaceholder": "Sök ras",
-    "policyFound": "Vi hittade en djurförsäkring utan profil. Vill du koppla den till det här djuret?",
+    "policyFound": "Vi hittade försäkringen {{number}} som inte är kopplad till något djur än. Koppla den till det här djuret?",
     "link": "Koppla",
     "linked": "Kopplad ✓",
     "create": "Skapa djurets sida"

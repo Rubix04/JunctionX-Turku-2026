@@ -65,10 +65,12 @@ const DietScreen = () => {
   const latest = weights[weights.length - 1]?.weightKg ?? pet.weightKg;
   const dailyKcal = diet?.dailyKcal ?? (latest ? estimateDailyKcal(pet.species, latest) : null);
   const total = dailyKcal ? gramsPerDay(dailyKcal, per100) : null;
-  const parsedWeight = weightInput === null ? null : parseDecimal(weightInput);
+  const parsedNumber = weightInput === null ? null : parseDecimal(weightInput);
+  // A weight the app accepts: above 0 and at most 150 kg, like when adding a pet.
+  const parsedWeight = parsedNumber !== null && parsedNumber > 0 && parsedNumber <= 150 ? parsedNumber : null;
 
   const saveWeight = async () => {
-    if (!parsedWeight || parsedWeight <= 0 || parsedWeight > 150) return;
+    if (!parsedWeight) return;
     try {
       await logWeight(petId, parsedWeight);
       await updatePet(petId, { weightKg: parsedWeight });

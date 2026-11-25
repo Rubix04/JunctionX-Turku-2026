@@ -414,7 +414,7 @@
     "weightInvalid": "Enter kilograms, e.g. 4.6",
     "breed": "Breed",
     "breedPlaceholder": "Search breeds",
-    "policyFound": "We found a pet policy without a profile. Link it to this pet?",
+    "policyFound": "We found policy {{number}} that isn't linked to a pet yet. Link it to this pet?",
     "link": "Link",
     "linked": "Linked ✓",
     "create": "Create pet page"
