@@ -23,15 +23,17 @@ A vet visit lasts 20 minutes. Recovery lasts weeks.
 TassuVahti stays with the pet between vet visits.
 
 - **Care plan after every visit.** What was found, what to do at home and when the follow-up is, in plain language, with the vet's original notes kept alongside.
-- **A 30-second daily log.** Appetite, energy, drinking, toilet, pain and vomiting, plus questions specific to the diagnosis. For example, after a urinary tract infection: water intake, litter box trips, straining.
+- **Vet documents read by AI.** Take a photo of the clinic's printout, pick a PDF or paste the text. Claude turns it into a draft care plan, medication reminders and a follow-up visit, and lists anything it could not read for sure. The plan stays a draft until the clinic checks it.
+- **A quick daily log.** Appetite, energy, drinking, toilet, pain and vomiting, plus questions specific to the diagnosis. For example, after a urinary tract infection: water intake, litter box trips, straining.
 - **A traffic light that knows the pet's history.** Green, yellow or red, with the reason given in plain words: *"The assessment is higher because Mirri has been diagnosed with kidney disease and has a poor appetite."* The same symptom is judged differently for a healthy young dog and an old cat with kidney disease. Emergency symptoms always override.
+- **AI analysis of the vet's data and the daily logs together.** It compares what the vet expected with what the owner logs ("recovery slower than the vet expected"), gives the reasons by source, from the vet or from the logs, says what to watch and when to call the clinic, and writes a short summary for the vet.
 - **Reminders the whole family shares.** Medication doses, follow-up visits and vaccinations, with a "Did you already give it?" mark so a dose is never given twice.
 - **Health passport.** Vaccinations, medication, allergies, surgeries and visits in one place, shared with a vet or pet sitter through a time-limited link.
 - **Diet and weight.** Diet suggestions based on the diagnosis, and portions from the food package's own feeding table.
 - **"Is it safe?"** A searchable list of dangerous foods, plants and substances, with risk levels per species: lilies are an emergency for cats but not for dogs.
 - **Seasonal alerts.** Ticks in spring, blue-green algae in summer, antifreeze in winter, matched to the pet's species, age and region.
-- **Vets near you.** Contracted clinics, 24-hour emergency clinics and direct payment, sorted by opening status and distance.
-- **Insurance in the same app.** Remaining yearly cover, claims and remote vet services.
+- **Clinics.** Remote vet services, contracted clinics, 24-hour emergency clinics and direct payment, sorted by opening status and distance.
+- **Insurance in the same app.** Remaining yearly cover and claims.
 
 ## Why insurers care
 
@@ -43,6 +45,7 @@ TassuVahti stays with the pet between vet visits.
 ## Safety first
 
 - **The app suggests; the vet decides.** The vet's own limits for a pet always take priority, and every assessment says that it does not replace a vet.
+- **The rules decide the traffic light, the AI explains it.** The AI may raise the level up to "contact a vet" when the vet data and the logs together point to it, but never lower it. Emergencies are always decided by the rules.
 - **The precautionary principle.** When too little is known about the pet, the app chooses the more serious level.
 - **Medical content is kept separate from code.** It is versioned, carries sources and dates, and is marked as sample material until a veterinarian reviews it.
 
@@ -55,9 +58,10 @@ TassuVahti stays with the pet between vet visits.
 | Back-end | Node.js, TypeScript, Fastify 5, Zod validation |
 | Database | SQLite with Drizzle ORM and versioned migrations |
 | Sign-in | Online banking (simulated identity provider), rotating single-use refresh tokens, sessions per device |
+| AI | Claude (Anthropic) on the back-end only, for reading vet documents and the analysis of visits and logs. Without an API key both answer with a built-in sample, so the demo works offline. |
 | Notifications | Expo push notifications for reminders and seasonal alerts |
 | Images | Server-side cropping and resizing; location data removed from photos |
-| Quality | 208 automated back-end tests (Vitest) |
+| Quality | 229 automated back-end tests (Vitest) |
 
 **Privacy by design:**
 - The national ID number is never stored, only a one-way keyed hash of it.
@@ -73,14 +77,14 @@ tassuvahti/
 │   │   ├── app/                      # Expo Router pages (only re-export screens)
 │   │   │   ├── (auth)/               # Landing page, BankID, email sign-in and sign-up
 │   │   │   ├── (tabs)/               # The four tabs
-│   │   │   │   ├── (home)/           # Home: policy and health card, vet services
+│   │   │   │   ├── (home)/           # Home: health status and AI summary, today's care, a seasonal tip
 │   │   │   │   ├── pets/             # Pets list
-│   │   │   │   ├── explore/          # Vets map, "Is it safe?", quizzes
+│   │   │   │   ├── explore/          # Clinics: remote vet services and the vets map
 │   │   │   │   └── profile/          # Account, insurance, team, FAQ, support, accessibility
 │   │   │   ├── pet/[petId]/          # Pet page: log, care plan, reminders, diet, passport, trends
 │   │   │   ├── clinic/[id].tsx       # Clinic card
 │   │   │   ├── substance/[id].tsx    # Knowledge base entry
-│   │   │   ├── quiz/[id].tsx         # Scenario quiz
+│   │   │   ├── safe.tsx              # "Is it safe?" knowledge base, opened from the pet page
 │   │   │   ├── ate-this.tsx          # "My pet ate this"
 │   │   │   ├── find-in-store.tsx     # Stores for a recommended product
 │   │   │   ├── add-pet.tsx
@@ -97,11 +101,13 @@ tassuvahti/
 └── server/                           # Back-end (Node.js + Fastify)
     ├── src/
     │   ├── modules/                  # One folder per feature
-    │   │   ├── auth/                 # Online banking sign-in, sessions, devices
+    │   │   ├── auth/                 # Online banking sign-in, sessions, devices, demo data
     │   │   ├── pets/  pet-photos/    # Pets and profile pictures
     │   │   ├── passport/             # Health passport and share links
     │   │   ├── symptoms/             # Watch lists, daily log, severity assessment
     │   │   ├── care/                 # Care plans, medication schedules, reminders
+    │   │   ├── visit-scan/           # Reading vet documents with AI into a draft care plan
+    │   │   ├── insights/             # AI analysis of visits and daily logs together
     │   │   ├── diet/                 # Diets, portions, weight
     │   │   ├── knowledge/            # Dangerous substances, "My pet ate this"
     │   │   ├── alerts/               # Seasonal alerts and push notifications
@@ -143,14 +149,15 @@ The full design is in the [mockups](https://claude.ai/artifact/YTMRtqRmMMjpkMBSA
 
 ## Getting Started
 
-The app runs on its own with mock data. Start the server too to use real sign-in and saved data.
+The app runs on its own with mock data. Start the server too to use real sign-in and saved data. With `DEMO_MODE=true` a new account gets the same demo pets and history as the mock data (Mirri recovering from a urinary tract infection, Rekku), so the app looks the same either way.
 
 **Server** (first terminal):
 
 ```bash
 cd server
 npm install
-cp .env.example .env   # then set JWT_SECRET and IDENTITY_HASH_SECRET (32+ characters each)
+cp .env.example .env   # Windows: copy .env.example .env
+                       # then set JWT_SECRET and IDENTITY_HASH_SECRET (32+ characters each)
 npm run dev            # http://localhost:3000/health should answer {"status":"ok"}
 npm test               # runs the back-end tests
 ```
@@ -161,10 +168,32 @@ npm test               # runs the back-end tests
 cd client
 npm install
 cp .env.example .env   # set EXPO_PUBLIC_API_URL, or leave it empty for mock data
-npx expo start
+npx expo start -c      # -c clears the cache, so a changed .env is read
 ```
 
-`EXPO_PUBLIC_API_URL` depends on where the app runs: `http://localhost:3000` in a browser, `http://10.0.2.2:3000` in the Android emulator, or your computer's network address (e.g. `http://192.168.1.10:3000`) on a phone.
+`EXPO_PUBLIC_API_URL` depends on where the app runs: `http://localhost:3000` in a browser, `http://10.0.2.2:3000` in the Android emulator, or your computer's network address (e.g. `http://192.168.1.10:3000`, see `ipconfig`) on a phone. The phone must be on the same Wi-Fi, and Windows Firewall must allow Node.js.
+
+With the server on, sign in with **online banking** (any bank; it is simulated). Email accounts are mock only.
+
+**Tips**
+
+- On Windows, Notepad may save the file as `.env.txt`. Expo and the server only read a file named exactly `.env`.
+- The demo history is created when an account is first made. To start over, stop the server and delete `server/data/tassuvahti.db`.
+
+**AI (optional)**
+
+Add `ANTHROPIC_API_KEY=` to `server/.env` and restart the server. Then Claude reads scanned vet documents and writes the analysis of visits and logs. Without a key both use a built-in sample, marked as such in the app. The key stays on the server and is never put in the app. `VISIT_SCAN_MODE` and `INSIGHTS_MODE` (`auto`, `claude` or `mock`) force one or the other.
+
+**What uses the back-end**
+
+| With `EXPO_PUBLIC_API_URL` set | Always mock data for now |
+|---|---|
+| Sign-in (online banking), pets and photos | Email sign-in |
+| Visits, care plans, scanning vet documents | Health passport |
+| Daily logs, traffic light, watch lists | Diet, weight and water trends |
+| Reminders and the medication course | Clinics and stores |
+| Seasonal alerts, "Is it safe?" | Insurance and remote vet services |
+| AI analysis | |
 
 ## Coding Conventions
 
