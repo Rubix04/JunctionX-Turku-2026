@@ -4,6 +4,7 @@ import type { Db } from "../../db/client.js";
 import { type PetRow, pets, reminders } from "../../db/schema.js";
 import { createSchedule, saveCarePlan } from "../care/service.js";
 import { addDays } from "../care/time.js";
+import { addWeight, savePlan } from "../diet/service.js";
 import { createRecord, todayInFinland } from "../passport/service.js";
 import type { Answer } from "../symptoms/content.js";
 import { saveLog, startWatchListsForRecord } from "../symptoms/service.js";
@@ -20,9 +21,20 @@ const VET = "ELL Laine";
 /** "2026-11-19" as "19.11." */
 const dayMonth = (isoDate: string) => `${Number(isoDate.slice(8, 10))}.${Number(isoDate.slice(5, 7))}.`;
 
+/** Weigh-ins every few weeks, as in the mock: [days ago, kg] */
+const addWeights = (db: Db, pet: PetRow, today: string, weights: [number, number][]) => {
+  for (const [offset, weightKg] of weights) {
+    addWeight(db, pet.id, { weightKg, weighedOn: addDays(today, offset) }, today);
+  }
+};
+
 const usual = { appetite: 1, energy: 1, drinking: 1, toilet: 1, pain: 0, vomiting: 0 } satisfies Record<string, Answer>;
 
 const seedMirri = (db: Db, pet: PetRow, userId: string, today: string) => {
+  db.update(pets)
+    .set({ microchip: "246098100234517", markings: "Harmaa tiikerikuvioinen, valkoinen rinta ja tassut", sex: "female", neutered: true })
+    .where(eq(pets.id, pet.id))
+    .run();
   const visitDate = addDays(today, -4);
   const courseStart = addDays(today, -3);
   const courseEnd = addDays(courseStart, 9);
@@ -40,6 +52,26 @@ const seedMirri = (db: Db, pet: PetRow, userId: string, today: string) => {
     clinic: AURORA,
   });
   createRecord(db, pet.id, "surgery", { name: "Sterilointi", performedOn: "2019-05-14", clinic: AURORA });
+  createRecord(db, pet.id, "visit", {
+    visitedOn: addDays(today, -625),
+    reason: "Hammastarkastus",
+    clinic: AURORA,
+    diagnosis: "Lievä ientulehdus",
+  });
+  createRecord(db, pet.id, "lab", {
+    kind: "blood",
+    takenOn: addDays(today, -267),
+    title: "Verenkuva ja munuaisarvot",
+    summary: "Kaikki arvot viitealueella.",
+    clinic: AURORA,
+  });
+  createRecord(db, pet.id, "lab", {
+    kind: "urine",
+    takenOn: visitDate,
+    title: "Virtsakoe",
+    summary: "Löydettiin bakteereja ja valkosoluja. Ei kiteitä.",
+    clinic: AURORA,
+  });
 
   const visit = createRecord(db, pet.id, "visit", {
     visitedOn: visitDate,
@@ -81,6 +113,24 @@ const seedMirri = (db: Db, pet: PetRow, userId: string, today: string) => {
     userId,
     { allowClinicCheck: true },
   );
+
+  savePlan(db, pet, {
+    dietType: "urinary",
+    source: "vet",
+    foodName: "Virtsateitä tukeva märkäruoka · Vet Diet Urinary S/O",
+    mealsPerDay: 2,
+    goal: "maintain",
+  });
+  addWeights(db, pet, today, [
+    [-133, 5.0],
+    [-116, 4.95],
+    [-97, 4.9],
+    [-81, 4.8],
+    [-67, 4.75],
+    [-60, 4.7],
+    [-53, 4.65],
+    [-4, 4.6],
+  ]);
 
   // Doses at 8 and 20, the ones already due marked as given.
   const schedule = createSchedule(
@@ -124,6 +174,16 @@ const seedMirri = (db: Db, pet: PetRow, userId: string, today: string) => {
 };
 
 const seedRekku = (db: Db, pet: PetRow, userId: string, today: string) => {
+  db.update(pets)
+    .set({
+      microchip: "246098100771203",
+      markings: "Keltainen, lyhytkarvainen",
+      registration: "FI28417/21 · Suomen Kennelliitto",
+      sex: "male",
+      neutered: false,
+    })
+    .where(eq(pets.id, pet.id))
+    .run();
   createRecord(db, pet.id, "visit", {
     visitedOn: addDays(today, -58),
     reason: "Ontuminen vasen etujalka",
@@ -143,6 +203,32 @@ const seedRekku = (db: Db, pet: PetRow, userId: string, today: string) => {
     clinic: KAARINA,
   });
   createRecord(db, pet.id, "allergy", { allergen: "Kanaproteiini", severity: "mild" });
+  createRecord(db, pet.id, "lab", {
+    kind: "xray",
+    takenOn: addDays(today, -58),
+    title: "Röntgen, vasen etutassu",
+    summary: "Ei murtumaa. Vain pehmytkudosvamma.",
+    clinic: KAARINA,
+  });
+  createRecord(db, pet.id, "lab", {
+    kind: "ultrasound",
+    takenOn: addDays(today, -383),
+    title: "Vatsan ultraääni",
+    summary: "Normaalit löydökset. Tutkittiin vatsavaivojen vuoksi.",
+    clinic: KAARINA,
+  });
+  savePlan(db, pet, {
+    dietType: "hypoallergenic",
+    source: "vet",
+    foodName: "Kanaton aikuisen koiran ruoka",
+    mealsPerDay: 2,
+    goal: "maintain",
+  });
+  addWeights(db, pet, today, [
+    [-107, 31.4],
+    [-74, 31.1],
+    [-46, 31.0],
+  ]);
 
   // Two weeks of logs: tired after a long walk one day, extra hungry another.
   for (let offset = -14; offset <= -1; offset++) {

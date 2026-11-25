@@ -60,6 +60,15 @@ export const pets = sqliteTable("pets", {
   weightKg: real("weight_kg"),
   /** File name of the profile picture in the upload folder, or null for the species default. */
   photoKey: text("photo_key"),
+  // Identity for the health passport (spec 4)
+  /** 15-digit ISO 11784/11785 microchip number */
+  microchip: text("microchip"),
+  /** Colour and markings, e.g. "Grey tabby, white paws" */
+  markings: text("markings"),
+  /** Pedigree registration, e.g. "FI12345/21 · Finnish Kennel Club" */
+  registration: text("registration"),
+  sex: text("sex", { enum: ["female", "male"] }),
+  neutered: integer("neutered", { mode: "boolean" }),
   createdAt: createdAt(),
 });
 
@@ -69,7 +78,7 @@ export type PetRow = typeof pets.$inferSelect;
 
 // ---- Health passport (spec 4) ----
 
-export const healthRecordKinds = ["vaccination", "medication", "allergy", "surgery", "visit"] as const;
+export const healthRecordKinds = ["vaccination", "medication", "allergy", "surgery", "visit", "lab"] as const;
 export type HealthRecordKind = (typeof healthRecordKinds)[number];
 
 /**
@@ -90,7 +99,7 @@ export const healthRecords = sqliteTable("health_records", {
 });
 
 export const shareRecipients = ["vet", "petCare", "other"] as const;
-export const passportSections = ["vaccinations", "medications", "allergies", "surgeries", "visits"] as const;
+export const passportSections = ["vaccinations", "medications", "allergies", "surgeries", "visits", "labs"] as const;
 export type PassportSection = (typeof passportSections)[number];
 
 /**

@@ -20,6 +20,7 @@ const notBefore =
   };
 
 export const allergySeverities = ["mild", "moderate", "severe", "unknown"] as const;
+export const labKinds = ["blood", "urine", "ultrasound", "xray", "other"] as const;
 
 const inputSchemas = {
   vaccination: z
@@ -63,6 +64,14 @@ const inputSchemas = {
     /** Weight measured at the visit; also added to the pet's weight history */
     weightKg: z.number().positive().max(150).nullish(),
     notes: optionalText(1000),
+  }),
+  /** A lab result or imaging, e.g. from the clinic's PDF */
+  lab: z.object({
+    kind: z.enum(labKinds).default("other"),
+    takenOn: isoDate,
+    title: requiredText(120),
+    summary: optionalText(1000),
+    clinic: optionalText(120),
   }),
 } satisfies Record<HealthRecordKind, z.ZodType>;
 
@@ -120,6 +129,14 @@ export const outputSchemas = {
     weightKg: z.number().nullable(),
     notes: z.string().nullable(),
   }),
+  lab: z.object({
+    ...recordMeta,
+    kind: z.enum(labKinds),
+    takenOn: z.string(),
+    title: z.string(),
+    summary: z.string().nullable(),
+    clinic: z.string().nullable(),
+  }),
 } satisfies Record<HealthRecordKind, z.ZodType>;
 
 type KindConfig = {
@@ -135,6 +152,7 @@ export const kinds: Record<HealthRecordKind, KindConfig> = {
   allergy: { section: "allergies", input: inputSchemas.allergy, dateField: "notedOn" },
   surgery: { section: "surgeries", input: inputSchemas.surgery, dateField: "performedOn" },
   visit: { section: "visits", input: inputSchemas.visit, dateField: "visitedOn" },
+  lab: { section: "labs", input: inputSchemas.lab, dateField: "takenOn" },
 };
 
 export const kindForSection = Object.fromEntries(

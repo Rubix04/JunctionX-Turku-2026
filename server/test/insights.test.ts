@@ -48,6 +48,29 @@ describe("demo history", () => {
     expect(logs).toHaveLength(14);
   });
 
+  it("fills the passport and the diet like the mock data", async () => {
+    app = await createTestApp({ DEMO_MODE: "true" });
+    const { headers, mirri, rekku } = await signInDemo(app);
+
+    const passport = (await app.inject({ method: "GET", url: `/pets/${mirri.id}/passport`, headers })).json();
+    expect(passport.profile).toMatchObject({ microchip: "246098100234517", sex: "female", neutered: true });
+    expect(passport.labs.map((lab: { kind: string }) => lab.kind).sort()).toEqual(["blood", "urine"]);
+    const conditions = Object.fromEntries(
+      passport.profile.conditions.map((c: { name: string; resolved: boolean }) => [c.name, c.resolved]),
+    );
+    expect(conditions).toEqual({ Virtsatieinfektio: false, "Lievä ientulehdus": true });
+
+    const rekkuPassport = (await app.inject({ method: "GET", url: `/pets/${rekku.id}/passport`, headers })).json();
+    expect(rekkuPassport.profile.registration).toContain("Kennelliitto");
+    expect(rekkuPassport.profile.conditions[0]).toMatchObject({ resolved: true });
+
+    const diet = (await app.inject({ method: "GET", url: `/pets/${mirri.id}/diet`, headers })).json();
+    expect(diet.plan).toMatchObject({ dietType: "urinary", source: "vet", mealsPerDay: 2 });
+    const weights = (await app.inject({ method: "GET", url: `/pets/${mirri.id}/weights`, headers })).json();
+    expect(weights.entries).toHaveLength(8);
+    expect(weights.summary.latest.weightKg).toBe(4.6);
+  });
+
   it("does not seed anything without demo mode", async () => {
     app = await createTestApp({ DEMO_MODE: "false" });
     const response = await app.inject({ method: "POST", url: "/auth/bank", payload: { bankId: "op", deviceName: "Test" } });

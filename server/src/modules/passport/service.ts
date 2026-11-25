@@ -91,6 +91,7 @@ export type Passport = {
   allergies: RecordDto<"allergy">[];
   surgeries: RecordDto<"surgery">[];
   visits: RecordDto<"visit">[];
+  labs: RecordDto<"lab">[];
 };
 
 /** Groups records into passport sections, keeping only the requested sections. */
