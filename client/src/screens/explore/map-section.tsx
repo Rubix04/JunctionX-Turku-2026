@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import ClinicCard from '@/components/features/clinic-card';
+import Note from '@/components/ui/note';
 import SchematicMap from '@/components/features/schematic-map';
 import AppText from '@/components/ui/app-text';
 import { ListGroup, ListRow } from '@/components/ui/list-group';
@@ -28,6 +29,19 @@ type Filters = {
 
 const defaultFilters: Filters = { openNow: false, emergency: false, contractedOnly: false, species: null, maxKm: null };
 const emergencyFilters: Filters = { ...defaultFilters, emergency: true };
+const speciesValues: Species[] = ['dog', 'cat', 'smallAnimal'];
+
+type MapParams = { mode?: string; species?: string; for?: string };
+
+/** Filters a link asks for: 24 h clinics in emergency mode, contracted clinics for the pet's species when booking */
+const filtersFor = ({ mode, species }: MapParams): Filters => {
+  if (mode === 'emergency') return emergencyFilters;
+  if (mode === 'book') {
+    const pet = speciesValues.find((s) => s === species) ?? null;
+    return { ...defaultFilters, contractedOnly: true, species: pet };
+  }
+  return defaultFilters;
+};
 
 const FilterChip = ({ label, selected, onPress }: { label: string; selected: boolean; onPress: () => void }) => (
   <Pressable
@@ -50,19 +64,23 @@ const matches = (clinic: Clinic, f: Filters) =>
   (!f.maxKm || clinic.distanceKm <= f.maxKm);
 
 // Contracted vets and emergency clinics (spec 7), shown in the Explore tab. With ?mode=emergency the 24 h clinics come
-// first, ordered by opening status and distance.
+// first, ordered by opening status and distance. With ?mode=book (from a reminder's Book button) it shows contracted
+// clinics for the pet's species and says what is being booked.
 const MapSection = () => {
   const { t } = useTranslation();
-  const { mode } = useLocalSearchParams<{ mode?: string }>();
+  const params = useLocalSearchParams<MapParams>();
   const { data: clinics, error, reload } = useAsync(getClinics, []);
-  const [filters, setFilters] = useState<Filters>(mode === 'emergency' ? emergencyFilters : defaultFilters);
+  const [filters, setFilters] = useState<Filters>(() => filtersFor(params));
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [appliedMode, setAppliedMode] = useState(mode);
+  const linkKey = [params.mode, params.species, params.for].join('|');
+  const [appliedLink, setAppliedLink] = useState(linkKey);
+  const [bookingFor, setBookingFor] = useState(params.mode === 'book' ? (params.for ?? null) : null);
 
-  // Opened again in emergency mode while the tab was already open: show the 24 h clinics.
-  if (mode !== appliedMode) {
-    setAppliedMode(mode);
-    if (mode === 'emergency') setFilters(emergencyFilters);
+  // Opened again from a link while the tab was already open: apply that link's filters.
+  if (linkKey !== appliedLink) {
+    setAppliedLink(linkKey);
+    if (params.mode) setFilters(filtersFor(params));
+    setBookingFor(params.mode === 'book' ? (params.for ?? null) : null);
   }
 
   const toggle = (key: 'openNow' | 'emergency' | 'contractedOnly') => setFilters({ ...filters, [key]: !filters[key] });
@@ -75,6 +93,27 @@ const MapSection = () => {
 
   return (
     <>
+      {bookingFor && (
+        <ScreenSection>
+          <Note
+            icon="calendar"
+            tone="amber"
+            trailing={
+              <AppText
+                variant="bodySmall"
+                color={colors.accentDark}
+                style={styles.bold}
+                accessibilityRole="button"
+                onPress={() => setBookingFor(null)}
+              >
+                {t('common.close')}
+              </AppText>
+            }
+          >
+            {t('map.bookingFor', { what: bookingFor })}
+          </Note>
+        </ScreenSection>
+      )}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>
         <FilterChip label={t('map.filter.openNow')} selected={filters.openNow} onPress={() => toggle('openNow')} />
         <FilterChip label={t('map.filter.emergency')} selected={filters.emergency} onPress={() => toggle('emergency')} />
@@ -83,7 +122,7 @@ const MapSection = () => {
           selected={filters.contractedOnly}
           onPress={() => toggle('contractedOnly')}
         />
-        {(['dog', 'cat', 'smallAnimal'] as const).map((s) => (
+        {speciesValues.map((s) => (
           <FilterChip
             key={s}
             label={t(`species.${s}Plural`)}
@@ -150,7 +189,13 @@ const MapSection = () => {
                     .filter(Boolean)
                     .join(' · ')}
                   trailing={c.directPayment ? <Pill label={t('clinic.directPaymentShort')} /> : undefined}
-                  onPress={() => router.push(`/clinic/${c.id}`)}
+                  onPress={() =>
+                    router.push(
+                      bookingFor
+                        ? { pathname: '/clinic/[id]', params: { id: c.id, for: bookingFor } }
+                        : `/clinic/${c.id}`,
+                    )
+                  }
                 />
               );
             })}
@@ -175,6 +220,7 @@ const styles = StyleSheet.create({
   chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipOff: { backgroundColor: colors.surface, borderColor: colors.border },
   chipText: { fontFamily: fonts.bodySemiBold },
+  bold: { fontFamily: fonts.bodyBold },
   legend: { flexDirection: 'row', flexWrap: 'wrap', gap: 14 },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   legendDot: { width: 10, height: 10, borderRadius: 5 },

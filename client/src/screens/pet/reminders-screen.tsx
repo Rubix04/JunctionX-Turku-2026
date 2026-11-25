@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams } from 'expo-router';
+import { type Href, router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
@@ -12,16 +12,48 @@ import SectionLabel from '@/components/ui/section-label';
 import Screen from '@/components/ui/screen';
 import { EmptyView, ErrorView, LoadingView } from '@/components/ui/state-views';
 import { useAsync } from '@/hooks/use-async';
-import { getMedicationCourse, getReminders, setReminderDone } from '@/services/care';
+import { getMedicationCourse, getReminders, getVisits, setReminderDone } from '@/services/care';
+import { getClinics } from '@/services/clinics';
 import { mockHousehold } from '@/services/mock/data';
 import { getPets } from '@/services/pets';
 import { colors, fonts, radius, spacing } from '@/theme';
-import type { ReminderKind } from '@/types/care';
+import type { ReminderKind, Visit } from '@/types/care';
+import type { Clinic } from '@/types/clinic';
+import type { Pet } from '@/types/pet';
 import { daysBetween, formatShortWeekdayDate, formatTime, todayIso } from '@/utils/format';
 
 const loadReminders = async (petId: string) => {
-  const [pets, reminders, course] = await Promise.all([getPets(), getReminders(), getMedicationCourse(petId)]);
-  return { pets, reminders, course };
+  const [pets, reminders, course, clinics] = await Promise.all([
+    getPets(),
+    getReminders(),
+    getMedicationCourse(petId),
+    getClinics(),
+  ]);
+  // Each pet's visits, newest first, to find the clinic it usually goes to.
+  const visits = await Promise.all(pets.map((p) => getVisits(p.id).catch((): Visit[] => [])));
+  const visitsByPet = Object.fromEntries(pets.map((p, i) => [p.id, visits[i]]));
+  return { pets, reminders, course, clinics, visitsByPet };
+};
+
+/**
+ * Where "Book" goes: the clinic of the pet's latest visit, if it treats the species and takes bookings.
+ * Otherwise the Clinics tab, filtered to contracted clinics that treat the species.
+ */
+const bookingHref = (
+  pet: Pet | undefined,
+  clinics: Clinic[],
+  visits: Visit[],
+  what: string,
+): Href => {
+  const usual = pet
+    ? visits
+        .map((v) => clinics.find((c) => c.name === v.clinicName))
+        .find((c) => c && c.bookingUrl && c.species.includes(pet.species))
+    : undefined;
+  if (usual) {
+    return { pathname: '/clinic/[id]', params: { id: usual.id, for: what } };
+  }
+  return { pathname: '/explore', params: { mode: 'book', for: what, ...(pet ? { species: pet.species } : {}) } };
 };
 
 const kindIcons: Record<ReminderKind, 'pill' | 'calendar' | 'shieldCheck' | 'leaf'> = {
@@ -43,7 +75,7 @@ const RemindersScreen = () => {
     return <Screen header={header}>{error ? <ErrorView onRetry={reload} /> : <LoadingView />}</Screen>;
   }
 
-  const { pets, reminders, course } = data;
+  const { pets, reminders, course, clinics, visitsByPet } = data;
   const petName = (id: string) => pets.find((p) => p.id === id)?.name ?? '';
   const today = todayIso();
   const todays = reminders.filter((r) => r.dueAt.startsWith(today));
@@ -132,7 +164,16 @@ const RemindersScreen = () => {
                     label={t('reminders.book')}
                     variant="tealOutline"
                     size="small"
-                    onPress={() => router.push('/explore')}
+                    onPress={() =>
+                      router.push(
+                        bookingHref(
+                          pets.find((p) => p.id === r.petId),
+                          clinics,
+                          visitsByPet[r.petId] ?? [],
+                          `${petName(r.petId)} · ${r.title.toLowerCase()}`,
+                        ),
+                      )
+                    }
                   />
                 ) : undefined
               }

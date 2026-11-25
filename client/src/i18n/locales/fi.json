@@ -468,7 +468,8 @@
     },
     "noResults": "Ei sopivia klinikoita",
     "noResultsBody": "Kokeile poistaa jokin suodatin.",
-    "registryNote": "Sopimusklinikat tulevat vakuutusyhtiön rekisteristä."
+    "registryNote": "Sopimusklinikat tulevat vakuutusyhtiön rekisteristä.",
+    "bookingFor": "Valitse klinikka: {{what}}. Näytetään sopimusklinikat, jotka hoitavat tätä lemmikkiä."
   },
   "clinic": {
     "emergency24h": "24 h päivystys",
@@ -494,7 +495,8 @@
     "phone": "Puhelin",
     "species": "Hoitaa",
     "expertise": "Erikoisosaaminen",
-    "notContracted": "Ei sopimusklinikka. Vakuutus korvaa käynnin silti, mutta haet korvauksen itse."
+    "notContracted": "Ei sopimusklinikka. Vakuutus korvaa käynnin silti, mutta haet korvauksen itse.",
+    "bookingFor": "Varaus: {{what}}"
   },
   "store": {
     "vetRecommended": "Eläinlääkärin suosittelema",

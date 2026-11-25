@@ -468,7 +468,8 @@
     },
     "noResults": "Inga kliniker matchar",
     "noResultsBody": "Prova att ta bort ett filter.",
-    "registryNote": "Avtalsklinikerna kommer från försäkringsbolagets register."
+    "registryNote": "Avtalsklinikerna kommer från försäkringsbolagets register.",
+    "bookingFor": "Välj en klinik för {{what}}. Visar avtalskliniker som behandlar det här djuret."
   },
   "clinic": {
     "emergency24h": "Jour 24 h",
@@ -494,7 +495,8 @@
     "phone": "Telefon",
     "species": "Behandlar",
     "expertise": "Specialkunskap",
-    "notContracted": "Ingen avtalsklinik. Försäkringen ersätter ändå besöket, men du ansöker om ersättning själv."
+    "notContracted": "Ingen avtalsklinik. Försäkringen ersätter ändå besöket, men du ansöker om ersättning själv.",
+    "bookingFor": "Bokning: {{what}}"
   },
   "store": {
     "vetRecommended": "Rekommenderat av veterinär",
