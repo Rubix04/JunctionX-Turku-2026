@@ -1,3 +1,4 @@
+import { AURORA } from '@/services/mock/clinics';
 import { tr } from '@/services/mock/delay';
 import type { Claim, Policy } from '@/types/insurance';
 
@@ -15,6 +16,8 @@ export const mockClaims: Claim[] = [
     date: '2026-10-13',
     channel: 'directPayment',
     status: 'paid',
+    amount: 286,
+    clinicName: AURORA,
   },
   {
     id: 'claim-rekku-paw',
@@ -23,5 +26,7 @@ export const mockClaims: Claim[] = [
     date: '2026-09-28',
     channel: 'receipt',
     status: 'inReview',
+    amount: 154.5,
+    clinicName: tr({ en: 'Animal Hospital Meri', fi: 'Eläinsairaala Meri', sv: 'Djursjukhuset Meri' }),
   },
 ];

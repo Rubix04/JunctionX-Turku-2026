@@ -32,7 +32,8 @@
     "findInStore": "Etsi kaupasta",
     "addPet": "Lisää lemmikki",
     "addVisit": "Lisää eläinlääkärikäynti",
-    "notFound": "Sivua ei löytynyt"
+    "notFound": "Sivua ei löytynyt",
+    "claim": "Tee korvaushakemus"
   },
   "disclaimer": {
     "app": "TassuVahti on tukityökalu. Se ei korvaa eläinlääkäriä.",
@@ -310,7 +311,8 @@
     "comingUp": "Tulossa",
     "nothingComing": "Ei tulevia muistutuksia",
     "book": "Varaa",
-    "familySees": "Perheesi näkee samat muistutukset ja kuittaukset."
+    "familySees": "Perheesi näkee samat muistutukset ja kuittaukset.",
+    "overdue": "Myöhässä"
   },
   "diet": {
     "recommendedBy": "Suositellut: {{vet}}",
@@ -605,6 +607,42 @@
     "makeClaim": "Hae korvausta",
     "directPaymentNote": "Sopimusklinikat, joissa on suorakorvaus: korvausta ei tarvitse hakea jälkikäteen.",
     "bankIdNote": "Vakuutustietojen muuttaminen vaatii uuden pankkitunnistautumisen."
+  },
+  "claim": {
+    "noPolicy": "Yhdelläkään lemmikilläsi ei ole voimassa olevaa vakuutusta, joten haettavaa ei vielä ole.",
+    "treatment": "Hoito",
+    "title": "Mitä hoidettiin?",
+    "titlePlaceholder": "esim. Tassuvamma",
+    "titleRequired": "Kerro, mitä hoito koski",
+    "date": "Käyntipäivä",
+    "dateInvalid": "Muoto pp.kk.vvvv, ei tulevaisuudessa",
+    "amount": "Summa (€)",
+    "amountLabel": "Summa",
+    "amountInvalid": "Syötä kuitin summa",
+    "overCover": "Summa ylittää tämän vuoden jäljellä olevan korvauksen ({{amount}}). Korvaamme enintään jäljellä olevan määrän.",
+    "clinic": "Klinikka",
+    "clinicPlaceholder": "Eläinlääkäriaseman nimi",
+    "clinicRequired": "Syötä klinikka",
+    "description": "Mitä tapahtui? (valinnainen)",
+    "descriptionPlaceholder": "Muutama sana nopeuttaa käsittelyä.",
+    "receipts": "Kuitit",
+    "receiptsHint": "Lisää kuitti ja, jos sinulla on, eläinlääkärin lausunto. Enintään 5 tiedostoa.",
+    "receiptPhoto": "Kuva kuitista",
+    "removeReceipt": "Poista {{name}}",
+    "takePhoto": "Ota kuva",
+    "fromGallery": "Galleria",
+    "fromFiles": "Tiedostot",
+    "receiptRequired": "Lisää vähintään yksi kuitti",
+    "confirm": "Antamani tiedot ovat oikein",
+    "confirmRequired": "Vahvista tiedot",
+    "send": "Lähetä hakemus",
+    "sendFailed": "Hakemusta ei voitu lähettää. Tarkista yhteys ja yritä uudelleen.",
+    "payoutNote": "Korvaus maksetaan vakuutukseesi liitetylle tilille.",
+    "sentTitle": "Hakemus lähetetty",
+    "sentBody": "Saimme lemmikin {{name}} korvaushakemuksen ja käsittelemme sen mahdollisimman pian.",
+    "sentNext": "Useimmat hakemukset käsitellään 5 arkipäivän kuluessa. Voit seurata tilaa kohdassa Vakuutukset ja korvaukset.",
+    "reference": "Viite",
+    "backToInsurance": "Takaisin vakuutuksiin"
   },
   "profile": {
     "pets_one": "{{count}} lemmikki",

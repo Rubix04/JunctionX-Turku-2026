@@ -21,4 +21,22 @@ export type Claim = {
   /** How the claim was made */
   channel: 'directPayment' | 'receipt';
   status: ClaimStatus;
+  /** Euros on the receipt */
+  amount?: number;
+  clinicName?: string;
+};
+
+/** A receipt, invoice or vet record attached to a claim */
+export type ClaimAttachment = { uri: string; name: string; kind: 'image' | 'pdf' };
+
+export type NewClaim = {
+  petId: string;
+  /** What the treatment was for, e.g. "Paw injury" */
+  title: string;
+  /** Day of the treatment, ISO date */
+  treatmentDate: string;
+  clinicName: string;
+  amount: number;
+  description: string | null;
+  attachments: ClaimAttachment[];
 };

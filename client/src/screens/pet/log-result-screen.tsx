@@ -60,9 +60,14 @@ const LogResultScreen = () => {
   const [reminderSet, setReminderSet] = useState(false);
   // The AI reads the vet's data and the logs together; it can raise the level, never lower it.
   const { data: insight, loading: analysing } = useAsync(() => getInsights(petId), [petId]);
+  const close = () => (router.canGoBack() ? router.back() : router.replace(`/pet/${petId}`));
 
   if (!data) {
-    return <Screen>{error ? <ErrorView onRetry={reload} /> : <LoadingView />}</Screen>;
+    return (
+      <Screen header={<ScreenHeader backIcon="close" onBack={close} />}>
+        {error ? <ErrorView onRetry={reload} /> : <LoadingView />}
+      </Screen>
+    );
   }
 
   const { pet, status, questions, clinic } = data;
@@ -76,7 +81,6 @@ const LogResultScreen = () => {
     const answer = log?.answers[q.id];
     return answer !== undefined && (level === 'red' ? q.redIf : [...q.yellowIf, ...q.redIf]).includes(answer);
   });
-  const close = () => (router.canGoBack() ? router.back() : router.replace(`/pet/${petId}`));
 
   const remindTonight = async () => {
     await addReminder({

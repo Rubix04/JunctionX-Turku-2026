@@ -32,7 +32,8 @@
     "findInStore": "Hitta i butik",
     "addPet": "Lägg till ett djur",
     "addVisit": "Lägg till ett veterinärbesök",
-    "notFound": "Sidan hittades inte"
+    "notFound": "Sidan hittades inte",
+    "claim": "Ansök om ersättning"
   },
   "disclaimer": {
     "app": "TassuVahti är ett stödverktyg. Det ersätter inte en veterinär.",
@@ -310,7 +311,8 @@
     "comingUp": "Kommande",
     "nothingComing": "Inget kommande",
     "book": "Boka",
-    "familySees": "Din familj ser samma påminnelser och markeringar."
+    "familySees": "Din familj ser samma påminnelser och markeringar.",
+    "overdue": "Försenad"
   },
   "diet": {
     "recommendedBy": "Rekommenderat av {{vet}}",
@@ -605,6 +607,42 @@
     "makeClaim": "Ansök om ersättning",
     "directPaymentNote": "Avtalskliniker med direktersättning: du behöver inte ansöka i efterhand.",
     "bankIdNote": "Ändring av försäkringsuppgifter kräver ny bankidentifiering."
+  },
+  "claim": {
+    "noPolicy": "Inget av dina djur har en giltig försäkring, så det finns inget att ansöka om ännu.",
+    "treatment": "Behandling",
+    "title": "Vad behandlades?",
+    "titlePlaceholder": "t.ex. Tasskada",
+    "titleRequired": "Berätta vad behandlingen gällde",
+    "date": "Besöksdatum",
+    "dateInvalid": "Formatet dd.mm.åååå, inte i framtiden",
+    "amount": "Belopp (€)",
+    "amountLabel": "Belopp",
+    "amountInvalid": "Ange beloppet på kvittot",
+    "overCover": "Beloppet är större än årets återstående ersättning ({{amount}}). Vi betalar högst det som återstår.",
+    "clinic": "Klinik",
+    "clinicPlaceholder": "Veterinärklinikens namn",
+    "clinicRequired": "Ange kliniken",
+    "description": "Vad hände? (valfritt)",
+    "descriptionPlaceholder": "Några ord hjälper oss att behandla ansökan snabbare.",
+    "receipts": "Kvitton",
+    "receiptsHint": "Lägg till kvittot och, om du har det, veterinärens utlåtande. Högst 5 filer.",
+    "receiptPhoto": "Foto av kvitto",
+    "removeReceipt": "Ta bort {{name}}",
+    "takePhoto": "Ta foto",
+    "fromGallery": "Galleri",
+    "fromFiles": "Filer",
+    "receiptRequired": "Lägg till minst ett kvitto",
+    "confirm": "Uppgifterna jag gett är korrekta",
+    "confirmRequired": "Bekräfta uppgifterna",
+    "send": "Skicka ansökan",
+    "sendFailed": "Ansökan kunde inte skickas. Kontrollera anslutningen och försök igen.",
+    "payoutNote": "Ersättningen betalas till kontot som är kopplat till din försäkring.",
+    "sentTitle": "Ansökan skickad",
+    "sentBody": "Vi har tagit emot ansökan för {{name}} och behandlar den så snart som möjligt.",
+    "sentNext": "De flesta ansökningar behandlas inom 5 arbetsdagar. Du kan följa statusen under Försäkringar och ersättningar.",
+    "reference": "Referens",
+    "backToInsurance": "Tillbaka till försäkringar"
   },
   "profile": {
     "pets_one": "{{count}} husdjur",

@@ -47,7 +47,10 @@ const RemindersScreen = () => {
   const petName = (id: string) => pets.find((p) => p.id === id)?.name ?? '';
   const today = todayIso();
   const todays = reminders.filter((r) => r.dueAt.startsWith(today));
-  const upcoming = reminders.filter((r) => r.dueAt.slice(0, 10) > today && !r.done);
+  // Missed visits and vaccinations stay on the list (marked overdue) until done; a missed dose can't be given later.
+  const upcoming = reminders
+    .filter((r) => !r.done && (r.dueAt.slice(0, 10) > today || (r.dueAt.slice(0, 10) < today && r.kind !== 'medication')))
+    .sort((a, b) => a.dueAt.localeCompare(b.dueAt));
   const coursePet = pets.find((p) => p.id === petId);
 
   const toggle = async (id: string, done: boolean) => {
@@ -116,6 +119,7 @@ const RemindersScreen = () => {
               leading={<IconTile name={kindIcons[r.kind]} tone={r.kind === 'vaccination' ? 'amber' : 'teal'} />}
               title={`${petName(r.petId)} · ${r.title.toLowerCase()}`}
               subtitle={[
+                r.dueAt.slice(0, 10) < today ? t('reminders.overdue') : null,
                 formatShortWeekdayDate(r.dueAt),
                 r.dueAt.endsWith('T00:00:00') ? null : formatTime(r.dueAt),
                 r.detail || null,
@@ -130,9 +134,7 @@ const RemindersScreen = () => {
                     size="small"
                     onPress={() => router.push('/explore')}
                   />
-                ) : (
-                  <View />
-                )
+                ) : undefined
               }
             />
           ))}
