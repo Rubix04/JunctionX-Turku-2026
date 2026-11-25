@@ -64,6 +64,12 @@ export const apiFetch = async <T>(
   if (body !== undefined && !isFormData) {
     headers['Content-Type'] = 'application/json';
   }
+  // Sign-in, refresh and the bank list work without a session; everything else needs a token.
+  const isAuthCall = path.startsWith('/auth/') && path !== '/auth/logout';
+  // The app started offline with a saved session: get an access token before the first request.
+  if (!accessToken && !isAuthCall) {
+    await refreshOnce();
+  }
   if (accessToken) {
     headers.Authorization = `Bearer ${accessToken}`;
   }
@@ -75,8 +81,7 @@ export const apiFetch = async <T>(
     body: body === undefined ? undefined : isFormData ? (body as FormData) : JSON.stringify(body),
   });
 
-  const isSignInCall = path === '/auth/bank' || path === '/auth/refresh';
-  const canRefresh = retryOnUnauthorized && accessToken !== null && !isSignInCall;
+  const canRefresh = retryOnUnauthorized && accessToken !== null && !isAuthCall;
   if (response.status === 401 && canRefresh && (await refreshOnce())) {
     return apiFetch<T>(path, { method, body, retryOnUnauthorized: false });
   }
