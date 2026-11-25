@@ -43,6 +43,9 @@ describe("demo history", () => {
 
     const { course } = (await app.inject({ method: "GET", url: `/pets/${mirri.id}/medication-course`, headers })).json();
     expect(course).toMatchObject({ name: "Antibiootti", dosesTotal: 20, dosesGiven: 6, active: true });
+
+    const { logs } = (await app.inject({ method: "GET", url: `/pets/${mirri.id}/logs`, headers })).json();
+    expect(logs).toHaveLength(14);
   });
 
   it("does not seed anything without demo mode", async () => {

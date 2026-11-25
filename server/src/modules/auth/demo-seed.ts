@@ -10,7 +10,8 @@ import { saveLog, startWatchListsForRecord } from "../symptoms/service.js";
 
 // Demo history for the spec's example pets, the same story as the app's mock data
 // (client/src/services/mock), so the app looks the same with and without the backend.
-// Dates are relative to the sign-up day: Mirri is on day 5 of 10 after a urinary tract infection.
+// Dates are relative to the sign-up day: Mirri is on day 5 of 10 after a urinary tract infection,
+// and both pets have two weeks of daily logs.
 
 const AURORA = "Eläinklinikka Aurora";
 const KAARINA = "Kaarinan koiraklinikka";
@@ -94,19 +95,35 @@ const seedMirri = (db: Db, pet: PetRow, userId: string, today: string) => {
     .where(and(eq(reminders.scheduleId, schedule.id), lt(reminders.dueAt, `${today}T00:00`)))
     .run();
 
-  // As in the mock: straining on the visit day, then drinking more for the last two days.
+  // Two weeks, as in the mock: fine at first, pain and a poor appetite two days before the visit,
+  // straining on the visit day, drinking more since. Watch list questions only from the visit on.
+  const uti = (water: Answer, trips: Answer, straining: Answer) => ({
+    "uti-water": water,
+    "uti-trips": trips,
+    "uti-straining": straining,
+  });
   const logs: { day: number; answers: Record<string, Answer> }[] = [
-    { day: -4, answers: { ...usual, pain: 1, "uti-water": 1, "uti-trips": 2, "uti-straining": 1 } },
-    { day: -3, answers: { ...usual, "uti-water": 1, "uti-trips": 1, "uti-straining": 0 } },
-    { day: -2, answers: { ...usual, "uti-water": 2, "uti-trips": 1, "uti-straining": 0 } },
-    { day: -1, answers: { ...usual, "uti-water": 2, "uti-trips": 1, "uti-straining": 0 } },
+    { day: -14, answers: usual },
+    { day: -13, answers: usual },
+    { day: -12, answers: { ...usual, appetite: 2 } },
+    { day: -11, answers: usual },
+    { day: -10, answers: usual },
+    { day: -9, answers: usual },
+    { day: -8, answers: { ...usual, energy: 2 } },
+    { day: -7, answers: usual },
+    { day: -6, answers: { ...usual, pain: 1 } },
+    { day: -5, answers: { ...usual, pain: 1, appetite: 0 } },
+    { day: -4, answers: { ...usual, pain: 1, ...uti(1, 2, 1) } },
+    { day: -3, answers: { ...usual, ...uti(1, 1, 0) } },
+    { day: -2, answers: { ...usual, ...uti(2, 1, 0) } },
+    { day: -1, answers: { ...usual, ...uti(2, 1, 0) } },
   ];
   for (const log of logs) {
     saveLog(db, pet, userId, addDays(today, log.day), { answers: log.answers, emergencySymptoms: [], symptoms: [] }, today);
   }
 };
 
-const seedRekku = (db: Db, pet: PetRow, today: string) => {
+const seedRekku = (db: Db, pet: PetRow, userId: string, today: string) => {
   createRecord(db, pet.id, "visit", {
     visitedOn: addDays(today, -58),
     reason: "Ontuminen vasen etujalka",
@@ -126,12 +143,19 @@ const seedRekku = (db: Db, pet: PetRow, today: string) => {
     clinic: KAARINA,
   });
   createRecord(db, pet.id, "allergy", { allergen: "Kanaproteiini", severity: "mild" });
+
+  // Two weeks of logs: tired after a long walk one day, extra hungry another.
+  for (let offset = -14; offset <= -1; offset++) {
+    const answers: Record<string, Answer> =
+      offset === -9 ? { ...usual, energy: 0 } : offset === -3 ? { ...usual, appetite: 2 } : usual;
+    saveLog(db, pet, userId, addDays(today, offset), { answers, emergencySymptoms: [], symptoms: [] }, today);
+  }
 };
 
 /** Fills a new demo household's pets with the same history as the app's mock data. */
 export const seedDemoHistory = (db: Db, householdId: string, userId: string, today = todayInFinland()) => {
   for (const pet of db.select().from(pets).where(eq(pets.householdId, householdId)).all()) {
     if (pet.name === "Mirri") seedMirri(db, pet, userId, today);
-    if (pet.name === "Rekku") seedRekku(db, pet, today);
+    if (pet.name === "Rekku") seedRekku(db, pet, userId, today);
   }
 };
