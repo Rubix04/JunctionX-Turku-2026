@@ -139,8 +139,8 @@ const TrendsScreen = () => {
                 </AppText>
               </>
             )}
-            {water.map((w) => (
-              <View key={w.label} style={styles.barColumn}>
+            {water.map((w, i) => (
+              <View key={`${i}-${w.label}`} style={styles.barColumn}>
                 <AppText variant="caption" color={colors.textSecondary} style={styles.barValue}>
                   {dl(w.ml)}
                 </AppText>
@@ -157,8 +157,8 @@ const TrendsScreen = () => {
             ))}
           </View>
           <View style={styles.barLabels}>
-            {water.map((w) => (
-              <AppText key={w.label} variant="caption" color={colors.muted} style={styles.barLabel}>
+            {water.map((w, i) => (
+              <AppText key={`${i}-${w.label}`} variant="caption" color={colors.muted} style={styles.barLabel}>
                 {waterLabel(w.label)}
               </AppText>
             ))}
@@ -177,7 +177,7 @@ const TrendsScreen = () => {
             )}
             <Polyline points={points} fill="none" stroke={colors.primary} strokeWidth={3} strokeLinejoin="round" />
             {shownWeights.map((w, i) => (
-              <Circle key={w.date} cx={x(i)} cy={y(w.weightKg)} r={4.5} fill={colors.surface} stroke={colors.primary} strokeWidth={2.5} />
+              <Circle key={`${i}-${w.date}`} cx={x(i)} cy={y(w.weightKg)} r={4.5} fill={colors.surface} stroke={colors.primary} strokeWidth={2.5} />
             ))}
           </Svg>
           <View style={styles.weightLabels}>

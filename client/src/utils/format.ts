@@ -61,6 +61,10 @@ export const formatMonthShort = (iso: string) =>
   format(iso, { month: 'short' }).replace('.', '').toUpperCase();
 
 /** "20:00" */
+/** "Mirri · vuosirokotus"; just the title when the pet's name is not known */
+export const reminderLabel = (petName: string | undefined, title: string) =>
+  [petName, title.toLowerCase()].filter(Boolean).join(' · ');
+
 export const formatTime = (iso: string) =>
   new Intl.DateTimeFormat(locale(), { hour: '2-digit', minute: '2-digit', hour12: false }).format(
     new Date(iso),

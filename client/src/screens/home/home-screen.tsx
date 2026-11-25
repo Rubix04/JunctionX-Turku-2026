@@ -27,7 +27,7 @@ import type { SeasonalAlert } from '@/types/alerts';
 import type { HealthStatus } from '@/types/health';
 import type { Policy } from '@/types/insurance';
 import type { Pet } from '@/types/pet';
-import { formatEuros, formatTime, todayIso } from '@/utils/format';
+import { formatEuros, formatTime, reminderLabel, todayIso } from '@/utils/format';
 import { alertSaveFailed } from '@/utils/notify';
 
 const loadHome = async () => {
@@ -222,7 +222,7 @@ const HomeScreen = () => {
                   <View key={reminder.id} style={styles.todayRow}>
                     <Icon name={reminder.kind === 'medication' ? 'pill' : 'calendar'} size={18} color={colors.yellowText} />
                     <View style={styles.flex}>
-                      <AppText variant="label">{`${reminderPet?.name ?? ''} · ${reminder.title.toLowerCase()}`}</AppText>
+                      <AppText variant="label">{reminderLabel(reminderPet?.name, reminder.title)}</AppText>
                       <AppText variant="caption" color={colors.muted}>
                         {`${reminder.detail} · ${formatTime(reminder.dueAt)}`}
                       </AppText>
