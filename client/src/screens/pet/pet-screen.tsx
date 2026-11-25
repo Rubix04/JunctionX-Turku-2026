@@ -23,7 +23,7 @@ import { useReloadOnFocus } from '@/hooks/use-reload-on-focus';
 import { getCarePlan, getReminders, getVisits } from '@/services/care';
 import { getDietPlan } from '@/services/diet';
 import { getHealthStatus } from '@/services/health';
-import { getPassport } from '@/services/passport';
+import { getPassport, sexKey } from '@/services/passport';
 import { getPet } from '@/services/pets';
 import { colors, fonts, spacing, touchTarget } from '@/theme';
 import type { CarePlan, Visit } from '@/types/care';
@@ -78,6 +78,10 @@ const recordIcons: Record<RecordKind, IconName> = {
 };
 
 type MedicalRecord = { id: string; kind: RecordKind; date: string; title: string; detail: string; visitId?: string };
+
+/** "valid until 2 March 2027", or "no expiry" for a vaccine without an end date */
+const validUntilText = (validUntil: string | null, t: TFunction) =>
+  validUntil ? t('pet.passportTab.validUntil', { date: formatLongDate(validUntil) }) : t('passport.vaccine.noExpiry');
 
 /** "246098100234517" -> "246 098 100 234 517" */
 const formatChip = (chip: string) => chip.replace(/(\d{3})(?=\d)/g, '$1 ');
@@ -287,8 +291,8 @@ const PassportTab = ({ pet, passport }: { pet: Pet; passport: Passport | null })
     { label: t('pet.passportTab.markings'), value: passport.markings ?? '–' },
     { label: t('pet.passportTab.registration'), value: passport.registration ?? '–' },
     { label: t('passport.born'), value: pet.birthDate ? formatLongDate(pet.birthDate) : '–' },
-    { label: t('pet.passportTab.sex'), value: t(`pet.sex.${passport.sex}${passport.neutered ? 'Neutered' : ''}`) },
-    { label: t('passport.owner'), value: passport.ownerName },
+    { label: t('pet.passportTab.sex'), value: sexKey(passport) ? t(sexKey(passport)!) : '–' },
+    { label: t('passport.owner'), value: passport.ownerName ?? '–' },
   ];
 
   // Short summary for travel, boarding or a new owner, sent with the phone's share sheet.
@@ -299,7 +303,7 @@ const PassportTab = ({ pet, passport }: { pet: Pet; passport: Passport | null })
       ...facts.map((f) => `${f.label}: ${f.value}`),
       `${t('passport.vaccinations')}: ${
         passport.vaccinations
-          .map((v) => `${v.name} (${t('pet.passportTab.validUntil', { date: formatLongDate(v.validUntil) })})`)
+          .map((v) => `${v.name} (${validUntilText(v.validUntil, t)})`)
           .join('; ') || '–'
       }`,
       `${t('passport.allergies')}: ${passport.allergies.map((a) => a.allergen).join(', ') || t('passport.noneKnown')}`,
@@ -338,7 +342,7 @@ const PassportTab = ({ pet, passport }: { pet: Pet; passport: Passport | null })
             <ListRow
               key={v.id}
               title={v.name}
-              subtitle={t('pet.passportTab.validUntil', { date: formatLongDate(v.validUntil) })}
+              subtitle={validUntilText(v.validUntil, t)}
               trailing={<VaccinationPill validUntil={v.validUntil} />}
             />
           ))}
@@ -391,7 +395,7 @@ const PetScreen = () => {
   const facts = [
     pet.birthDate ? t('pet.years', { count: ageInYears(pet.birthDate) }) : null,
     pet.weightKg ? `${formatNumber(pet.weightKg)} kg` : null,
-    passport ? t(`pet.sex.${passport.sex}${passport.neutered ? 'Neutered' : ''}`) : null,
+    passport && sexKey(passport) ? t(sexKey(passport)!) : null,
   ].filter(Boolean);
 
   return (

@@ -13,7 +13,7 @@ import Screen from '@/components/ui/screen';
 import { EmptyView, ErrorView, LoadingView } from '@/components/ui/state-views';
 import { useAsync } from '@/hooks/use-async';
 import { getCarePlan, getVisits } from '@/services/care';
-import { getPassport } from '@/services/passport';
+import { getPassport, sexKey } from '@/services/passport';
 import { getPet } from '@/services/pets';
 import { colors } from '@/theme';
 import { formatShortDate } from '@/utils/format';
@@ -40,7 +40,8 @@ const PassportScreen = () => {
   }
 
   const { pet, passport, visits, plan } = data;
-  const sex = passport ? t(`pet.sex.${passport.sex}${passport.neutered ? 'Neutered' : ''}`).toLowerCase() : null;
+  const sexLabelKey = passport ? sexKey(passport) : null;
+  const sex = sexLabelKey ? t(sexLabelKey).toLowerCase() : null;
   const facts = [
     { label: t('passport.born'), value: pet.birthDate ? formatShortDate(pet.birthDate) : '–' },
     { label: t('passport.microchip'), value: passport?.microchip ?? '–' },

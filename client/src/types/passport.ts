@@ -4,7 +4,8 @@ export type Vaccination = {
   id: string;
   name: string;
   givenOn: string;
-  validUntil: string;
+  /** Null when the vaccine has no end date */
+  validUntil: string | null;
   clinicName: string;
 };
 
@@ -17,7 +18,7 @@ export type MedicationRecord = {
   reason: string | null;
 };
 
-export type Allergy = { id: string; allergen: string; severity: 'mild' | 'moderate' | 'severe' };
+export type Allergy = { id: string; allergen: string; severity: 'mild' | 'moderate' | 'severe' | 'unknown' };
 
 export type Surgery = { id: string; name: string; year: number };
 
@@ -39,9 +40,10 @@ export type Passport = {
   markings: string | null;
   /** Pedigree registration, e.g. "FI12345/21 · Finnish Kennel Club" */
   registration: string | null;
-  ownerName: string;
+  ownerName: string | null;
   policyNumber: string | null;
-  sex: 'female' | 'male';
+  /** Null when not recorded (the backend doesn't keep it yet) */
+  sex: 'female' | 'male' | null;
   neutered: boolean;
   vaccinations: Vaccination[];
   medications: MedicationRecord[];

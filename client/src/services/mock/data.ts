@@ -301,3 +301,42 @@ export const mockReminders: Reminder[] = [
     done: false,
   },
 ];
+
+/**
+ * What a scanned visit note becomes in mock mode, for any pet. Kept free of names and pronouns so
+ * it reads right for a cat or a dog; the real result comes from the backend's AI.
+ */
+export const mockScanSample: Omit<CarePlan, 'petId' | 'visitId' | 'checkedByClinic'> = {
+  diagnosis: tr({ en: 'Mild stomach upset', fi: 'Lievä vatsatauti', sv: 'Lindriga magbesvär' }),
+  clinicName: AURORA,
+  vetName: DR_LAINE,
+  findings: tr({
+    en: 'The stomach and bowel are irritated, which causes the loose stools and poor appetite. The vet found no signs of anything serious.',
+    fi: 'Maha ja suolisto ovat ärtyneet, mistä löysät ulosteet ja huono ruokahalu johtuvat. Eläinlääkäri ei löytänyt merkkejä vakavasta.',
+    sv: 'Magen och tarmen är irriterade, vilket ger lös avföring och dålig aptit. Veterinären hittade inga tecken på något allvarligt.',
+  }),
+  homeCare: [
+    tr({
+      en: 'Give small portions of light food 3–4 times a day for 3 days.',
+      fi: 'Anna pieniä annoksia kevyttä ruokaa 3–4 kertaa päivässä 3 päivän ajan.',
+      sv: 'Ge små portioner lätt mat 3–4 gånger om dagen i 3 dagar.',
+    }),
+    tr({
+      en: 'Keep fresh water available at all times.',
+      fi: 'Pidä raikasta vettä aina saatavilla.',
+      sv: 'Se till att färskt vatten alltid finns.',
+    }),
+    tr({
+      en: 'Log appetite, stools and vomiting every day.',
+      fi: 'Kirjaa ruokahalu, ulosteet ja oksentelu päivittäin.',
+      sv: 'Logga aptit, avföring och kräkningar varje dag.',
+    }),
+  ],
+  followUp: null,
+  products: [],
+  originalText: tr({
+    en: 'Dx: mild gastroenteritis. Gen. condition good, no fever, abdomen soft. Tx: light diet 3 d, small portions. Control if vomiting or no improvement in 3 d.',
+    fi: 'Dg: lievä gastroenteriitti. Yleistila hyvä, ei kuumetta, vatsa pehmeä. Hoito: kevyt ruokavalio 3 vrk, pienet annokset. Kontrolli jos oksentelee tai ei parane 3 vrk:ssa.',
+    sv: 'Dg: lindrig gastroenterit. Gott allmäntillstånd, ingen feber, buken mjuk. Beh: lätt kost 3 d, små portioner. Kontroll vid kräkningar eller ingen förbättring på 3 d.',
+  }),
+};
