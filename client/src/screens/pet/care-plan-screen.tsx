@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -46,6 +46,11 @@ const CarePlanScreen = () => {
   const { petId } = useLocalSearchParams<{ petId: string }>();
   const { data, error, reload } = useAsync(() => loadPlan(petId), [petId]);
   const [originalOpen, setOriginalOpen] = useState(false);
+  // A second tap before the first one is saved must not add a second reminder.
+  const savingReminder = useRef(false);
+  const [addingReminder, setAddingReminder] = useState(false);
+  // Shows "Reminder on" right away, before the reload brings the new reminder back.
+  const [reminderAdded, setReminderAdded] = useState(false);
   useReloadOnFocus(reload);
 
   const header = <ScreenHeader title={t('screens.carePlan')} />;
@@ -65,18 +70,27 @@ const CarePlanScreen = () => {
 
   const visit = visits.find((v) => v.id === plan.visitId);
   const followUp = plan.followUp;
-  const followUpReminder = followUp && reminders.find((r) => r.dueAt === followUp.dateTime);
+  const followUpReminder =
+    followUp && reminders.find((r) => r.petId === petId && r.kind === 'visit' && r.dueAt === followUp.dateTime);
 
   const remindFollowUp = async () => {
-    if (!followUp) return;
-    await addReminder({
-      petId,
-      kind: 'visit',
-      title: followUp.title,
-      detail: followUp.clinicName,
-      dueAt: followUp.dateTime,
-    });
-    reload();
+    if (!followUp || followUpReminder || reminderAdded || savingReminder.current) return;
+    savingReminder.current = true;
+    setAddingReminder(true);
+    try {
+      await addReminder({
+        petId,
+        kind: 'visit',
+        title: followUp.title,
+        detail: followUp.clinicName,
+        dueAt: followUp.dateTime,
+      });
+      setReminderAdded(true);
+      reload();
+    } finally {
+      savingReminder.current = false;
+      setAddingReminder(false);
+    }
   };
 
   return (
@@ -128,10 +142,16 @@ const CarePlanScreen = () => {
               title={followUp.title}
               subtitle={`${formatShortWeekdayDate(followUp.dateTime)} ${formatTime(followUp.dateTime)} · ${followUp.clinicName}`}
               trailing={
-                followUpReminder ? (
+                followUpReminder || reminderAdded ? (
                   <Pill label={t('carePlan.reminderOn')} tone="green" icon="check" />
                 ) : (
-                  <Button label={t('carePlan.remindMe')} variant="tealOutline" size="small" onPress={remindFollowUp} />
+                  <Button
+                    label={t('carePlan.remindMe')}
+                    variant="tealOutline"
+                    size="small"
+                    onPress={remindFollowUp}
+                    loading={addingReminder}
+                  />
                 )
               }
             />
