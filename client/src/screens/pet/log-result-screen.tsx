@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -58,6 +58,8 @@ const LogResultScreen = () => {
   const { data, error, reload } = useAsync(() => loadResult(petId), [petId]);
   const [whyOpen, setWhyOpen] = useState(false);
   const [reminderSet, setReminderSet] = useState(false);
+  // Blocks a second tap while the first reminder is being saved.
+  const savingReminder = useRef(false);
   // The AI reads the vet's data and the logs together; it can raise the level, never lower it.
   const { data: insight, loading: analysing } = useAsync(() => getInsights(petId), [petId]);
   const close = () => (router.canGoBack() ? router.back() : router.replace(`/pet/${petId}`));
@@ -83,14 +85,20 @@ const LogResultScreen = () => {
   });
 
   const remindTonight = async () => {
-    await addReminder({
-      petId,
-      kind: 'visit',
-      title: t('result.reminderTitle'),
-      detail: t('result.reminderDetail'),
-      dueAt: `${todayIso()}T19:00:00`,
-    });
-    setReminderSet(true);
+    if (reminderSet || savingReminder.current) return;
+    savingReminder.current = true;
+    try {
+      await addReminder({
+        petId,
+        kind: 'visit',
+        title: t('result.reminderTitle'),
+        detail: t('result.reminderDetail'),
+        dueAt: `${todayIso()}T19:00:00`,
+      });
+      setReminderSet(true);
+    } finally {
+      savingReminder.current = false;
+    }
   };
 
   return (
