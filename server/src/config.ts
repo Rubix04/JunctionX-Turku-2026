@@ -6,6 +6,14 @@ const envSchema = z.object({
   HOST: z.string().default("0.0.0.0"),
   DATABASE_PATH: z.string().default("./data/tassuvahti.db"),
   UPLOAD_DIR: z.string().default("./data/uploads"),
+  /**
+   * Web addresses allowed to call the API from a browser, comma-separated, e.g.
+   * "https://app.tassuvahti.fi". The mobile app doesn't need this. Empty in production = none.
+   */
+  CORS_ORIGINS: z
+    .string()
+    .optional()
+    .transform((value) => value?.split(",").map((origin) => origin.trim()).filter(Boolean) ?? []),
   /** Public address of the server, used in share links. Defaults to the request's own host. */
   PUBLIC_BASE_URL: z.url().optional(),
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),

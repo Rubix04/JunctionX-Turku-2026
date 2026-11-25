@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 
 import { type PushDeviceRow, pushDevices, type Species } from "../../db/schema.js";
@@ -191,6 +191,12 @@ export const notificationRoutes: FastifyPluginAsyncZod = async (app) => {
       reminders: request.body.reminders,
       updatedAt: Date.now(),
     };
+    // A phone has one push token. If another session on it registered the same token (an earlier
+    // sign-in, maybe another person), remove it, so this phone doesn't get that household's pushes.
+    app.db
+      .delete(pushDevices)
+      .where(and(eq(pushDevices.expoPushToken, values.expoPushToken), ne(pushDevices.sessionId, sessionId)))
+      .run();
     const device = app.db
       .insert(pushDevices)
       .values({ sessionId, ...values })

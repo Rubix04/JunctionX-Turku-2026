@@ -53,11 +53,12 @@ export const runReminderJob = async (db: Db, send: PushSender, now = Date.now())
     )
     .all();
 
-  const planned: { message: PushMessage; sessionId: string }[] = [];
+  const planned: { message: PushMessage; sessionId: string; reminderId: string }[] = [];
   for (const { reminder, petName, householdId } of due) {
     for (const { device } of devices.filter((d) => d.householdId === householdId)) {
       planned.push({
         sessionId: device.sessionId,
+        reminderId: reminder.id,
         message: {
           to: device.expoPushToken,
           title: titles[reminder.kind][device.language].replace("{pet}", petName),
@@ -68,26 +69,41 @@ export const runReminderJob = async (db: Db, send: PushSender, now = Date.now())
     }
   }
 
-  // Marked as pushed even without devices, so a phone registered later doesn't get old reminders.
-  db.update(reminders)
-    .set({ pushedAt: now })
-    .where(inArray(reminders.id, due.map((row) => row.reminder.id)))
-    .run();
+  const markPushed = (ids: string[]) =>
+    ids.length && db.update(reminders).set({ pushedAt: now }).where(inArray(reminders.id, ids)).run();
+
+  // Reminders with no device are marked right away, so a phone registered later doesn't get old ones.
+  const withDevice = new Set(planned.map((item) => item.reminderId));
+  markPushed(due.map((row) => row.reminder.id).filter((id) => !withDevice.has(id)));
   if (planned.length === 0) {
     return stats;
   }
 
-  const results = await send(planned.map((item) => item.message));
+  // The others only once the push service has taken them: if sending fails, the next run tries
+  // again (within LATE_WINDOW_MS) instead of the reminder being lost.
+  let results: Awaited<ReturnType<PushSender>>;
+  try {
+    results = await send(planned.map((item) => item.message));
+  } catch {
+    stats.failed = planned.length;
+    return stats;
+  }
   const invalidSessions = new Set<string>();
+  const delivered = new Set<string>();
   results.forEach((result, index) => {
     if (result === "sent") {
       stats.sent++;
+      delivered.add(planned[index].reminderId);
     } else if (result === "invalidToken") {
       invalidSessions.add(planned[index].sessionId);
+      delivered.add(planned[index].reminderId);
     } else {
       stats.failed++;
     }
   });
+  // A reminder that reached at least one phone (or only dead tokens) is done; one that failed
+  // everywhere is tried again on the next run.
+  markPushed([...delivered]);
   if (invalidSessions.size) {
     db.delete(pushDevices).where(inArray(pushDevices.sessionId, [...invalidSessions])).run();
     stats.removed = invalidSessions.size;

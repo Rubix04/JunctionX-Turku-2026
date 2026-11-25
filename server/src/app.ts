@@ -94,7 +94,9 @@ export const buildApp = async ({
     });
   });
 
-  await app.register(cors, { origin: true });
+  // Browsers may call the API only from the listed web addresses; in development from anywhere.
+  const corsOrigin = config.CORS_ORIGINS.length ? config.CORS_ORIGINS : config.NODE_ENV !== "production";
+  await app.register(cors, { origin: corsOrigin });
   // Too many requests from one client get 429; off in tests, which send many requests at once.
   if (config.NODE_ENV !== "test") {
     await app.register(rateLimitPlugin);
