@@ -12,6 +12,7 @@ import SectionLabel from '@/components/ui/section-label';
 import Screen from '@/components/ui/screen';
 import { EmptyView, ErrorView, LoadingView } from '@/components/ui/state-views';
 import { useAsync } from '@/hooks/use-async';
+import { useReloadOnFocus } from '@/hooks/use-reload-on-focus';
 import { getClaims, getPolicies } from '@/services/insurance';
 import { getPets } from '@/services/pets';
 import { colors, radius, spacing } from '@/theme';
@@ -29,6 +30,8 @@ const claimTones: Record<ClaimStatus, 'green' | 'amber' | 'red'> = { paid: 'gree
 const InsuranceScreen = () => {
   const { t } = useTranslation();
   const { data, error, reload } = useAsync(loadInsurance, []);
+  // A claim sent from the claim form shows up here when coming back.
+  useReloadOnFocus(reload);
 
   const header = <ScreenHeader title={t('screens.insurance')} />;
   if (!data) {
@@ -103,7 +106,13 @@ const InsuranceScreen = () => {
             <ListRow
               key={claim.id}
               title={`${petName(claim.petId)} · ${claim.title.toLowerCase()}`}
-              subtitle={`${formatDayMonth(claim.date)} · ${t(`insurance.channel.${claim.channel}`)}`}
+              subtitle={[
+                formatDayMonth(claim.date),
+                claim.amount !== undefined ? formatEuros(claim.amount, true) : null,
+                t(`insurance.channel.${claim.channel}`),
+              ]
+                .filter(Boolean)
+                .join(' · ')}
               trailing={<Pill label={t(`insurance.status.${claim.status}`)} tone={claimTones[claim.status]} />}
             />
           ))}
@@ -112,7 +121,7 @@ const InsuranceScreen = () => {
         <EmptyView title={t('insurance.noClaims')} />
       )}
 
-      <Button label={t('insurance.makeClaim')} icon="receipt" onPress={() => router.push('/add-visit')} />
+      <Button label={t('insurance.makeClaim')} icon="receipt" onPress={() => router.push('/claim')} />
 
       <Pressable accessibilityRole="link" onPress={() => router.push('/explore')} style={styles.directNote}>
         <Icon name="shieldCheck" size={20} color={colors.primary} />

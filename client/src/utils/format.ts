@@ -73,10 +73,14 @@ export const formatTime = (iso: string) =>
 export const formatNumber = (value: number, maximumFractionDigits = 1) =>
   new Intl.NumberFormat(locale(), { maximumFractionDigits }).format(value);
 
-export const formatEuros = (value: number) =>
-  new Intl.NumberFormat(locale(), { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(
-    value,
-  );
+/** Whole euros by default; `cents` shows a receipt amount exactly, e.g. "€128.40" */
+export const formatEuros = (value: number, cents = false) =>
+  new Intl.NumberFormat(locale(), {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: cents ? 2 : 0,
+    maximumFractionDigits: cents ? 2 : 0,
+  }).format(value);
 
 /** Full years from the birth date to today */
 export const ageInYears = (birthDate: string, today = todayIso()) => {

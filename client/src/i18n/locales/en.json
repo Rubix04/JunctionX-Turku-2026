@@ -32,7 +32,8 @@
     "findInStore": "Find in store",
     "addPet": "Add a pet",
     "addVisit": "Add a vet visit",
-    "notFound": "Page not found"
+    "notFound": "Page not found",
+    "claim": "Make a claim"
   },
   "disclaimer": {
     "app": "TassuVahti is a support tool. It does not replace a veterinarian.",
@@ -310,7 +311,8 @@
     "comingUp": "Coming up",
     "nothingComing": "Nothing coming up",
     "book": "Book",
-    "familySees": "Your family sees the same reminders and ticks."
+    "familySees": "Your family sees the same reminders and ticks.",
+    "overdue": "Overdue"
   },
   "diet": {
     "recommendedBy": "Recommended by {{vet}}",
@@ -605,6 +607,42 @@
     "makeClaim": "Make a claim",
     "directPaymentNote": "Contracted clinics with direct payment: no need to claim afterwards.",
     "bankIdNote": "Changing policy details asks for bank ID again."
+  },
+  "claim": {
+    "noPolicy": "None of your pets has an active policy, so there is nothing to claim yet.",
+    "treatment": "Treatment",
+    "title": "What was treated?",
+    "titlePlaceholder": "e.g. Paw injury",
+    "titleRequired": "Tell us what the treatment was for",
+    "date": "Date of visit",
+    "dateInvalid": "Use dd.mm.yyyy, not in the future",
+    "amount": "Amount (€)",
+    "amountLabel": "Amount",
+    "amountInvalid": "Enter the amount on the receipt",
+    "overCover": "This is more than the {{amount}} of cover left this year. We will pay up to what is left.",
+    "clinic": "Clinic",
+    "clinicPlaceholder": "Name of the vet clinic",
+    "clinicRequired": "Enter the clinic",
+    "description": "What happened? (optional)",
+    "descriptionPlaceholder": "A few words help us handle the claim faster.",
+    "receipts": "Receipts",
+    "receiptsHint": "Add the receipt and, if you have it, the vet's report. Up to 5 files.",
+    "receiptPhoto": "Photo of receipt",
+    "removeReceipt": "Remove {{name}}",
+    "takePhoto": "Take photo",
+    "fromGallery": "Gallery",
+    "fromFiles": "Files",
+    "receiptRequired": "Add at least one receipt",
+    "confirm": "The information I gave is correct",
+    "confirmRequired": "Please confirm the information",
+    "send": "Send claim",
+    "sendFailed": "The claim could not be sent. Check your connection and try again.",
+    "payoutNote": "Compensation is paid to the bank account linked to your policy.",
+    "sentTitle": "Claim sent",
+    "sentBody": "We received {{name}}'s claim and will check it as soon as possible.",
+    "sentNext": "Most claims are handled within 5 working days. You can follow the status under Insurance & claims.",
+    "reference": "Reference",
+    "backToInsurance": "Back to insurance"
   },
   "profile": {
     "pets_one": "{{count}} pet",

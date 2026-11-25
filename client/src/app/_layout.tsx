@@ -55,6 +55,7 @@ const RootNavigator = ({ ready }: { ready: boolean }) => {
         <Stack.Screen name="ate-this" options={{ presentation: 'fullScreenModal' }} />
         <Stack.Screen name="add-pet" options={{ presentation: 'fullScreenModal' }} />
         <Stack.Screen name="add-visit" options={{ presentation: 'fullScreenModal' }} />
+        <Stack.Screen name="claim" options={{ presentation: 'fullScreenModal' }} />
       </Stack.Protected>
 
       {/* BankID and email sign-in / sign-up. */}
