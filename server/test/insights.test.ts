@@ -141,3 +141,34 @@ describe("insights", () => {
     expect(response.statusCode).toBe(404);
   });
 });
+
+describe("insight calls", () => {
+  let app: TestApp;
+  afterEach(async () => app.close());
+
+  it("asks the AI once when the app requests the same pet from two screens at once", async () => {
+    const writer = fakeWriter({});
+    app = await createTestApp({ DEMO_MODE: "true" }, { insightWriter: writer });
+    const { headers, mirri } = await signInDemo(app);
+
+    const url = `/pets/${mirri.id}/insights?lang=en`;
+    const [first, second] = await Promise.all([
+      app.inject({ method: "GET", url, headers }),
+      app.inject({ method: "GET", url, headers }),
+    ]);
+    expect(first.statusCode).toBe(200);
+    expect(second.json()).toEqual(first.json());
+    expect(writer).toHaveBeenCalledTimes(1);
+  });
+
+  it("doesn't keep a sample answer, so the AI is asked again next time", async () => {
+    const writer = vi.fn<InsightWriter>(sampleWriter);
+    app = await createTestApp({ DEMO_MODE: "true" }, { insightWriter: writer });
+    const { headers, mirri } = await signInDemo(app);
+
+    const url = `/pets/${mirri.id}/insights?lang=en`;
+    await app.inject({ method: "GET", url, headers });
+    await app.inject({ method: "GET", url, headers });
+    expect(writer).toHaveBeenCalledTimes(2);
+  });
+});
