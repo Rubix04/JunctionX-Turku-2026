@@ -51,7 +51,8 @@ export const signInWithBank = async (bankId: string): Promise<SignInResponse> =>
   });
 };
 
-export type EmailAuthErrorCode = 'invalidCredentials' | 'emailTaken';
+/** `unavailable`: the app talks to the real backend, which has no email sign-in yet */
+export type EmailAuthErrorCode = 'invalidCredentials' | 'emailTaken' | 'unavailable';
 
 export class EmailAuthError extends Error {
   constructor(public code: EmailAuthErrorCode) {
@@ -61,6 +62,9 @@ export class EmailAuthError extends Error {
 
 // Email accounts are mock only for now: the server has no email sign-in yet.
 // Accounts live on this device, with a hash of the password instead of the password.
+// With the backend connected, email sign-in is turned off: a local account would get a mock
+// session that the server rejects on the first request.
+export const emailSignInAvailable = useMockData;
 type MockUser = { id: string; displayName: string; email: string; passwordHash: string };
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase();
@@ -88,6 +92,9 @@ const saveMockUser = async (user: MockUser) => {
 };
 
 export const signInWithEmail = async (email: string, password: string): Promise<SignInResponse> => {
+  if (!emailSignInAvailable) {
+    throw new EmailAuthError('unavailable');
+  }
   const passwordHash = await hashPassword(email, password);
   const user = (await loadMockUsers()).find(
     (u) => u.email === normalizeEmail(email) && u.passwordHash === passwordHash,
@@ -100,6 +107,9 @@ export const signInWithEmail = async (email: string, password: string): Promise<
 };
 
 export const signUpWithEmail = async ({ name, email, password }: EmailSignUpInput): Promise<SignInResponse> => {
+  if (!emailSignInAvailable) {
+    throw new EmailAuthError('unavailable');
+  }
   const users = await loadMockUsers();
   if (users.some((u) => u.email === normalizeEmail(email))) {
     await mockDelay(undefined, 600);
