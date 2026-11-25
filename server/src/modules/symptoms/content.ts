@@ -37,6 +37,15 @@ export type SeverityRule = z.infer<typeof ruleSchema>;
 
 const perSpecies = z.object({ dog: z.number().int(), cat: z.number().int(), smallAnimal: z.number().int() });
 
+/** What to do when a watch list turns yellow, and when it turns red. {pet} is the pet's name. */
+const watchListAdvice = z.object({
+  yellowAdvice: z.array(localized).min(1),
+  /** Completes "Turns red if …" */
+  redWhen: localized,
+  /** Why the result is red, on the red result screen */
+  redReason: localized,
+});
+
 const contentSchema = z
   .object({
     meta: z.object({
@@ -67,8 +76,11 @@ const contentSchema = z
         /** Null for long-term conditions that are watched until the vet ends it */
         defaultDays: z.number().int().positive().nullable(),
         questions: z.array(questionSchema).min(1),
+        ...watchListAdvice.partial().shape,
       }),
     ),
+    /** Advice for templates that have none of their own */
+    watchListDefaults: watchListAdvice,
     severity: z.object({
       /** Long-term illnesses found in the passport (visit diagnoses and medications) */
       conditions: z.array(

@@ -25,19 +25,24 @@ describe("demo history", () => {
   let app: TestApp;
   afterEach(async () => app.close());
 
-  it("gives Mirri a visit, care plan, watch list and logs where symptoms come back after the course", async () => {
+  it("gives Mirri the same story as the app's mock data: day 5 of 10 after a urinary tract infection", async () => {
     app = await createTestApp({ DEMO_MODE: "true" });
     const { headers, mirri } = await signInDemo(app);
 
     const plan = (await app.inject({ method: "GET", url: `/pets/${mirri.id}/care-plan`, headers })).json().carePlan;
     expect(plan.diagnosis).toBe("Virtsatieinfektio");
-    expect(plan.originalText).toContain("ELÄINKLINIKKA AURORA");
-    expect(plan.originalText).not.toMatch(/\{\w+\}/);
+    expect(plan.homeCare).toHaveLength(3);
+    expect(plan.originalText).toContain("bakteerikystiitti");
 
     const status = (await app.inject({ method: "GET", url: `/pets/${mirri.id}/health-status`, headers })).json();
     expect(status.watchLists).toHaveLength(1);
-    expect(status.level).toBe("contactVet");
-    expect(status.latestLog.assessment.reasons.map((r: { code: string }) => r.code)).toContain("afterMedication");
+    expect(status.watchLists[0]).toMatchObject({ currentDay: 5, totalDays: 10 });
+    expect(status.watchLists[0].redWhen).toContain("Mirri");
+    expect(status.watchLists[0].yellowAdvice).toHaveLength(2);
+    expect(status.level).toBe("monitor");
+
+    const { course } = (await app.inject({ method: "GET", url: `/pets/${mirri.id}/medication-course`, headers })).json();
+    expect(course).toMatchObject({ name: "Antibiootti", dosesTotal: 20, dosesGiven: 6, active: true });
   });
 
   it("does not seed anything without demo mode", async () => {
@@ -58,7 +63,7 @@ describe("insights", () => {
     const response = await app.inject({ method: "GET", url: `/pets/${mirri.id}/insights?lang=fi`, headers });
     expect(response.statusCode).toBe(200);
     const insight = response.json();
-    expect(insight).toMatchObject({ source: "sample", ruleLevel: "red", level: "red", raisedByAi: false, comparison: "worse" });
+    expect(insight).toMatchObject({ source: "sample", ruleLevel: "yellow", level: "yellow", raisedByAi: false, comparison: "slower" });
     const sources = new Set(insight.reasons.map((r: { source: string }) => r.source));
     expect(sources).toEqual(new Set(["vet", "behaviour"]));
   });
@@ -76,7 +81,7 @@ describe("insights", () => {
     app = await createTestApp({ DEMO_MODE: "true" }, { insightWriter: lower });
     const second = await signInDemo(app);
     const mirriInsight = (await app.inject({ method: "GET", url: `/pets/${second.mirri.id}/insights`, headers: second.headers })).json();
-    expect(mirriInsight).toMatchObject({ ruleLevel: "red", level: "red", raisedByAi: false });
+    expect(mirriInsight).toMatchObject({ ruleLevel: "yellow", level: "yellow", raisedByAi: false });
     expect(mirri.id).not.toBe(second.mirri.id);
   });
 

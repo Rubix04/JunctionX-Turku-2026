@@ -1,146 +1,137 @@
-import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-
-import { eq } from "drizzle-orm";
+import { and, eq, lt } from "drizzle-orm";
 
 import type { Db } from "../../db/client.js";
-import { type PetRow, pets } from "../../db/schema.js";
-import { saveCarePlan } from "../care/service.js";
+import { type PetRow, pets, reminders } from "../../db/schema.js";
+import { createSchedule, saveCarePlan } from "../care/service.js";
 import { addDays } from "../care/time.js";
 import { createRecord, todayInFinland } from "../passport/service.js";
 import type { Answer } from "../symptoms/content.js";
 import { saveLog, startWatchListsForRecord } from "../symptoms/service.js";
 
-// Demo history for the spec's example pets, so a demo account has something to show and the AI
-// has vet data and daily logs to read together. Dates are relative to the sign-up day.
-//
-// Mirri: a urinary tract infection found 6 days ago, a 5-day antibiotic course that ended 2 days
-// ago, and daily logs where the symptoms ease during the course and come back after it.
-// Rekku: a healed paw injury and the annual vaccines.
+// Demo history for the spec's example pets, the same story as the app's mock data
+// (client/src/services/mock), so the app looks the same with and without the backend.
+// Dates are relative to the sign-up day: Mirri is on day 5 of 10 after a urinary tract infection.
 
-const documentPath = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "../../../content/demo-documents/mirri-virtsatieinfektio.txt",
-);
+const AURORA = "Eläinklinikka Aurora";
+const KAARINA = "Kaarinan koiraklinikka";
+const VET = "ELL Laine";
 
-/** "2026-11-19" as "19.11.2026" */
-const finnishDate = (isoDate: string) => {
-  const [year, month, day] = isoDate.split("-");
-  return `${Number(day)}.${Number(month)}.${year}`;
-};
+/** "2026-11-19" as "19.11." */
+const dayMonth = (isoDate: string) => `${Number(isoDate.slice(8, 10))}.${Number(isoDate.slice(5, 7))}.`;
 
 const usual = { appetite: 1, energy: 1, drinking: 1, toilet: 1, pain: 0, vomiting: 0 } satisfies Record<string, Answer>;
 
 const seedMirri = (db: Db, pet: PetRow, userId: string, today: string) => {
-  const visitDate = addDays(today, -6);
-  const courseEnd = addDays(today, -2);
-  const followUp = addDays(today, 1);
+  const visitDate = addDays(today, -4);
+  const courseStart = addDays(today, -3);
+  const courseEnd = addDays(courseStart, 9);
+  const followUp = addDays(today, 5);
+
+  createRecord(db, pet.id, "visit", {
+    visitedOn: addDays(today, -267),
+    reason: "Vuositarkastus ja rokotukset",
+    clinic: AURORA,
+  });
+  createRecord(db, pet.id, "vaccination", {
+    name: "Kissanflunssa ja kissarutto",
+    givenOn: addDays(today, -267),
+    validUntil: addDays(today, 98),
+    clinic: AURORA,
+  });
+  createRecord(db, pet.id, "surgery", { name: "Sterilointi", performedOn: "2019-05-14", clinic: AURORA });
 
   const visit = createRecord(db, pet.id, "visit", {
     visitedOn: visitDate,
     reason: "Tihentynyt virtsaaminen",
-    clinic: "Eläinklinikka Aurora",
+    clinic: AURORA,
     diagnosis: "Virtsatieinfektio",
   });
   startWatchListsForRecord(db, pet, visit, userId, today);
-  createRecord(db, pet.id, "medication", {
+  const medication = createRecord(db, pet.id, "medication", {
     name: "Antibiootti",
     dosage: "1 tabletti 2 kertaa päivässä ruoan kanssa",
-    startDate: visitDate,
+    startDate: courseStart,
     endDate: courseEnd,
-    prescribedBy: "ELL Laura Laine",
-  });
-  createRecord(db, pet.id, "vaccination", {
-    name: "Kissanflunssa ja kissarutto",
-    givenOn: addDays(today, -260),
-    validUntil: addDays(today, 105),
-    clinic: "Eläinklinikka Aurora",
+    prescribedBy: VET,
   });
 
-  const originalText = readFileSync(documentPath, "utf8")
-    .replaceAll("{visitDate}", finnishDate(visitDate))
-    .replaceAll("{courseEnd}", finnishDate(courseEnd))
-    .replaceAll("{followUp}", `${finnishDate(followUp)} klo 10.00`);
-  saveCarePlan(
+  const { plan } = saveCarePlan(
     db,
     pet,
     visit.id,
     {
       diagnosis: "Virtsatieinfektio",
-      vetName: "ELL Laura Laine",
+      vetName: VET,
       findings:
-        "Mirrin virtsassa on bakteereja, jotka ärsyttävät virtsarakkoa. Siksi hän käy laatikolla usein ja virtsaa vain vähän kerrallaan. Virtsateissä ei ole tukosta.",
+        "Mirrin virtsassa on bakteereja, jotka ärsyttävät virtsarakkoa. Siksi hän käy laatikolla usein ja virtsaa vain vähän kerrallaan.",
       homeCare: [
-        "Raikasta vettä useassa paikassa, kupit erillään ruokakupista.",
-        "Märkäruokaa 2 kertaa päivässä, jotta Mirri saa enemmän nestettä.",
-        "Seuraa hiekkalaatikkokäyntejä ja virtsan väriä päivittäin.",
-        "Anna koko antibioottikuuri loppuun, vaikka oireet helpottaisivat.",
+        "Anna antibioottia aamuin illoin 10 päivän ajan, vaikka vointi paranisi aiemmin.",
+        "Tue juomista: raikasta vettä useaan paikkaan ja märkäruokaa.",
+        "Kirjaa juominen, laatikkokäynnit ja ponnistelu päivittäin.",
       ],
-      followUp: { title: "Kontrollikäynti ja virtsanäyte", dateTime: `${followUp}T10:00:00`, clinicName: "Eläinklinikka Aurora" },
+      followUp: { title: "Kontrollikäynti ja virtsanäyte", dateTime: `${followUp}T14:30:00`, clinicName: AURORA },
       products: [
-        { productId: null, name: "Antibiootti", brand: "Reseptilääke", prescription: { issuedTo: "Aino Virtanen", pickedUpOn: visitDate } },
+        { productId: "urinary-wet", name: "Virtsateitä tukeva märkäruoka", brand: "Vet Diet · Urinary S/O", prescription: null },
+        { productId: "antibiotic", name: "Antibiootti", brand: "", prescription: { issuedTo: AURORA, pickedUpOn: visitDate } },
       ],
-      originalText,
+      originalText: `Dg: bakteerikystiitti. Virtsan liuskakoe: leuk +++, ery ++, nitriitti +. Sedimentti: bakteereja, ei kiteitä. Hoito: amoksisilliini/klavulaanihappo 50 mg 1x2 p.o. 10 vrk. Märkä virtsatieruokavalio, lisää juomista. Kontrolli ${dayMonth(followUp)} jos ei paranemista.`,
       checkedByClinic: true,
     },
     userId,
     { allowClinicCheck: true },
   );
 
-  // Better during the course, worse again after it: drinking less and more trips to the box.
-  const logs: { day: number; answers: Record<string, Answer>; note?: string }[] = [
-    {
-      day: -6,
-      answers: { ...usual, pain: 1, "uti-water": 1, "uti-trips": 2, "uti-straining": 1 },
-      note: "Klinikalta kotiin, ensimmäinen tabletti annettu.",
-    },
-    { day: -5, answers: { ...usual, "uti-water": 1, "uti-trips": 2, "uti-straining": 0 } },
-    { day: -4, answers: { ...usual, "uti-water": 1, "uti-trips": 1, "uti-straining": 0 } },
-    { day: -3, answers: { ...usual, "uti-water": 1, "uti-trips": 1, "uti-straining": 0 }, note: "Tuntuu jo ihan omalta itseltään." },
-    { day: -2, answers: { ...usual, "uti-water": 1, "uti-trips": 1, "uti-straining": 0 }, note: "Viimeinen tabletti illalla." },
-    {
-      day: -1,
-      answers: { ...usual, drinking: 0, "uti-water": 0, "uti-trips": 2, "uti-straining": 0 },
-      note: "Joi tänään vähän ja kävi laatikolla monta kertaa.",
-    },
+  // Doses at 8 and 20, the ones already due marked as given.
+  const schedule = createSchedule(
+    db,
+    pet,
+    userId,
+    { medicationRecordId: medication.id, carePlanId: plan.id, times: ["08:00", "20:00"] },
+    today,
+  );
+  db.update(reminders)
+    .set({ doneAt: Date.now(), doneByUserId: userId })
+    .where(and(eq(reminders.scheduleId, schedule.id), lt(reminders.dueAt, `${today}T00:00`)))
+    .run();
+
+  // As in the mock: straining on the visit day, then drinking more for the last two days.
+  const logs: { day: number; answers: Record<string, Answer> }[] = [
+    { day: -4, answers: { ...usual, pain: 1, "uti-water": 1, "uti-trips": 2, "uti-straining": 1 } },
+    { day: -3, answers: { ...usual, "uti-water": 1, "uti-trips": 1, "uti-straining": 0 } },
+    { day: -2, answers: { ...usual, "uti-water": 2, "uti-trips": 1, "uti-straining": 0 } },
+    { day: -1, answers: { ...usual, "uti-water": 2, "uti-trips": 1, "uti-straining": 0 } },
   ];
   for (const log of logs) {
-    saveLog(
-      db,
-      pet,
-      userId,
-      addDays(today, log.day),
-      { answers: log.answers, emergencySymptoms: [], symptoms: [], note: log.note ?? null },
-      today,
-    );
+    saveLog(db, pet, userId, addDays(today, log.day), { answers: log.answers, emergencySymptoms: [], symptoms: [] }, today);
   }
 };
 
-const seedRekku = (db: Db, pet: PetRow, userId: string, today: string) => {
+const seedRekku = (db: Db, pet: PetRow, today: string) => {
   createRecord(db, pet.id, "visit", {
     visitedOn: addDays(today, -58),
     reason: "Ontuminen vasen etujalka",
-    clinic: "Kaarinan koiraklinikka",
+    clinic: KAARINA,
     diagnosis: "Anturavamma, ei murtumaa",
   });
   createRecord(db, pet.id, "vaccination", {
     name: "Penikkatauti, parvo ja hepatiitti",
-    givenOn: addDays(today, -19),
-    validUntil: addDays(today, 3 * 365 - 19),
-    clinic: "Kaarinan koiraklinikka",
+    givenOn: addDays(today, -383),
+    validUntil: addDays(today, -18),
+    clinic: KAARINA,
   });
-  createRecord(db, pet.id, "allergy", { allergen: "Kanaproteiini", reaction: "Kutina ja vatsavaivat", severity: "mild" });
-  for (const day of [-3, -2, -1]) {
-    saveLog(db, pet, userId, addDays(today, day), { answers: usual, emergencySymptoms: [], symptoms: [] }, today);
-  }
+  createRecord(db, pet.id, "vaccination", {
+    name: "Raivotauti",
+    givenOn: addDays(today, -748),
+    validUntil: addDays(today, 347),
+    clinic: KAARINA,
+  });
+  createRecord(db, pet.id, "allergy", { allergen: "Kanaproteiini", severity: "mild" });
 };
 
-/** Fills a new demo household's pets with a visit history, a care plan and daily logs. */
+/** Fills a new demo household's pets with the same history as the app's mock data. */
 export const seedDemoHistory = (db: Db, householdId: string, userId: string, today = todayInFinland()) => {
-  const household = db.select().from(pets).where(eq(pets.householdId, householdId)).all();
-  for (const pet of household) {
+  for (const pet of db.select().from(pets).where(eq(pets.householdId, householdId)).all()) {
     if (pet.name === "Mirri") seedMirri(db, pet, userId, today);
-    if (pet.name === "Rekku") seedRekku(db, pet, userId, today);
+    if (pet.name === "Rekku") seedRekku(db, pet, today);
   }
 };
