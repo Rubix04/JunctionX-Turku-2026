@@ -114,7 +114,8 @@
       "passwordMismatch": "Salasanat eivät täsmää.",
       "invalidCredentials": "Sähköposti tai salasana on väärin.",
       "emailTaken": "Tällä sähköpostilla on jo tili. Kirjaudu sisään.",
-      "generic": "Jokin meni vikaan. Yritä uudelleen."
+      "generic": "Jokin meni vikaan. Yritä uudelleen.",
+      "unavailable": "Sähköpostilla kirjautuminen ei ole vielä käytössä. Kirjaudu verkkopankkitunnuksilla."
     }
   },
   "home": {
@@ -582,7 +583,8 @@
     },
     "emergencyMap": "Päivystykset kartalla",
     "readEntry": "Lue lisää: {{substance}}",
-    "again": "Tarkista jotain muuta"
+    "again": "Tarkista jotain muuta",
+    "failed": "Tarkistus ei onnistunut juuri nyt. Jos lemmikkisi on voinut syödä jotain vaarallista, älä odota: soita eläinlääkärille tai lähde päivystykseen."
   },
   "insurance": {
     "policies": "Vakuutukset",
