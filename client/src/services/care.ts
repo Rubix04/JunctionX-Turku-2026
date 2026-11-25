@@ -125,13 +125,18 @@ export const addVisitDraft = async (petId: string, title: string, clinicName: st
   return mockDelay(visit);
 };
 
-export const addReminder = async (input: Omit<Reminder, 'id' | 'done'>): Promise<Reminder> => {
-  const reminder: Reminder = { ...input, id: `reminder-${Date.now()}`, done: false };
+export const addReminder = async (input: Omit<Reminder, 'id' | 'done' | 'doneBy'>): Promise<Reminder> => {
+  const reminder: Reminder = { ...input, id: `reminder-${Date.now()}`, done: false, doneBy: null };
   mockReminders.push(reminder);
   return mockDelay(reminder);
 };
 
-export const setReminderDone = async (reminderId: string, done: boolean): Promise<Reminder> => {
+/** Ticks a reminder done (or undoes it). `doneBy` is the signed-in family member's name. */
+export const setReminderDone = async (
+  reminderId: string,
+  done: boolean,
+  doneBy: string | null,
+): Promise<Reminder> => {
   const reminder = mockReminders.find((r) => r.id === reminderId);
   if (!reminder) {
     throw new Error(`Reminder ${reminderId} not found`);
@@ -142,6 +147,7 @@ export const setReminderDone = async (reminderId: string, done: boolean): Promis
     course.dosesGiven += done ? 1 : -1;
   }
   reminder.done = done;
+  reminder.doneBy = done ? doneBy : null;
 
   return mockDelay({ ...reminder });
 };

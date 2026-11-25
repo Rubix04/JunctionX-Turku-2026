@@ -65,6 +65,8 @@ export type Reminder = {
   /** ISO date-time */
   dueAt: string;
   done: boolean;
+  /** Name of the family member who ticked it done, so the others can see who gave the dose */
+  doneBy?: string | null;
 };
 
 export type MedicationCourse = {

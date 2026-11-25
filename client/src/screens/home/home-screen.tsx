@@ -14,6 +14,7 @@ import { ListGroup } from '@/components/ui/list-group';
 import SectionLabel from '@/components/ui/section-label';
 import Screen, { ScreenSection } from '@/components/ui/screen';
 import { ErrorView, LoadingView } from '@/components/ui/state-views';
+import { useAuth } from '@/context/auth-context';
 import { useAsync } from '@/hooks/use-async';
 import { useReloadOnFocus } from '@/hooks/use-reload-on-focus';
 import { getSeasonalAlerts } from '@/services/alerts';
@@ -172,6 +173,7 @@ const PolicyLine = ({ policy }: { policy: Policy }) => {
 
 const HomeScreen = () => {
   const { t } = useTranslation();
+  const { displayName } = useAuth();
   const { data, error, reload } = useAsync(loadHome, []);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   useReloadOnFocus(reload);
@@ -209,7 +211,7 @@ const HomeScreen = () => {
   const alert = pet ? alerts[index][0] : undefined;
 
   const toggleDone = async (reminderId: string, done: boolean) => {
-    await setReminderDone(reminderId, done);
+    await setReminderDone(reminderId, done, displayName);
     reload();
   };
 

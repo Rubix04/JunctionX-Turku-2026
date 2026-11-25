@@ -11,6 +11,7 @@ import { ListGroup, ListRow } from '@/components/ui/list-group';
 import SectionLabel from '@/components/ui/section-label';
 import Screen from '@/components/ui/screen';
 import { EmptyView, ErrorView, LoadingView } from '@/components/ui/state-views';
+import { useAuth } from '@/context/auth-context';
 import { useAsync } from '@/hooks/use-async';
 import { getMedicationCourse, getReminders, getVisits, setReminderDone } from '@/services/care';
 import { getClinics } from '@/services/clinics';
@@ -68,6 +69,7 @@ const kindIcons: Record<ReminderKind, 'pill' | 'calendar' | 'shieldCheck' | 'lea
 const RemindersScreen = () => {
   const { t } = useTranslation();
   const { petId } = useLocalSearchParams<{ petId: string }>();
+  const { displayName } = useAuth();
   const { data, error, reload } = useAsync(() => loadReminders(petId), [petId]);
 
   const header = <ScreenHeader title={t('screens.reminders')} />;
@@ -86,7 +88,7 @@ const RemindersScreen = () => {
   const coursePet = pets.find((p) => p.id === petId);
 
   const toggle = async (id: string, done: boolean) => {
-    await setReminderDone(id, done);
+    await setReminderDone(id, done, displayName);
     reload();
   };
 
@@ -128,7 +130,9 @@ const RemindersScreen = () => {
             <View style={styles.flex}>
               <AppText variant="label">{`${petName(r.petId)} · ${r.title.toLowerCase()}`}</AppText>
               <AppText variant="caption" color={colors.muted}>
-                {r.done && r.kind === 'medication' ? t('reminders.givenBy', { name: t('reminders.you') }) : r.detail}
+                {r.done && r.kind === 'medication' && r.doneBy
+                  ? t('reminders.givenBy', { name: r.doneBy === displayName ? t('reminders.you') : r.doneBy })
+                  : r.detail}
               </AppText>
             </View>
             {r.kind === 'medication' ? (
