@@ -73,7 +73,14 @@ export const DateTile = ({ day, month, tint }: { day: string; month: string; tin
     <AppText variant="title" style={styles.dateDay}>
       {day}
     </AppText>
-    <AppText variant="caption" color={tint ? colors.accentText : colors.muted} style={styles.dateMonth}>
+    <AppText
+      variant="caption"
+      color={tint ? colors.accentText : colors.muted}
+      style={styles.dateMonth}
+      numberOfLines={1}
+      adjustsFontSizeToFit
+      minimumFontScale={0.7}
+    >
       {month}
     </AppText>
   </View>
@@ -98,7 +105,8 @@ const styles = StyleSheet.create({
   },
   pressed: { backgroundColor: colors.background },
   texts: { flex: 1, gap: 1 },
-  date: { width: 48, alignItems: 'center', justifyContent: 'center' },
-  dateDay: { fontFamily: fonts.bodyBold, fontSize: 17, lineHeight: 20 },
-  dateMonth: { fontSize: 11.5, fontFamily: fonts.bodyBold },
+  date: { width: 52, paddingHorizontal: 2, alignItems: 'center', justifyContent: 'center' },
+  dateDay: { fontFamily: fonts.bodyBold, fontSize: 17, lineHeight: 20, textAlign: 'center' },
+  // Finnish months are long ("MARRASK"), so the month shrinks to fit instead of wrapping.
+  dateMonth: { fontSize: 10.5, lineHeight: 13, fontFamily: fonts.bodyBold, textAlign: 'center', letterSpacing: 0.3 },
 });

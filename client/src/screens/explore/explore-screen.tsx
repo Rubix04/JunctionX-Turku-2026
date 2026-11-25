@@ -1,4 +1,3 @@
-import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
@@ -11,13 +10,11 @@ import MapSection from '@/screens/explore/map-section';
 import { getVetServices } from '@/services/vet-services';
 import { colors, spacing } from '@/theme';
 
-// Remote vet services first, then vets on a map. The knowledge base is on its own screen (/safe).
+// Vets on a map first, then the remote vet services. The knowledge base is on its own screen (/safe).
+// The map section reads ?mode= itself (emergency, or book from a reminder).
 const ExploreScreen = () => {
   const { t } = useTranslation();
   const { data: services } = useAsync(getVetServices, []);
-  // Coming from a reminder's Book button: the clinics come first, the remote services after them.
-  const { mode } = useLocalSearchParams<{ mode?: string }>();
-  const clinicsFirst = mode === 'book';
 
   const header = (
     <View style={styles.header}>
@@ -29,7 +26,7 @@ const ExploreScreen = () => {
 
   return (
     <Screen inTabs header={header} noPadding contentStyle={styles.content} background={colors.background}>
-      {clinicsFirst && <MapSection />}
+      <MapSection />
       {services && services.length > 0 && (
         <ScreenSection>
           <SectionLabel label={t('home.vetServices')} />
@@ -38,7 +35,6 @@ const ExploreScreen = () => {
           ))}
         </ScreenSection>
       )}
-      {!clinicsFirst && <MapSection />}
     </Screen>
   );
 };

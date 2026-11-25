@@ -82,7 +82,7 @@
     },
     "bankId": {
       "title": "Kirjaudu BankID:llä",
-      "intro": "Valitse pankkisi. Vahvistat henkilöllisyytesi pankin sovelluksessa.",
+    "intro": "Valitse pankkisi. Vahvistat henkilöllisyytesi pankin sovelluksessa.",
       "waiting": "Odotetaan vahvistusta pankin sovelluksessa…",
       "loadError": "Pankkilistaa ei voitu ladata.",
       "signInError": "Kirjautuminen ei onnistunut. Tarkista yhteys ja yritä uudelleen.",
@@ -272,6 +272,9 @@
     "weightDown": "Laskenut {{kg}} kg {{weeks}} viikossa.",
     "weightUp": "Noussut {{kg}} kg {{weeks}} viikossa.",
     "weightSteady": "Paino on pysynyt tasaisena.",
+    "weightSixMonths": "Paino · 6 kk",
+    "weightDownMonths": "Laskenut {{kg}} kg {{months}} kuukaudessa.",
+    "weightUpMonths": "Noussut {{kg}} kg {{months}} kuukaudessa.",
     "dailyStatus": "Päivittäinen tila · viimeiset 14 päivää",
     "today": "Tänään",
     "noLog": "Ei kirjausta",
@@ -323,7 +326,8 @@
     "now": "Nyt",
     "vetTarget": "Eläinlääkärin tavoite",
     "idealRange": "Ihannepaino, kg",
-    "logWeight": "Kirjaa tämän päivän paino",
+    "logWeight": "Kirjaa punnitus",
+    "lastWeighed": "Viimeksi punnittu {{date}}. Punnitus noin kerran kuussa riittää.",
     "weightKg": "Paino (kg)",
     "weightInvalid": "Syötä paino kilogrammoina, esim. 4,6",
     "calculator": "Annoslaskuri",
@@ -420,6 +424,7 @@
     "create": "Luo lemmikin sivu"
   },
   "addVisit": {
+    "aiBadge": "Tekoäly lukee ja tiivistää käyntitiedot",
     "intro": "Lisää lemmikin {{name}} käynnin tiedot. Teemme niistä hoitosuunnitelman ja seurantalistan.",
     "source": {
       "file": "Lataa tiedosto",

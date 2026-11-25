@@ -144,6 +144,11 @@ const AddVisitScreen = () => {
         </View>
       )}
       <AppText color={colors.textSecondary}>{t('addVisit.intro', { name: pet?.name ?? '' })}</AppText>
+      <View style={styles.aiBadge}>
+        <AppText variant="caption" color={colors.primary} style={styles.bold}>
+          {`✦ ${t('addVisit.aiBadge')}`}
+        </AppText>
+      </View>
 
       <View style={styles.sources}>
         {sources.map((s) => {
@@ -201,7 +206,7 @@ const AddVisitScreen = () => {
               <StepRow
                 key={step}
                 state={index < progress ? 'done' : index === progress ? 'active' : 'waiting'}
-                title={t(`addVisit.step.${step}`)}
+                title={`${step === 'clinic' ? '' : '✦ '}${t(`addVisit.step.${step}`)}`}
                 subtitle={step === 'clinic' ? t('addVisit.step.clinicHint') : undefined}
               />
             ))}
@@ -225,7 +230,7 @@ const AddVisitScreen = () => {
         </AppText>
       )}
 
-      <Note>{t('addVisit.aiNote')}</Note>
+      <Note>{`✦ ${t('addVisit.aiNote')}`}</Note>
     </Screen>
   );
 };
@@ -235,6 +240,13 @@ export default AddVisitScreen;
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   bold: { fontFamily: fonts.bodyBold },
+  aiBadge: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.primaryTint,
+  },
   pets: { marginHorizontal: -spacing.xl },
   sources: { flexDirection: 'row', gap: spacing.sm },
   source: {

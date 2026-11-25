@@ -82,7 +82,7 @@
     },
     "bankId": {
       "title": "Logga in med BankID",
-      "intro": "Välj din bank. Du bekräftar din identitet i bankens app.",
+    "intro": "Välj din bank. Du bekräftar din identitet i bankens app.",
       "waiting": "Väntar på bekräftelse i bankappen…",
       "loadError": "Det gick inte att ladda listan över banker.",
       "signInError": "Inloggningen misslyckades. Kontrollera anslutningen och försök igen.",
@@ -272,6 +272,9 @@
     "weightDown": "Ned {{kg}} kg på {{weeks}} veckor.",
     "weightUp": "Upp {{kg}} kg på {{weeks}} veckor.",
     "weightSteady": "Vikten är stabil.",
+    "weightSixMonths": "Vikt · 6 mån",
+    "weightDownMonths": "Minskat {{kg}} kg på {{months}} månader.",
+    "weightUpMonths": "Ökat {{kg}} kg på {{months}} månader.",
     "dailyStatus": "Daglig status · senaste 14 dagarna",
     "today": "I dag",
     "noLog": "Ingen logg",
@@ -323,7 +326,8 @@
     "now": "Nu",
     "vetTarget": "Veterinärens mål",
     "idealRange": "Idealvikt, kg",
-    "logWeight": "Logga dagens vikt",
+    "logWeight": "Lägg till vägning",
+    "lastWeighed": "Senast vägd {{date}}. Det räcker att väga ungefär en gång i månaden.",
     "weightKg": "Vikt (kg)",
     "weightInvalid": "Ange vikten i kilogram, t.ex. 4,6",
     "calculator": "Portionsräknare",
@@ -420,6 +424,7 @@
     "create": "Skapa djurets sida"
   },
   "addVisit": {
+    "aiBadge": "AI:n läser och sammanfattar besöksanteckningarna",
     "intro": "Lägg till anteckningarna från {{name}}s besök. Vi gör en vårdplan och en bevakningslista av dem.",
     "source": {
       "file": "Ladda upp fil",

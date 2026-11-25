@@ -148,7 +148,12 @@ const sampleInsight = async (petId: string): Promise<Insight> => {
 export const getInsights = async (petId: string): Promise<Insight> => {
   if (!useMockData) {
     try {
-      return await apiFetch<Insight>(`/pets/${petId}/insights?lang=${currentLanguage()}`);
+      // At least as long as the sample, so the "AI is reading" step shows either way.
+      const [insight] = await Promise.all([
+        apiFetch<Insight>(`/pets/${petId}/insights?lang=${currentLanguage()}`),
+        wait(1200),
+      ]);
+      return insight;
     } catch {
       // The endpoint is not there yet: fall back to the sample.
     }

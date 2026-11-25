@@ -16,7 +16,16 @@ import { getInsights } from '@/services/insights';
 import { getPet } from '@/services/pets';
 import { colors, fonts, radius, spacing } from '@/theme';
 import type { TrafficLightLevel } from '@/types/health';
-import { addDays, daysBetween, formatDayMonth, formatMonth, formatNumber, todayIso } from '@/utils/format';
+import {
+  addDays,
+  daysBetween,
+  formatDayMonth,
+  formatMonth,
+  formatMonthShort,
+  formatNumber,
+  parseDate,
+  todayIso,
+} from '@/utils/format';
 import { evaluateLog } from '@/utils/evaluate-log';
 
 type Range = 'week' | 'months';
@@ -41,6 +50,8 @@ const statusColors: Record<TrafficLightLevel | 'none', string> = {
 };
 
 const CHART_HEIGHT = 120;
+/** The weight chart's range: about six months */
+const WEIGHT_DAYS = 183;
 
 const Card = ({ title, note, children }: { title: string; note?: string; children: ReactNode }) => (
   <View style={styles.card}>
@@ -87,18 +98,31 @@ const TrendsScreen = () => {
         ? formatMonth(`${label}-01`)
         : label;
 
-  // Weight: the last 4 weeks or 3 months.
-  const since = addDays(today, range === 'week' ? -35 : -95);
+  // Weight: always the last 6 months. Pets are weighed about monthly, so the week / month choice
+  // (for water and the daily status) would leave one point or none.
+  const since = addDays(today, -WEIGHT_DAYS);
   const shownWeights = weights.filter((w) => w.date >= since);
+  const firstDay = shownWeights[0]?.date ?? since;
+  const span = Math.max(daysBetween(firstDay, today), 1);
   const kgs = shownWeights.map((w) => w.weightKg);
   const [ideal0, ideal1] = diet?.idealWeightKg ?? [Math.min(...kgs), Math.max(...kgs)];
   const low = Math.min(...kgs, ideal0) - 0.2;
   const high = Math.max(...kgs, ideal1) + 0.2;
   const y = (kg: number) => CHART_HEIGHT - ((kg - low) / (high - low)) * CHART_HEIGHT;
-  const x = (i: number) => (shownWeights.length > 1 ? (i / (shownWeights.length - 1)) * 300 : 150);
-  const points = shownWeights.map((w, i) => `${x(i)},${y(w.weightKg)}`).join(' ');
+  // Spaced by date, so the gaps between weigh-ins show.
+  const xOf = (date: string) => (daysBetween(firstDay, date) / span) * 300;
+  const points = shownWeights.map((w) => `${xOf(w.date)},${y(w.weightKg)}`).join(' ');
+  // A label at each month start in the range
+  const monthTicks = Array.from({ length: 7 }, (_, i) => {
+    const d = parseDate(today);
+    return todayIso(new Date(d.getFullYear(), d.getMonth() - i, 1));
+  })
+    .filter((date) => date >= firstDay)
+    .reverse();
   const change = shownWeights.length > 1 ? kgs[kgs.length - 1] - kgs[0] : 0;
-  const weeks = shownWeights.length > 1 ? Math.round(daysBetween(shownWeights[0].date, shownWeights[shownWeights.length - 1].date) / 7) : 0;
+  const changeDays = shownWeights.length > 1 ? daysBetween(shownWeights[0].date, shownWeights[shownWeights.length - 1].date) : 0;
+  const weeks = Math.round(changeDays / 7);
+  const months = Math.round(changeDays / 30);
 
   // Daily status for the last 14 days.
   const days = Array.from({ length: 14 }, (_, i) => addDays(today, i - 13));
@@ -127,20 +151,8 @@ const TrendsScreen = () => {
             </AppText>
           )}
           <View style={styles.bars} accessibilityLabel={t('trends.waterA11y', { values: water.map((w) => `${waterLabel(w.label)} ${dl(w.ml)}`).join(', ') })}>
-            {watch && (
-              <>
-                <View style={[styles.watchLine, { bottom: (watch / waterMax) * CHART_HEIGHT }]} />
-                <AppText
-                  variant="caption"
-                  color={colors.yellowText}
-                  style={[styles.watchLabel, { bottom: (watch / waterMax) * CHART_HEIGHT + 4 }]}
-                >
-                  {t('trends.watchLevel')}
-                </AppText>
-              </>
-            )}
-            {water.map((w) => (
-              <View key={w.label} style={styles.barColumn}>
+            {water.map((w, i) => (
+              <View key={`${i}-${w.label}`} style={styles.barColumn}>
                 <AppText variant="caption" color={colors.textSecondary} style={styles.barValue}>
                   {dl(w.ml)}
                 </AppText>
@@ -155,20 +167,32 @@ const TrendsScreen = () => {
                 />
               </View>
             ))}
+            {/* Drawn over the bars; its label is in the legend under the chart, so nothing overlaps. */}
+            {watch && (
+              <View pointerEvents="none" style={[styles.watchLine, { bottom: (watch / waterMax) * CHART_HEIGHT }]} />
+            )}
           </View>
           <View style={styles.barLabels}>
-            {water.map((w) => (
-              <AppText key={w.label} variant="caption" color={colors.muted} style={styles.barLabel}>
+            {water.map((w, i) => (
+              <AppText key={`${i}-${w.label}`} variant="caption" color={colors.muted} style={styles.barLabel}>
                 {waterLabel(w.label)}
               </AppText>
             ))}
           </View>
+          {watch && (
+            <View style={styles.watchLegend}>
+              <View style={styles.watchSwatch} />
+              <AppText variant="caption" color={colors.yellowText} style={styles.watchLegendText}>
+                {`${t('trends.watchLevel')} · ${dl(watch)} dl`}
+              </AppText>
+            </View>
+          )}
         </Card>
       )}
 
       {shownWeights.length > 0 && (
         <Card
-          title={t('trends.weight')}
+          title={t('trends.weightSixMonths')}
           note={diet?.idealWeightKg ? t('trends.ideal', { from: formatNumber(ideal0), to: formatNumber(ideal1) }) : 'kg'}
         >
           <Svg width="100%" height={CHART_HEIGHT + 16} viewBox={`-8 -8 316 ${CHART_HEIGHT + 16}`} accessible={false}>
@@ -177,9 +201,21 @@ const TrendsScreen = () => {
             )}
             <Polyline points={points} fill="none" stroke={colors.primary} strokeWidth={3} strokeLinejoin="round" />
             {shownWeights.map((w, i) => (
-              <Circle key={w.date} cx={x(i)} cy={y(w.weightKg)} r={4.5} fill={colors.surface} stroke={colors.primary} strokeWidth={2.5} />
+              <Circle key={`${i}-${w.date}`} cx={xOf(w.date)} cy={y(w.weightKg)} r={4.5} fill={colors.surface} stroke={colors.primary} strokeWidth={2.5} />
             ))}
           </Svg>
+          <View style={styles.monthTicks}>
+            {monthTicks.map((date) => (
+              <AppText
+                key={date}
+                variant="caption"
+                color={colors.muted}
+                style={[styles.monthTick, { left: `${(xOf(date) / 300) * 100}%` }]}
+              >
+                {formatMonthShort(date).toLowerCase()}
+              </AppText>
+            ))}
+          </View>
           <View style={styles.weightLabels}>
             <AppText variant="caption" color={colors.muted}>
               {`${formatDayMonth(shownWeights[0].date)} · ${formatNumber(kgs[0], 2)} kg`}
@@ -191,10 +227,15 @@ const TrendsScreen = () => {
           <AppText variant="caption" color={colors.muted}>
             {Math.abs(change) < 0.05
               ? t('trends.weightSteady')
-              : t(change < 0 ? 'trends.weightDown' : 'trends.weightUp', {
-                  kg: formatNumber(Math.abs(change), 2),
-                  weeks,
-                })}
+              : months >= 2
+                ? t(change < 0 ? 'trends.weightDownMonths' : 'trends.weightUpMonths', {
+                    kg: formatNumber(Math.abs(change), 2),
+                    months,
+                  })
+                : t(change < 0 ? 'trends.weightDown' : 'trends.weightUp', {
+                    kg: formatNumber(Math.abs(change), 2),
+                    weeks,
+                  })}
           </AppText>
         </Card>
       )}
@@ -268,21 +309,18 @@ const styles = StyleSheet.create({
     borderTopWidth: 1.5,
     borderStyle: 'dashed',
     borderColor: colors.yellowBorder,
-  },
-  watchLabel: {
-    position: 'absolute',
-    right: 0,
-    paddingHorizontal: 4,
-    backgroundColor: colors.surface,
-    fontFamily: fonts.bodyBold,
-    fontSize: 11.5,
     zIndex: 1,
   },
+  watchLegend: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.xs },
+  watchSwatch: { width: 18, borderTopWidth: 1.5, borderStyle: 'dashed', borderColor: colors.yellowBorder },
+  watchLegendText: { fontFamily: fonts.bodyBold, fontSize: 11.5 },
   barColumn: { flex: 1, alignItems: 'center', gap: spacing.xs },
   barValue: { fontFamily: fonts.bodyBold, fontSize: 11.5 },
   bar: { width: '100%', maxWidth: 40, borderTopLeftRadius: radius.sm / 1.5, borderTopRightRadius: radius.sm / 1.5 },
   barLabels: { flexDirection: 'row', gap: 10 },
   barLabel: { flex: 1, textAlign: 'center', fontSize: 12 },
+  monthTicks: { height: 16, marginTop: -4 },
+  monthTick: { position: 'absolute', fontSize: 11, transform: [{ translateX: -10 }] },
   weightLabels: { flexDirection: 'row', justifyContent: 'space-between' },
   days: { flexDirection: 'row', gap: 4 },
   day: { flex: 1, height: 26, borderRadius: 6 },

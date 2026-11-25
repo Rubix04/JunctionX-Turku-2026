@@ -21,7 +21,7 @@ import { colors, fonts, radius, spacing } from '@/theme';
 import type { ReminderKind, Visit } from '@/types/care';
 import type { Clinic } from '@/types/clinic';
 import type { Pet } from '@/types/pet';
-import { daysBetween, formatShortWeekdayDate, formatTime, todayIso } from '@/utils/format';
+import { daysBetween, formatShortWeekdayDate, formatTime, reminderLabel, todayIso } from '@/utils/format';
 import { alertSaveFailed } from '@/utils/notify';
 
 const loadReminders = async (petId: string) => {
@@ -134,7 +134,7 @@ const RemindersScreen = () => {
               {formatTime(r.dueAt)}
             </AppText>
             <View style={styles.flex}>
-              <AppText variant="label">{`${petName(r.petId)} · ${r.title.toLowerCase()}`}</AppText>
+              <AppText variant="label">{reminderLabel(petName(r.petId), r.title)}</AppText>
               <AppText variant="caption" color={colors.muted}>
                 {r.done && r.kind === 'medication' && r.doneBy
                   ? t('reminders.givenBy', { name: r.doneBy === displayName ? t('reminders.you') : r.doneBy })
@@ -159,7 +159,7 @@ const RemindersScreen = () => {
             <ListRow
               key={r.id}
               leading={<IconTile name={kindIcons[r.kind]} tone={r.kind === 'vaccination' ? 'amber' : 'teal'} />}
-              title={`${petName(r.petId)} · ${r.title.toLowerCase()}`}
+              title={reminderLabel(petName(r.petId), r.title)}
               subtitle={[
                 r.dueAt.slice(0, 10) < today ? t('reminders.overdue') : null,
                 formatShortWeekdayDate(r.dueAt),

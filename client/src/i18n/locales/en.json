@@ -82,7 +82,7 @@
     },
     "bankId": {
       "title": "Log in with BankID",
-      "intro": "Choose your bank. You'll confirm it's you in your bank's app.",
+    "intro": "Choose your bank. You'll confirm it's you in your bank's app.",
       "waiting": "Waiting for confirmation in your bank app…",
       "loadError": "Couldn't load the list of banks.",
       "signInError": "Sign-in didn't work. Check your connection and try again.",
@@ -272,6 +272,9 @@
     "weightDown": "Down {{kg}} kg in {{weeks}} weeks.",
     "weightUp": "Up {{kg}} kg in {{weeks}} weeks.",
     "weightSteady": "Weight is steady.",
+    "weightSixMonths": "Weight · 6 months",
+    "weightDownMonths": "Down {{kg}} kg in {{months}} months.",
+    "weightUpMonths": "Up {{kg}} kg in {{months}} months.",
     "dailyStatus": "Daily status · last 14 days",
     "today": "Today",
     "noLog": "No log",
@@ -323,7 +326,8 @@
     "now": "Now",
     "vetTarget": "Vet's target",
     "idealRange": "Ideal range, kg",
-    "logWeight": "Log today's weight",
+    "logWeight": "Add a weigh-in",
+    "lastWeighed": "Last weighed {{date}}. Weighing about once a month is enough.",
     "weightKg": "Weight (kg)",
     "weightInvalid": "Enter the weight in kilograms, e.g. 4.6",
     "calculator": "Portion calculator",
@@ -420,6 +424,7 @@
     "create": "Create pet page"
   },
   "addVisit": {
+    "aiBadge": "AI reads and summarises the visit notes",
     "intro": "Add {{name}}'s visit notes. We turn them into a care plan and a watch list.",
     "source": {
       "file": "Upload file",

@@ -2,7 +2,7 @@ import { AURORA, DR_LAINE } from '@/services/mock/clinics';
 import { tr } from '@/services/mock/delay';
 import { demoDate } from '@/services/mock/demo-date';
 import type { CarePlan, MedicationCourse, Reminder, Visit } from '@/types/care';
-import type { DailyLog, LogQuestion, WatchList } from '@/types/health';
+import type { DailyLog, LogAnswer, LogQuestion, WatchList } from '@/types/health';
 import type { Pet } from '@/types/pet';
 
 /** The follow-up date as the vet writes it in the notes, e.g. "22.10." */
@@ -139,27 +139,41 @@ export const mockGeneralQuestions: LogQuestion[] = [
   },
 ];
 
+// Two weeks of daily logs, dated like the rest of the story (demoDate moves them to today).
+// Mirri was fine, had some pain and a poor appetite two days before the visit on the 13th,
+// strained that day and has been drinking more since. Rekku was tired after a long walk one day
+// and extra hungry another.
+const usual = { appetite: 1, energy: 1, pain: 0, vomiting: 0 } as const;
+const uti = (water: LogAnswer, litter: LogAnswer, straining: LogAnswer) => ({ water, litter, straining });
+
+const mirriDays: [string, Record<string, LogAnswer>][] = [
+  ['2026-10-03', usual],
+  ['2026-10-04', usual],
+  ['2026-10-05', { ...usual, appetite: 2 }],
+  ['2026-10-06', usual],
+  ['2026-10-07', usual],
+  ['2026-10-08', usual],
+  ['2026-10-09', { ...usual, energy: 2 }],
+  ['2026-10-10', usual],
+  ['2026-10-11', { ...usual, pain: 1 }],
+  ['2026-10-12', { ...usual, pain: 1, appetite: 0 }],
+  ['2026-10-13', { ...usual, pain: 1, ...uti(1, 2, 1) }],
+  ['2026-10-14', { ...usual, ...uti(1, 1, 0) }],
+  ['2026-10-15', { ...usual, ...uti(2, 1, 0) }],
+  ['2026-10-16', { ...usual, ...uti(2, 1, 0) }],
+];
+
+const rekkuDays: [string, Record<string, LogAnswer>][] = [
+  '2026-10-03', '2026-10-04', '2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08', '2026-10-09',
+  '2026-10-10', '2026-10-11', '2026-10-12', '2026-10-13', '2026-10-14', '2026-10-15', '2026-10-16',
+].map((date) => [
+  date,
+  date === '2026-10-08' ? { ...usual, energy: 0 } : date === '2026-10-14' ? { ...usual, appetite: 2 } : usual,
+]);
+
 export const mockDailyLogs: DailyLog[] = [
-  {
-    petId: 'mirri',
-    date: demoDate('2026-10-13'),
-    answers: { water: 1, litter: 2, straining: 1, appetite: 1, energy: 1, pain: 1, vomiting: 0 },
-  },
-  {
-    petId: 'mirri',
-    date: demoDate('2026-10-14'),
-    answers: { water: 1, litter: 1, straining: 0, appetite: 1, energy: 1, pain: 0, vomiting: 0 },
-  },
-  {
-    petId: 'mirri',
-    date: demoDate('2026-10-15'),
-    answers: { water: 2, litter: 1, straining: 0, appetite: 1, energy: 1, pain: 0, vomiting: 0 },
-  },
-  {
-    petId: 'mirri',
-    date: demoDate('2026-10-16'),
-    answers: { water: 2, litter: 1, straining: 0, appetite: 1, energy: 1, pain: 0, vomiting: 0 },
-  },
+  ...mirriDays.map(([date, answers]) => ({ petId: 'mirri', date: demoDate(date), answers })),
+  ...rekkuDays.map(([date, answers]) => ({ petId: 'rekku', date: demoDate(date), answers })),
 ];
 
 /** Family members who share the pet pages and reminders */

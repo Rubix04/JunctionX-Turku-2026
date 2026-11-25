@@ -123,7 +123,8 @@ const CarePlanScreen = () => {
       <SectionLabel label={t('carePlan.atHome')} />
       <ListGroup>
         {plan.homeCare.map((item, index) => (
-          <View key={item} style={styles.homeRow}>
+          // Index too: a scanned plan can repeat a line.
+          <View key={`${index}-${item}`} style={styles.homeRow}>
             <Icon name={homeCareIcons[index] ?? 'check'} size={20} color={colors.primary} />
             <AppText style={styles.flex}>{item}</AppText>
           </View>
@@ -165,30 +166,35 @@ const CarePlanScreen = () => {
       {plan.products.length > 0 && (
         <>
           <SectionLabel label={t('carePlan.recommended')} />
-          {plan.products.map((product) => (
-            <View key={product.productId} style={styles.product}>
-              <IconTile name={product.prescription ? 'pill' : 'bowl'} tone={product.prescription ? 'amber' : 'teal'} size={44} />
-              <View style={styles.flex}>
-                <AppText variant="label">
-                  {product.prescription ? t('carePlan.prescription', { name: product.name }) : product.name}
-                </AppText>
-                <AppText variant="caption" color={colors.muted}>
-                  {product.prescription
-                    ? product.prescription.pickedUpOn
-                      ? t('carePlan.pickedUp', {
-                          place: product.prescription.issuedTo,
-                          date: formatDayMonth(product.prescription.pickedUpOn),
-                        })
-                      : t('carePlan.pickUp', { place: product.prescription.issuedTo })
-                    : product.brand}
-                </AppText>
+          {plan.products.map((product, index) => (
+            // Products read from a document have no product id, so the id alone is not unique.
+            <View key={`${index}-${product.productId}-${product.name}`} style={styles.product}>
+              <View style={styles.productRow}>
+                <IconTile name={product.prescription ? 'pill' : 'bowl'} tone={product.prescription ? 'amber' : 'teal'} size={44} />
+                <View style={styles.flex}>
+                  <AppText variant="label">
+                    {product.prescription ? t('carePlan.prescription', { name: product.name }) : product.name}
+                  </AppText>
+                  <AppText variant="caption" color={colors.muted}>
+                    {product.prescription
+                      ? product.prescription.pickedUpOn
+                        ? t('carePlan.pickedUp', {
+                            place: product.prescription.issuedTo,
+                            date: formatDayMonth(product.prescription.pickedUpOn),
+                          })
+                        : t('carePlan.pickUp', { place: product.prescription.issuedTo })
+                      : product.brand}
+                  </AppText>
+                </View>
               </View>
-              {!product.prescription && (
+              {!product.prescription && product.productId !== '' && (
                 <Button
                   label={t('carePlan.findInStore')}
                   variant="tealOutline"
                   size="small"
+                  icon="store"
                   onPress={() => router.push(`/find-in-store?productId=${product.productId}`)}
+                  style={styles.productButton}
                 />
               )}
             </View>
@@ -234,10 +240,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-    flexDirection: 'row',
-    alignItems: 'center',
     gap: spacing.md,
   },
+  productRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  // Lines up with the text, past the 44 px icon
+  productButton: { alignSelf: 'flex-start', marginLeft: 44 + spacing.md },
   original: {
     padding: spacing.md,
     paddingHorizontal: 14,
