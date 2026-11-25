@@ -214,6 +214,12 @@
         "sv": "Medan {pet} återhämtar sig från urinvägsinfektionen, följ drickandet, urineringarna och eventuella krystningar.",
         "en": "While {pet} recovers from a urinary tract infection, monitor water intake, trips to the toilet and any straining to urinate."
       },
+      "yellowAdvice": [
+        { "fi": "Täytä vesikuppi merkkiin aamulla ja tarkista se illalla.", "sv": "Fyll vattenskålen till ett märke på morgonen och kontrollera den på kvällen.", "en": "Fill the water bowl to a mark in the morning and check it in the evening." },
+        { "fi": "Kirjaa hiekkalaatikkokäynnit uudelleen illalla tarkemmin.", "sv": "Logga besöken i kattlådan igen i kväll, noggrannare.", "en": "Log litter box trips again tonight, in more detail." }
+      ],
+      "redWhen": { "fi": "{pet} ponnistelee eikä virtsaa tule. Ota silloin heti yhteyttä eläinlääkäriin.", "sv": "{pet} krystar utan att urin kommer. Kontakta då en veterinär direkt.", "en": "{pet} strains without passing urine. Then contact a vet straight away." },
+      "redReason": { "fi": "Ponnistelu ilman virtsaa voi tarkoittaa virtsateiden tukosta. Eläinlääkäri mainitsi tämän syyksi soittaa heti.", "sv": "Krystningar utan urin kan betyda att urinvägarna är blockerade. Veterinären nämnde detta som skäl att ringa direkt.", "en": "Straining without passing urine can mean a blocked urinary tract. Your vet listed this as a reason to call right away." },
       "diagnosisKeywords": ["virtsatie", "kystiit", "rakkotulehd", "urinvägs", "cystit", "urinary", "cystitis", "flutd"],
       "defaultDays": 10,
       "questions": [
@@ -534,6 +540,13 @@
       ]
     }
   ],
+  "watchListDefaults": {
+    "yellowAdvice": [
+      { "fi": "Seuraa lemmikkiä tarkemmin ja kirjaa vointi uudelleen illalla.", "sv": "Håll extra koll på djuret och logga måendet igen i kväll.", "en": "Keep a closer eye on your pet and log again tonight." }
+    ],
+    "redWhen": { "fi": "oireet pahenevat tai {pet} ei syö tai juo. Ota silloin yhteyttä eläinlääkäriin.", "sv": "symtomen blir värre eller {pet} inte äter eller dricker. Kontakta då en veterinär.", "en": "the symptoms get worse or {pet} stops eating or drinking. Then contact a vet." },
+    "redReason": { "fi": "Vastaukset ylittävät seurantalistan rajat. Eläinlääkäri arvioi, tarvitaanko käynti.", "sv": "Svaren överskrider gränserna i uppföljningslistan. En veterinär bedömer om ett besök behövs.", "en": "The answers are past the watch list limits. A vet can tell whether a visit is needed." }
+  },
   "severity": {
     "conditions": [
       {
@@ -607,6 +620,8 @@
       "overrides": [{ "symptom": "appetiteLoss", "species": "cat", "days": 2 }],
       "level": "contactVet"
     },
+    "severalSigns": { "count": 3, "level": "contactVet" },
+    "afterMedication": { "days": 7, "level": "contactVet" },
     "baseline": {
       "windowDays": 21,
       "recentDays": 3,
@@ -709,6 +724,16 @@
       "fi": "{question} poikkeaa lemmikin {pet} tavallisesta jo {days} päivänä.",
       "sv": "{question} avviker från det som är normalt för {pet} sedan {days} dagar.",
       "en": "{question} has differed from what is normal for {pet} on {days} days."
+    },
+    "severalSigns": {
+      "fi": "{pet} on näyttänyt tänään useita oireita yhtä aikaa: {symptom}.",
+      "sv": "{pet} har visat flera symtom samtidigt i dag: {symptom}.",
+      "en": "{pet} has shown several symptoms at the same time today: {symptom}."
+    },
+    "afterMedication": {
+      "fi": "{medication}-kuuri päättyi {days} päivää sitten, ja nyt näkyy {symptom}. Sairaus voi olla palaamassa.",
+      "sv": "Kuren med {medication} tog slut för {days} dagar sedan, och nu syns {symptom}. Sjukdomen kan vara på väg tillbaka.",
+      "en": "The {medication} course ended {days} days ago, and now there is {symptom}. The illness may be coming back."
     },
     "insufficientData": {
       "fi": "Lemmikistä on vähän tietoja, joten arvio on varmuuden vuoksi korkeampi. Lisää ikä ja eläinlääkärikäynnit terveyspassiin.",

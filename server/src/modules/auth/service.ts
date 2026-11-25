@@ -6,6 +6,7 @@ import type { Db } from "../../db/client.js";
 import { type DeviceSessionRow, deviceSessions, households, pets, type UserRow, users } from "../../db/schema.js";
 import { notFound, unauthorized } from "../../errors.js";
 import type { BankIdentity } from "./bank-provider.js";
+import { seedDemoHistory } from "./demo-seed.js";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -43,7 +44,7 @@ export const findOrCreateUser = (
     return existing;
   }
 
-  return db.transaction((tx) => {
+  const created = db.transaction((tx) => {
     const householdId = randomUUID();
     tx.insert(households).values({ id: householdId }).run();
     const user = tx
@@ -58,6 +59,10 @@ export const findOrCreateUser = (
     }
     return user;
   });
+  if (options.seedDemoPets) {
+    seedDemoHistory(db, created.householdId, created.id);
+  }
+  return created;
 };
 
 /** Starts a session for a device after online banking. Returns the refresh token once. */

@@ -106,6 +106,11 @@ export const toWatchListDto = (list: WatchListRow, pet: PetRow, lang: Language, 
     templateId: list.templateId,
     condition: list.condition[lang],
     intro: template ? fillPet(template.intro[lang], pet.name) : null,
+    yellowAdvice: (template?.yellowAdvice ?? symptomContent.watchListDefaults.yellowAdvice).map((text) =>
+      fillPet(text[lang], pet.name),
+    ),
+    redWhen: fillPet((template?.redWhen ?? symptomContent.watchListDefaults.redWhen)[lang], pet.name),
+    redReason: fillPet((template?.redReason ?? symptomContent.watchListDefaults.redReason)[lang], pet.name),
     source: list.source,
     vetName: list.vetName,
     recordId: list.recordId,
@@ -429,6 +434,9 @@ export const historyFor = (db: Db, pet: PetRow, date: string) => {
         .filter((r) => r.kind === "medication" && upTo("startDate")(r))
         .filter((r) => !data(r).endDate || (data(r).endDate as string) >= date)
         .map((r) => data(r).name ?? ""),
+      endedMedications: records
+        .filter((r) => r.kind === "medication" && data(r).endDate && (data(r).endDate as string) < date)
+        .map((r) => ({ name: data(r).name ?? "", endDate: data(r).endDate as string })),
       surgeryDates: records
         .filter((r) => r.kind === "surgery" && upTo("performedOn")(r))
         .map((r) => data(r).performedOn as string),

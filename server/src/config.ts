@@ -31,12 +31,16 @@ const envSchema = z.object({
   ANTHROPIC_API_KEY: z.string().optional(),
   /** auto: Claude when ANTHROPIC_API_KEY is set, otherwise the sample; claude or mock to force one */
   VISIT_SCAN_MODE: z.enum(["auto", "claude", "mock"]).default("auto"),
+  /** The AI analysis of visits and daily logs; same choices as VISIT_SCAN_MODE */
+  INSIGHTS_MODE: z.enum(["auto", "claude", "mock"]).default("auto"),
 });
 
 export type Config = z.infer<typeof envSchema>;
 
 export const loadConfig = (env: NodeJS.ProcessEnv = process.env): Config => {
-  const result = envSchema.safeParse(env);
+  // An empty line like "PUBLIC_BASE_URL=" (as in .env.example) means "not set".
+  const set = Object.fromEntries(Object.entries(env).filter(([, value]) => value !== undefined && value.trim() !== ""));
+  const result = envSchema.safeParse(set);
   if (!result.success) {
     const problems = result.error.issues.map((issue) => `  ${issue.path.join(".")}: ${issue.message}`);
     throw new Error(`Invalid environment configuration:\n${problems.join("\n")}`);

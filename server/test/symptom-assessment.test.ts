@@ -160,6 +160,24 @@ describe("severity assessment", () => {
     expect(assess(input({ answers: { energy: 2 } }, { logs: [...calm.slice(0, 3), restlessYesterday] })).level).toBe("normal");
   });
 
+  it("counts several mild symptoms on the same day as more than each alone", () => {
+    expect(assess(input({ answers: { ...allUsual, appetite: 0, energy: 0 } })).level).toBe("monitor");
+    const result = assess(input({ answers: { ...allUsual, appetite: 0, energy: 0, drinking: 0 } }));
+    expect(result.level).toBe("contactVet");
+    expect(result.reasons[0]).toMatchObject({ code: "severalSigns", level: "contactVet" });
+  });
+
+  it("raises symptoms that start soon after a medication course ended", () => {
+    const endedMedications = [{ name: "Antibiotic", endDate: daysBefore(2) }];
+    const result = assess(input({ answers: { ...allUsual, drinking: 0 } }, { endedMedications }));
+    expect(result.level).toBe("contactVet");
+    expect(result.reasons[0]).toMatchObject({ code: "afterMedication", params: { medication: "Antibiotic", days: 2 } });
+    // A course that ended long ago, or no symptoms, changes nothing.
+    const longAgo = [{ name: "Antibiotic", endDate: daysBefore(30) }];
+    expect(assess(input({ answers: { ...allUsual, drinking: 0 } }, { endedMedications: longAgo })).level).toBe("monitor");
+    expect(assess(input({ answers: allUsual }, { endedMedications })).level).toBe("normal");
+  });
+
   it("chooses the more serious level when there is too little information", () => {
     const unknownPet = { name: "Uusi", species: "cat" as const, ageMonths: null };
     const result = assess(input({ pet: unknownPet, answers: { appetite: 0 } }, { hasRecords: false }));

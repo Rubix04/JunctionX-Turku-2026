@@ -37,6 +37,15 @@ export type SeverityRule = z.infer<typeof ruleSchema>;
 
 const perSpecies = z.object({ dog: z.number().int(), cat: z.number().int(), smallAnimal: z.number().int() });
 
+/** What to do when a watch list turns yellow, and when it turns red. {pet} is the pet's name. */
+const watchListAdvice = z.object({
+  yellowAdvice: z.array(localized).min(1),
+  /** Completes "Turns red if …" */
+  redWhen: localized,
+  /** Why the result is red, on the red result screen */
+  redReason: localized,
+});
+
 const contentSchema = z
   .object({
     meta: z.object({
@@ -67,8 +76,11 @@ const contentSchema = z
         /** Null for long-term conditions that are watched until the vet ends it */
         defaultDays: z.number().int().positive().nullable(),
         questions: z.array(questionSchema).min(1),
+        ...watchListAdvice.partial().shape,
       }),
     ),
+    /** Advice for templates that have none of their own */
+    watchListDefaults: watchListAdvice,
     severity: z.object({
       /** Long-term illnesses found in the passport (visit diagnoses and medications) */
       conditions: z.array(
@@ -105,6 +117,10 @@ const contentSchema = z
         overrides: z.array(z.object({ symptom: z.string(), species: z.enum(species), days: z.number().int().min(2) })),
         level: z.enum(severityLevels),
       }),
+      /** Several symptoms on the same day count more than each alone */
+      severalSigns: z.object({ count: z.number().int().min(2), level: z.enum(severityLevels) }),
+      /** Symptoms soon after a medication course ended can mean the illness is coming back */
+      afterMedication: z.object({ days: z.number().int().positive(), level: z.enum(severityLevels) }),
       /** The pet's own normal, learned from earlier logs */
       baseline: z.object({
         windowDays: z.number().int().positive(),
@@ -130,6 +146,8 @@ const contentSchema = z
         "exposure",
         "persistent",
         "baselineDeviation",
+        "severalSigns",
+        "afterMedication",
         "insufficientData",
       ]),
       localized,
