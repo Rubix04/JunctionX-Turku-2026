@@ -11,6 +11,11 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 // Spec 13: online banking is needed again after a long period of inactivity.
 export const SESSION_INACTIVITY_LIMIT_MS = 90 * DAY_MS;
+/**
+ * The token just replaced still works this long. A phone whose refresh answer got lost on the
+ * way (bad network) only has the old token; without this it would be signed out as if stolen.
+ */
+export const REFRESH_REUSE_GRACE_MS = 60 * 1000;
 
 const hashToken = (token: string) => createHash("sha256").update(token).digest("hex");
 
@@ -99,6 +104,18 @@ export const rotateRefreshToken = (db: Db, refreshToken: string) => {
     throw unauthorized("SESSION_EXPIRED", "Sign in with online banking");
   }
   if (session.refreshTokenHash !== tokenHash) {
+    // The previous token, right after it was replaced: most likely a lost answer, so hand out a
+    // new token again. Later reuse means someone else has a copy: sign the device out.
+    if (Date.now() - session.lastUsedAt <= REFRESH_REUSE_GRACE_MS) {
+      const retryToken = newRefreshToken();
+      const updated = db
+        .update(deviceSessions)
+        .set({ refreshTokenHash: hashToken(retryToken) })
+        .where(eq(deviceSessions.id, session.id))
+        .returning()
+        .get();
+      return { session: updated, refreshToken: retryToken };
+    }
     revoke(db, session.id);
     throw unauthorized("SESSION_EXPIRED", "Sign in with online banking");
   }

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { deviceSessions, users } from "../src/db/schema.js";
-import { SESSION_INACTIVITY_LIMIT_MS } from "../src/modules/auth/service.js";
+import { REFRESH_REUSE_GRACE_MS, SESSION_INACTIVITY_LIMIT_MS } from "../src/modules/auth/service.js";
 import { requireRecentBankAuth } from "../src/plugins/auth.js";
 import { createTestApp, type TestApp } from "./helpers.js";
 
@@ -96,6 +96,9 @@ describe("auth", () => {
     const { refreshToken } = await signIn(app);
     const refreshed = await app.inject({ method: "POST", url: "/auth/refresh", payload: { refreshToken } });
 
+    // Past the grace period, the old token coming back means someone else has a copy.
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(Date.now() + REFRESH_REUSE_GRACE_MS + 1000);
     const reused = await app.inject({ method: "POST", url: "/auth/refresh", payload: { refreshToken } });
     expect(reused.statusCode).toBe(401);
     expect(reused.json().error.code).toBe("SESSION_EXPIRED");
@@ -107,6 +110,23 @@ describe("auth", () => {
       payload: { refreshToken: refreshed.json().refreshToken },
     });
     expect(legit.statusCode).toBe(401);
+  });
+
+  it("accepts the previous refresh token again right after a refresh whose answer was lost", async () => {
+    const { refreshToken } = await signIn(app);
+    // The server rotated the token, but the phone never got the answer.
+    await app.inject({ method: "POST", url: "/auth/refresh", payload: { refreshToken } });
+
+    const retry = await app.inject({ method: "POST", url: "/auth/refresh", payload: { refreshToken } });
+    expect(retry.statusCode).toBe(200);
+
+    // The token from the retry keeps working: the device stays signed in.
+    const next = await app.inject({
+      method: "POST",
+      url: "/auth/refresh",
+      payload: { refreshToken: retry.json().refreshToken },
+    });
+    expect(next.statusCode).toBe(200);
   });
 
   it("expires the session after long inactivity", async () => {
