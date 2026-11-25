@@ -468,7 +468,8 @@
     },
     "noResults": "No clinics match",
     "noResultsBody": "Try removing a filter.",
-    "registryNote": "Contracted clinics come from the insurance company's registry."
+    "registryNote": "Contracted clinics come from the insurance company's registry.",
+    "bookingFor": "Choose a clinic for {{what}}. Showing contracted clinics that treat this pet."
   },
   "clinic": {
     "emergency24h": "24 h emergency",
@@ -494,7 +495,8 @@
     "phone": "Phone",
     "species": "Treats",
     "expertise": "Special expertise",
-    "notContracted": "Not a contracted clinic. Your insurance still covers the visit, but you make the claim yourself."
+    "notContracted": "Not a contracted clinic. Your insurance still covers the visit, but you make the claim yourself.",
+    "bookingFor": "Booking for: {{what}}"
   },
   "store": {
     "vetRecommended": "Vet recommended",

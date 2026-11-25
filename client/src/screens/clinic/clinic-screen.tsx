@@ -22,7 +22,8 @@ const weekdayKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 // Clinic card: hours, phone, booking, directions and direct payment (spec 7).
 const ClinicScreen = () => {
   const { t } = useTranslation();
-  const { id } = useLocalSearchParams<{ id: string }>();
+  // `for` is set when coming from a reminder's Book button, e.g. "Rekku · yearly vaccination".
+  const { id, for: bookingFor } = useLocalSearchParams<{ id: string; for?: string }>();
   const { data: clinic, error, reload } = useAsync(() => getClinic(id), [id]);
 
   const header = <ScreenHeader title={clinic?.name ?? t('screens.clinic')} />;
@@ -35,6 +36,12 @@ const ClinicScreen = () => {
   return (
     <Screen header={header}>
       <ClinicCard clinic={clinic} emergency={clinic.emergency24h} linkToDetails={false} />
+
+      {bookingFor && (
+        <Note icon="calendar" tone="amber">
+          {t('clinic.bookingFor', { what: bookingFor })}
+        </Note>
+      )}
 
       {clinic.bookingUrl && (
         <Button

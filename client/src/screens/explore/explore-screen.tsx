@@ -1,3 +1,4 @@
+import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
@@ -14,6 +15,9 @@ import { colors, spacing } from '@/theme';
 const ExploreScreen = () => {
   const { t } = useTranslation();
   const { data: services } = useAsync(getVetServices, []);
+  // Coming from a reminder's Book button: the clinics come first, the remote services after them.
+  const { mode } = useLocalSearchParams<{ mode?: string }>();
+  const clinicsFirst = mode === 'book';
 
   const header = (
     <View style={styles.header}>
@@ -25,6 +29,7 @@ const ExploreScreen = () => {
 
   return (
     <Screen inTabs header={header} noPadding contentStyle={styles.content} background={colors.background}>
+      {clinicsFirst && <MapSection />}
       {services && services.length > 0 && (
         <ScreenSection>
           <SectionLabel label={t('home.vetServices')} />
@@ -33,7 +38,7 @@ const ExploreScreen = () => {
           ))}
         </ScreenSection>
       )}
-      <MapSection />
+      {!clinicsFirst && <MapSection />}
     </Screen>
   );
 };
