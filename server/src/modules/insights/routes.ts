@@ -27,6 +27,8 @@ type InsightResponse = z.infer<typeof insightResponseSchema>;
 export const insightsRoutes: FastifyPluginAsyncZod<{ writer: InsightWriter }> = async (app, { writer }) => {
   app.addHook("preHandler", app.authenticate);
   const cache = new Map<string, InsightResponse>();
+  // The app asks for the same pet from several screens at once: one AI call serves them all.
+  const inFlight = new Map<string, Promise<InsightResponse>>();
 
   app.get(
     "/:petId/insights",
@@ -46,30 +48,45 @@ export const insightsRoutes: FastifyPluginAsyncZod<{ writer: InsightWriter }> = 
       if (cached) {
         return cached;
       }
-
-      const { insight, source } = await writer(input, lang);
-      const ruleLevel = input.rules.level;
-      const level = maxLevel(ruleLevel, insight.suggestedLevel);
-      const response: InsightResponse = {
-        petId: pet.id,
-        source,
-        ruleLevel: trafficLightFor(ruleLevel),
-        level: trafficLightFor(level),
-        raisedByAi: trafficLightFor(level) !== trafficLightFor(ruleLevel),
-        summary: insight.summary,
-        comparison: insight.comparison,
-        reasons: insight.reasons,
-        watchFor: insight.watchFor,
-        callVetIf: insight.callVetIf,
-        trendNote: insight.trendNote,
-        vetSummary: insight.vetSummary,
-      };
-
-      if (cache.size >= MAX_CACHED) {
-        cache.delete(cache.keys().next().value as string);
+      const pending = inFlight.get(key);
+      if (pending) {
+        return pending;
       }
-      cache.set(key, response);
-      return response;
+      const work = (async () => {
+        const { insight, source } = await writer(input, lang);
+        const ruleLevel = input.rules.level;
+        const level = maxLevel(ruleLevel, insight.suggestedLevel);
+        const response: InsightResponse = {
+          petId: pet.id,
+          source,
+          ruleLevel: trafficLightFor(ruleLevel),
+          level: trafficLightFor(level),
+          raisedByAi: trafficLightFor(level) !== trafficLightFor(ruleLevel),
+          summary: insight.summary,
+          comparison: insight.comparison,
+          reasons: insight.reasons,
+          watchFor: insight.watchFor,
+          callVetIf: insight.callVetIf,
+          trendNote: insight.trendNote,
+          vetSummary: insight.vetSummary,
+        };
+
+        // Only the AI's answer is kept. The sample is cheap to rebuild, and when it stood in for a
+        // failed AI call, keeping it would hide the real analysis until the pet's data changes.
+        if (source === "claude") {
+          if (cache.size >= MAX_CACHED) {
+            cache.delete(cache.keys().next().value as string);
+          }
+          cache.set(key, response);
+        }
+        return response;
+      })();
+      inFlight.set(key, work);
+      try {
+        return await work;
+      } finally {
+        inFlight.delete(key);
+      }
     },
   );
 };

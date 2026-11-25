@@ -15,6 +15,8 @@ const rules: Rule[] = [
   { name: "shared", match: (r) => (r.routeOptions.url ?? "").startsWith("/shared/"), limit: 60, windowMs: MINUTE },
   // Reading vet documents calls the paid Claude API.
   { name: "scan", match: (r) => r.method === "POST" && (r.routeOptions.url ?? "").endsWith("/visits/scan"), limit: 10, windowMs: 60 * MINUTE },
+  // The AI analysis also calls the paid API whenever a pet's data has changed.
+  { name: "insights", match: (r) => r.method === "GET" && (r.routeOptions.url ?? "").endsWith("/insights"), limit: 60, windowMs: 10 * MINUTE },
 ];
 
 /**

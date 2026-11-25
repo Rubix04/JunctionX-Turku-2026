@@ -31,6 +31,14 @@ const envSchema = z.object({
   ANTHROPIC_API_KEY: z.string().optional(),
   /** auto: Claude when ANTHROPIC_API_KEY is set, otherwise the sample; claude or mock to force one */
   VISIT_SCAN_MODE: z.enum(["auto", "claude", "mock"]).default("auto"),
+  /**
+   * true behind a reverse proxy or load balancer, so the client's address (used for rate limits)
+   * comes from X-Forwarded-For instead of being the proxy's own.
+   */
+  TRUST_PROXY: z
+    .enum(["true", "false"])
+    .default("false")
+    .transform((value) => value === "true"),
   /** The AI analysis of visits and daily logs; same choices as VISIT_SCAN_MODE */
   INSIGHTS_MODE: z.enum(["auto", "claude", "mock"]).default("auto"),
 });

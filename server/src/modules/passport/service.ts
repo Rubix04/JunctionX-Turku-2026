@@ -16,16 +16,14 @@ import {
 } from "../../db/schema.js";
 import { ApiError, notFound } from "../../errors.js";
 import { kinds, outputSchemas } from "./records.js";
+import { addDays } from "../care/time.js";
 
-const DAY_MS = 24 * 60 * 60 * 1000;
 const EXPIRING_SOON_DAYS = 30;
 
 /** Today's date (YYYY-MM-DD) in Finland, so "expired" flips at local midnight. */
 export const todayInFinland = (now = new Date()) =>
   new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Helsinki" }).format(now);
 
-const addDays = (isoDate: string, days: number) =>
-  new Date(Date.parse(`${isoDate}T00:00:00Z`) + days * DAY_MS).toISOString().slice(0, 10);
 
 const validationError = (error: z.ZodError) =>
   new ApiError(

@@ -62,7 +62,7 @@ export const buildApp = async ({
     throw new Error("The simulated bank sign-in can't run in production: pass a real bankProvider or set DEMO_MODE=true");
   }
 
-  const app = Fastify({ logger }).withTypeProvider<ZodTypeProvider>();
+  const app = Fastify({ logger, trustProxy: config.TRUST_PROXY }).withTypeProvider<ZodTypeProvider>();
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
 

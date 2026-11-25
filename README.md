@@ -61,7 +61,7 @@ TassuVahti stays with the pet between vet visits.
 | AI | Claude (Anthropic) on the back-end only, for reading vet documents and the analysis of visits and logs. Without an API key both answer with a built-in sample, so the demo works offline. |
 | Notifications | Expo push notifications for reminders and seasonal alerts |
 | Images | Server-side cropping and resizing; location data removed from photos |
-| Quality | 229 automated back-end tests (Vitest) |
+| Quality | 233 automated back-end tests (Vitest) |
 
 **Privacy by design:**
 - The national ID number is never stored, only a one-way keyed hash of it.
