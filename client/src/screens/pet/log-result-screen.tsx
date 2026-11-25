@@ -23,7 +23,7 @@ import { getInsights } from '@/services/insights';
 import { getPet } from '@/services/pets';
 import { colors, fonts, radius, spacing } from '@/theme';
 import type { TrafficLightLevel } from '@/types/health';
-import { formatDayMonth, formatTime, todayIso } from '@/utils/format';
+import { formatDayMonth, todayIso } from '@/utils/format';
 import { alertSaveFailed } from '@/utils/notify';
 
 const loadResult = async (petId: string) => {
@@ -123,7 +123,7 @@ const LogResultScreen = () => {
             trailing={
               level === 'red' && log ? (
                 <AppText variant="bodySmall" color={colors.redOnDark} style={styles.bold}>
-                  {`${pet.name} · ${formatDayMonth(log.date)} ${formatTime(new Date().toISOString())}`}
+                  {`${pet.name} · ${formatDayMonth(log.date)}`}
                 </AppText>
               ) : undefined
             }

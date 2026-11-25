@@ -3,7 +3,7 @@ import i18n from '@/i18n';
 import { apiFetch } from '@/services/api-client';
 import { getCarePlan, getMedicationCourse } from '@/services/care';
 import { getTrends } from '@/services/diet';
-import { getDailyLogs, getHealthStatus, getLogQuestions } from '@/services/health';
+import { getDailyLogs, getHealthStatus, getLogQuestions, isRecentLog } from '@/services/health';
 import { getPet } from '@/services/pets';
 import type { DailyLog, LogQuestion, TrafficLightLevel } from '@/types/health';
 import type { Insight, InsightComparison, InsightReason } from '@/types/insights';
@@ -50,8 +50,9 @@ const sampleInsight = async (petId: string): Promise<Insight> => {
   ]);
   const name = pet.name;
   const watchList = status.watchList;
-  const latest = status.latestLog;
-  const anchor = latest?.date ?? todayIso();
+  // The analysis is about today: an old log is history, not how the pet is doing now.
+  const latest = isRecentLog(status.latestLog) ? status.latestLog : null;
+  const anchor = todayIso();
   const recent = logs.filter((log) => log.date > addDays(anchor, -WINDOW_DAYS) && log.date <= anchor);
   const watchedIds = new Set(watchList?.questions.map((q) => q.id) ?? []);
 

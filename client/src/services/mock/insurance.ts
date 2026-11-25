@@ -1,5 +1,6 @@
 import { AURORA } from '@/services/mock/clinics';
 import { tr } from '@/services/mock/delay';
+import { demoDate } from '@/services/mock/demo-date';
 import type { Claim, Policy } from '@/types/insurance';
 
 // Placeholder figures until the insurer's systems are connected.
@@ -13,7 +14,7 @@ export const mockClaims: Claim[] = [
     id: 'claim-mirri-uti',
     petId: 'mirri',
     title: tr({ en: 'Urinary tract infection', fi: 'Virtsatieinfektio', sv: 'Urinvägsinfektion' }),
-    date: '2026-10-13',
+    date: demoDate('2026-10-13'),
     channel: 'directPayment',
     status: 'paid',
     amount: 286,
@@ -23,7 +24,7 @@ export const mockClaims: Claim[] = [
     id: 'claim-rekku-paw',
     petId: 'rekku',
     title: tr({ en: 'Paw injury', fi: 'Tassuvamma', sv: 'Tasskada' }),
-    date: '2026-09-28',
+    date: demoDate('2026-09-28'),
     channel: 'receipt',
     status: 'inReview',
     amount: 154.5,

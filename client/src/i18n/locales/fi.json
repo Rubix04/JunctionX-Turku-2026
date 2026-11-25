@@ -414,7 +414,7 @@
     "weightInvalid": "Syötä kilogrammat, esim. 4,6",
     "breed": "Rotu",
     "breedPlaceholder": "Hae rotua",
-    "policyFound": "Löysimme lemmikkivakuutuksen ilman profiilia. Liitetäänkö se tähän lemmikkiin?",
+    "policyFound": "Löysimme vakuutuksen {{number}}, jota ei ole vielä liitetty lemmikkiin. Liitetäänkö se tähän lemmikkiin?",
     "link": "Liitä",
     "linked": "Liitetty ✓",
     "create": "Luo lemmikin sivu"

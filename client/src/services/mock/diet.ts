@@ -1,5 +1,6 @@
 import { DR_LAINE } from '@/services/mock/clinics';
 import { tr } from '@/services/mock/delay';
+import { demoDate, demoMonth, demoWeek } from '@/services/mock/demo-date';
 import type { DietPlan, Trends, WeightEntry } from '@/types/diet';
 
 /** Week number label for the water chart, e.g. "vk 39" in Finnish */
@@ -46,19 +47,19 @@ export const mockDietPlans: DietPlan[] = [
 
 export const mockWeights: Record<string, WeightEntry[]> = {
   mirri: [
-    { date: '2026-07-15', weightKg: 5.0 },
-    { date: '2026-08-01', weightKg: 4.95 },
-    { date: '2026-08-20', weightKg: 4.9 },
-    { date: '2026-09-05', weightKg: 4.8 },
-    { date: '2026-09-19', weightKg: 4.75 },
-    { date: '2026-09-26', weightKg: 4.7 },
-    { date: '2026-10-03', weightKg: 4.65 },
-    { date: '2026-10-13', weightKg: 4.6 },
+    { date: demoDate('2026-07-15'), weightKg: 5.0 },
+    { date: demoDate('2026-08-01'), weightKg: 4.95 },
+    { date: demoDate('2026-08-20'), weightKg: 4.9 },
+    { date: demoDate('2026-09-05'), weightKg: 4.8 },
+    { date: demoDate('2026-09-19'), weightKg: 4.75 },
+    { date: demoDate('2026-09-26'), weightKg: 4.7 },
+    { date: demoDate('2026-10-03'), weightKg: 4.65 },
+    { date: demoDate('2026-10-13'), weightKg: 4.6 },
   ],
   rekku: [
-    { date: '2026-08-10', weightKg: 31.4 },
-    { date: '2026-09-12', weightKg: 31.1 },
-    { date: '2026-10-10', weightKg: 31.0 },
+    { date: demoDate('2026-08-10'), weightKg: 31.4 },
+    { date: demoDate('2026-09-12'), weightKg: 31.1 },
+    { date: demoDate('2026-10-10'), weightKg: 31.0 },
   ],
 };
 
@@ -66,19 +67,19 @@ export const mockTrends: Trends[] = [
   {
     petId: 'mirri',
     waterByWeek: [
-      { label: week(39), ml: 215 },
-      { label: week(40), ml: 210 },
-      { label: week(41), ml: 220 },
-      { label: week(42), ml: 265 },
+      { label: week(demoWeek(4)), ml: 215 },
+      { label: week(demoWeek(3)), ml: 210 },
+      { label: week(demoWeek(2)), ml: 220 },
+      { label: week(demoWeek(1)), ml: 265 },
       { label: 'now', ml: 290 },
     ],
     waterByMonth: [
-      { label: '2026-05', ml: 218 },
-      { label: '2026-06', ml: 212 },
-      { label: '2026-07', ml: 215 },
-      { label: '2026-08', ml: 210 },
-      { label: '2026-09', ml: 240 },
-      { label: '2026-10', ml: 290 },
+      { label: demoMonth(5), ml: 218 },
+      { label: demoMonth(4), ml: 212 },
+      { label: demoMonth(3), ml: 215 },
+      { label: demoMonth(2), ml: 210 },
+      { label: demoMonth(1), ml: 240 },
+      { label: demoMonth(0), ml: 290 },
     ],
     waterWatchMl: 250,
   },

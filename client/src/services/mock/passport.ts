@@ -1,5 +1,6 @@
 import { AURORA, KAARINA } from '@/services/mock/clinics';
 import { tr } from '@/services/mock/delay';
+import { demoDate } from '@/services/mock/demo-date';
 import type { Passport, PassportShare } from '@/types/passport';
 
 const UTI = tr({ en: 'Urinary tract infection', fi: 'Virtsatieinfektio', sv: 'Urinvägsinfektion' });
@@ -22,8 +23,8 @@ export const mockPassports: Passport[] = [
       {
         id: 'mirri-flu',
         name: tr({ en: 'Cat flu & panleukopenia', fi: 'Kissanflunssa ja kissarutto', sv: 'Kattsnuva och kattpest' }),
-        givenOn: '2026-03-02',
-        validUntil: '2027-03-02',
+        givenOn: demoDate('2026-03-02'),
+        validUntil: demoDate('2027-03-02'),
         clinicName: AURORA,
       },
     ],
@@ -32,20 +33,20 @@ export const mockPassports: Passport[] = [
         id: 'mirri-antibiotic',
         name: tr({ en: 'Antibiotic', fi: 'Antibiootti', sv: 'Antibiotika' }),
         dosage: tr({ en: '1 tablet twice a day', fi: '1 tabletti 2 kertaa päivässä', sv: '1 tablett 2 gånger om dagen' }),
-        startDate: '2026-10-13',
-        endDate: '2026-10-23',
+        startDate: demoDate('2026-10-13'),
+        endDate: demoDate('2026-10-23'),
         reason: UTI,
       },
     ],
     allergies: [],
-    allergiesUpdatedOn: '2026-10-13',
+    allergiesUpdatedOn: demoDate('2026-10-13'),
     surgeries: [{ id: 'mirri-spay', name: tr({ en: 'Spaying', fi: 'Sterilointi', sv: 'Kastrering' }), year: 2019 }],
     conditions: [
-      { id: 'mirri-uti', name: UTI, diagnosedOn: '2026-10-13', resolved: false },
+      { id: 'mirri-uti', name: UTI, diagnosedOn: demoDate('2026-10-13'), resolved: false },
       {
         id: 'mirri-dental',
         name: tr({ en: 'Mild gingivitis', fi: 'Lievä ientulehdus', sv: 'Lindrig tandköttsinflammation' }),
-        diagnosedOn: '2025-03-10',
+        diagnosedOn: demoDate('2025-03-10'),
         resolved: true,
       },
     ],
@@ -53,7 +54,7 @@ export const mockPassports: Passport[] = [
       {
         id: 'mirri-urine',
         kind: 'urine',
-        date: '2026-10-13',
+        date: demoDate('2026-10-13'),
         title: tr({ en: 'Urine test', fi: 'Virtsakoe', sv: 'Urinprov' }),
         summary: tr({
           en: 'Bacteria and white blood cells found. No crystals.',
@@ -65,7 +66,7 @@ export const mockPassports: Passport[] = [
       {
         id: 'mirri-blood',
         kind: 'blood',
-        date: '2026-03-02',
+        date: demoDate('2026-03-02'),
         title: tr({ en: 'Blood count and kidney values', fi: 'Verenkuva ja munuaisarvot', sv: 'Blodstatus och njurvärden' }),
         summary: tr({
           en: 'All values within normal range.',
@@ -97,15 +98,15 @@ export const mockPassports: Passport[] = [
           fi: 'Penikkatauti, parvo ja hepatiitti',
           sv: 'Valpsjuka, parvo och hepatit',
         }),
-        givenOn: '2025-11-07',
-        validUntil: '2026-11-07',
+        givenOn: demoDate('2025-11-07'),
+        validUntil: demoDate('2026-11-07'),
         clinicName: KAARINA,
       },
       {
         id: 'rekku-rabies',
         name: tr({ en: 'Rabies', fi: 'Raivotauti', sv: 'Rabies' }),
-        givenOn: '2024-11-07',
-        validUntil: '2027-11-07',
+        givenOn: demoDate('2024-11-07'),
+        validUntil: demoDate('2027-11-07'),
         clinicName: KAARINA,
       },
     ],
@@ -117,13 +118,13 @@ export const mockPassports: Passport[] = [
         severity: 'mild',
       },
     ],
-    allergiesUpdatedOn: '2025-11-07',
+    allergiesUpdatedOn: demoDate('2025-11-07'),
     surgeries: [],
     conditions: [
       {
         id: 'rekku-paw',
         name: tr({ en: 'Paw pad injury', fi: 'Anturavamma', sv: 'Trampdynsskada' }),
-        diagnosedOn: '2026-09-28',
+        diagnosedOn: demoDate('2026-09-28'),
         resolved: true,
       },
     ],
@@ -131,7 +132,7 @@ export const mockPassports: Passport[] = [
       {
         id: 'rekku-xray',
         kind: 'xray',
-        date: '2026-09-28',
+        date: demoDate('2026-09-28'),
         title: tr({ en: 'X-ray, front left paw', fi: 'Röntgen, vasen etutassu', sv: 'Röntgen, vänster framtass' }),
         summary: tr({
           en: 'No fracture. Soft tissue injury only.',
@@ -143,7 +144,7 @@ export const mockPassports: Passport[] = [
       {
         id: 'rekku-ultrasound',
         kind: 'ultrasound',
-        date: '2025-11-07',
+        date: demoDate('2025-11-07'),
         title: tr({ en: 'Abdominal ultrasound', fi: 'Vatsan ultraääni', sv: 'Ultraljud av buken' }),
         summary: tr({
           en: 'Normal findings. Checked because of an upset stomach.',

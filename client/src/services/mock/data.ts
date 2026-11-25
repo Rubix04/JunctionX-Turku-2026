@@ -1,8 +1,15 @@
 import { AURORA, DR_LAINE } from '@/services/mock/clinics';
 import { tr } from '@/services/mock/delay';
+import { demoDate } from '@/services/mock/demo-date';
 import type { CarePlan, MedicationCourse, Reminder, Visit } from '@/types/care';
 import type { DailyLog, LogQuestion, WatchList } from '@/types/health';
 import type { Pet } from '@/types/pet';
+
+/** The follow-up date as the vet writes it in the notes, e.g. "22.10." */
+const followUpDay = (() => {
+  const [, month, day] = demoDate('2026-10-22').split('-');
+  return `${Number(day)}.${Number(month)}.`;
+})();
 
 // Demo data from the design mockups: Mirri is recovering from a urinary tract
 // infection (yellow), Rekku has no watch list (green). Texts are placeholders
@@ -46,7 +53,7 @@ export const mockWatchLists: WatchList[] = [
     petId: 'mirri',
     condition: UTI,
     vetName: DR_LAINE,
-    startDate: '2026-10-14',
+    startDate: demoDate('2026-10-14'),
     totalDays: 10,
     questions: [
       {
@@ -135,22 +142,22 @@ export const mockGeneralQuestions: LogQuestion[] = [
 export const mockDailyLogs: DailyLog[] = [
   {
     petId: 'mirri',
-    date: '2026-10-13',
+    date: demoDate('2026-10-13'),
     answers: { water: 1, litter: 2, straining: 1, appetite: 1, energy: 1, pain: 1, vomiting: 0 },
   },
   {
     petId: 'mirri',
-    date: '2026-10-14',
+    date: demoDate('2026-10-14'),
     answers: { water: 1, litter: 1, straining: 0, appetite: 1, energy: 1, pain: 0, vomiting: 0 },
   },
   {
     petId: 'mirri',
-    date: '2026-10-15',
+    date: demoDate('2026-10-15'),
     answers: { water: 2, litter: 1, straining: 0, appetite: 1, energy: 1, pain: 0, vomiting: 0 },
   },
   {
     petId: 'mirri',
-    date: '2026-10-16',
+    date: demoDate('2026-10-16'),
     answers: { water: 2, litter: 1, straining: 0, appetite: 1, energy: 1, pain: 0, vomiting: 0 },
   },
 ];
@@ -166,7 +173,7 @@ export const mockVisits: Visit[] = [
   {
     id: 'visit-mirri-uti',
     petId: 'mirri',
-    date: '2026-10-13',
+    date: demoDate('2026-10-13'),
     title: UTI,
     clinicName: AURORA,
     vetName: DR_LAINE,
@@ -174,7 +181,7 @@ export const mockVisits: Visit[] = [
   {
     id: 'visit-mirri-annual',
     petId: 'mirri',
-    date: '2026-03-02',
+    date: demoDate('2026-03-02'),
     title: tr({ en: 'Annual check-up & vaccines', fi: 'Vuositarkastus ja rokotukset', sv: 'Årlig hälsokontroll och vaccinationer' }),
     clinicName: AURORA,
     vetName: null,
@@ -215,7 +222,7 @@ export const mockCarePlans: CarePlan[] = [
     ],
     followUp: {
       title: tr({ en: 'Check-up and urine test', fi: 'Kontrollikäynti ja virtsanäyte', sv: 'Återbesök och urinprov' }),
-      dateTime: '2026-10-22T14:30:00',
+      dateTime: demoDate('2026-10-22T14:30:00'),
       clinicName: AURORA,
     },
     products: [
@@ -229,13 +236,13 @@ export const mockCarePlans: CarePlan[] = [
         productId: 'antibiotic',
         name: ANTIBIOTIC,
         brand: '',
-        prescription: { issuedTo: AURORA, pickedUpOn: '2026-10-13' },
+        prescription: { issuedTo: AURORA, pickedUpOn: demoDate('2026-10-13') },
       },
     ],
     originalText: tr({
-      en: 'Dx: bacterial cystitis. Urine sticks: leuk +++, ery ++, nitrite +. Sediment: bacteria, no crystals. Tx: amoxicillin/clavulanate 50 mg 1x2 p.o. 10 d. Wet urinary diet, increase water intake. Control 22.10. if no improvement.',
-      fi: 'Dg: bakteerikystiitti. Virtsan liuskakoe: leuk +++, ery ++, nitriitti +. Sedimentti: bakteereja, ei kiteitä. Hoito: amoksisilliini/klavulaanihappo 50 mg 1x2 p.o. 10 vrk. Märkä virtsatieruokavalio, lisää juomista. Kontrolli 22.10. jos ei paranemista.',
-      sv: 'Dg: bakteriell cystit. Urinstickor: leuk +++, ery ++, nitrit +. Sediment: bakterier, inga kristaller. Beh: amoxicillin/klavulansyra 50 mg 1x2 p.o. 10 d. Vått urinvägsfoder, öka vattenintaget. Kontroll 22.10. om ingen förbättring.',
+      en: `Dx: bacterial cystitis. Urine sticks: leuk +++, ery ++, nitrite +. Sediment: bacteria, no crystals. Tx: amoxicillin/clavulanate 50 mg 1x2 p.o. 10 d. Wet urinary diet, increase water intake. Control ${followUpDay} if no improvement.`,
+      fi: `Dg: bakteerikystiitti. Virtsan liuskakoe: leuk +++, ery ++, nitriitti +. Sedimentti: bakteereja, ei kiteitä. Hoito: amoksisilliini/klavulaanihappo 50 mg 1x2 p.o. 10 vrk. Märkä virtsatieruokavalio, lisää juomista. Kontrolli ${followUpDay} jos ei paranemista.`,
+      sv: `Dg: bakteriell cystit. Urinstickor: leuk +++, ery ++, nitrit +. Sediment: bakterier, inga kristaller. Beh: amoxicillin/klavulansyra 50 mg 1x2 p.o. 10 d. Vått urinvägsfoder, öka vattenintaget. Kontroll ${followUpDay} om ingen förbättring.`,
     }),
   },
 ];
@@ -246,7 +253,7 @@ export const mockMedicationCourses: MedicationCourse[] = [
     name: ANTIBIOTIC,
     dosesTotal: 20,
     dosesGiven: 6,
-    startDate: '2026-10-14',
+    startDate: demoDate('2026-10-14'),
     totalDays: 10,
   },
 ];
@@ -260,7 +267,7 @@ export const mockReminders: Reminder[] = [
     kind: 'medication',
     title: ANTIBIOTIC,
     detail: ONE_TABLET_WITH_FOOD,
-    dueAt: '2026-10-17T08:00:00',
+    dueAt: demoDate('2026-10-17T08:00:00'),
     done: true,
     doneBy: 'Juha',
   },
@@ -270,7 +277,7 @@ export const mockReminders: Reminder[] = [
     kind: 'medication',
     title: ANTIBIOTIC,
     detail: ONE_TABLET_WITH_FOOD,
-    dueAt: '2026-10-17T20:00:00',
+    dueAt: demoDate('2026-10-17T20:00:00'),
     done: false,
   },
   {
@@ -279,7 +286,7 @@ export const mockReminders: Reminder[] = [
     kind: 'visit',
     title: tr({ en: 'Follow-up visit', fi: 'Jälkitarkastus', sv: 'Återbesök' }),
     detail: AURORA,
-    dueAt: '2026-10-22T14:30:00',
+    dueAt: demoDate('2026-10-22T14:30:00'),
     done: false,
   },
   {
@@ -288,7 +295,7 @@ export const mockReminders: Reminder[] = [
     kind: 'vaccination',
     title: tr({ en: 'Yearly vaccination', fi: 'Vuosirokotus', sv: 'Årlig vaccination' }),
     detail: tr({ en: 'Book a time', fi: 'Varaa aika', sv: 'Boka en tid' }),
-    dueAt: '2026-11-07T00:00:00',
+    dueAt: demoDate('2026-11-07T00:00:00'),
     done: false,
   },
   {
@@ -297,7 +304,7 @@ export const mockReminders: Reminder[] = [
     kind: 'deworming',
     title: tr({ en: 'Deworming', fi: 'Madotus', sv: 'Avmaskning' }),
     detail: '',
-    dueAt: '2026-12-01T00:00:00',
+    dueAt: demoDate('2026-12-01T00:00:00'),
     done: false,
   },
 ];

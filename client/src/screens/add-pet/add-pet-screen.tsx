@@ -12,7 +12,9 @@ import Note from '@/components/ui/note';
 import OptionGroup from '@/components/ui/option-group';
 import Screen from '@/components/ui/screen';
 import TextField from '@/components/ui/text-field';
-import { createPet, updatePetPhoto } from '@/services/pets';
+import { useAsync } from '@/hooks/use-async';
+import { getUnlinkedPolicy, linkPolicy } from '@/services/insurance';
+import { createPet, getPets, updatePetPhoto } from '@/services/pets';
 import { colors, fonts, spacing } from '@/theme';
 import type { Species } from '@/types/pet';
 import { parseDecimal, parseFinnishDate, todayIso } from '@/utils/format';
@@ -28,7 +30,9 @@ const AddPetScreen = () => {
   const [weight, setWeight] = useState('');
   const [breed, setBreed] = useState('');
   const [photo, setPhoto] = useState<string | null>(null);
-  const [linkPolicy, setLinkPolicy] = useState(false);
+  const [linkChosen, setLinkChosen] = useState(false);
+  // Shown only when the insurer has a policy that no pet page has yet.
+  const { data: unlinkedPolicy } = useAsync(async () => getUnlinkedPolicy((await getPets()).map((p) => p.id)), []);
   const [submitted, setSubmitted] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -59,6 +63,7 @@ const AddPetScreen = () => {
         weightKg,
       });
       if (photo) await updatePetPhoto(pet.id, photo);
+      if (linkChosen && unlinkedPolicy) await linkPolicy(unlinkedPolicy.id, pet.id);
       router.dismissTo(`/pet/${pet.id}`);
     } catch {
       alertSaveFailed();
@@ -136,22 +141,24 @@ const AddPetScreen = () => {
       </View>
       <TextField label={t('addPet.breed')} value={breed} onChangeText={setBreed} placeholder={t('addPet.breedPlaceholder')} />
 
-      <Note
-        icon="shieldCheck"
-        trailing={
-          <AppText
-            variant="bodySmall"
-            color={colors.primary}
-            style={styles.bold}
-            accessibilityRole="button"
-            onPress={() => setLinkPolicy(!linkPolicy)}
-          >
-            {linkPolicy ? t('addPet.linked') : t('addPet.link')}
-          </AppText>
-        }
-      >
-        {t('addPet.policyFound')}
-      </Note>
+      {unlinkedPolicy && (
+        <Note
+          icon="shieldCheck"
+          trailing={
+            <AppText
+              variant="bodySmall"
+              color={colors.primary}
+              style={styles.bold}
+              accessibilityRole="button"
+              onPress={() => setLinkChosen(!linkChosen)}
+            >
+              {linkChosen ? t('addPet.linked') : t('addPet.link')}
+            </AppText>
+          }
+        >
+          {t('addPet.policyFound', { number: unlinkedPolicy.number })}
+        </Note>
+      )}
     </Screen>
   );
 };

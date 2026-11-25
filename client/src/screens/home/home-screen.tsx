@@ -163,9 +163,10 @@ const HomeScreen = () => {
   const pet = pets[index];
   const policy = pet ? policies.find((p) => p.petId === pet.id) : undefined;
   const todaysReminders = reminders.filter((r) => r.dueAt.startsWith(todayIso()));
-  // Today's list: reminders for all pets, then two of the selected pet's care instructions.
+  // Today's list: reminders for all pets, then two of the selected pet's care instructions,
+  // only while the pet is recovering (the vet's watch list is running).
   const plan = pet ? carePlans[index] : null;
-  const careItems = plan?.homeCare.slice(0, 2) ?? [];
+  const careItems = pet && statuses[index].watchList ? (plan?.homeCare.slice(0, 2) ?? []) : [];
   const alert = pet ? alerts[index][0] : undefined;
 
   const toggleDone = async (reminderId: string, done: boolean) => {

@@ -11,7 +11,7 @@ import {
 } from '@/services/mock/data';
 import { mockDelay } from '@/services/mock/delay';
 import type { CarePlan, MedicationCourse, Reminder, ScannedVisit, Visit, VisitNotesInput } from '@/types/care';
-import { currentLanguage, todayIso } from '@/utils/format';
+import { currentLanguage, daysBetween, todayIso } from '@/utils/format';
 
 // Visits, care plans and reminders. Visits, care plans and reading vet documents use the backend
 // (server/src/modules/care and visit-scan) when an API URL is set; the rest is mock only.
@@ -122,7 +122,10 @@ export const getMedicationCourse = async (petId: string): Promise<MedicationCour
         }
       : null;
   }
-  return mockDelay(mockMedicationCourses.find((c) => c.petId === petId) ?? null);
+  // Only a course that is still being given, as the backend does.
+  const course = mockMedicationCourses.find((c) => c.petId === petId);
+  const running = course && daysBetween(course.startDate, todayIso()) < course.totalDays;
+  return mockDelay(running ? course : null);
 };
 
 /** Keeps the fields the app uses from the backend's reminder */
