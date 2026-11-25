@@ -82,7 +82,6 @@
     },
     "bankId": {
       "title": "Log in with BankID",
-      "aiBadge": "AI reads and summarises the visit notes",
     "intro": "Choose your bank. You'll confirm it's you in your bank's app.",
       "waiting": "Waiting for confirmation in your bank app…",
       "loadError": "Couldn't load the list of banks.",
@@ -422,6 +421,7 @@
     "create": "Create pet page"
   },
   "addVisit": {
+    "aiBadge": "AI reads and summarises the visit notes",
     "intro": "Add {{name}}'s visit notes. We turn them into a care plan and a watch list.",
     "source": {
       "file": "Upload file",
