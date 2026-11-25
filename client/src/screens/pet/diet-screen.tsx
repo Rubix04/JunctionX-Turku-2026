@@ -16,7 +16,8 @@ import { useAsync } from '@/hooks/use-async';
 import { getDietPlan, getWeights, logWeight } from '@/services/diet';
 import { getPet, updatePet } from '@/services/pets';
 import { colors, fonts, radius, spacing, touchTarget } from '@/theme';
-import { formatNumber, parseDecimal } from '@/utils/format';
+import { formatDayMonth, formatNumber, parseDecimal } from '@/utils/format';
+import { alertSaveFailed } from '@/utils/notify';
 import { estimateDailyKcal, gramsPerDay } from '@/utils/portion';
 
 const loadDiet = async (petId: string) => {
@@ -62,14 +63,23 @@ const DietScreen = () => {
 
   const { pet, diet, weights } = data;
   const latest = weights[weights.length - 1]?.weightKg ?? pet.weightKg;
+  // Pets are weighed now and then (about monthly), not every day.
+  const lastWeighed = weights[weights.length - 1]?.date ?? null;
   const dailyKcal = diet?.dailyKcal ?? (latest ? estimateDailyKcal(pet.species, latest) : null);
   const total = dailyKcal ? gramsPerDay(dailyKcal, per100) : null;
-  const parsedWeight = weightInput === null ? null : parseDecimal(weightInput);
+  const parsedNumber = weightInput === null ? null : parseDecimal(weightInput);
+  // A weight the app accepts: above 0 and at most 150 kg, like when adding a pet.
+  const parsedWeight = parsedNumber !== null && parsedNumber > 0 && parsedNumber <= 150 ? parsedNumber : null;
 
   const saveWeight = async () => {
-    if (!parsedWeight || parsedWeight <= 0 || parsedWeight > 150) return;
-    await logWeight(petId, parsedWeight);
-    await updatePet(petId, { weightKg: parsedWeight });
+    if (!parsedWeight) return;
+    try {
+      await logWeight(petId, parsedWeight);
+      await updatePet(petId, { weightKg: parsedWeight });
+    } catch {
+      alertSaveFailed();
+      return;
+    }
     setWeightInput(null);
     reload();
   };
@@ -139,7 +149,14 @@ const DietScreen = () => {
           </View>
         </View>
         {weightInput === null ? (
-          <Button label={t('diet.logWeight')} variant="tealOutline" onPress={() => setWeightInput('')} />
+          <>
+            <Button label={t('diet.logWeight')} variant="tealOutline" onPress={() => setWeightInput('')} />
+            {lastWeighed && (
+              <AppText variant="caption" color={colors.muted}>
+                {t('diet.lastWeighed', { date: formatDayMonth(lastWeighed) })}
+              </AppText>
+            )}
+          </>
         ) : (
           <View style={styles.weightForm}>
             <TextField

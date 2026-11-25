@@ -8,9 +8,9 @@ Drop this `assets/` folder into `client/` (it matches the folder structure in th
 | --- | --- | --- |
 | `images/icon.png` | 1024 × 1024 | App icon. Full-bleed square, no transparency: iOS rounds the corners itself. |
 | `images/android-icon-foreground.png` | 1024 × 1024 | Android adaptive icon, foreground. Artwork stays inside the safe zone. |
-| `images/android-icon-background.png` | 1024 × 1024 | Android adaptive icon, solid teal background. |
+| `images/android-icon-background.png` | 1024 × 1024 | Android adaptive icon, solid blue background. |
 | `images/android-icon-monochrome.png` | 1024 × 1024 | Android 13+ themed icon (only the alpha is used). |
-| `images/splash-icon.png` | 1024 × 1024 | Splash logo, shown on a teal background. |
+| `images/splash-icon.png` | 1024 × 1024 | Splash logo (light tile, blue shield), shown on a blue background. |
 | `images/favicon.png` | 48 × 48 | Web favicon. |
 
 `app.json`:
@@ -25,7 +25,7 @@ Drop this `assets/` folder into `client/` (it matches the folder structure in th
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png",
-        "backgroundColor": "#0E5A63"
+        "backgroundColor": "#0B5AA0"
       }
     },
     "web": { "favicon": "./assets/images/favicon.png" },
@@ -36,7 +36,7 @@ Drop this `assets/` folder into `client/` (it matches the folder structure in th
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 120,
           "resizeMode": "contain",
-          "backgroundColor": "#0E5A63"
+          "backgroundColor": "#0B5AA0"
         }
       ]
     ]
@@ -50,17 +50,17 @@ Every logo comes as SVG (`svg/`, for slides, print and the web) and PNG (`png/`,
 
 | Name | What it is | Use on |
 | --- | --- | --- |
-| `icon-primary` | Teal tile, light shield, amber toes | Light backgrounds. The main logo. |
-| `icon-light` | Light tile, teal shield | Teal or dark backgrounds |
-| `icon-dark` | Ink tile | Light backgrounds where teal clashes |
-| `mark-teal` / `mark-white` | Shield and paw without a tile | In-app headers, small spaces |
+| `icon-primary` | Blue tile, light shield, orange toes | Light backgrounds. The main logo. |
+| `icon-light` | Light tile, blue shield | Blue or dark backgrounds |
+| `icon-dark` | Ink tile | Light backgrounds where blue clashes |
+| `mark-blue` / `mark-white` | Shield and paw without a tile | In-app headers, small spaces |
 | `mark-mono-ink` / `mark-mono-white` | One colour, paw cut out | Stamps, print, single-colour use |
 | `wordmark-on-light` / `wordmark-on-dark` | "TassuVahti" text | Next to the mark, titles |
 | `wordmark-mono-ink` / `wordmark-mono-white` | Text in one colour | Single-colour use |
 | `logo-horizontal-on-light` / `-on-dark` | Icon + wordmark side by side | Headers, slides, report cover |
 | `logo-stacked-on-light` / `-on-dark` | Icon above wordmark | Square spaces, posters |
 
-Rules: keep clear space around the logo of at least half the icon's width, don't recolour or stretch it, and use the `-on-dark` versions on teal or dark backgrounds.
+Rules: keep clear space around the logo of at least half the icon's width, don't recolour or stretch it, and use the `-on-dark` versions on blue or dark backgrounds.
 
 ## Tab icons (`images/tabIcons/`)
 
@@ -73,7 +73,7 @@ Rules: keep clear space around the logo of at least half the icon's width, don't
 />
 ```
 
-The `.svg` files use `currentColor` if you prefer `react-native-svg`. Active tab colour: `#0E5A63`. Inactive: `#56656C`.
+The `.svg` files use `currentColor` if you prefer `react-native-svg`. In the app the tab bar uses `colors.primary` (active) and `colors.muted` (inactive) from `src/theme/colors.ts`.
 
 Other UI icons in the mockups (back arrow, phone, camera, etc.) follow the same 24 × 24, 2 px stroke style as `lucide-react-native`, so use that library instead of exporting each one.
 
@@ -90,12 +90,14 @@ Default pet pictures, shown until the owner adds a photo: `pet-cat`, `pet-dog`, 
 
 ## Colours and fonts
 
+The source of truth is `src/theme/colors.ts`; this table lists the brand colours used in the logo files.
+
 | Token | Value |
 | --- | --- |
-| Vahti teal (primary) | `#0E5A63` |
-| Tassu amber (accent) | `#F2A33A` |
-| Ink (text) | `#14232B` |
-| Mist (background) | `#F5F7F6` |
+| Vahti blue (primary) | `#0B5AA0` |
+| Tassu orange (accent) | `#EE9B5A` |
+| Ink (text) | `#1B2733` |
+| Warm off-white (background) | `#FAF8F5` |
 | Green / Yellow / Red | `#1F7A4A` / `#F4C542` / `#B3261E` |
 
 Fonts: **Sora** (headings, ExtraBold for the logo) and **Figtree** (body). Install with `npx expo install @expo-google-fonts/sora @expo-google-fonts/figtree`.

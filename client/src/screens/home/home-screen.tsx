@@ -4,165 +4,134 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import GivenButton from '@/components/features/given-button';
+import PetStatusCard from '@/components/features/pet-status-card';
 import PetSwitcher from '@/components/features/pet-switcher';
-import TrafficLightBadge from '@/components/features/traffic-light-badge';
 import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
 import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import IconTile from '@/components/ui/icon-tile';
-import Pill from '@/components/ui/pill';
+import { ListGroup } from '@/components/ui/list-group';
 import SectionLabel from '@/components/ui/section-label';
 import Screen, { ScreenSection } from '@/components/ui/screen';
 import { ErrorView, LoadingView } from '@/components/ui/state-views';
+import { useAuth } from '@/context/auth-context';
 import { useAsync } from '@/hooks/use-async';
 import { useReloadOnFocus } from '@/hooks/use-reload-on-focus';
-import { getReminders, setReminderDone } from '@/services/care';
+import { getSeasonalAlerts } from '@/services/alerts';
+import { getCarePlan, getReminders, setReminderDone } from '@/services/care';
 import { getHealthStatus } from '@/services/health';
 import { getPolicies } from '@/services/insurance';
 import { getPets } from '@/services/pets';
-import { getVetServices } from '@/services/vet-services';
-import { colors, radius, spacing } from '@/theme';
+import { colors, fonts, spacing } from '@/theme';
+import type { SeasonalAlert } from '@/types/alerts';
 import type { HealthStatus } from '@/types/health';
 import type { Policy } from '@/types/insurance';
 import type { Pet } from '@/types/pet';
-import type { VetService } from '@/types/vet-service';
-import { daysBetween, formatDayMonth, formatEuros, formatTime, localize, todayIso } from '@/utils/format';
+import { formatEuros, formatTime, reminderLabel, todayIso } from '@/utils/format';
+import { alertSaveFailed } from '@/utils/notify';
 
 const loadHome = async () => {
   const pets = await getPets();
-  const [statuses, reminders, policies, services] = await Promise.all([
+  const [statuses, carePlans, alerts, reminders, policies] = await Promise.all([
     Promise.all(pets.map((pet) => getHealthStatus(pet.id))),
+    Promise.all(pets.map((pet) => getCarePlan(pet.id))),
+    Promise.all(pets.map((pet) => getSeasonalAlerts(pet).catch(() => []))),
     getReminders(),
     getPolicies(),
-    getVetServices(),
   ]);
-  return { pets, statuses, reminders, policies, services };
+  return { pets, statuses, carePlans, alerts, reminders, policies };
 };
 
-const PolicySection = ({ pet, policy }: { pet: Pet; policy: Policy }) => {
+// Health status of the selected pet, and the two things done most: today's log and a vet visit.
+const StatusCard = ({ pet, status }: { pet: Pet; status: HealthStatus }) => {
   const { t } = useTranslation();
-  const remaining = Math.max(0, policy.coverLimit - policy.usedThisYear);
+  const loggedToday = status.latestLog?.date === todayIso();
 
   return (
-    <View style={styles.policy}>
-      <View style={styles.row}>
-        <IconTile name="shieldCheck" />
-        <AppText variant="label" style={styles.flex}>
-          {`${pet.name} · ${policy.plan}`}
-        </AppText>
-        <Pill label={t('home.active')} tone="green" icon="check" />
-      </View>
-      <View style={styles.coverTexts}>
-        <AppText variant="caption" color={colors.muted}>
-          {t('home.remainingCover')}
-        </AppText>
-        <AppText variant="title">{`${formatEuros(remaining)} / ${formatEuros(policy.coverLimit)}`}</AppText>
-      </View>
-      <View style={styles.track}>
-        <View style={[styles.fill, { width: `${Math.min(100, (remaining / policy.coverLimit) * 100)}%` }]} />
-      </View>
-      <Button label={t('home.submitClaim')} icon="receipt" variant="outline" onPress={() => router.push('/add-visit')} />
-    </View>
-  );
-};
-
-// Insurance cover and health status of the selected pet in one card. Tapping the status opens the pet page.
-const PetCard = ({ pet, policy, status }: { pet: Pet; policy?: Policy; status: HealthStatus }) => {
-  const { t } = useTranslation();
-  const watchList = status.watchList;
-
-  return (
-    <Card>
-      {policy && (
-        <>
-          <PolicySection pet={pet} policy={policy} />
-          <View style={styles.divider} />
-        </>
-      )}
-      <Pressable
-        accessibilityRole="button"
-        accessibilityHint={t('home.viewDetails')}
-        onPress={() => router.push(`/pet/${pet.id}/watch-list`)}
-        style={({ pressed }) => [styles.status, pressed && styles.pressed]}
-      >
-        <View style={styles.statusTop}>
-          <TrafficLightBadge level={status.level} />
-          {watchList && (
-            <AppText variant="caption" color={colors.muted}>
-              {t('home.dayOf', {
-                day: Math.min(daysBetween(watchList.startDate, todayIso()) + 1, watchList.totalDays),
-                total: watchList.totalDays,
-              })}
-            </AppText>
-          )}
-        </View>
-        <View style={styles.row}>
-          <AppText variant="label" style={styles.flex}>
-            {watchList
-              ? t('home.recovering', { condition: watchList.condition.toLowerCase() })
-              : t('home.allGood', { name: pet.name })}
-          </AppText>
-          <Icon name="chevronRight" size={20} color={colors.muted} />
-        </View>
-      </Pressable>
-    </Card>
-  );
-};
-
-const ServiceCard = ({ service }: { service: VetService }) => {
-  const { t } = useTranslation();
-  const [booked, setBooked] = useState(false);
-  const { availability } = service;
-
-  let when: string;
-  if (availability.kind === 'queue') {
-    when = t('home.approxMinutes', { minutes: availability.minutes });
-  } else {
-    const time = formatTime(availability.at);
-    when = availability.at.startsWith(todayIso())
-      ? t('home.todayAt', { time })
-      : `${formatDayMonth(availability.at)} ${time}`;
-  }
-
-  return (
-    <Card style={styles.service}>
-      <View style={styles.serviceTop}>
-        <View style={styles.serviceTexts}>
-          <AppText variant="title" color={colors.primary}>
-            {localize(service.title)}
-          </AppText>
-          <AppText variant="bodySmall" color={colors.textSecondary}>
-            {localize(service.description)}
-          </AppText>
-          <AppText variant="label">{service.price ? formatEuros(service.price) : t('home.included')}</AppText>
-        </View>
-        <View style={styles.serviceAvatar}>
-          <Icon name={service.icon} size={28} color={colors.primary} />
-        </View>
-      </View>
-      <View style={styles.divider} />
-      <View style={styles.serviceBottom}>
-        <View style={styles.flex}>
-          <AppText variant="caption" color={colors.muted}>
-            {t(availability.kind === 'queue' ? 'home.waitingTime' : 'home.nextTime')}
-          </AppText>
-          <AppText variant="body">{when}</AppText>
-        </View>
+    <PetStatusCard pet={pet} status={status}>
+      <View style={styles.actions}>
         <Button
-          label={t(booked ? 'home.booked' : 'home.book')}
-          icon={booked ? 'check' : undefined}
-          variant={booked ? 'outline' : 'primary'}
-          onPress={() => setBooked(!booked)}
-          style={styles.book}
+          label={t(loggedToday ? 'home.loggedToday' : 'pet.logToday')}
+          icon={loggedToday ? 'check' : 'edit'}
+          variant={loggedToday ? 'outline' : 'primary'}
+          onPress={() =>
+            router.push(loggedToday ? `/pet/${pet.id}/log-result?level=${status.level}` : `/pet/${pet.id}/log`)
+          }
+          style={styles.flex}
+        />
+        <Button
+          label={t('home.addVisit')}
+          icon="plus"
+          variant="outline"
+          onPress={() => router.push(`/add-visit?petId=${pet.id}`)}
+          style={styles.flex}
         />
       </View>
-    </Card>
+    </PetStatusCard>
+  );
+};
+
+// Seasonal risks right now (spec 9), e.g. road salt in winter or ticks in spring.
+const seasonIcons = { winter: 'snowflake', spring: 'sprout', summer: 'sun', autumn: 'leaf' } as const;
+
+// One line per alert; tapping it opens the risk and two tips.
+const AlertRow = ({ alert }: { alert: SeasonalAlert }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ expanded: open }}
+      onPress={() => setOpen(!open)}
+      style={({ pressed }) => [styles.alert, pressed && styles.pressed]}
+    >
+      <View style={styles.row}>
+        <Icon name={seasonIcons[alert.season]} size={18} color={colors.yellowText} />
+        <AppText variant="bodySmall" style={[styles.flex, styles.alertTitle]} numberOfLines={open ? undefined : 1}>
+          {alert.title}
+        </AppText>
+        <Icon name="chevronDown" size={16} color={colors.muted} />
+      </View>
+      {open && (
+        <>
+          <AppText variant="bodySmall" color={colors.textSecondary}>
+            {alert.risk}
+          </AppText>
+          {alert.prevention.slice(0, 2).map((tip) => (
+            <View key={tip} style={styles.tip}>
+              <Icon name="check" size={16} color={colors.primary} />
+              <AppText variant="bodySmall" style={styles.flex}>
+                {tip}
+              </AppText>
+            </View>
+          ))}
+        </>
+      )}
+    </Pressable>
+  );
+};
+
+// Insurance as one small line at the bottom; the details are on the insurance page.
+const PolicyLine = ({ policy }: { policy: Policy }) => {
+  const { t } = useTranslation();
+  const remaining = Math.max(0, policy.coverLimit - policy.usedThisYear);
+  return (
+    <Pressable
+      accessibilityRole="link"
+      onPress={() => router.push('/profile/insurance')}
+      style={({ pressed }) => [styles.policy, pressed && styles.pressed]}
+    >
+      <Icon name="shieldCheck" size={16} color={colors.muted} />
+      <AppText variant="caption" color={colors.muted} style={styles.flex}>
+        {`${policy.plan} · ${t('home.coverLeft', { amount: formatEuros(remaining) })}`}
+      </AppText>
+      <Icon name="chevronRight" size={16} color={colors.muted} />
+    </Pressable>
   );
 };
 
 const HomeScreen = () => {
   const { t } = useTranslation();
+  const { displayName } = useAuth();
   const { data, error, reload } = useAsync(loadHome, []);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   useReloadOnFocus(reload);
@@ -186,16 +155,26 @@ const HomeScreen = () => {
     );
   }
 
-  const { pets, statuses, reminders, policies, services } = data;
+  const { pets, statuses, carePlans, alerts, reminders, policies } = data;
   const index = Math.max(
     0,
     pets.findIndex((p) => p.id === selectedId),
   );
   const pet = pets[index];
+  const policy = pet ? policies.find((p) => p.petId === pet.id) : undefined;
   const todaysReminders = reminders.filter((r) => r.dueAt.startsWith(todayIso()));
+  // Today's list: reminders for all pets, then two of the selected pet's care instructions,
+  // only while the pet is recovering (the vet's watch list is running).
+  const plan = pet ? carePlans[index] : null;
+  const careItems = pet && statuses[index].watchList ? (plan?.homeCare.slice(0, 2) ?? []) : [];
+  const alert = pet ? alerts[index][0] : undefined;
 
   const toggleDone = async (reminderId: string, done: boolean) => {
-    await setReminderDone(reminderId, done);
+    try {
+      await setReminderDone(reminderId, done, displayName);
+    } catch {
+      alertSaveFailed();
+    }
     reload();
   };
 
@@ -213,7 +192,7 @@ const HomeScreen = () => {
     <Screen inTabs header={header} noPadding contentStyle={styles.content}>
       <ScreenSection>
         {pet ? (
-          <PetCard pet={pet} policy={policies.find((p) => p.petId === pet.id)} status={statuses[index]} />
+          <StatusCard pet={pet} status={statuses[index]} />
         ) : (
           <Card style={styles.noPets}>
             <AppText variant="title">{t('home.noPetsTitle')}</AppText>
@@ -224,40 +203,59 @@ const HomeScreen = () => {
           </Card>
         )}
 
-        {todaysReminders.length > 0 && (
+        {(todaysReminders.length > 0 || careItems.length > 0) && (
           <>
             <SectionLabel
               label={t('home.today')}
-              action={pet ? { label: t('home.allReminders'), href: `/pet/${pet.id}/reminders` } : undefined}
+              action={
+                pet && plan
+                  ? { label: t('home.wholePlan'), href: `/pet/${pet.id}/care-plan` }
+                  : pet
+                    ? { label: t('home.allReminders'), href: `/pet/${pet.id}/reminders` }
+                    : undefined
+              }
             />
-            {todaysReminders.map((reminder) => {
-              const reminderPet = pets.find((p) => p.id === reminder.petId);
-              return (
-                <View key={reminder.id} style={styles.reminder}>
-                  <IconTile name={reminder.kind === 'medication' ? 'pill' : 'calendar'} tone="amber" />
-                  <View style={styles.flex}>
-                    <AppText variant="label">{`${reminderPet?.name ?? ''} · ${reminder.title.toLowerCase()}`}</AppText>
-                    <AppText variant="caption" color={colors.muted}>
-                      {`${reminder.detail} · ${formatTime(reminder.dueAt)}`}
-                    </AppText>
+            <ListGroup>
+              {todaysReminders.map((reminder) => {
+                const reminderPet = pets.find((p) => p.id === reminder.petId);
+                return (
+                  <View key={reminder.id} style={styles.todayRow}>
+                    <Icon name={reminder.kind === 'medication' ? 'pill' : 'calendar'} size={18} color={colors.yellowText} />
+                    <View style={styles.flex}>
+                      <AppText variant="label">{reminderLabel(reminderPet?.name, reminder.title)}</AppText>
+                      <AppText variant="caption" color={colors.muted}>
+                        {[reminder.detail, formatTime(reminder.dueAt)].filter(Boolean).join(' · ')}
+                      </AppText>
+                    </View>
+                    {reminder.kind === 'medication' && (
+                      <GivenButton
+                        given={reminder.done}
+                        medicineName={reminder.title}
+                        onToggle={() => toggleDone(reminder.id, !reminder.done)}
+                      />
+                    )}
                   </View>
-                  {reminder.kind === 'medication' && (
-                    <GivenButton
-                      given={reminder.done}
-                      medicineName={reminder.title}
-                      onToggle={() => toggleDone(reminder.id, !reminder.done)}
-                    />
-                  )}
+                );
+              })}
+              {careItems.map((item) => (
+                <View key={item} style={styles.todayRow}>
+                  <Icon name="check" size={18} color={colors.primary} />
+                  <AppText variant="bodySmall" style={styles.flex}>
+                    {item}
+                  </AppText>
                 </View>
-              );
-            })}
+              ))}
+            </ListGroup>
           </>
         )}
 
-        <SectionLabel label={t('home.vetServices')} />
-        {services.map((service) => (
-          <ServiceCard key={service.id} service={service} />
-        ))}
+        {alert && (
+          <ListGroup>
+            <AlertRow alert={alert} />
+          </ListGroup>
+        )}
+
+        {policy && <PolicyLine policy={policy} />}
       </ScreenSection>
     </Screen>
   );
@@ -288,38 +286,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   content: { gap: spacing.lg },
-  policy: { gap: spacing.md },
-  coverTexts: { gap: 2 },
-  track: { height: 6, borderRadius: 3, backgroundColor: colors.primaryTint, overflow: 'hidden' },
-  fill: { height: '100%', borderRadius: 3, backgroundColor: colors.primary },
-  divider: { height: 1, backgroundColor: colors.divider },
-  status: { gap: spacing.sm },
-  statusTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  actions: { flexDirection: 'row', gap: spacing.sm },
+  todayRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md, paddingHorizontal: 14 },
+  policy: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, paddingHorizontal: spacing.xs },
+  alert: { paddingVertical: spacing.md, paddingHorizontal: 14, gap: spacing.sm },
+  alertTitle: { fontFamily: fonts.bodyBold },
+  tip: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm },
   noPets: { alignItems: 'center' },
   centerText: { textAlign: 'center' },
   pressed: { opacity: 0.7 },
-  reminder: {
-    padding: spacing.md,
-    paddingHorizontal: 14,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-  },
-  service: { gap: spacing.md },
-  serviceTop: { flexDirection: 'row', gap: spacing.md },
-  serviceTexts: { flex: 1, gap: spacing.xs },
-  serviceAvatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: colors.primaryTint,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  serviceBottom: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  book: { minWidth: 110, borderRadius: radius.pill },
 });

@@ -1,0 +1,365 @@
+{
+  "meta": {
+    "status": "sample",
+    "reviewedBy": null,
+    "updatedOn": "2026-10-17",
+    "notice": "Sample content for the prototype, not reviewed. A veterinarian must review every card and date window before release."
+  },
+  "symptomTags": [
+    "vomiting",
+    "diarrhoea",
+    "drooling",
+    "staggering",
+    "shivering",
+    "limping",
+    "tiredness",
+    "heavyPanting",
+    "fever",
+    "swelling",
+    "headShaking",
+    "pawLicking",
+    "hiding",
+    "seizures",
+    "redPaws",
+    "abdominalPain",
+    "lostPet",
+    "injury"
+  ],
+  "cards": [
+    {
+      "id": "winter-ice-cold",
+      "season": "winter",
+      "species": ["dog", "cat"],
+      "windows": {
+        "south": [{ "from": "12-01", "to": "03-15" }],
+        "central": [{ "from": "11-15", "to": "03-31" }],
+        "north": [{ "from": "11-01", "to": "04-15" }]
+      },
+      "title": { "fi": "Heikot jäät ja pakkanen", "sv": "Svag is och kyla", "en": "Thin ice and frost" },
+      "risk": {
+        "fi": "Koira voi pudota heikkoihin jäihin. Pakkanen paleltuttaa tassuja ja korvia.",
+        "sv": "Hunden kan gå genom svag is. Kylan kan ge köldskador på tassar och öron.",
+        "en": "Dogs can fall through thin ice. Frost can injure paws and ears."
+      },
+      "prevention": {
+        "fi": ["Pidä koira kytkettynä jäiden lähellä.", "Vältä epävarmoja vesistöjä.", "Käytä tarvittaessa suojaliiviä ja tassuvoidetta."],
+        "sv": ["Ha hunden kopplad nära isar.", "Undvik osäkra vattendrag.", "Använd vid behov täcke och tassalva."],
+        "en": ["Keep your dog on a leash near ice.", "Avoid uncertain lakes and rivers.", "Use a coat and paw balm when needed."]
+      },
+      "watchFor": {
+        "fi": ["Tärinä", "Punaiset tassut", "Ontuminen", "Väsymys"],
+        "sv": ["Skakningar", "Röda tassar", "Hälta", "Trötthet"],
+        "en": ["Shivering", "Red paws", "Limping", "Tiredness"]
+      },
+      "ifHappens": {
+        "fi": "Älä mene itse heikoille jäille, vaan soita 112. Lämmitä kylmettynyttä lemmikkiä vähitellen huovan alla ja ota yhteys eläinlääkäriin.",
+        "sv": "Gå inte själv ut på svag is, ring 112. Värm ett nedkylt djur gradvis under en filt och kontakta veterinären.",
+        "en": "Don't go onto thin ice yourself; call 112. Warm a chilled pet gradually under a blanket and contact a vet."
+      },
+      "pushText": {
+        "fi": "Jäät ovat vielä heikkoja. Pidä koira kytkettynä rannoilla.",
+        "sv": "Isarna är ännu svaga. Ha hunden kopplad vid stränderna.",
+        "en": "The ice is still thin. Keep your dog on a leash near the shore."
+      },
+      "ageNotes": [
+        {
+          "maxAgeMonths": 12,
+          "text": { "fi": "Pennut kylmettyvät aikuisia nopeammin.", "sv": "Valpar och kattungar blir fortare kalla än vuxna.", "en": "Puppies and kittens get cold faster than adults." }
+        },
+        {
+          "minAgeMonths": 96,
+          "text": { "fi": "Vanhemmat lemmikit kylmettyvät nopeammin.", "sv": "Äldre djur blir fortare kalla.", "en": "Older pets get cold faster." }
+        }
+      ],
+      "symptomTags": ["shivering", "redPaws", "limping", "tiredness"],
+      "relatedSubstances": []
+    },
+    {
+      "id": "winter-salt-antifreeze",
+      "season": "winter",
+      "species": ["dog", "cat"],
+      "windows": {
+        "south": [{ "from": "11-15", "to": "03-31" }],
+        "central": [{ "from": "11-01", "to": "04-15" }],
+        "north": [{ "from": "10-15", "to": "04-30" }]
+      },
+      "title": { "fi": "Tiesuola ja pakkasneste", "sv": "Vägsalt och frostskyddsvätska", "en": "Road salt and antifreeze" },
+      "risk": {
+        "fi": "Tiesuola ärsyttää tassuja. Pakkasneste maistuu makealta, ja pienikin määrä on hengenvaarallinen.",
+        "sv": "Vägsalt irriterar tassarna. Frostskyddsvätska smakar sött och redan lite är livsfarligt.",
+        "en": "Road salt irritates paws. Antifreeze tastes sweet, and even a little is life-threatening."
+      },
+      "prevention": {
+        "fi": ["Pyyhi tassut lenkin jälkeen.", "Säilytä pakkasneste ja lasinpesuneste lemmikin ulottumattomissa.", "Siivoa vuodot autotallista heti."],
+        "sv": ["Torka tassarna efter promenaden.", "Förvara frostskydds- och spolarvätska utom räckhåll.", "Torka upp spill i garaget direkt."],
+        "en": ["Wipe paws after walks.", "Keep antifreeze and screen wash out of reach.", "Clean up spills in the garage at once."]
+      },
+      "watchFor": {
+        "fi": ["Oksentelu", "Kuolaaminen", "Horjuminen", "Tassujen nuoleminen"],
+        "sv": ["Kräkningar", "Dregling", "Vinglighet", "Slickar tassarna"],
+        "en": ["Vomiting", "Drooling", "Staggering", "Paw licking"]
+      },
+      "ifHappens": {
+        "fi": "Jos epäilet pakkasnestettä, lähde heti päivystykseen. Huuhtele suolan ärsyttämät tassut haalealla vedellä.",
+        "sv": "Misstänker du frostskyddsvätska, åk genast till jouren. Skölj saltirriterade tassar med ljummet vatten.",
+        "en": "If you suspect antifreeze, go to the emergency clinic now. Rinse salt-irritated paws with lukewarm water."
+      },
+      "pushText": {
+        "fi": "Pakkasneste on lemmikille hengenvaarallista. Pidä se poissa ulottuvilta.",
+        "sv": "Frostskyddsvätska är livsfarlig för djur. Förvara den utom räckhåll.",
+        "en": "Antifreeze is deadly for pets. Keep it out of reach."
+      },
+      "symptomTags": ["vomiting", "drooling", "staggering", "pawLicking", "redPaws"],
+      "relatedSubstances": ["antifreeze"]
+    },
+    {
+      "id": "spring-ticks-adders",
+      "season": "spring",
+      "species": ["dog", "cat"],
+      "windows": {
+        "south": [{ "from": "04-01", "to": "10-31" }],
+        "central": [{ "from": "04-15", "to": "10-15" }],
+        "north": [{ "from": "05-01", "to": "09-30" }]
+      },
+      "title": { "fi": "Punkit ja kyyt", "sv": "Fästingar och huggormar", "en": "Ticks and adders" },
+      "risk": {
+        "fi": "Punkit levittävät tauteja. Kyy voi purra uteliasta lemmikkiä, usein kuonoon tai tassuun.",
+        "sv": "Fästingar sprider sjukdomar. En huggorm kan bita ett nyfiket djur, ofta i nosen eller tassen.",
+        "en": "Ticks spread diseases. Adders can bite curious pets, often on the nose or a paw."
+      },
+      "prevention": {
+        "fi": ["Käytä eläinlääkärin suosittelemaa punkkisuojaa.", "Tarkista turkki lenkin jälkeen.", "Vältä korkeaa heinikkoa ja aurinkoisia kivikkoja."],
+        "sv": ["Använd fästingskydd som veterinären rekommenderar.", "Gå igenom pälsen efter promenaden.", "Undvik högt gräs och soliga stensamlingar."],
+        "en": ["Use the tick protection your vet recommends.", "Check the coat after walks.", "Avoid tall grass and sunny rocky spots."]
+      },
+      "watchFor": {
+        "fi": ["Kuume", "Väsymys", "Turvotus puremakohdassa", "Ontuminen"],
+        "sv": ["Feber", "Trötthet", "Svullnad vid bettet", "Hälta"],
+        "en": ["Fever", "Tiredness", "Swelling at the bite", "Limping"]
+      },
+      "ifHappens": {
+        "fi": "Kyyn puremassa pidä lemmikki rauhallisena, kanna se jos voit ja lähde heti eläinlääkäriin. Poista punkki punkkipihdeillä.",
+        "sv": "Vid huggormsbett: håll djuret lugnt, bär det om du kan och åk genast till veterinären. Ta bort fästingar med fästingplockare.",
+        "en": "For an adder bite, keep your pet calm, carry it if you can and go to a vet at once. Remove ticks with a tick remover."
+      },
+      "pushText": {
+        "fi": "Punkkikausi on alkanut. Tarkista turkki lenkin jälkeen.",
+        "sv": "Fästingsäsongen har börjat. Gå igenom pälsen efter promenaden.",
+        "en": "Tick season has started. Check the coat after walks."
+      },
+      "symptomTags": ["fever", "tiredness", "swelling", "limping"],
+      "relatedSubstances": []
+    },
+    {
+      "id": "summer-heat-cars",
+      "season": "summer",
+      "species": ["dog", "cat"],
+      "windows": {
+        "south": [{ "from": "06-01", "to": "08-31" }],
+        "central": [{ "from": "06-01", "to": "08-31" }],
+        "north": [{ "from": "06-15", "to": "08-15" }]
+      },
+      "title": { "fi": "Helle ja kuuma auto", "sv": "Värme och varm bil", "en": "Heatstroke and hot cars" },
+      "risk": {
+        "fi": "Auto kuumenee minuuteissa hengenvaaralliseksi. Rasitus helteellä voi aiheuttaa lämpöhalvauksen.",
+        "sv": "En bil blir livsfarligt varm på några minuter. Ansträngning i värmen kan ge värmeslag.",
+        "en": "A car becomes deadly hot within minutes. Exercise in hot weather can cause heatstroke."
+      },
+      "prevention": {
+        "fi": ["Älä koskaan jätä lemmikkiä autoon.", "Ulkoile aamuisin ja iltaisin.", "Tarjoa vettä ja varjoa."],
+        "sv": ["Lämna aldrig djuret i bilen.", "Gå ut på morgonen och kvällen.", "Ge vatten och skugga."],
+        "en": ["Never leave your pet in the car.", "Go out in the morning and evening.", "Offer water and shade."]
+      },
+      "watchFor": {
+        "fi": ["Voimakas läähätys", "Kuolaaminen", "Horjuminen", "Väsymys"],
+        "sv": ["Kraftig flämtning", "Dregling", "Vinglighet", "Trötthet"],
+        "en": ["Heavy panting", "Drooling", "Staggering", "Tiredness"]
+      },
+      "ifHappens": {
+        "fi": "Siirrä lemmikki varjoon, viilennä viileällä (ei jääkylmällä) vedellä ja lähde heti eläinlääkäriin.",
+        "sv": "Flytta djuret till skuggan, kyl med svalt (inte iskallt) vatten och åk genast till veterinären.",
+        "en": "Move your pet into the shade, cool it with cool (not ice-cold) water and go to a vet at once."
+      },
+      "pushText": {
+        "fi": "Helle on vaarallinen. Älä jätä lemmikkiä autoon hetkeksikään.",
+        "sv": "Värmen är farlig. Lämna inte djuret i bilen ens en kort stund.",
+        "en": "The heat is dangerous. Don't leave your pet in the car even for a moment."
+      },
+      "ageNotes": [
+        {
+          "minAgeMonths": 96,
+          "text": { "fi": "Vanhemmat lemmikit ylikuumenevat helpommin.", "sv": "Äldre djur blir lättare överhettade.", "en": "Older pets overheat more easily." }
+        }
+      ],
+      "speciesNotes": {
+        "dog": { "fi": "Lyhytkuonoiset rodut ylikuumenevat erityisen helposti.", "sv": "Kortnosiga raser blir särskilt lätt överhettade.", "en": "Short-nosed breeds overheat especially easily." }
+      },
+      "symptomTags": ["heavyPanting", "drooling", "staggering", "tiredness"],
+      "relatedSubstances": []
+    },
+    {
+      "id": "summer-algae-grass-seeds",
+      "season": "summer",
+      "species": ["dog"],
+      "windows": {
+        "south": [{ "from": "06-15", "to": "09-15" }],
+        "central": [{ "from": "07-01", "to": "09-15" }],
+        "north": [{ "from": "07-01", "to": "08-31" }]
+      },
+      "title": { "fi": "Sinilevä ja heinän siemenet", "sv": "Blågröna alger och gräsfrön", "en": "Blue-green algae and grass seeds" },
+      "risk": {
+        "fi": "Sinilevän myrkyt voivat olla hengenvaarallisia. Heinän siemenet porautuvat korviin ja tassuihin.",
+        "sv": "Gifter från blågröna alger kan vara livsfarliga. Gräsfrön borrar sig in i öron och tassar.",
+        "en": "Toxins from blue-green algae can be life-threatening. Grass seeds work their way into ears and paws."
+      },
+      "prevention": {
+        "fi": ["Älä päästä koiraa uimaan tai juomaan sinileväiseen veteen.", "Tarkista korvat ja tassut lenkin jälkeen."],
+        "sv": ["Låt inte hunden bada i eller dricka vatten med blågröna alger.", "Kontrollera öron och tassar efter promenaden."],
+        "en": ["Don't let your dog swim in or drink water with blue-green algae.", "Check ears and paws after walks."]
+      },
+      "watchFor": {
+        "fi": ["Oksentelu", "Ripuli", "Pään ravistelu", "Tassun nuoleminen"],
+        "sv": ["Kräkningar", "Diarré", "Skakar på huvudet", "Slickar tassen"],
+        "en": ["Vomiting", "Diarrhoea", "Head shaking", "Licking a paw"]
+      },
+      "ifHappens": {
+        "fi": "Jos koira on ollut sinileväisessä vedessä, huuhtele turkki puhtaalla vedellä ja soita heti eläinlääkärille.",
+        "sv": "Har hunden varit i vatten med blågröna alger, skölj pälsen med rent vatten och ring veterinären direkt.",
+        "en": "If your dog has been in water with blue-green algae, rinse the coat with clean water and call a vet right away."
+      },
+      "pushText": {
+        "fi": "Sinileväkausi on alkanut. Tarkista ranta ennen kuin koira menee veteen.",
+        "sv": "Algsäsongen har börjat. Kolla stranden innan hunden går i vattnet.",
+        "en": "Algae season has started. Check the shore before your dog goes in the water."
+      },
+      "symptomTags": ["vomiting", "diarrhoea", "headShaking", "pawLicking", "staggering", "seizures"],
+      "relatedSubstances": []
+    },
+    {
+      "id": "autumn-apples-mushrooms",
+      "season": "autumn",
+      "species": ["dog"],
+      "windows": {
+        "south": [{ "from": "08-15", "to": "10-31" }],
+        "central": [{ "from": "08-15", "to": "10-15" }],
+        "north": [{ "from": "08-01", "to": "09-30" }]
+      },
+      "title": { "fi": "Pudonneet omenat, sienet ja tammenterhot", "sv": "Nedfallna äpplen, svampar och ekollon", "en": "Fallen apples, mushrooms and acorns" },
+      "risk": {
+        "fi": "Käyneet omenat sisältävät alkoholia. Monet sienet ja tammenterhot ovat myrkyllisiä.",
+        "sv": "Jästa äpplen innehåller alkohol. Många svampar och ekollon är giftiga.",
+        "en": "Fermenting apples contain alcohol. Many mushrooms and acorns are poisonous."
+      },
+      "prevention": {
+        "fi": ["Älä anna koiran syödä pilaantuneita omenoita.", "Pidä koira poissa sienistä metsässä."],
+        "sv": ["Låt inte hunden äta ruttna äpplen.", "Håll hunden borta från svampar i skogen."],
+        "en": ["Don't let your dog eat rotting apples.", "Keep your dog away from mushrooms in the forest."]
+      },
+      "watchFor": {
+        "fi": ["Oksentelu", "Ripuli", "Vatsakipu", "Horjuminen"],
+        "sv": ["Kräkningar", "Diarré", "Magont", "Vinglighet"],
+        "en": ["Vomiting", "Diarrhoea", "Stomach pain", "Staggering"]
+      },
+      "ifHappens": {
+        "fi": "Ota sienestä kuva tai näyte talteen ja soita eläinlääkärille. Älä oksennuta koiraa itse.",
+        "sv": "Ta en bild eller ett prov på svampen och ring veterinären. Framkalla inte kräkning själv.",
+        "en": "Take a photo or a sample of the mushroom and call a vet. Don't make your dog vomit yourself."
+      },
+      "pushText": {
+        "fi": "Sienikausi: pidä koira poissa metsän sienistä.",
+        "sv": "Svampsäsong: håll hunden borta från skogens svampar.",
+        "en": "Mushroom season: keep your dog away from mushrooms in the forest."
+      },
+      "symptomTags": ["vomiting", "diarrhoea", "abdominalPain", "staggering"],
+      "relatedSubstances": ["false-morel", "deadly-amanita"]
+    },
+    {
+      "id": "autumn-hunting-darkness",
+      "season": "autumn",
+      "species": ["dog", "cat"],
+      "windows": {
+        "south": [{ "from": "08-20", "to": "12-31" }],
+        "central": [{ "from": "08-20", "to": "12-31" }],
+        "north": [{ "from": "08-20", "to": "12-31" }]
+      },
+      "title": { "fi": "Metsästyskausi ja pimeys", "sv": "Jaktsäsong och mörker", "en": "Hunting season and darkness" },
+      "risk": {
+        "fi": "Metsästäjät liikkuvat metsissä, ja pimeässä lemmikki voi jäädä auton alle tai eksyä.",
+        "sv": "Jägare rör sig i skogen, och i mörkret kan djuret bli påkört eller gå vilse.",
+        "en": "Hunters are out in the forest, and in the dark pets can be hit by cars or get lost."
+      },
+      "prevention": {
+        "fi": ["Käytä heijastinliiviä ja valopantaa.", "Pidä koira kytkettynä metsässä.", "Varmista, että mikrosiru ja yhteystiedot ovat ajan tasalla."],
+        "sv": ["Använd reflexväst och lyshalsband.", "Ha hunden kopplad i skogen.", "Se till att mikrochip och kontaktuppgifter är aktuella."],
+        "en": ["Use a reflective vest and a light collar.", "Keep your dog on a leash in the forest.", "Make sure the microchip and contact details are up to date."]
+      },
+      "watchFor": {
+        "fi": ["Kadonnut lemmikki", "Vammat", "Ontuminen"],
+        "sv": ["Försvunnet djur", "Skador", "Hälta"],
+        "en": ["A lost pet", "Injuries", "Limping"]
+      },
+      "ifHappens": {
+        "fi": "Jos lemmikki loukkaantuu, lähde eläinlääkäriin. Jos se katoaa, ilmoita löytöeläinpalveluun ja paikallisiin ryhmiin.",
+        "sv": "Om djuret skadas, åk till veterinären. Om det försvinner, anmäl till hittedjurstjänsten och lokala grupper.",
+        "en": "If your pet is injured, go to a vet. If it goes missing, report it to the lost-animal service and local groups."
+      },
+      "pushText": {
+        "fi": "Illat pimenevät. Laita lemmikille heijastin lenkille.",
+        "sv": "Kvällarna blir mörka. Sätt reflex på djuret på promenaden.",
+        "en": "Evenings are getting dark. Put a reflector on your pet for walks."
+      },
+      "speciesNotes": {
+        "cat": { "fi": "Ulkoileva kissa tarvitsee heijastavan pannan.", "sv": "En utekatt behöver ett reflekterande halsband.", "en": "An outdoor cat needs a reflective collar." }
+      },
+      "symptomTags": ["lostPet", "injury", "limping"],
+      "relatedSubstances": []
+    },
+    {
+      "id": "christmas-new-year",
+      "season": "holiday",
+      "species": ["dog", "cat"],
+      "windows": {
+        "south": [{ "from": "12-01", "to": "01-06" }],
+        "central": [{ "from": "12-01", "to": "01-06" }],
+        "north": [{ "from": "12-01", "to": "01-06" }]
+      },
+      "title": { "fi": "Joulu ja uusivuosi", "sv": "Jul och nyår", "en": "Christmas and New Year" },
+      "risk": {
+        "fi": "Suklaa, ksylitoli ja jouluruoat ovat myrkyllisiä. Ilotulitteet pelottavat lemmikkejä.",
+        "sv": "Choklad, xylitol och julmat är giftiga. Fyrverkerier skrämmer djur.",
+        "en": "Chocolate, xylitol and Christmas food are poisonous. Fireworks frighten pets."
+      },
+      "prevention": {
+        "fi": ["Pidä herkut ja kasvit ulottumattomissa.", "Järjestä rauhallinen paikka uudeksivuodeksi.", "Kysy eläinlääkäriltä ajoissa, jos lemmikki pelkää paukkeita."],
+        "sv": ["Håll godis och växter utom räckhåll.", "Ordna en lugn plats till nyår.", "Fråga veterinären i god tid om djuret är rädd för smällar."],
+        "en": ["Keep treats and plants out of reach.", "Make a calm, quiet space for New Year.", "Ask your vet early if your pet is afraid of bangs."]
+      },
+      "watchFor": {
+        "fi": ["Oksentelu", "Kouristukset", "Piiloutuminen", "Tärinä"],
+        "sv": ["Kräkningar", "Kramper", "Gömmer sig", "Skakningar"],
+        "en": ["Vomiting", "Seizures", "Hiding", "Shivering"]
+      },
+      "ifHappens": {
+        "fi": "Jos lemmikki on syönyt jotain vaarallista, katso 'Söikö lemmikki tätä?' ja soita eläinlääkärille.",
+        "sv": "Om djuret har ätit något farligt, se 'Har djuret ätit detta?' och ring veterinären.",
+        "en": "If your pet has eaten something dangerous, check 'My pet ate this' and call a vet."
+      },
+      "pushText": {
+        "fi": "Joulun herkut ja kasvit voivat olla myrkyllisiä. Pidä ne poissa ulottuvilta.",
+        "sv": "Julens godis och växter kan vara giftiga. Håll dem utom räckhåll.",
+        "en": "Christmas treats and plants can be poisonous. Keep them out of reach."
+      },
+      "ageNotes": [
+        {
+          "maxAgeMonths": 12,
+          "text": { "fi": "Pennun ensimmäinen uusivuosi: totuta ääniin ajoissa ja pidä se sisällä.", "sv": "Valpens första nyår: vänj den vid ljud i tid och håll den inne.", "en": "A young pet's first New Year: get it used to sounds early and keep it indoors." }
+        }
+      ],
+      "speciesNotes": {
+        "cat": { "fi": "Liljat ovat kissalle hengenvaarallisia, myös kukkakimpuissa.", "sv": "Liljor är livsfarliga för katter, även i buketter.", "en": "Lilies are deadly for cats, including in bouquets." }
+      },
+      "symptomTags": ["vomiting", "seizures", "hiding", "shivering"],
+      "relatedSubstances": ["chocolate", "xylitol", "lilies", "poinsettia"]
+    }
+  ]
+}

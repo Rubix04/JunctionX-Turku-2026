@@ -5,7 +5,8 @@ import { useMockData } from '@/constants/config';
 import { apiFetch } from '@/services/api-client';
 import { mockDelay } from '@/services/mock/delay';
 import { getStoredItem, setStoredItem, storageKeys } from '@/services/secure-storage';
-import type { Bank, EmailSignUpInput, SignedInDevice, SignInResponse } from '@/types/auth';
+import type { Bank, EmailSignUpInput, SignInResponse } from '@/types/auth';
+import { currentLanguage } from '@/utils/format';
 
 // Backend: server/src/modules/auth. Its bank provider is simulated: every bank
 // signs in a test person straight away. Uses mock data when no API URL is set.
@@ -47,11 +48,13 @@ export const signInWithBank = async (bankId: string): Promise<SignInResponse> =>
   }
   return apiFetch<SignInResponse>('/auth/bank', {
     method: 'POST',
-    body: { bankId, deviceName: deviceName() },
+    // The language lets a new demo account get its example history in the app's language.
+    body: { bankId, deviceName: deviceName(), language: currentLanguage() },
   });
 };
 
-export type EmailAuthErrorCode = 'invalidCredentials' | 'emailTaken';
+/** `unavailable`: the app talks to the real backend, which has no email sign-in yet */
+export type EmailAuthErrorCode = 'invalidCredentials' | 'emailTaken' | 'unavailable';
 
 export class EmailAuthError extends Error {
   constructor(public code: EmailAuthErrorCode) {
@@ -61,6 +64,9 @@ export class EmailAuthError extends Error {
 
 // Email accounts are mock only for now: the server has no email sign-in yet.
 // Accounts live on this device, with a hash of the password instead of the password.
+// With the backend connected, email sign-in is turned off: a local account would get a mock
+// session that the server rejects on the first request.
+export const emailSignInAvailable = useMockData;
 type MockUser = { id: string; displayName: string; email: string; passwordHash: string };
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase();
@@ -88,6 +94,9 @@ const saveMockUser = async (user: MockUser) => {
 };
 
 export const signInWithEmail = async (email: string, password: string): Promise<SignInResponse> => {
+  if (!emailSignInAvailable) {
+    throw new EmailAuthError('unavailable');
+  }
   const passwordHash = await hashPassword(email, password);
   const user = (await loadMockUsers()).find(
     (u) => u.email === normalizeEmail(email) && u.passwordHash === passwordHash,
@@ -100,6 +109,9 @@ export const signInWithEmail = async (email: string, password: string): Promise<
 };
 
 export const signUpWithEmail = async ({ name, email, password }: EmailSignUpInput): Promise<SignInResponse> => {
+  if (!emailSignInAvailable) {
+    throw new EmailAuthError('unavailable');
+  }
   const users = await loadMockUsers();
   if (users.some((u) => u.email === normalizeEmail(email))) {
     await mockDelay(undefined, 600);
@@ -129,30 +141,4 @@ export const signOutSession = async (): Promise<void> => {
     return;
   }
   await apiFetch<void>('/auth/logout', { method: 'POST' });
-};
-
-const mockDevices: SignedInDevice[] = [
-  { id: 'this-device', deviceName: 'This phone', createdAt: Date.now() - 86_400_000 * 30, lastUsedAt: Date.now(), current: true },
-  { id: 'old-tablet', deviceName: 'iPad', createdAt: Date.now() - 86_400_000 * 90, lastUsedAt: Date.now() - 86_400_000 * 12, current: false },
-];
-
-/** Devices signed in to this account, most recently used first. */
-export const getSignedInDevices = async (): Promise<SignedInDevice[]> => {
-  if (useMockData) {
-    return mockDelay([...mockDevices]);
-  }
-  const { devices } = await apiFetch<{ devices: SignedInDevice[] }>('/auth/devices');
-  return devices;
-};
-
-/** Signs another device out. It stops working at once and needs online banking again. */
-export const signOutDevice = async (deviceId: string): Promise<void> => {
-  if (useMockData) {
-    mockDevices.splice(
-      mockDevices.findIndex((device) => device.id === deviceId),
-      1,
-    );
-    return mockDelay(undefined);
-  }
-  await apiFetch<void>(`/auth/devices/${deviceId}`, { method: 'DELETE' });
 };

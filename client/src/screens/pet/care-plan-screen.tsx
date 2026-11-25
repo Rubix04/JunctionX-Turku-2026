@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -27,6 +27,7 @@ import {
   formatTime,
   parseDate,
 } from '@/utils/format';
+import { alertSaveFailed } from '@/utils/notify';
 
 const loadPlan = async (petId: string) => {
   const [pet, plan, visits, reminders] = await Promise.all([
@@ -46,6 +47,11 @@ const CarePlanScreen = () => {
   const { petId } = useLocalSearchParams<{ petId: string }>();
   const { data, error, reload } = useAsync(() => loadPlan(petId), [petId]);
   const [originalOpen, setOriginalOpen] = useState(false);
+  // A second tap before the first one is saved must not add a second reminder.
+  const savingReminder = useRef(false);
+  const [addingReminder, setAddingReminder] = useState(false);
+  // Shows "Reminder on" right away, before the reload brings the new reminder back.
+  const [reminderAdded, setReminderAdded] = useState(false);
   useReloadOnFocus(reload);
 
   const header = <ScreenHeader title={t('screens.carePlan')} />;
@@ -65,18 +71,29 @@ const CarePlanScreen = () => {
 
   const visit = visits.find((v) => v.id === plan.visitId);
   const followUp = plan.followUp;
-  const followUpReminder = followUp && reminders.find((r) => r.dueAt === followUp.dateTime);
+  const followUpReminder =
+    followUp && reminders.find((r) => r.petId === petId && r.kind === 'visit' && r.dueAt === followUp.dateTime);
 
   const remindFollowUp = async () => {
-    if (!followUp) return;
-    await addReminder({
-      petId,
-      kind: 'visit',
-      title: followUp.title,
-      detail: followUp.clinicName,
-      dueAt: followUp.dateTime,
-    });
-    reload();
+    if (!followUp || followUpReminder || reminderAdded || savingReminder.current) return;
+    savingReminder.current = true;
+    setAddingReminder(true);
+    try {
+      await addReminder({
+        petId,
+        kind: 'visit',
+        title: followUp.title,
+        detail: followUp.clinicName,
+        dueAt: followUp.dateTime,
+      });
+      setReminderAdded(true);
+      reload();
+    } catch {
+      alertSaveFailed();
+    } finally {
+      savingReminder.current = false;
+      setAddingReminder(false);
+    }
   };
 
   return (
@@ -106,7 +123,8 @@ const CarePlanScreen = () => {
       <SectionLabel label={t('carePlan.atHome')} />
       <ListGroup>
         {plan.homeCare.map((item, index) => (
-          <View key={item} style={styles.homeRow}>
+          // Index too: a scanned plan can repeat a line.
+          <View key={`${index}-${item}`} style={styles.homeRow}>
             <Icon name={homeCareIcons[index] ?? 'check'} size={20} color={colors.primary} />
             <AppText style={styles.flex}>{item}</AppText>
           </View>
@@ -128,10 +146,16 @@ const CarePlanScreen = () => {
               title={followUp.title}
               subtitle={`${formatShortWeekdayDate(followUp.dateTime)} ${formatTime(followUp.dateTime)} · ${followUp.clinicName}`}
               trailing={
-                followUpReminder ? (
+                followUpReminder || reminderAdded ? (
                   <Pill label={t('carePlan.reminderOn')} tone="green" icon="check" />
                 ) : (
-                  <Button label={t('carePlan.remindMe')} variant="tealOutline" size="small" onPress={remindFollowUp} />
+                  <Button
+                    label={t('carePlan.remindMe')}
+                    variant="tealOutline"
+                    size="small"
+                    onPress={remindFollowUp}
+                    loading={addingReminder}
+                  />
                 )
               }
             />
@@ -142,30 +166,35 @@ const CarePlanScreen = () => {
       {plan.products.length > 0 && (
         <>
           <SectionLabel label={t('carePlan.recommended')} />
-          {plan.products.map((product) => (
-            <View key={product.productId} style={styles.product}>
-              <IconTile name={product.prescription ? 'pill' : 'bowl'} tone={product.prescription ? 'amber' : 'teal'} size={44} />
-              <View style={styles.flex}>
-                <AppText variant="label">
-                  {product.prescription ? t('carePlan.prescription', { name: product.name }) : product.name}
-                </AppText>
-                <AppText variant="caption" color={colors.muted}>
-                  {product.prescription
-                    ? product.prescription.pickedUpOn
-                      ? t('carePlan.pickedUp', {
-                          place: product.prescription.issuedTo,
-                          date: formatDayMonth(product.prescription.pickedUpOn),
-                        })
-                      : t('carePlan.pickUp', { place: product.prescription.issuedTo })
-                    : product.brand}
-                </AppText>
+          {plan.products.map((product, index) => (
+            // Products read from a document have no product id, so the id alone is not unique.
+            <View key={`${index}-${product.productId}-${product.name}`} style={styles.product}>
+              <View style={styles.productRow}>
+                <IconTile name={product.prescription ? 'pill' : 'bowl'} tone={product.prescription ? 'amber' : 'teal'} size={44} />
+                <View style={styles.flex}>
+                  <AppText variant="label">
+                    {product.prescription ? t('carePlan.prescription', { name: product.name }) : product.name}
+                  </AppText>
+                  <AppText variant="caption" color={colors.muted}>
+                    {product.prescription
+                      ? product.prescription.pickedUpOn
+                        ? t('carePlan.pickedUp', {
+                            place: product.prescription.issuedTo,
+                            date: formatDayMonth(product.prescription.pickedUpOn),
+                          })
+                        : t('carePlan.pickUp', { place: product.prescription.issuedTo })
+                      : product.brand}
+                  </AppText>
+                </View>
               </View>
-              {!product.prescription && (
+              {!product.prescription && product.productId !== '' && (
                 <Button
                   label={t('carePlan.findInStore')}
                   variant="tealOutline"
                   size="small"
+                  icon="store"
                   onPress={() => router.push(`/find-in-store?productId=${product.productId}`)}
+                  style={styles.productButton}
                 />
               )}
             </View>
@@ -211,10 +240,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-    flexDirection: 'row',
-    alignItems: 'center',
     gap: spacing.md,
   },
+  productRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  // Lines up with the text, past the 44 px icon
+  productButton: { alignSelf: 'flex-start', marginLeft: 44 + spacing.md },
   original: {
     padding: spacing.md,
     paddingHorizontal: 14,

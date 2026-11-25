@@ -83,11 +83,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setStatus('signedOut');
         return;
       }
-      const session = await refreshTokens();
-      setDisplayName(savedName ?? session.user.displayName);
+      try {
+        const session = await refreshTokens();
+        setDisplayName(savedName ?? session.user.displayName);
+      } catch (error) {
+        // Only a rejected session signs the user out. Offline or a server hiccup keeps the saved
+        // session: the API client gets a new access token on the first request that needs one.
+        if (isSessionGone(error)) {
+          await resetToSignedOut();
+          return;
+        }
+        setDisplayName(savedName);
+      }
       setStatus('signedIn');
     };
-    restore().catch(() => resetToSignedOut());
+    // Secure storage could not be read: show sign-in, but keep the saved session for the next start.
+    restore().catch(() => setStatus('signedOut'));
   }, []);
 
   // Let the API client renew an expired access token while the app is open.

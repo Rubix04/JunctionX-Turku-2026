@@ -59,6 +59,7 @@ export const authRoutes: FastifyPluginAsyncZod<{ bankProvider: BankIdentityProvi
       const user = findOrCreateUser(app.db, identity, {
         secret: app.config.IDENTITY_HASH_SECRET,
         seedDemoPets: app.config.DEMO_MODE,
+        language: request.body.language,
       });
       const { session, refreshToken } = createDeviceSession(app.db, user.id, request.body.deviceName);
       return {

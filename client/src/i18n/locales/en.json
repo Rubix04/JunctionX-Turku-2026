@@ -9,12 +9,14 @@
     "errorTitle": "Something went wrong",
     "errorBody": "Check your connection and try again.",
     "tryAgain": "Try again",
-    "language": "Language"
+    "language": "Language",
+    "saveFailedTitle": "Couldn't save",
+    "saveFailedBody": "Check your connection and try again. Nothing was changed."
   },
   "tabs": {
     "home": "Home",
     "pets": "Pets",
-    "explore": "Explore",
+    "explore": "Clinics",
     "profile": "Profile"
   },
   "screens": {
@@ -32,7 +34,8 @@
     "findInStore": "Find in store",
     "addPet": "Add a pet",
     "addVisit": "Add a vet visit",
-    "notFound": "Page not found"
+    "notFound": "Page not found",
+    "claim": "Make a claim"
   },
   "disclaimer": {
     "app": "TassuVahti is a support tool. It does not replace a veterinarian.",
@@ -79,7 +82,7 @@
     },
     "bankId": {
       "title": "Log in with BankID",
-      "intro": "Choose your bank. You'll confirm it's you in your bank's app.",
+    "intro": "Choose your bank. You'll confirm it's you in your bank's app.",
       "waiting": "Waiting for confirmation in your bank app…",
       "loadError": "Couldn't load the list of banks.",
       "signInError": "Sign-in didn't work. Check your connection and try again.",
@@ -113,7 +116,8 @@
       "passwordMismatch": "The passwords don't match.",
       "invalidCredentials": "Email or password is wrong.",
       "emailTaken": "An account with this email already exists. Log in instead.",
-      "generic": "Something went wrong. Try again."
+      "generic": "Something went wrong. Try again.",
+      "unavailable": "Email sign-in isn't available yet. Sign in with online banking."
     }
   },
   "home": {
@@ -125,9 +129,6 @@
     "today": "Today",
     "allReminders": "All reminders",
     "nothingToday": "Nothing due today",
-    "submitClaim": "Submit a claim",
-    "active": "Active",
-    "remainingCover": "Cover left this year",
     "viewDetails": "View details",
     "settings": "Settings",
     "allGood": "{{name}} is doing well",
@@ -138,7 +139,11 @@
     "nextTime": "Next available time",
     "todayAt": "Today {{time}}",
     "book": "Book",
-    "booked": "Booked"
+    "booked": "Booked",
+    "loggedToday": "Logged today",
+    "addVisit": "Add vet visit",
+    "wholePlan": "Care plan",
+    "coverLeft": "{{amount}} cover left this year"
   },
   "pets": {
     "title": "My pets"
@@ -159,17 +164,20 @@
     "nextDose": "Next {{time}}",
     "noMedication": "Reminders",
     "portionCalculator": "Portion calculator",
+    "safeTitle": "Did {{name}} eat something?",
+    "safeSubtitle": "Check if it is safe",
     "trendsHint": "Weight, water",
-    "addVisit": "+ Add visit",
+    "addVisit": "Add visit",
     "noVisits": "No visits yet",
     "tabs": {
       "overview": "Overview",
       "records": "Records",
       "passport": "Passport"
     },
-    "logToday": "Log today · 30 s",
+    "logToday": "Log today",
     "records": {
       "kind": {
+        "health": "Health",
         "all": "All",
         "allergies": "Allergies",
         "conditions": "Conditions",
@@ -181,7 +189,8 @@
       "severity": {
         "mild": "Mild reaction",
         "moderate": "Moderate reaction",
-        "severe": "Severe reaction"
+        "severe": "Severe reaction",
+        "unknown": "Reaction not known"
       },
       "resolved": "Resolved",
       "ongoing": "Ongoing",
@@ -254,8 +263,8 @@
     "byWeek": "By week",
     "months": "3 months",
     "water": "Water intake",
-    "waterUnit": "ml per day, average",
-    "waterA11y": "Water intake, ml per day: {{values}}",
+    "waterUnit": "dl per day, average",
+    "waterA11y": "Water intake, dl per day: {{values}}",
     "watchLevel": "Vet's watch level",
     "now": "Now",
     "weight": "Weight",
@@ -263,6 +272,9 @@
     "weightDown": "Down {{kg}} kg in {{weeks}} weeks.",
     "weightUp": "Up {{kg}} kg in {{weeks}} weeks.",
     "weightSteady": "Weight is steady.",
+    "weightSixMonths": "Weight · 6 months",
+    "weightDownMonths": "Down {{kg}} kg in {{months}} months.",
+    "weightUpMonths": "Up {{kg}} kg in {{months}} months.",
     "dailyStatus": "Daily status · last 14 days",
     "today": "Today",
     "noLog": "No log",
@@ -303,7 +315,8 @@
     "comingUp": "Coming up",
     "nothingComing": "Nothing coming up",
     "book": "Book",
-    "familySees": "Your family sees the same reminders and ticks."
+    "familySees": "Your family sees the same reminders and ticks.",
+    "overdue": "Overdue"
   },
   "diet": {
     "recommendedBy": "Recommended by {{vet}}",
@@ -313,7 +326,8 @@
     "now": "Now",
     "vetTarget": "Vet's target",
     "idealRange": "Ideal range, kg",
-    "logWeight": "Log today's weight",
+    "logWeight": "Add a weigh-in",
+    "lastWeighed": "Last weighed {{date}}. Weighing about once a month is enough.",
     "weightKg": "Weight (kg)",
     "weightInvalid": "Enter the weight in kilograms, e.g. 4.6",
     "calculator": "Portion calculator",
@@ -343,7 +357,8 @@
     "vaccine": {
       "valid": "Valid",
       "dueSoon": "Due soon",
-      "expired": "Expired"
+      "expired": "Expired",
+      "noExpiry": "No expiry"
     },
     "medication": "Medication",
     "ongoing": "ongoing",
@@ -403,12 +418,13 @@
     "weightInvalid": "Enter kilograms, e.g. 4.6",
     "breed": "Breed",
     "breedPlaceholder": "Search breeds",
-    "policyFound": "We found a pet policy without a profile. Link it to this pet?",
+    "policyFound": "We found policy {{number}} that isn't linked to a pet yet. Link it to this pet?",
     "link": "Link",
     "linked": "Linked ✓",
     "create": "Create pet page"
   },
   "addVisit": {
+    "aiBadge": "AI reads and summarises the visit notes",
     "intro": "Add {{name}}'s visit notes. We turn them into a care plan and a watch list.",
     "source": {
       "file": "Upload file",
@@ -438,11 +454,10 @@
     "sampleResult": "Demo: this is a sample result, not read from your document."
   },
   "explore": {
-    "title": "Explore",
+    "title": "Clinics",
     "sections": {
       "vets": "Vets",
-      "safe": "Is it safe?",
-      "quizzes": "Quizzes"
+      "safe": "Is it safe?"
     }
   },
   "map": {
@@ -460,7 +475,8 @@
     },
     "noResults": "No clinics match",
     "noResultsBody": "Try removing a filter.",
-    "registryNote": "Contracted clinics come from the insurance company's registry."
+    "registryNote": "Contracted clinics come from the insurance company's registry.",
+    "bookingFor": "Choose a clinic for {{what}}. Showing contracted clinics that treat this pet."
   },
   "clinic": {
     "emergency24h": "24 h emergency",
@@ -486,7 +502,8 @@
     "phone": "Phone",
     "species": "Treats",
     "expertise": "Special expertise",
-    "notContracted": "Not a contracted clinic. Your insurance still covers the visit, but you make the claim yourself."
+    "notContracted": "Not a contracted clinic. Your insurance still covers the visit, but you make the claim yourself.",
+    "bookingFor": "Booking for: {{what}}"
   },
   "store": {
     "vetRecommended": "Vet recommended",
@@ -575,7 +592,8 @@
     },
     "emergencyMap": "Emergency clinics on the map",
     "readEntry": "Read about {{substance}}",
-    "again": "Check something else"
+    "again": "Check something else",
+    "failed": "We couldn't check this right now. If your pet may have eaten something dangerous, don't wait: call a vet or go to the emergency clinic."
   },
   "insurance": {
     "policies": "Policies",
@@ -599,6 +617,42 @@
     "makeClaim": "Make a claim",
     "directPaymentNote": "Contracted clinics with direct payment: no need to claim afterwards.",
     "bankIdNote": "Changing policy details asks for bank ID again."
+  },
+  "claim": {
+    "noPolicy": "None of your pets has an active policy, so there is nothing to claim yet.",
+    "treatment": "Treatment",
+    "title": "What was treated?",
+    "titlePlaceholder": "e.g. Paw injury",
+    "titleRequired": "Tell us what the treatment was for",
+    "date": "Date of visit",
+    "dateInvalid": "Use dd.mm.yyyy, not in the future",
+    "amount": "Amount (€)",
+    "amountLabel": "Amount",
+    "amountInvalid": "Enter the amount on the receipt",
+    "overCover": "This is more than the {{amount}} of cover left this year. We will pay up to what is left.",
+    "clinic": "Clinic",
+    "clinicPlaceholder": "Name of the vet clinic",
+    "clinicRequired": "Enter the clinic",
+    "description": "What happened? (optional)",
+    "descriptionPlaceholder": "A few words help us handle the claim faster.",
+    "receipts": "Receipts",
+    "receiptsHint": "Add the receipt and, if you have it, the vet's report. Up to 5 files.",
+    "receiptPhoto": "Photo of receipt",
+    "removeReceipt": "Remove {{name}}",
+    "takePhoto": "Take photo",
+    "fromGallery": "Gallery",
+    "fromFiles": "Files",
+    "receiptRequired": "Add at least one receipt",
+    "confirm": "The information I gave is correct",
+    "confirmRequired": "Please confirm the information",
+    "send": "Send claim",
+    "sendFailed": "The claim could not be sent. Check your connection and try again.",
+    "payoutNote": "Compensation is paid to the bank account linked to your policy.",
+    "sentTitle": "Claim sent",
+    "sentBody": "We received {{name}}'s claim and will check it as soon as possible.",
+    "sentNext": "Most claims are handled within 5 working days. You can follow the status under Insurance & claims.",
+    "reference": "Reference",
+    "backToInsurance": "Back to insurance"
   },
   "profile": {
     "pets_one": "{{count}} pet",
@@ -666,7 +720,7 @@
     "hoursValue": "Mon–Fri 8–18 · Sat 10–15",
     "call": "Call us",
     "sendEmail": "Send an email",
-    "emergencyNote": "Is your pet acutely ill? Find the nearest emergency clinic in Explore.",
+    "emergencyNote": "Is your pet acutely ill? Find the nearest emergency clinic under Clinics.",
     "accessibilityBody": [
       "We want everyone to be able to use TassuVahti. The app aims to meet the WCAG 2.1 AA guidelines.",
       "Health status is always shown with a colour, an icon and a word, so it can be read without colour vision. Text follows the size set on your phone, and every button works with screen readers such as VoiceOver and TalkBack.",
@@ -682,26 +736,6 @@
   "splash": {
     "slogan": "Watching over the ones who watch over you."
   },
-  "quiz": {
-    "intro": "Read a short lesson, then test yourself with real-life situations.",
-    "questions_one": "{{count}} question",
-    "questions_other": "{{count}} questions",
-    "best": "Best {{score}}/{{total}}",
-    "beforeYouStart": "Before you start",
-    "start_one": "Start · {{count}} question",
-    "start_other": "Start · {{count}} questions",
-    "questionOf": "Question {{current}} of {{total}}",
-    "correct": "Correct!",
-    "notQuite": "Not quite",
-    "next": "Next question",
-    "seeResult": "See result",
-    "score": "{{score}} / {{total}}",
-    "perfect": "All right! You know what to do.",
-    "goodTry": "Good try. Read the explanations again and give it another go.",
-    "tryAgain": "Try again",
-    "backToExplore": "Back to Explore",
-    "readMore": "Read more in Is it safe?"
-  },
   "watchList": {
     "byVet": "Watch list from {{vet}}",
     "noneBody": "There is no active watch list. Log how {{name}} is doing whenever something seems off.",
@@ -710,5 +744,63 @@
     "notLogged": "Not logged",
     "whatToDo": "What to do now",
     "callVet": "When to call a vet: {{when}}"
+  },
+  "insights": {
+    "title": "AI analysis",
+    "analysing": "AI is reading the data…",
+    "raised": "AI raised the level",
+    "noticed": "AI noticed",
+    "why": "Why?",
+    "fromVet": "From the vet",
+    "fromBehaviour": "From the daily logs",
+    "watchForTitle": "Keep an eye on",
+    "callVetTitle": "Call the clinic if",
+    "sample": "Sample analysis. With an API key, the AI writes it from the same data.",
+    "disclaimer": "The AI's assessment, not a diagnosis.",
+    "comparison": {
+      "asExpected": "Recovering as expected",
+      "slower": "Slower than the vet expected",
+      "worse": "May be getting worse"
+    },
+    "streak": "{{label}}: {{answer}} {{days}} days in a row.",
+    "today": "{{label}} in the latest log: {{answer}}.",
+    "severalSigns": "{{count}} changes in the same log. Together they count for more than each alone.",
+    "allUsual": "Everything was as usual in the latest log ({{date}}).",
+    "noLogs": "{{name}} has no logs from the last two weeks.",
+    "afterCourse": "The symptoms started {{days}} days after the {{medicine}} course ended. The illness may be coming back.",
+    "vet": {
+      "watching": "Watching {{condition}}, as {{vet}} asked.",
+      "plan": "Latest care plan: {{diagnosis}} ({{clinic}}).",
+      "instruction": "The vet's advice: {{text}}",
+      "courseUntil": "{{medicine}} course until {{date}}.",
+      "courseEnded": "{{medicine}} course ended {{date}}."
+    },
+    "summary": {
+      "asExpected": "{{name}} is recovering from {{condition}} as the vet expected.",
+      "slower": "{{name}} is recovering from {{condition}} more slowly than the vet expected.",
+      "worse": "{{name}}'s {{condition}} may be getting worse.",
+      "green": "{{name}} has been doing well.",
+      "yellow": "Some of {{name}}'s logs differ from usual.",
+      "red": "{{name}}'s logs suggest contacting a vet."
+    },
+    "callVet": {
+      "worse": "The symptoms get worse or new ones appear",
+      "noFood": "Your pet does not eat or drink for a day"
+    },
+    "trend": {
+      "aboveWatch": "Water intake {{dl}} dl a day, {{change}} % from the week before and above the vet's watch level.",
+      "normal": "Water intake {{dl}} dl a day, {{change}} % from the week before."
+    },
+    "vetSummary": {
+      "logs": "{{count}} daily logs in {{days}} days."
+    }
+  },
+  "links": {
+    "cantCall": "Can't make calls on this device",
+    "callManually": "Call {{number}} from a phone.",
+    "cantOpenMaps": "Can't open maps",
+    "cantEmail": "No email app found",
+    "emailManually": "Send your message to {{address}}.",
+    "cantOpenPage": "Can't open this page"
   }
 }

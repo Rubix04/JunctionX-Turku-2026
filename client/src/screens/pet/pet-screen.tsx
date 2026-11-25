@@ -2,17 +2,18 @@ import { router, useLocalSearchParams } from 'expo-router';
 import type { TFunction } from 'i18next';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, Share, StyleSheet, View } from 'react-native';
+import { Pressable, Share, StyleSheet, View } from 'react-native';
 
 import PetAvatar, { speciesTint } from '@/components/features/pet-avatar';
-import TrafficLightBadge from '@/components/features/traffic-light-badge';
+import PetStatusCard from '@/components/features/pet-status-card';
+import VaccinationPill from '@/components/features/vaccination-pill';
 import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
 import Card from '@/components/ui/card';
+import Chip from '@/components/ui/chip';
 import Icon, { type IconName } from '@/components/ui/icon';
 import IconTile from '@/components/ui/icon-tile';
 import { DateTile, ListGroup, ListRow } from '@/components/ui/list-group';
-import Pill from '@/components/ui/pill';
 import SectionLabel from '@/components/ui/section-label';
 import Screen, { ScreenSection } from '@/components/ui/screen';
 import SegmentedControl from '@/components/ui/segmented-control';
@@ -22,16 +23,15 @@ import { useReloadOnFocus } from '@/hooks/use-reload-on-focus';
 import { getCarePlan, getReminders, getVisits } from '@/services/care';
 import { getDietPlan } from '@/services/diet';
 import { getHealthStatus } from '@/services/health';
-import { getPassport, vaccinationStatus } from '@/services/passport';
+import { getPassport, sexKey } from '@/services/passport';
 import { getPet } from '@/services/pets';
-import { colors, fonts, radius, spacing, touchTarget } from '@/theme';
+import { colors, fonts, spacing, touchTarget } from '@/theme';
 import type { CarePlan, Visit } from '@/types/care';
 import type { HealthStatus } from '@/types/health';
 import type { Passport } from '@/types/passport';
 import type { Pet } from '@/types/pet';
 import {
   ageInYears,
-  daysBetween,
   formatDayMonth,
   formatLongDate,
   formatMonthShort,
@@ -57,8 +57,16 @@ const loadPetPage = async (petId: string) => {
 const petTabs = ['overview', 'records', 'passport'] as const;
 type PetTab = (typeof petTabs)[number];
 
-const recordKinds = ['allergies', 'conditions', 'surgeries', 'medications', 'labs', 'visits'] as const;
-type RecordKind = (typeof recordKinds)[number];
+type RecordKind = 'allergies' | 'conditions' | 'surgeries' | 'medications' | 'labs' | 'visits';
+
+// Four filters fit without scrolling sideways; "health" groups the rest of the record kinds.
+const recordFilters = ['visits', 'medications', 'health'] as const;
+type RecordFilter = (typeof recordFilters)[number];
+const filterKinds: Record<RecordFilter, RecordKind[]> = {
+  visits: ['visits'],
+  medications: ['medications'],
+  health: ['conditions', 'allergies', 'surgeries', 'labs'],
+};
 
 const recordIcons: Record<RecordKind, IconName> = {
   allergies: 'alertTriangle',
@@ -70,6 +78,10 @@ const recordIcons: Record<RecordKind, IconName> = {
 };
 
 type MedicalRecord = { id: string; kind: RecordKind; date: string; title: string; detail: string; visitId?: string };
+
+/** "valid until 2 March 2027", or "no expiry" for a vaccine without an end date */
+const validUntilText = (validUntil: string | null, t: TFunction) =>
+  validUntil ? t('pet.passportTab.validUntil', { date: formatLongDate(validUntil) }) : t('passport.vaccine.noExpiry');
 
 /** "246098100234517" -> "246 098 100 234 517" */
 const formatChip = (chip: string) => chip.replace(/(\d{3})(?=\d)/g, '$1 ');
@@ -144,38 +156,27 @@ const OverviewTab = ({
   dietName: string | null;
 }) => {
   const { t } = useTranslation();
-  const watchList = status.watchList;
   const today = todayIso();
 
   return (
     <>
-      <Pressable
-        accessibilityRole="link"
-        onPress={() => router.push(`/pet/${pet.id}/watch-list`)}
-        style={({ pressed }) => [styles.statusCard, pressed && styles.pressed]}
-      >
-        <View style={styles.statusTop}>
-          <TrafficLightBadge level={status.level} />
-          {watchList && (
-            <AppText variant="caption" color={colors.muted}>
-              {t('home.dayOf', {
-                day: Math.min(daysBetween(watchList.startDate, today) + 1, watchList.totalDays),
-                total: watchList.totalDays,
-              })}
-            </AppText>
-          )}
-        </View>
-        <View style={styles.row}>
-          <AppText variant="label" style={styles.flex}>
-            {watchList
-              ? t('home.recovering', { condition: watchList.condition.toLowerCase() })
-              : t('home.allGood', { name: pet.name })}
-          </AppText>
-          <Icon name="chevronRight" size={20} color={colors.muted} />
-        </View>
-      </Pressable>
+      <PetStatusCard pet={pet} status={status} />
 
-      <Button label={t('pet.logToday')} icon="edit" onPress={() => router.push(`/pet/${pet.id}/log`)} />
+      <View style={styles.actions}>
+        <Button
+          label={t('pet.logToday')}
+          icon="edit"
+          onPress={() => router.push(`/pet/${pet.id}/log`)}
+          style={styles.flex}
+        />
+        <Button
+          label={t('home.addVisit')}
+          icon="plus"
+          variant="outline"
+          onPress={() => router.push(`/add-visit?petId=${pet.id}`)}
+          style={styles.flex}
+        />
+      </View>
 
       <ListGroup>
         <ListRow
@@ -206,6 +207,12 @@ const OverviewTab = ({
           subtitle={t('pet.trendsHint')}
           href={`/pet/${pet.id}/trends`}
         />
+        <ListRow
+          leading={<IconTile name="search" />}
+          title={t('pet.safeTitle', { name: pet.name })}
+          subtitle={t('pet.safeSubtitle')}
+          href="/safe"
+        />
       </ListGroup>
     </>
   );
@@ -213,29 +220,25 @@ const OverviewTab = ({
 
 const RecordsTab = ({ pet, records, carePlan }: { pet: Pet; records: MedicalRecord[]; carePlan: CarePlan | null }) => {
   const { t } = useTranslation();
-  const [filter, setFilter] = useState<RecordKind | null>(null);
-  const shown = filter ? records.filter((r) => r.kind === filter) : records;
+  const [filter, setFilter] = useState<RecordFilter | null>(null);
+  const shown = filter ? records.filter((r) => filterKinds[filter].includes(r.kind)) : records;
 
   return (
     <>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
-        {[null, ...recordKinds].map((kind) => {
+      <View style={styles.chips}>
+        {[null, ...recordFilters].map((kind) => {
           const selected = filter === kind;
           return (
-            <Pressable
+            <Chip
               key={kind ?? 'all'}
-              accessibilityRole="radio"
-              accessibilityState={{ selected }}
+              role="radio"
+              label={t(`pet.records.kind.${kind ?? 'all'}`)}
+              selected={selected}
               onPress={() => setFilter(kind)}
-              style={[styles.chip, selected ? styles.chipOn : styles.chipOff]}
-            >
-              <AppText variant="bodySmall" color={selected ? colors.onDark : colors.text} style={styles.chipText}>
-                {t(`pet.records.kind.${kind ?? 'all'}`)}
-              </AppText>
-            </Pressable>
+            />
           );
         })}
-      </ScrollView>
+      </View>
 
       {shown.length ? (
         <ListGroup>
@@ -288,8 +291,8 @@ const PassportTab = ({ pet, passport }: { pet: Pet; passport: Passport | null })
     { label: t('pet.passportTab.markings'), value: passport.markings ?? '–' },
     { label: t('pet.passportTab.registration'), value: passport.registration ?? '–' },
     { label: t('passport.born'), value: pet.birthDate ? formatLongDate(pet.birthDate) : '–' },
-    { label: t('pet.passportTab.sex'), value: t(`pet.sex.${passport.sex}${passport.neutered ? 'Neutered' : ''}`) },
-    { label: t('passport.owner'), value: passport.ownerName },
+    { label: t('pet.passportTab.sex'), value: sexKey(passport) ? t(sexKey(passport)!) : '–' },
+    { label: t('passport.owner'), value: passport.ownerName ?? '–' },
   ];
 
   // Short summary for travel, boarding or a new owner, sent with the phone's share sheet.
@@ -300,7 +303,7 @@ const PassportTab = ({ pet, passport }: { pet: Pet; passport: Passport | null })
       ...facts.map((f) => `${f.label}: ${f.value}`),
       `${t('passport.vaccinations')}: ${
         passport.vaccinations
-          .map((v) => `${v.name} (${t('pet.passportTab.validUntil', { date: formatLongDate(v.validUntil) })})`)
+          .map((v) => `${v.name} (${validUntilText(v.validUntil, t)})`)
           .join('; ') || '–'
       }`,
       `${t('passport.allergies')}: ${passport.allergies.map((a) => a.allergen).join(', ') || t('passport.noneKnown')}`,
@@ -335,22 +338,14 @@ const PassportTab = ({ pet, passport }: { pet: Pet; passport: Passport | null })
       <SectionLabel label={t('passport.vaccinations')} />
       {passport.vaccinations.length ? (
         <ListGroup>
-          {passport.vaccinations.map((v) => {
-            const state = vaccinationStatus(v.validUntil);
-            return (
-              <ListRow
-                key={v.id}
-                title={v.name}
-                subtitle={t('pet.passportTab.validUntil', { date: formatLongDate(v.validUntil) })}
-                trailing={
-                  <Pill
-                    label={t(`passport.vaccine.${state}`)}
-                    tone={state === 'valid' ? 'green' : state === 'dueSoon' ? 'amber' : 'red'}
-                  />
-                }
-              />
-            );
-          })}
+          {passport.vaccinations.map((v) => (
+            <ListRow
+              key={v.id}
+              title={v.name}
+              subtitle={validUntilText(v.validUntil, t)}
+              trailing={<VaccinationPill validUntil={v.validUntil} />}
+            />
+          ))}
         </ListGroup>
       ) : (
         <EmptyView title={t('passport.none')} />
@@ -400,7 +395,7 @@ const PetScreen = () => {
   const facts = [
     pet.birthDate ? t('pet.years', { count: ageInYears(pet.birthDate) }) : null,
     pet.weightKg ? `${formatNumber(pet.weightKg)} kg` : null,
-    passport ? t(`pet.sex.${passport.sex}${passport.neutered ? 'Neutered' : ''}`) : null,
+    passport && sexKey(passport) ? t(sexKey(passport)!) : null,
   ].filter(Boolean);
 
   return (
@@ -462,6 +457,7 @@ const PetScreen = () => {
 export default PetScreen;
 
 const styles = StyleSheet.create({
+  actions: { flexDirection: 'row', gap: spacing.sm },
   flex: { flex: 1 },
   center: { textAlign: 'center' },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
@@ -491,21 +487,7 @@ const styles = StyleSheet.create({
   },
   identityTexts: { flex: 1, gap: spacing.xs },
   name: { fontSize: 30 },
-  statusCard: {
-    padding: spacing.lg,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    gap: spacing.sm,
-  },
-  statusTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  pressed: { opacity: 0.7 },
-  chips: { gap: spacing.sm },
-  chip: { minHeight: 40, paddingHorizontal: 14, borderRadius: radius.pill, borderWidth: 1, justifyContent: 'center' },
-  chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipOff: { backgroundColor: colors.surface, borderColor: colors.border },
-  chipText: { fontFamily: fonts.bodySemiBold },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   fact: { gap: 2 },
   mono: { fontFamily: fonts.bodySemiBold, letterSpacing: 1 },
 });

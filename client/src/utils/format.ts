@@ -49,10 +49,6 @@ export const formatLongDate = (iso: string) =>
 export const formatShortDate = (iso: string) =>
   format(iso, { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-/** "Saturday 17 October" */
-export const formatWeekdayDate = (iso: string) =>
-  format(iso, { weekday: 'long', day: 'numeric', month: 'long' });
-
 /** "Thu 22 Oct" */
 export const formatShortWeekdayDate = (iso: string) =>
   format(iso, { weekday: 'short', day: 'numeric', month: 'short' });
@@ -65,6 +61,10 @@ export const formatMonthShort = (iso: string) =>
   format(iso, { month: 'short' }).replace('.', '').toUpperCase();
 
 /** "20:00" */
+/** "Mirri · vuosirokotus"; just the title when the pet's name is not known */
+export const reminderLabel = (petName: string | undefined, title: string) =>
+  [petName, title.toLowerCase()].filter(Boolean).join(' · ');
+
 export const formatTime = (iso: string) =>
   new Intl.DateTimeFormat(locale(), { hour: '2-digit', minute: '2-digit', hour12: false }).format(
     new Date(iso),
@@ -73,10 +73,14 @@ export const formatTime = (iso: string) =>
 export const formatNumber = (value: number, maximumFractionDigits = 1) =>
   new Intl.NumberFormat(locale(), { maximumFractionDigits }).format(value);
 
-export const formatEuros = (value: number) =>
-  new Intl.NumberFormat(locale(), { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(
-    value,
-  );
+/** Whole euros by default; `cents` shows a receipt amount exactly, e.g. "€128.40" */
+export const formatEuros = (value: number, cents = false) =>
+  new Intl.NumberFormat(locale(), {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: cents ? 2 : 0,
+    maximumFractionDigits: cents ? 2 : 0,
+  }).format(value);
 
 /** Full years from the birth date to today */
 export const ageInYears = (birthDate: string, today = todayIso()) => {

@@ -6,11 +6,18 @@ import type { Db } from "../../db/client.js";
 import { type DeviceSessionRow, deviceSessions, households, pets, type UserRow, users } from "../../db/schema.js";
 import { notFound, unauthorized } from "../../errors.js";
 import type { BankIdentity } from "./bank-provider.js";
+import { seedDemoHistory } from "./demo-seed.js";
+import type { DemoLanguage } from "./demo-texts.js";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 // Spec 13: online banking is needed again after a long period of inactivity.
 export const SESSION_INACTIVITY_LIMIT_MS = 90 * DAY_MS;
+/**
+ * The token just replaced still works this long. A phone whose refresh answer got lost on the
+ * way (bad network) only has the old token; without this it would be signed out as if stolen.
+ */
+export const REFRESH_REUSE_GRACE_MS = 60 * 1000;
 
 const hashToken = (token: string) => createHash("sha256").update(token).digest("hex");
 
@@ -30,7 +37,7 @@ const DEMO_PETS = [
 export const findOrCreateUser = (
   db: Db,
   identity: BankIdentity,
-  options: { secret: string; seedDemoPets: boolean },
+  options: { secret: string; seedDemoPets: boolean; language?: DemoLanguage },
 ): UserRow => {
   const identityHash = hashIdentity(identity.personId, options.secret);
   const existing = db.select().from(users).where(eq(users.identityHash, identityHash)).get();
@@ -38,7 +45,7 @@ export const findOrCreateUser = (
     return existing;
   }
 
-  return db.transaction((tx) => {
+  const created = db.transaction((tx) => {
     const householdId = randomUUID();
     tx.insert(households).values({ id: householdId }).run();
     const user = tx
@@ -53,6 +60,17 @@ export const findOrCreateUser = (
     }
     return user;
   });
+  if (options.seedDemoPets) {
+    try {
+      seedDemoHistory(db, created.householdId, created.id, options.language);
+    } catch (error) {
+      // Undo the half-made account (everything cascades from the household), so the next
+      // sign-in creates it again with its demo history instead of an account that never gets one.
+      db.delete(households).where(eq(households.id, created.householdId)).run();
+      throw error;
+    }
+  }
+  return created;
 };
 
 /** Starts a session for a device after online banking. Returns the refresh token once. */
@@ -99,6 +117,18 @@ export const rotateRefreshToken = (db: Db, refreshToken: string) => {
     throw unauthorized("SESSION_EXPIRED", "Sign in with online banking");
   }
   if (session.refreshTokenHash !== tokenHash) {
+    // The previous token, right after it was replaced: most likely a lost answer, so hand out a
+    // new token again. Later reuse means someone else has a copy: sign the device out.
+    if (Date.now() - session.lastUsedAt <= REFRESH_REUSE_GRACE_MS) {
+      const retryToken = newRefreshToken();
+      const updated = db
+        .update(deviceSessions)
+        .set({ refreshTokenHash: hashToken(retryToken) })
+        .where(eq(deviceSessions.id, session.id))
+        .returning()
+        .get();
+      return { session: updated, refreshToken: retryToken };
+    }
     revoke(db, session.id);
     throw unauthorized("SESSION_EXPIRED", "Sign in with online banking");
   }

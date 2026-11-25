@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams } from 'expo-router';
+import { type Href, router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
@@ -11,17 +11,52 @@ import { ListGroup, ListRow } from '@/components/ui/list-group';
 import SectionLabel from '@/components/ui/section-label';
 import Screen from '@/components/ui/screen';
 import { EmptyView, ErrorView, LoadingView } from '@/components/ui/state-views';
+import { useAuth } from '@/context/auth-context';
 import { useAsync } from '@/hooks/use-async';
-import { getMedicationCourse, getReminders, setReminderDone } from '@/services/care';
-import { mockHousehold } from '@/services/mock/data';
+import { getMedicationCourse, getReminders, getVisits, setReminderDone } from '@/services/care';
+import { getClinics } from '@/services/clinics';
+import { getHouseholdMembers } from '@/services/household';
 import { getPets } from '@/services/pets';
 import { colors, fonts, radius, spacing } from '@/theme';
-import type { ReminderKind } from '@/types/care';
-import { daysBetween, formatShortWeekdayDate, formatTime, todayIso } from '@/utils/format';
+import type { ReminderKind, Visit } from '@/types/care';
+import type { Clinic } from '@/types/clinic';
+import type { Pet } from '@/types/pet';
+import { daysBetween, formatShortWeekdayDate, formatTime, reminderLabel, todayIso } from '@/utils/format';
+import { alertSaveFailed } from '@/utils/notify';
 
 const loadReminders = async (petId: string) => {
-  const [pets, reminders, course] = await Promise.all([getPets(), getReminders(), getMedicationCourse(petId)]);
-  return { pets, reminders, course };
+  const [pets, reminders, course, clinics, members] = await Promise.all([
+    getPets(),
+    getReminders(),
+    getMedicationCourse(petId),
+    getClinics(),
+    getHouseholdMembers(),
+  ]);
+  // Each pet's visits, newest first, to find the clinic it usually goes to.
+  const visits = await Promise.all(pets.map((p) => getVisits(p.id).catch((): Visit[] => [])));
+  const visitsByPet = Object.fromEntries(pets.map((p, i) => [p.id, visits[i]]));
+  return { pets, reminders, course, clinics, visitsByPet, members };
+};
+
+/**
+ * Where "Book" goes: the clinic of the pet's latest visit, if it treats the species and takes bookings.
+ * Otherwise the Clinics tab, filtered to contracted clinics that treat the species.
+ */
+const bookingHref = (
+  pet: Pet | undefined,
+  clinics: Clinic[],
+  visits: Visit[],
+  reminderId: string,
+): Href => {
+  const usual = pet
+    ? visits
+        .map((v) => clinics.find((c) => c.name === v.clinicName))
+        .find((c) => c && c.bookingUrl && c.species.includes(pet.species))
+    : undefined;
+  if (usual) {
+    return { pathname: '/clinic/[id]', params: { id: usual.id, reminder: reminderId } };
+  }
+  return { pathname: '/explore', params: { mode: 'book', reminder: reminderId, ...(pet ? { species: pet.species } : {}) } };
 };
 
 const kindIcons: Record<ReminderKind, 'pill' | 'calendar' | 'shieldCheck' | 'leaf'> = {
@@ -36,6 +71,7 @@ const kindIcons: Record<ReminderKind, 'pill' | 'calendar' | 'shieldCheck' | 'lea
 const RemindersScreen = () => {
   const { t } = useTranslation();
   const { petId } = useLocalSearchParams<{ petId: string }>();
+  const { displayName } = useAuth();
   const { data, error, reload } = useAsync(() => loadReminders(petId), [petId]);
 
   const header = <ScreenHeader title={t('screens.reminders')} />;
@@ -43,15 +79,22 @@ const RemindersScreen = () => {
     return <Screen header={header}>{error ? <ErrorView onRetry={reload} /> : <LoadingView />}</Screen>;
   }
 
-  const { pets, reminders, course } = data;
+  const { pets, reminders, course, clinics, visitsByPet, members } = data;
   const petName = (id: string) => pets.find((p) => p.id === id)?.name ?? '';
   const today = todayIso();
   const todays = reminders.filter((r) => r.dueAt.startsWith(today));
-  const upcoming = reminders.filter((r) => r.dueAt.slice(0, 10) > today && !r.done);
+  // Missed visits and vaccinations stay on the list (marked overdue) until done; a missed dose can't be given later.
+  const upcoming = reminders
+    .filter((r) => !r.done && (r.dueAt.slice(0, 10) > today || (r.dueAt.slice(0, 10) < today && r.kind !== 'medication')))
+    .sort((a, b) => a.dueAt.localeCompare(b.dueAt));
   const coursePet = pets.find((p) => p.id === petId);
 
   const toggle = async (id: string, done: boolean) => {
-    await setReminderDone(id, done);
+    try {
+      await setReminderDone(id, done, displayName);
+    } catch {
+      alertSaveFailed();
+    }
     reload();
   };
 
@@ -91,9 +134,11 @@ const RemindersScreen = () => {
               {formatTime(r.dueAt)}
             </AppText>
             <View style={styles.flex}>
-              <AppText variant="label">{`${petName(r.petId)} · ${r.title.toLowerCase()}`}</AppText>
+              <AppText variant="label">{reminderLabel(petName(r.petId), r.title)}</AppText>
               <AppText variant="caption" color={colors.muted}>
-                {r.done && r.kind === 'medication' ? t('reminders.givenBy', { name: t('reminders.you') }) : r.detail}
+                {r.done && r.kind === 'medication' && r.doneBy
+                  ? t('reminders.givenBy', { name: r.doneBy === displayName ? t('reminders.you') : r.doneBy })
+                  : r.detail}
               </AppText>
             </View>
             {r.kind === 'medication' ? (
@@ -114,8 +159,9 @@ const RemindersScreen = () => {
             <ListRow
               key={r.id}
               leading={<IconTile name={kindIcons[r.kind]} tone={r.kind === 'vaccination' ? 'amber' : 'teal'} />}
-              title={`${petName(r.petId)} · ${r.title.toLowerCase()}`}
+              title={reminderLabel(petName(r.petId), r.title)}
               subtitle={[
+                r.dueAt.slice(0, 10) < today ? t('reminders.overdue') : null,
                 formatShortWeekdayDate(r.dueAt),
                 r.dueAt.endsWith('T00:00:00') ? null : formatTime(r.dueAt),
                 r.detail || null,
@@ -128,11 +174,18 @@ const RemindersScreen = () => {
                     label={t('reminders.book')}
                     variant="tealOutline"
                     size="small"
-                    onPress={() => router.push('/explore')}
+                    onPress={() =>
+                      router.push(
+                        bookingHref(
+                          pets.find((p) => p.id === r.petId),
+                          clinics,
+                          visitsByPet[r.petId] ?? [],
+                          r.id,
+                        ),
+                      )
+                    }
                   />
-                ) : (
-                  <View />
-                )
+                ) : undefined
               }
             />
           ))}
@@ -141,7 +194,7 @@ const RemindersScreen = () => {
         <EmptyView title={t('reminders.nothingComing')} />
       )}
 
-      {mockHousehold.members.length > 0 && (
+      {members.length > 0 && (
         <AppText variant="caption" color={colors.muted}>
           {t('reminders.familySees')}
         </AppText>

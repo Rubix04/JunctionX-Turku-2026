@@ -10,16 +10,18 @@ import { Sora_600SemiBold, Sora_700Bold, Sora_800ExtraBold, useFonts } from '@ex
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import AppLogo from '@/components/features/app-logo';
 import { stackScreenOptions } from '@/constants/navigation';
 import { AuthProvider, useAuth } from '@/context/auth-context';
 import { colors } from '@/theme';
 
-// The native splash hands over to LoadingScreen, which stays up for at least this long.
+// The native splash hands over to LoadingScreen while fonts, the language and the saved session load.
+// It stays up at least this long so a fast start doesn't flash the logo; it used to be 3 s, which felt
+// like waiting for nothing once everything had loaded.
 SplashScreen.preventAutoHideAsync();
-const minSplashMs = 3000;
+const minSplashMs = 500;
 
 /** Same look as the native splash: blue with the logo */
 const LoadingScreen = () => {
@@ -30,7 +32,6 @@ const LoadingScreen = () => {
   return (
     <View style={styles.loading}>
       <AppLogo size={120} variant="light" />
-      <ActivityIndicator color={colors.onDark} />
     </View>
   );
 };
@@ -50,11 +51,12 @@ const RootNavigator = ({ ready }: { ready: boolean }) => {
         <Stack.Screen name="pet/[petId]" />
         <Stack.Screen name="clinic/[id]" />
         <Stack.Screen name="substance/[id]" />
-        <Stack.Screen name="quiz/[id]" />
+        <Stack.Screen name="safe" />
         <Stack.Screen name="find-in-store" />
         <Stack.Screen name="ate-this" options={{ presentation: 'fullScreenModal' }} />
         <Stack.Screen name="add-pet" options={{ presentation: 'fullScreenModal' }} />
         <Stack.Screen name="add-visit" options={{ presentation: 'fullScreenModal' }} />
+        <Stack.Screen name="claim" options={{ presentation: 'fullScreenModal' }} />
       </Stack.Protected>
 
       {/* BankID and email sign-in / sign-up. */}

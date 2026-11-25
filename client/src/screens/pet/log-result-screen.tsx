@@ -1,11 +1,12 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import ClinicCard from '@/components/features/clinic-card';
 import Disclaimer from '@/components/features/disclaimer';
+import InsightCard from '@/components/features/insight-card';
 import ScreenHeader from '@/components/features/screen-header';
 import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
@@ -18,10 +19,12 @@ import { useAsync } from '@/hooks/use-async';
 import { addReminder } from '@/services/care';
 import { getEmergencyClinics } from '@/services/clinics';
 import { getHealthStatus, getLogQuestions } from '@/services/health';
+import { getInsights } from '@/services/insights';
 import { getPet } from '@/services/pets';
 import { colors, fonts, radius, spacing } from '@/theme';
 import type { TrafficLightLevel } from '@/types/health';
-import { formatDayMonth, formatTime, todayIso } from '@/utils/format';
+import { formatDayMonth, todayIso } from '@/utils/format';
+import { alertSaveFailed } from '@/utils/notify';
 
 const loadResult = async (petId: string) => {
   const [pet, status, questions, clinics] = await Promise.all([
@@ -56,13 +59,29 @@ const LogResultScreen = () => {
   const { data, error, reload } = useAsync(() => loadResult(petId), [petId]);
   const [whyOpen, setWhyOpen] = useState(false);
   const [reminderSet, setReminderSet] = useState(false);
+  // Blocks a second tap while the first reminder is being saved.
+  const savingReminder = useRef(false);
+  // The AI reads the vet's data and the logs together; it can raise the level, never lower it.
+  const { data: insight, loading: analysing } = useAsync(() => getInsights(petId), [petId]);
+  const close = () => (router.canGoBack() ? router.back() : router.replace(`/pet/${petId}`));
 
   if (!data) {
-    return <Screen>{error ? <ErrorView onRetry={reload} /> : <LoadingView />}</Screen>;
+    return (
+      <Screen header={<ScreenHeader backIcon="close" onBack={close} />}>
+        {error ? <ErrorView onRetry={reload} /> : <LoadingView />}
+      </Screen>
+    );
   }
 
   const { pet, status, questions, clinic } = data;
-  const level: TrafficLightLevel = levelParam && levels.includes(levelParam) ? levelParam : status.level;
+  // `level` comes from the URL (the log just saved). A link can only make the result more serious,
+  // never show a calmer level than the pet's saved status.
+  const ruleLevel: TrafficLightLevel =
+    levelParam && levels.includes(levelParam) && levels.indexOf(levelParam) < levels.indexOf(status.level)
+      ? levelParam
+      : status.level;
+  const level = insight && levels.indexOf(insight.level) < levels.indexOf(ruleLevel) ? insight.level : ruleLevel;
+  const raisedByAi = level !== ruleLevel;
   const hero = heroColors[level];
   const watchList = status.watchList;
   const log = status.latestLog;
@@ -70,17 +89,24 @@ const LogResultScreen = () => {
     const answer = log?.answers[q.id];
     return answer !== undefined && (level === 'red' ? q.redIf : [...q.yellowIf, ...q.redIf]).includes(answer);
   });
-  const close = () => (router.canGoBack() ? router.back() : router.replace(`/pet/${petId}`));
 
   const remindTonight = async () => {
-    await addReminder({
-      petId,
-      kind: 'visit',
-      title: t('result.reminderTitle'),
-      detail: t('result.reminderDetail'),
-      dueAt: `${todayIso()}T19:00:00`,
-    });
-    setReminderSet(true);
+    if (reminderSet || savingReminder.current) return;
+    savingReminder.current = true;
+    try {
+      await addReminder({
+        petId,
+        kind: 'visit',
+        title: t('result.reminderTitle'),
+        detail: t('result.reminderDetail'),
+        dueAt: `${todayIso()}T19:00:00`,
+      });
+      setReminderSet(true);
+    } catch {
+      alertSaveFailed();
+    } finally {
+      savingReminder.current = false;
+    }
   };
 
   return (
@@ -97,7 +123,7 @@ const LogResultScreen = () => {
             trailing={
               level === 'red' && log ? (
                 <AppText variant="bodySmall" color={colors.redOnDark} style={styles.bold}>
-                  {`${pet.name} · ${formatDayMonth(log.date)} ${formatTime(new Date().toISOString())}`}
+                  {`${pet.name} · ${formatDayMonth(log.date)}`}
                 </AppText>
               ) : undefined
             }
@@ -116,7 +142,9 @@ const LogResultScreen = () => {
           {t(`result.${level}Title`, { name: pet.name })}
         </AppText>
         <AppText color={hero.body}>
-          {level === 'red' && watchList
+          {raisedByAi && insight
+            ? insight.summary
+            : level === 'red' && watchList
             ? watchList.redReason
             : flagged.length
               ? t('result.noticed', { items: flagged.map((q) => `${q.label.toLowerCase()}: ${q.options[log!.answers[q.id]].toLowerCase()}`).join(', ') })
@@ -130,6 +158,7 @@ const LogResultScreen = () => {
       </View>
 
       <ScreenSection>
+        <InsightCard insight={insight} loading={analysing} />
         {level === 'red' ? (
           <>
             <SectionLabel label={t('result.nearestClinic')} />

@@ -32,12 +32,9 @@ import {
   symptomLabel,
   type WatchListTemplate,
 } from "./content.js";
+import { addDays } from "../care/time.js";
 
 export type Language = "fi" | "sv" | "en";
-
-const DAY_MS = 24 * 60 * 60 * 1000;
-const addDays = (isoDate: string, days: number) =>
-  new Date(Date.parse(`${isoDate}T00:00:00Z`) + days * DAY_MS).toISOString().slice(0, 10);
 
 export const contentStatus = () => ({ status: symptomContent.meta.status, updatedOn: symptomContent.meta.updatedOn });
 
@@ -106,6 +103,11 @@ export const toWatchListDto = (list: WatchListRow, pet: PetRow, lang: Language, 
     templateId: list.templateId,
     condition: list.condition[lang],
     intro: template ? fillPet(template.intro[lang], pet.name) : null,
+    yellowAdvice: (template?.yellowAdvice ?? symptomContent.watchListDefaults.yellowAdvice).map((text) =>
+      fillPet(text[lang], pet.name),
+    ),
+    redWhen: fillPet((template?.redWhen ?? symptomContent.watchListDefaults.redWhen)[lang], pet.name),
+    redReason: fillPet((template?.redReason ?? symptomContent.watchListDefaults.redReason)[lang], pet.name),
     source: list.source,
     vetName: list.vetName,
     recordId: list.recordId,
@@ -429,6 +431,9 @@ export const historyFor = (db: Db, pet: PetRow, date: string) => {
         .filter((r) => r.kind === "medication" && upTo("startDate")(r))
         .filter((r) => !data(r).endDate || (data(r).endDate as string) >= date)
         .map((r) => data(r).name ?? ""),
+      endedMedications: records
+        .filter((r) => r.kind === "medication" && data(r).endDate && (data(r).endDate as string) < date)
+        .map((r) => ({ name: data(r).name ?? "", endDate: data(r).endDate as string })),
       surgeryDates: records
         .filter((r) => r.kind === "surgery" && upTo("performedOn")(r))
         .map((r) => data(r).performedOn as string),

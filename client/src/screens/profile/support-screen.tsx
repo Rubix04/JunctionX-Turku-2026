@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Linking, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import ScreenHeader from '@/components/features/screen-header';
 import AppText from '@/components/ui/app-text';
@@ -10,7 +10,7 @@ import { ListGroup, ListRow } from '@/components/ui/list-group';
 import Note from '@/components/ui/note';
 import Screen from '@/components/ui/screen';
 import { colors, spacing } from '@/theme';
-import { callNumber, formatPhone } from '@/utils/links';
+import { callNumber, formatPhone, sendEmail } from '@/utils/links';
 
 // Placeholder contact details until the insurer's real ones are known.
 const supportPhone = '+358800123456';
@@ -35,7 +35,7 @@ const SupportScreen = () => {
           leading={<IconTile name="send" />}
           title={t('profile.email')}
           subtitle={supportEmail}
-          onPress={() => Linking.openURL(`mailto:${supportEmail}`)}
+          onPress={() => sendEmail(supportEmail)}
         />
         <ListRow leading={<IconTile name="clock" />} title={t('profile.hours')} subtitle={t('profile.hoursValue')} />
       </ListGroup>
@@ -44,7 +44,7 @@ const SupportScreen = () => {
         label={t('profile.sendEmail')}
         icon="send"
         variant="outline"
-        onPress={() => Linking.openURL(`mailto:${supportEmail}`)}
+        onPress={() => sendEmail(supportEmail)}
       />
       <Note tone="red" icon="alertTriangle">
         {t('profile.emergencyNote')}

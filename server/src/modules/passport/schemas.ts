@@ -23,6 +23,7 @@ export const recordSchema = z.union([
   outputSchemas.allergy,
   outputSchemas.surgery,
   outputSchemas.visit,
+  outputSchemas.lab,
 ]);
 
 const sectionsSchema = {
@@ -31,9 +32,23 @@ const sectionsSchema = {
   allergies: z.array(outputSchemas.allergy),
   surgeries: z.array(outputSchemas.surgery),
   visits: z.array(outputSchemas.visit),
+  labs: z.array(outputSchemas.lab),
 };
 
-export const passportSchema = z.object({ pet: petSchema, ...sectionsSchema });
+/** Who the pet is, for the passport's first card. Diagnoses come from the passport's visits. */
+export const passportProfileSchema = z.object({
+  microchip: z.string().nullable(),
+  markings: z.string().nullable(),
+  registration: z.string().nullable(),
+  sex: z.enum(["female", "male"]).nullable(),
+  neutered: z.boolean().nullable(),
+  ownerName: z.string().nullable(),
+  conditions: z.array(
+    z.object({ id: z.string(), name: z.string(), diagnosedOn: z.string(), resolved: z.boolean() }),
+  ),
+});
+
+export const passportSchema = z.object({ pet: petSchema, profile: passportProfileSchema, ...sectionsSchema });
 
 /** What a vet or pet care facility sees. No owner details, only the pet and the chosen sections. */
 export const sharedPassportSchema = z.object({
@@ -45,6 +60,7 @@ export const sharedPassportSchema = z.object({
   allergies: sectionsSchema.allergies.optional(),
   surgeries: sectionsSchema.surgeries.optional(),
   visits: sectionsSchema.visits.optional(),
+  labs: sectionsSchema.labs.optional(),
 });
 
 export const createShareSchema = z.object({

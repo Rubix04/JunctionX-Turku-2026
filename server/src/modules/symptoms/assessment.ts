@@ -6,6 +6,7 @@ import type {
   StoredReason,
 } from "../../db/schema.js";
 import { type Answer, type SeverityLevel, type SeverityRule, type SymptomContent, symptomContent } from "./content.js";
+import { addDays } from "../care/time.js";
 
 // Severity assessment (spec 12). Pure functions: the routes gather the pet's history and pass it in.
 //
@@ -25,8 +26,6 @@ export const trafficLightFor = (level: SeverityLevel): "green" | "yellow" | "red
   level === "normal" ? "green" : level === "monitor" ? "yellow" : "red";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-const addDays = (isoDate: string, days: number) =>
-  new Date(Date.parse(`${isoDate}T00:00:00Z`) + days * DAY_MS).toISOString().slice(0, 10);
 export const daysBetween = (from: string, to: string) =>
   Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / DAY_MS);
 
@@ -58,6 +57,8 @@ export type AssessmentInput = {
     diagnoses: string[];
     /** Names of medications in use on the date */
     medications: string[];
+    /** Medication courses that ended before the date */
+    endedMedications?: { name: string; endDate: string }[];
     /** ISO dates of surgeries up to the date */
     surgeryDates: string[];
     /** False if the passport is empty */
@@ -240,6 +241,24 @@ export const assess = (input: AssessmentInput, content: SymptomContent = symptom
     if (run >= needed) {
       raise(severity.persistence.level, { code: "persistent", params: { symptom: id, days: run } });
     }
+  }
+
+  // Several symptoms on the same day (emergency ones are handled above).
+  const signs = escalatable.filter((id) => !emergencyIds.has(id));
+  if (signs.length >= severity.severalSigns.count) {
+    raise(severity.severalSigns.level, { code: "severalSigns", params: { pet: pet.name, symptom: signs } });
+  }
+
+  // Symptoms soon after a course ended: the illness may be coming back.
+  const ended = (history.endedMedications ?? [])
+    .map((m) => ({ ...m, days: daysBetween(m.endDate, date) }))
+    .filter((m) => m.days >= 0 && m.days <= severity.afterMedication.days)
+    .sort((a, b) => a.days - b.days)[0];
+  if (ended && signs.length > 0) {
+    raise(severity.afterMedication.level, {
+      code: "afterMedication",
+      params: { medication: ended.name, days: ended.days, symptom: signs },
+    });
   }
 
   // Changes from the pet's own normal. Learned from logs before the recent days, compared with

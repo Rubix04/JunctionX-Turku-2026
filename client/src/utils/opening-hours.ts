@@ -21,6 +21,3 @@ export const isOpenNow = ({ hours, emergency24h }: Hours, now = new Date()) => {
   const current = now.getHours() * 60 + now.getMinutes();
   return current >= minutes(today.open) && current < minutes(today.close);
 };
-
-/** Today's hours, e.g. { open: '08:00', close: '20:00' }, or null if closed today */
-export const hoursToday = ({ hours }: Hours, now = new Date()) => hours[weekdayIndex(now)];

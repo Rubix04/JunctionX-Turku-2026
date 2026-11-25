@@ -4,16 +4,16 @@ import { StyleSheet, View } from 'react-native';
 
 import PetAvatar from '@/components/features/pet-avatar';
 import ScreenHeader from '@/components/features/screen-header';
+import VaccinationPill from '@/components/features/vaccination-pill';
 import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
 import { ListGroup, ListRow } from '@/components/ui/list-group';
-import Pill from '@/components/ui/pill';
 import SectionLabel from '@/components/ui/section-label';
 import Screen from '@/components/ui/screen';
 import { EmptyView, ErrorView, LoadingView } from '@/components/ui/state-views';
 import { useAsync } from '@/hooks/use-async';
 import { getCarePlan, getVisits } from '@/services/care';
-import { getPassport, vaccinationStatus } from '@/services/passport';
+import { getPassport, sexKey } from '@/services/passport';
 import { getPet } from '@/services/pets';
 import { colors } from '@/theme';
 import { formatShortDate } from '@/utils/format';
@@ -28,8 +28,6 @@ const loadPassport = async (petId: string) => {
   return { pet, passport, visits, plan };
 };
 
-const vaccinationTones = { valid: 'green', dueSoon: 'amber', expired: 'red' } as const;
-
 // Vaccinations, medication, allergies, surgeries and visits in one place (spec 4).
 const PassportScreen = () => {
   const { t } = useTranslation();
@@ -42,7 +40,8 @@ const PassportScreen = () => {
   }
 
   const { pet, passport, visits, plan } = data;
-  const sex = passport ? t(`pet.sex.${passport.sex}${passport.neutered ? 'Neutered' : ''}`).toLowerCase() : null;
+  const sexLabelKey = passport ? sexKey(passport) : null;
+  const sex = sexLabelKey ? t(sexLabelKey).toLowerCase() : null;
   const facts = [
     { label: t('passport.born'), value: pet.birthDate ? formatShortDate(pet.birthDate) : '–' },
     { label: t('passport.microchip'), value: passport?.microchip ?? '–' },
@@ -91,17 +90,14 @@ const PassportScreen = () => {
           <SectionLabel label={t('passport.vaccinations')} />
           {passport.vaccinations.length ? (
             <ListGroup>
-              {passport.vaccinations.map((v) => {
-                const status = vaccinationStatus(v.validUntil);
-                return (
-                  <ListRow
-                    key={v.id}
-                    title={v.name}
-                    subtitle={t('passport.given', { date: formatShortDate(v.givenOn), clinic: v.clinicName })}
-                    trailing={<Pill label={t(`passport.vaccine.${status}`)} tone={vaccinationTones[status]} />}
-                  />
-                );
-              })}
+              {passport.vaccinations.map((v) => (
+                <ListRow
+                  key={v.id}
+                  title={v.name}
+                  subtitle={t('passport.given', { date: formatShortDate(v.givenOn), clinic: v.clinicName })}
+                  trailing={<VaccinationPill validUntil={v.validUntil} />}
+                />
+              ))}
             </ListGroup>
           ) : (
             <EmptyView title={t('passport.none')} />

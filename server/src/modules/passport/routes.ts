@@ -39,6 +39,7 @@ import {
   updateRecord,
 } from "./service.js";
 import { renderSharedPassportPage } from "./share-page.js";
+import { passportProfile } from "./profile.js";
 
 const toShareDto = (share: PassportShareRow) => ({
   id: share.id,
@@ -75,8 +76,12 @@ export const passportRoutes: FastifyPluginAsyncZod = async (app) => {
     { schema: { params: petParamsSchema, response: { 200: passportSchema } } },
     async (request) => {
       const pet = petFor(request, request.params.petId);
-      const passport = groupPassport(listRecords(app.db, pet.id));
-      return { pet: toPetDto(pet), ...passport } as z.infer<typeof passportSchema>;
+      const records = listRecords(app.db, pet.id);
+      return {
+        pet: toPetDto(pet),
+        profile: passportProfile(app.db, pet, records),
+        ...groupPassport(records),
+      } as z.infer<typeof passportSchema>;
     },
   );
 

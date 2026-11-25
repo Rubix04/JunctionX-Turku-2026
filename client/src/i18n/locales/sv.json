@@ -9,12 +9,14 @@
     "errorTitle": "Något gick fel",
     "errorBody": "Kontrollera anslutningen och försök igen.",
     "tryAgain": "Försök igen",
-    "language": "Språk"
+    "language": "Språk",
+    "saveFailedTitle": "Det gick inte att spara",
+    "saveFailedBody": "Kontrollera anslutningen och försök igen. Inget ändrades."
   },
   "tabs": {
     "home": "Hem",
     "pets": "Husdjur",
-    "explore": "Utforska",
+    "explore": "Kliniker",
     "profile": "Profil"
   },
   "screens": {
@@ -32,7 +34,8 @@
     "findInStore": "Hitta i butik",
     "addPet": "Lägg till ett djur",
     "addVisit": "Lägg till ett veterinärbesök",
-    "notFound": "Sidan hittades inte"
+    "notFound": "Sidan hittades inte",
+    "claim": "Ansök om ersättning"
   },
   "disclaimer": {
     "app": "TassuVahti är ett stödverktyg. Det ersätter inte en veterinär.",
@@ -79,7 +82,7 @@
     },
     "bankId": {
       "title": "Logga in med BankID",
-      "intro": "Välj din bank. Du bekräftar din identitet i bankens app.",
+    "intro": "Välj din bank. Du bekräftar din identitet i bankens app.",
       "waiting": "Väntar på bekräftelse i bankappen…",
       "loadError": "Det gick inte att ladda listan över banker.",
       "signInError": "Inloggningen misslyckades. Kontrollera anslutningen och försök igen.",
@@ -113,7 +116,8 @@
       "passwordMismatch": "Lösenorden matchar inte.",
       "invalidCredentials": "Fel e-post eller lösenord.",
       "emailTaken": "Det finns redan ett konto med den här e-postadressen. Logga in i stället.",
-      "generic": "Något gick fel. Försök igen."
+      "generic": "Något gick fel. Försök igen.",
+      "unavailable": "Inloggning med e-post är inte tillgänglig än. Logga in med nätbankskoder."
     }
   },
   "home": {
@@ -125,9 +129,6 @@
     "today": "I dag",
     "allReminders": "Alla påminnelser",
     "nothingToday": "Inget att göra i dag",
-    "submitClaim": "Gör en skadeanmälan",
-    "active": "Aktiv",
-    "remainingCover": "Ersättning kvar i år",
     "viewDetails": "Visa detaljer",
     "settings": "Inställningar",
     "allGood": "{{name}} mår bra",
@@ -138,7 +139,11 @@
     "nextTime": "Nästa lediga tid",
     "todayAt": "I dag {{time}}",
     "book": "Boka",
-    "booked": "Bokad"
+    "booked": "Bokad",
+    "loggedToday": "Loggat i dag",
+    "addVisit": "Lägg till besök",
+    "wholePlan": "Vårdplan",
+    "coverLeft": "{{amount}} ersättning kvar i år"
   },
   "pets": {
     "title": "Mina djur"
@@ -159,17 +164,20 @@
     "nextDose": "Nästa {{time}}",
     "noMedication": "Påminnelser",
     "portionCalculator": "Portionsräknare",
+    "safeTitle": "Har {{name}} ätit något?",
+    "safeSubtitle": "Kolla om det är farligt",
     "trendsHint": "Vikt, vatten",
-    "addVisit": "+ Lägg till besök",
+    "addVisit": "Lägg till besök",
     "noVisits": "Inga besök än",
     "tabs": {
       "overview": "Översikt",
       "records": "Journal",
       "passport": "Pass"
     },
-    "logToday": "Logga i dag · 30 s",
+    "logToday": "Logga i dag",
     "records": {
       "kind": {
+        "health": "Hälsa",
         "all": "Alla",
         "allergies": "Allergier",
         "conditions": "Sjukdomar",
@@ -181,7 +189,8 @@
       "severity": {
         "mild": "Lindrig reaktion",
         "moderate": "Måttlig reaktion",
-        "severe": "Allvarlig reaktion"
+        "severe": "Allvarlig reaktion",
+        "unknown": "Reaktion okänd"
       },
       "resolved": "Läkt",
       "ongoing": "Pågående",
@@ -254,8 +263,8 @@
     "byWeek": "Per vecka",
     "months": "3 månader",
     "water": "Vattenintag",
-    "waterUnit": "ml per dag, medel",
-    "waterA11y": "Vattenintag, ml per dag: {{values}}",
+    "waterUnit": "dl per dag, medel",
+    "waterA11y": "Vattenintag, dl per dag: {{values}}",
     "watchLevel": "Veterinärens bevakningsgräns",
     "now": "Nu",
     "weight": "Vikt",
@@ -263,6 +272,9 @@
     "weightDown": "Ned {{kg}} kg på {{weeks}} veckor.",
     "weightUp": "Upp {{kg}} kg på {{weeks}} veckor.",
     "weightSteady": "Vikten är stabil.",
+    "weightSixMonths": "Vikt · 6 mån",
+    "weightDownMonths": "Minskat {{kg}} kg på {{months}} månader.",
+    "weightUpMonths": "Ökat {{kg}} kg på {{months}} månader.",
     "dailyStatus": "Daglig status · senaste 14 dagarna",
     "today": "I dag",
     "noLog": "Ingen logg",
@@ -303,7 +315,8 @@
     "comingUp": "Kommande",
     "nothingComing": "Inget kommande",
     "book": "Boka",
-    "familySees": "Din familj ser samma påminnelser och markeringar."
+    "familySees": "Din familj ser samma påminnelser och markeringar.",
+    "overdue": "Försenad"
   },
   "diet": {
     "recommendedBy": "Rekommenderat av {{vet}}",
@@ -313,7 +326,8 @@
     "now": "Nu",
     "vetTarget": "Veterinärens mål",
     "idealRange": "Idealvikt, kg",
-    "logWeight": "Logga dagens vikt",
+    "logWeight": "Lägg till vägning",
+    "lastWeighed": "Senast vägd {{date}}. Det räcker att väga ungefär en gång i månaden.",
     "weightKg": "Vikt (kg)",
     "weightInvalid": "Ange vikten i kilogram, t.ex. 4,6",
     "calculator": "Portionsräknare",
@@ -343,7 +357,8 @@
     "vaccine": {
       "valid": "Giltig",
       "dueSoon": "Snart dags",
-      "expired": "Utgången"
+      "expired": "Utgången",
+      "noExpiry": "Utgår inte"
     },
     "medication": "Medicinering",
     "ongoing": "pågår",
@@ -403,12 +418,13 @@
     "weightInvalid": "Ange kilogram, t.ex. 4,6",
     "breed": "Ras",
     "breedPlaceholder": "Sök ras",
-    "policyFound": "Vi hittade en djurförsäkring utan profil. Vill du koppla den till det här djuret?",
+    "policyFound": "Vi hittade försäkringen {{number}} som inte är kopplad till något djur än. Koppla den till det här djuret?",
     "link": "Koppla",
     "linked": "Kopplad ✓",
     "create": "Skapa djurets sida"
   },
   "addVisit": {
+    "aiBadge": "AI:n läser och sammanfattar besöksanteckningarna",
     "intro": "Lägg till anteckningarna från {{name}}s besök. Vi gör en vårdplan och en bevakningslista av dem.",
     "source": {
       "file": "Ladda upp fil",
@@ -438,11 +454,10 @@
     "sampleResult": "Demo: detta är ett exempelresultat, inte läst från ditt dokument."
   },
   "explore": {
-    "title": "Utforska",
+    "title": "Kliniker",
     "sections": {
       "vets": "Veterinärer",
-      "safe": "Är det säkert?",
-      "quizzes": "Quiz"
+      "safe": "Är det säkert?"
     }
   },
   "map": {
@@ -460,7 +475,8 @@
     },
     "noResults": "Inga kliniker matchar",
     "noResultsBody": "Prova att ta bort ett filter.",
-    "registryNote": "Avtalsklinikerna kommer från försäkringsbolagets register."
+    "registryNote": "Avtalsklinikerna kommer från försäkringsbolagets register.",
+    "bookingFor": "Välj en klinik för {{what}}. Visar avtalskliniker som behandlar det här djuret."
   },
   "clinic": {
     "emergency24h": "Jour 24 h",
@@ -486,7 +502,8 @@
     "phone": "Telefon",
     "species": "Behandlar",
     "expertise": "Specialkunskap",
-    "notContracted": "Ingen avtalsklinik. Försäkringen ersätter ändå besöket, men du ansöker om ersättning själv."
+    "notContracted": "Ingen avtalsklinik. Försäkringen ersätter ändå besöket, men du ansöker om ersättning själv.",
+    "bookingFor": "Bokning: {{what}}"
   },
   "store": {
     "vetRecommended": "Rekommenderat av veterinär",
@@ -575,7 +592,8 @@
     },
     "emergencyMap": "Jourer på kartan",
     "readEntry": "Läs om {{substance}}",
-    "again": "Kontrollera något annat"
+    "again": "Kontrollera något annat",
+    "failed": "Det gick inte att kontrollera just nu. Om ditt djur kan ha ätit något farligt, vänta inte: ring en veterinär eller åk till jouren."
   },
   "insurance": {
     "policies": "Försäkringar",
@@ -599,6 +617,42 @@
     "makeClaim": "Ansök om ersättning",
     "directPaymentNote": "Avtalskliniker med direktersättning: du behöver inte ansöka i efterhand.",
     "bankIdNote": "Ändring av försäkringsuppgifter kräver ny bankidentifiering."
+  },
+  "claim": {
+    "noPolicy": "Inget av dina djur har en giltig försäkring, så det finns inget att ansöka om ännu.",
+    "treatment": "Behandling",
+    "title": "Vad behandlades?",
+    "titlePlaceholder": "t.ex. Tasskada",
+    "titleRequired": "Berätta vad behandlingen gällde",
+    "date": "Besöksdatum",
+    "dateInvalid": "Formatet dd.mm.åååå, inte i framtiden",
+    "amount": "Belopp (€)",
+    "amountLabel": "Belopp",
+    "amountInvalid": "Ange beloppet på kvittot",
+    "overCover": "Beloppet är större än årets återstående ersättning ({{amount}}). Vi betalar högst det som återstår.",
+    "clinic": "Klinik",
+    "clinicPlaceholder": "Veterinärklinikens namn",
+    "clinicRequired": "Ange kliniken",
+    "description": "Vad hände? (valfritt)",
+    "descriptionPlaceholder": "Några ord hjälper oss att behandla ansökan snabbare.",
+    "receipts": "Kvitton",
+    "receiptsHint": "Lägg till kvittot och, om du har det, veterinärens utlåtande. Högst 5 filer.",
+    "receiptPhoto": "Foto av kvitto",
+    "removeReceipt": "Ta bort {{name}}",
+    "takePhoto": "Ta foto",
+    "fromGallery": "Galleri",
+    "fromFiles": "Filer",
+    "receiptRequired": "Lägg till minst ett kvitto",
+    "confirm": "Uppgifterna jag gett är korrekta",
+    "confirmRequired": "Bekräfta uppgifterna",
+    "send": "Skicka ansökan",
+    "sendFailed": "Ansökan kunde inte skickas. Kontrollera anslutningen och försök igen.",
+    "payoutNote": "Ersättningen betalas till kontot som är kopplat till din försäkring.",
+    "sentTitle": "Ansökan skickad",
+    "sentBody": "Vi har tagit emot ansökan för {{name}} och behandlar den så snart som möjligt.",
+    "sentNext": "De flesta ansökningar behandlas inom 5 arbetsdagar. Du kan följa statusen under Försäkringar och ersättningar.",
+    "reference": "Referens",
+    "backToInsurance": "Tillbaka till försäkringar"
   },
   "profile": {
     "pets_one": "{{count}} husdjur",
@@ -666,7 +720,7 @@
     "hoursValue": "mån–fre 8–18 · lör 10–15",
     "call": "Ring oss",
     "sendEmail": "Skicka e-post",
-    "emergencyNote": "Är ditt djur akut sjukt? Hitta närmaste jourklinik under Utforska.",
+    "emergencyNote": "Är ditt djur akut sjukt? Hitta närmaste jourklinik under Kliniker.",
     "accessibilityBody": [
       "Vi vill att alla ska kunna använda TassuVahti. Appen strävar efter att uppfylla WCAG 2.1 AA.",
       "Hälsoläget visas alltid med färg, ikon och ord, så det går att läsa utan färgseende. Texten följer storleken du valt i telefonen, och alla knappar fungerar med skärmläsare som VoiceOver och TalkBack.",
@@ -682,26 +736,6 @@
   "splash": {
     "slogan": "Vi vakar över dem som vakar över dig."
   },
-  "quiz": {
-    "intro": "Läs en kort lektion och testa dig sedan med vardagliga situationer.",
-    "questions_one": "{{count}} fråga",
-    "questions_other": "{{count}} frågor",
-    "best": "Bästa {{score}}/{{total}}",
-    "beforeYouStart": "Innan du börjar",
-    "start_one": "Starta · {{count}} fråga",
-    "start_other": "Starta · {{count}} frågor",
-    "questionOf": "Fråga {{current}} av {{total}}",
-    "correct": "Rätt!",
-    "notQuite": "Inte riktigt",
-    "next": "Nästa fråga",
-    "seeResult": "Se resultat",
-    "score": "{{score}} / {{total}}",
-    "perfect": "Alla rätt! Du vet vad du ska göra.",
-    "goodTry": "Bra försök. Läs förklaringarna igen och försök en gång till.",
-    "tryAgain": "Försök igen",
-    "backToExplore": "Tillbaka",
-    "readMore": "Läs mer i Är det säkert?"
-  },
   "watchList": {
     "byVet": "Bevakningslista från {{vet}}",
     "noneBody": "Det finns ingen aktiv bevakning. Logga hur {{name}} mår när något verkar fel.",
@@ -710,5 +744,63 @@
     "notLogged": "Inte loggat",
     "whatToDo": "Vad du gör nu",
     "callVet": "När du ska ringa veterinär: {{when}}"
+  },
+  "insights": {
+    "title": "AI-analys",
+    "analysing": "AI:n läser uppgifterna…",
+    "raised": "AI:n höjde nivån",
+    "noticed": "AI:n märkte",
+    "why": "Varför?",
+    "fromVet": "Från veterinären",
+    "fromBehaviour": "Från dagsloggarna",
+    "watchForTitle": "Håll koll på",
+    "callVetTitle": "Ring kliniken om",
+    "sample": "Exempelanalys. Med en API-nyckel skriver AI:n den utifrån samma data.",
+    "disclaimer": "AI:ns bedömning, inte en diagnos.",
+    "comparison": {
+      "asExpected": "Återhämtar sig som väntat",
+      "slower": "Långsammare än veterinären väntade",
+      "worse": "Kan bli sämre"
+    },
+    "streak": "{{label}}: {{answer}} {{days}} dagar i rad.",
+    "today": "{{label}} i senaste loggen: {{answer}}.",
+    "severalSigns": "{{count}} förändringar i samma logg. Tillsammans väger de tyngre än var för sig.",
+    "allUsual": "Allt var som vanligt i senaste loggen ({{date}}).",
+    "noLogs": "Inga loggar för {{name}} de senaste två veckorna.",
+    "afterCourse": "Symtomen började {{days}} dagar efter att kuren med {{medicine}} tog slut. Sjukdomen kan vara på väg tillbaka.",
+    "vet": {
+      "watching": "Följer upp {{condition}} enligt {{vet}}.",
+      "plan": "Senaste vårdplan: {{diagnosis}} ({{clinic}}).",
+      "instruction": "Veterinärens råd: {{text}}",
+      "courseUntil": "Kur med {{medicine}} till {{date}}.",
+      "courseEnded": "Kuren med {{medicine}} tog slut {{date}}."
+    },
+    "summary": {
+      "asExpected": "{{name}} återhämtar sig från {{condition}} som veterinären väntade.",
+      "slower": "{{name}} återhämtar sig från {{condition}} långsammare än veterinären väntade.",
+      "worse": "{{condition}} hos {{name}} kan bli sämre.",
+      "green": "{{name}} har mått bra.",
+      "yellow": "En del av loggarna för {{name}} avviker från det vanliga.",
+      "red": "Loggarna för {{name}} tyder på att ni bör kontakta en veterinär."
+    },
+    "callVet": {
+      "worse": "Symtomen blir värre eller nya kommer",
+      "noFood": "Djuret äter eller dricker inte på ett dygn"
+    },
+    "trend": {
+      "aboveWatch": "Vattenintag {{dl}} dl om dagen, {{change}} % från veckan innan och över veterinärens gräns.",
+      "normal": "Vattenintag {{dl}} dl om dagen, {{change}} % från veckan innan."
+    },
+    "vetSummary": {
+      "logs": "{{count}} dagsloggar på {{days}} dagar."
+    }
+  },
+  "links": {
+    "cantCall": "Det går inte att ringa från den här enheten",
+    "callManually": "Ring {{number}} från en telefon.",
+    "cantOpenMaps": "Kartan kan inte öppnas",
+    "cantEmail": "Ingen e-postapp hittades",
+    "emailManually": "Skicka ditt meddelande till {{address}}.",
+    "cantOpenPage": "Sidan kan inte öppnas"
   }
 }

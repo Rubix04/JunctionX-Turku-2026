@@ -18,6 +18,7 @@ import { getPet } from '@/services/pets';
 import { colors, fonts, radius, spacing } from '@/theme';
 import type { LogAnswer, LogQuestion } from '@/types/health';
 import { todayIso } from '@/utils/format';
+import { alertSaveFailed } from '@/utils/notify';
 import { type PickedMedia, pickMedia } from '@/utils/pick-media';
 
 const loadLog = async (petId: string) => {
@@ -77,6 +78,8 @@ const DailyLogScreen = () => {
     try {
       const level = await saveDailyLog({ petId, date: todayIso(), answers, attachments });
       router.replace(`/pet/${petId}/log-result?level=${level}`);
+    } catch {
+      alertSaveFailed();
     } finally {
       setSaving(false);
     }

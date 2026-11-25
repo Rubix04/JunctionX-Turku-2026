@@ -12,17 +12,21 @@ import { ListGroup } from '@/components/ui/list-group';
 import OptionGroup from '@/components/ui/option-group';
 import SectionLabel from '@/components/ui/section-label';
 import Screen from '@/components/ui/screen';
+import { useMockData } from '@/constants/config';
 import { useAsync } from '@/hooks/use-async';
 import { createShare, stopShare } from '@/services/passport';
 import { getPet } from '@/services/pets';
 import { colors, radius, spacing } from '@/theme';
 import type { PassportSection, PassportShare } from '@/types/passport';
+import { alertSaveFailed } from '@/utils/notify';
 
+// The backend can't share the daily logs yet, so that choice is only offered in mock mode;
+// otherwise ticking only "logs" would send an empty share that the server rejects.
 const sectionGroups: { id: string; sections: PassportSection[] }[] = [
   { id: 'vaccinations', sections: ['vaccinations'] },
   { id: 'medicationAllergies', sections: ['medications', 'allergies'] },
   { id: 'surgeriesVisits', sections: ['surgeries', 'visits'] },
-  { id: 'logs', sections: ['logs'] },
+  ...(useMockData ? [{ id: 'logs', sections: ['logs'] as PassportSection[] }] : []),
 ];
 
 const durations = [
@@ -53,13 +57,23 @@ const SharePassportScreen = () => {
     setBusy(true);
     try {
       setShare(await createShare(petId, sections, hours));
+    } catch {
+      alertSaveFailed();
     } finally {
       setBusy(false);
     }
   };
 
   const stop = async () => {
-    if (share) await stopShare(share.id);
+    if (share) {
+      try {
+        await stopShare(petId, share.id);
+      } catch {
+        // The link still works: keep it on screen so the user can try again.
+        alertSaveFailed();
+        return;
+      }
+    }
     setShare(null);
   };
 
