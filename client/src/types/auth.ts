@@ -25,16 +25,3 @@ export type EmailSignUpInput = {
   email: string;
   password: string;
 };
-
-/** A signed-in device, listed in Account (GET /auth/devices). */
-export type SignedInDevice = {
-  id: string;
-  deviceName: string;
-  /** Epoch ms */
-  createdAt: number;
-  /** Epoch ms */
-  lastUsedAt: number;
-  /** True for the device the app is running on */
-  current: boolean;
-};
-

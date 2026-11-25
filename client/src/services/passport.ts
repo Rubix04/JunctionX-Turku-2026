@@ -9,9 +9,6 @@ import { todayIso } from '@/utils/format';
 export const getPassport = async (petId: string): Promise<Passport | null> =>
   mockDelay(mockPassports.find((p) => p.petId === petId) ?? null);
 
-export const getShares = async (petId?: string): Promise<PassportShare[]> =>
-  mockDelay(mockShares.filter((s) => (!petId || s.petId === petId) && s.expiresAt > new Date().toISOString()));
-
 export const createShare = async (
   petId: string,
   sections: PassportSection[],

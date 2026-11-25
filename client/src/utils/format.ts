@@ -49,10 +49,6 @@ export const formatLongDate = (iso: string) =>
 export const formatShortDate = (iso: string) =>
   format(iso, { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-/** "Saturday 17 October" */
-export const formatWeekdayDate = (iso: string) =>
-  format(iso, { weekday: 'long', day: 'numeric', month: 'long' });
-
 /** "Thu 22 Oct" */
 export const formatShortWeekdayDate = (iso: string) =>
   format(iso, { weekday: 'short', day: 'numeric', month: 'short' });

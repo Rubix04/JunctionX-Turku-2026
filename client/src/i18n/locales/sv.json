@@ -139,10 +139,7 @@
     "booked": "Bokad",
     "loggedToday": "Loggat i dag",
     "addVisit": "Lägg till besök",
-    "careAdvice": "Vård hemma",
     "wholePlan": "Vårdplan",
-    "seasonal": "Aktuellt nu",
-    "insurance": "Försäkring",
     "coverLeft": "{{amount}} ersättning kvar i år"
   },
   "pets": {

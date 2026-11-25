@@ -5,7 +5,7 @@ import { useMockData } from '@/constants/config';
 import { apiFetch } from '@/services/api-client';
 import { mockDelay } from '@/services/mock/delay';
 import { getStoredItem, setStoredItem, storageKeys } from '@/services/secure-storage';
-import type { Bank, EmailSignUpInput, SignedInDevice, SignInResponse } from '@/types/auth';
+import type { Bank, EmailSignUpInput, SignInResponse } from '@/types/auth';
 
 // Backend: server/src/modules/auth. Its bank provider is simulated: every bank
 // signs in a test person straight away. Uses mock data when no API URL is set.
@@ -129,30 +129,4 @@ export const signOutSession = async (): Promise<void> => {
     return;
   }
   await apiFetch<void>('/auth/logout', { method: 'POST' });
-};
-
-const mockDevices: SignedInDevice[] = [
-  { id: 'this-device', deviceName: 'This phone', createdAt: Date.now() - 86_400_000 * 30, lastUsedAt: Date.now(), current: true },
-  { id: 'old-tablet', deviceName: 'iPad', createdAt: Date.now() - 86_400_000 * 90, lastUsedAt: Date.now() - 86_400_000 * 12, current: false },
-];
-
-/** Devices signed in to this account, most recently used first. */
-export const getSignedInDevices = async (): Promise<SignedInDevice[]> => {
-  if (useMockData) {
-    return mockDelay([...mockDevices]);
-  }
-  const { devices } = await apiFetch<{ devices: SignedInDevice[] }>('/auth/devices');
-  return devices;
-};
-
-/** Signs another device out. It stops working at once and needs online banking again. */
-export const signOutDevice = async (deviceId: string): Promise<void> => {
-  if (useMockData) {
-    mockDevices.splice(
-      mockDevices.findIndex((device) => device.id === deviceId),
-      1,
-    );
-    return mockDelay(undefined);
-  }
-  await apiFetch<void>(`/auth/devices/${deviceId}`, { method: 'DELETE' });
 };
