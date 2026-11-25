@@ -8,31 +8,49 @@ type AsyncState<T> = {
   reload: () => void;
 };
 
+/** One request. A new object is made when the caller's deps change or reload() is called. */
+type Request = { deps: DependencyList };
+
+/** What the latest finished request ended with, and which request that was */
+type Settled = { request: Request; error: Error | null };
+
+const sameDeps = (a: DependencyList, b: DependencyList) =>
+  a.length === b.length && a.every((value, index) => Object.is(value, b[index]));
+
 // Loads data from a service function, e.g. `useAsync(() => getPet(petId), [petId])`.
+// The previous data stays on screen while a new request runs.
 export const useAsync = <T>(load: () => Promise<T>, deps: DependencyList): AsyncState<T> => {
+  const [request, setRequest] = useState<Request>(() => ({ deps }));
   const [data, setData] = useState<T | null>(null);
-  const [error, setError] = useState<Error | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [reloadCount, setReloadCount] = useState(0);
+  const [settled, setSettled] = useState<Settled | null>(null);
+
+  // The caller's deps changed: start a new request (state set during render, not in an effect).
+  if (!sameDeps(request.deps, deps)) {
+    setRequest({ deps });
+  }
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
-
     load()
-      .then((result) => !cancelled && setData(result))
-      .catch((err: unknown) => !cancelled && setError(err instanceof Error ? err : new Error(String(err))))
-      .finally(() => !cancelled && setLoading(false));
-
+      .then((result) => {
+        if (cancelled) return;
+        setData(result);
+        setSettled({ request, error: null });
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        setSettled({ request, error: err instanceof Error ? err : new Error(String(err)) });
+      });
     return () => {
       cancelled = true;
     };
-    // `load` is a new function each render; the caller's deps decide when to reload.
+    // `load` is a new function each render; the request decides when to load again.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [...deps, reloadCount]);
+  }, [request]);
 
-  const reload = useCallback(() => setReloadCount((count) => count + 1), []);
+  const reload = useCallback(() => setRequest((current) => ({ deps: current.deps })), []);
+  // Loading until the current request has finished; an older request's error no longer shows.
+  const current = settled?.request === request;
 
-  return { data, error, loading, reload };
+  return { data, error: current ? settled.error : null, loading: !current, reload };
 };
