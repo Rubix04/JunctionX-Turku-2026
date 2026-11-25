@@ -60,7 +60,14 @@ export const findOrCreateUser = (
     return user;
   });
   if (options.seedDemoPets) {
-    seedDemoHistory(db, created.householdId, created.id);
+    try {
+      seedDemoHistory(db, created.householdId, created.id);
+    } catch (error) {
+      // Undo the half-made account (everything cascades from the household), so the next
+      // sign-in creates it again with its demo history instead of an account that never gets one.
+      db.delete(households).where(eq(households.id, created.householdId)).run();
+      throw error;
+    }
   }
   return created;
 };
