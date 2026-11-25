@@ -1,19 +1,20 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import ClinicCard from '@/components/features/clinic-card';
 import Note from '@/components/ui/note';
 import SchematicMap from '@/components/features/schematic-map';
 import AppText from '@/components/ui/app-text';
+import Chip from '@/components/ui/chip';
 import { ListGroup, ListRow } from '@/components/ui/list-group';
 import Pill from '@/components/ui/pill';
 import { ScreenSection } from '@/components/ui/screen';
 import { EmptyView, ErrorView, LoadingView } from '@/components/ui/state-views';
 import { useAsync } from '@/hooks/use-async';
 import { getClinics } from '@/services/clinics';
-import { colors, fonts, radius, spacing } from '@/theme';
+import { colors, fonts, spacing } from '@/theme';
 import type { Clinic } from '@/types/clinic';
 import type { Species } from '@/types/pet';
 import { formatNumber } from '@/utils/format';
@@ -42,19 +43,6 @@ const filtersFor = ({ mode, species }: MapParams): Filters => {
   }
   return defaultFilters;
 };
-
-const FilterChip = ({ label, selected, onPress }: { label: string; selected: boolean; onPress: () => void }) => (
-  <Pressable
-    accessibilityRole="checkbox"
-    accessibilityState={{ checked: selected }}
-    onPress={onPress}
-    style={[styles.chip, selected ? styles.chipOn : styles.chipOff]}
-  >
-    <AppText variant="bodySmall" color={selected ? colors.onDark : colors.text} style={styles.chipText}>
-      {label}
-    </AppText>
-  </Pressable>
-);
 
 const matches = (clinic: Clinic, f: Filters) =>
   (!f.openNow || isOpenNow(clinic)) &&
@@ -115,22 +103,22 @@ const MapSection = () => {
         </ScreenSection>
       )}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>
-        <FilterChip label={t('map.filter.openNow')} selected={filters.openNow} onPress={() => toggle('openNow')} />
-        <FilterChip label={t('map.filter.emergency')} selected={filters.emergency} onPress={() => toggle('emergency')} />
-        <FilterChip
+        <Chip label={t('map.filter.openNow')} selected={filters.openNow} onPress={() => toggle('openNow')} />
+        <Chip label={t('map.filter.emergency')} selected={filters.emergency} onPress={() => toggle('emergency')} />
+        <Chip
           label={t('map.filter.contracted')}
           selected={filters.contractedOnly}
           onPress={() => toggle('contractedOnly')}
         />
         {speciesValues.map((s) => (
-          <FilterChip
+          <Chip
             key={s}
             label={t(`species.${s}Plural`)}
             selected={filters.species === s}
             onPress={() => setFilters({ ...filters, species: filters.species === s ? null : s })}
           />
         ))}
-        <FilterChip
+        <Chip
           label={t('map.filter.within', { km: 5 })}
           selected={filters.maxKm === 5}
           onPress={() => setFilters({ ...filters, maxKm: filters.maxKm === 5 ? null : 5 })}
@@ -216,10 +204,6 @@ export default MapSection;
 const styles = StyleSheet.create({
   center: { textAlign: 'center' },
   filters: { paddingHorizontal: spacing.xl, gap: spacing.sm },
-  chip: { minHeight: 40, paddingHorizontal: 14, borderRadius: radius.pill, borderWidth: 1, justifyContent: 'center' },
-  chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipOff: { backgroundColor: colors.surface, borderColor: colors.border },
-  chipText: { fontFamily: fonts.bodySemiBold },
   bold: { fontFamily: fonts.bodyBold },
   legend: { flexDirection: 'row', flexWrap: 'wrap', gap: 14 },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
