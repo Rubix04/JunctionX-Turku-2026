@@ -23,6 +23,7 @@ import { getEmergencyClinics } from '@/services/clinics';
 import { assessExposure, getSubstance, searchSubstances } from '@/services/knowledge';
 import { getPets } from '@/services/pets';
 import { colors, fonts, radius, spacing } from '@/theme';
+import type { Clinic } from '@/types/clinic';
 import type { Assessment } from '@/types/knowledge';
 import { formatNumber, parseDecimal } from '@/utils/format';
 
@@ -33,11 +34,40 @@ const resultTones = {
   noAction: { background: colors.greenTint, text: colors.greenText },
 } as const;
 
+/**
+ * Shown when the check can't be done (no connection, server down). Someone whose pet may have
+ * eaten something dangerous must never be left without a next step: call a vet, or go now.
+ */
+const CheckFailed = ({ clinic, onRetry }: { clinic: Clinic | null; onRetry: () => void }) => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <Note icon="alertTriangle" tone="red">
+        {t('ateThis.failed')}
+      </Note>
+      {clinic && (
+        <>
+          <SectionLabel label={t('result.nearestClinic')} />
+          <ClinicCard clinic={clinic} emergency />
+        </>
+      )}
+      <ListGroup>
+        <ListRow
+          leading={<Icon name="map" size={20} color={colors.red} />}
+          title={t('ateThis.emergencyMap')}
+          onPress={() => router.push('/explore?mode=emergency')}
+        />
+      </ListGroup>
+      <Button label={t('common.retry')} variant="outline" onPress={onRetry} />
+    </>
+  );
+};
+
 // "My pet ate this": substance and amount -> risk level and where to go next (spec 10).
 const AteThisScreen = () => {
   const { t, i18n } = useTranslation();
   const params = useLocalSearchParams<{ substanceId?: string }>();
-  const { data: pets } = useAsync(getPets, []);
+  const { data: pets, error: petsError, reload: reloadPets } = useAsync(getPets, []);
   const [petId, setPetId] = useState<string | null>(null);
   const [substanceId, setSubstanceIdState] = useState<string | null>(params.substanceId ?? null);
   const [query, setQuery] = useState('');
@@ -45,8 +75,13 @@ const AteThisScreen = () => {
   const [amount, setAmount] = useState('');
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [busy, setBusy] = useState(false);
+  const [assessFailed, setAssessFailed] = useState(false);
 
-  const { data: substance } = useAsync(
+  const {
+    data: substance,
+    error: substanceError,
+    reload: reloadSubstance,
+  } = useAsync(
     () => (substanceId ? getSubstance(substanceId) : Promise.resolve(null)),
     [substanceId, i18n.language],
   );
@@ -62,6 +97,7 @@ const AteThisScreen = () => {
     setVariantId(null);
     setAmount('');
     setAssessment(null);
+    setAssessFailed(false);
   };
 
   const pet = pets?.find((p) => p.id === petId) ?? pets?.[0] ?? null;
@@ -73,6 +109,7 @@ const AteThisScreen = () => {
   const assess = async () => {
     if (!substance || !pet) return;
     setBusy(true);
+    setAssessFailed(false);
     try {
       setAssessment(
         await assessExposure({
@@ -83,6 +120,8 @@ const AteThisScreen = () => {
           amount: amountValue,
         }),
       );
+    } catch {
+      setAssessFailed(true);
     } finally {
       setBusy(false);
     }
@@ -92,7 +131,7 @@ const AteThisScreen = () => {
   if (!pets) {
     return (
       <Screen header={header}>
-        <LoadingView />
+        {petsError ? <CheckFailed clinic={clinics?.[0] ?? null} onRetry={reloadPets} /> : <LoadingView />}
       </Screen>
     );
   }
@@ -161,7 +200,7 @@ const AteThisScreen = () => {
       header={header}
       footer={
         substance && pet ? (
-          <Button label={t('ateThis.check')} size="large" variant="danger" onPress={assess} disabled={busy} />
+          <Button label={t('ateThis.check')} size="large" variant="danger" onPress={assess} loading={busy} />
         ) : undefined
       }
     >
@@ -174,6 +213,11 @@ const AteThisScreen = () => {
         </>
       ) : (
         <EmptyPets />
+      )}
+
+      {assessFailed && <CheckFailed clinic={clinics?.[0] ?? null} onRetry={assess} />}
+      {substanceId && !substance && substanceError && (
+        <CheckFailed clinic={clinics?.[0] ?? null} onRetry={reloadSubstance} />
       )}
 
       <SectionLabel label={t('ateThis.what')} />

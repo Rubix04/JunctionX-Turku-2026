@@ -73,7 +73,12 @@ const LogResultScreen = () => {
   }
 
   const { pet, status, questions, clinic } = data;
-  const ruleLevel: TrafficLightLevel = levelParam && levels.includes(levelParam) ? levelParam : status.level;
+  // `level` comes from the URL (the log just saved). A link can only make the result more serious,
+  // never show a calmer level than the pet's saved status.
+  const ruleLevel: TrafficLightLevel =
+    levelParam && levels.includes(levelParam) && levels.indexOf(levelParam) < levels.indexOf(status.level)
+      ? levelParam
+      : status.level;
   const level = insight && levels.indexOf(insight.level) < levels.indexOf(ruleLevel) ? insight.level : ruleLevel;
   const raisedByAi = level !== ruleLevel;
   const hero = heroColors[level];

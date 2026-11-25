@@ -114,7 +114,8 @@
       "passwordMismatch": "Lösenorden matchar inte.",
       "invalidCredentials": "Fel e-post eller lösenord.",
       "emailTaken": "Det finns redan ett konto med den här e-postadressen. Logga in i stället.",
-      "generic": "Något gick fel. Försök igen."
+      "generic": "Något gick fel. Försök igen.",
+      "unavailable": "Inloggning med e-post är inte tillgänglig än. Logga in med nätbankskoder."
     }
   },
   "home": {
@@ -582,7 +583,8 @@
     },
     "emergencyMap": "Jourer på kartan",
     "readEntry": "Läs om {{substance}}",
-    "again": "Kontrollera något annat"
+    "again": "Kontrollera något annat",
+    "failed": "Det gick inte att kontrollera just nu. Om ditt djur kan ha ätit något farligt, vänta inte: ring en veterinär eller åk till jouren."
   },
   "insurance": {
     "policies": "Försäkringar",

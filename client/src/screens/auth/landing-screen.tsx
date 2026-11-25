@@ -9,6 +9,7 @@ import LanguageSwitcher from '@/components/features/language-switcher';
 import VideoBackground from '@/components/features/video-background';
 import AppText from '@/components/ui/app-text';
 import Button from '@/components/ui/button';
+import { emailSignInAvailable } from '@/services/auth';
 import { colors, fonts, spacing } from '@/theme';
 
 const backgroundVideo = require('../../../assets/videos/splash-loop.mp4');
@@ -45,25 +46,30 @@ const LandingScreen = () => {
             size="large"
             onPress={() => router.push('/bank-id')}
           />
-          <Button
-            label={t('auth.landing.emailSignIn')}
-            variant="lightOutline"
-            size="large"
-            onPress={() => router.push('/sign-in')}
-          />
-          <Pressable
-            accessibilityRole="link"
-            onPress={() => router.push('/sign-up')}
-            hitSlop={8}
-            style={styles.signUpLink}
-          >
-            <AppText variant="bodySmall" color={colors.onDarkMuted}>
-              {t('auth.landing.newHere')}{' '}
-              <AppText variant="label" color={colors.onDark} style={styles.underline}>
-                {t('auth.landing.createAccount')}
-              </AppText>
-            </AppText>
-          </Pressable>
+          {/* Email accounts exist only in mock mode; with the backend, sign-in is online banking only. */}
+          {emailSignInAvailable && (
+            <>
+              <Button
+                label={t('auth.landing.emailSignIn')}
+                variant="lightOutline"
+                size="large"
+                onPress={() => router.push('/sign-in')}
+              />
+              <Pressable
+                accessibilityRole="link"
+                onPress={() => router.push('/sign-up')}
+                hitSlop={8}
+                style={styles.signUpLink}
+              >
+                <AppText variant="bodySmall" color={colors.onDarkMuted}>
+                  {t('auth.landing.newHere')}{' '}
+                  <AppText variant="label" color={colors.onDark} style={styles.underline}>
+                    {t('auth.landing.createAccount')}
+                  </AppText>
+                </AppText>
+              </Pressable>
+            </>
+          )}
           <AppText variant="caption" color={colors.onDarkFaint} style={styles.terms}>
             {t('auth.landing.terms')}
           </AppText>

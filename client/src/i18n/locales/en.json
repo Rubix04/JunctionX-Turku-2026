@@ -114,7 +114,8 @@
       "passwordMismatch": "The passwords don't match.",
       "invalidCredentials": "Email or password is wrong.",
       "emailTaken": "An account with this email already exists. Log in instead.",
-      "generic": "Something went wrong. Try again."
+      "generic": "Something went wrong. Try again.",
+      "unavailable": "Email sign-in isn't available yet. Sign in with online banking."
     }
   },
   "home": {
@@ -582,7 +583,8 @@
     },
     "emergencyMap": "Emergency clinics on the map",
     "readEntry": "Read about {{substance}}",
-    "again": "Check something else"
+    "again": "Check something else",
+    "failed": "We couldn't check this right now. If your pet may have eaten something dangerous, don't wait: call a vet or go to the emergency clinic."
   },
   "insurance": {
     "policies": "Policies",
