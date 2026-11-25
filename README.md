@@ -61,7 +61,7 @@ TassuVahti stays with the pet between vet visits.
 | AI | Claude (Anthropic) on the back-end only, for reading vet documents and the analysis of visits and logs. Without an API key both answer with a built-in sample, so the demo works offline. |
 | Notifications | Expo push notifications for reminders and seasonal alerts |
 | Images | Server-side cropping and resizing; location data removed from photos |
-| Quality | 233 automated back-end tests (Vitest) |
+| Quality | 234 automated back-end tests (Vitest), 31 app unit tests (Jest) |
 
 **Privacy by design:**
 - The national ID number is never stored, only a one-way keyed hash of it.
@@ -97,6 +97,7 @@ tassuvahti/
 │   │   ├── i18n/                     # Translations: en.json, fi.json, sv.json
 │   │   ├── hooks/ utils/ context/ constants/
 │   ├── assets/                       # Images, icons, video
+│   ├── __tests__/                    # Jest unit tests (npm test)
 │   └── .env.example                  # EXPO_PUBLIC_API_URL; leave empty for mock data
 └── server/                           # Back-end (Node.js + Fastify)
     ├── src/
@@ -149,7 +150,7 @@ The full design is in the [mockups](https://claude.ai/artifact/YTMRtqRmMMjpkMBSA
 
 ## Getting Started
 
-The app runs on its own with mock data. Start the server too to use real sign-in and saved data. With `DEMO_MODE=true` a new account gets the same demo pets and history as the mock data (Mirri recovering from a urinary tract infection, Rekku), so the app looks the same either way.
+The app runs on its own with mock data. Start the server too to use real sign-in and saved data. With `DEMO_MODE=true` a new account gets the same demo pets and history as the mock data (Mirri recovering from a urinary tract infection, Rekku), so the app looks the same either way. The history is written in the language the app signs in with (Finnish, Swedish or English).
 
 **Server** (first terminal):
 
@@ -169,6 +170,8 @@ cd client
 npm install
 cp .env.example .env   # set EXPO_PUBLIC_API_URL, or leave it empty for mock data
 npx expo start -c      # -c clears the cache, so a changed .env is read
+npm test               # runs the app's unit tests (Jest, in __tests__/)
+npm run lint           # ESLint, plus a check that the mock content matches server/content
 ```
 
 `EXPO_PUBLIC_API_URL` depends on where the app runs: `http://localhost:3000` in a browser, `http://10.0.2.2:3000` in the Android emulator, or your computer's network address (e.g. `http://192.168.1.10:3000`, see `ipconfig`) on a phone. The phone must be on the same Wi-Fi, and Windows Firewall must allow Node.js.

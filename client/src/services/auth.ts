@@ -6,6 +6,7 @@ import { apiFetch } from '@/services/api-client';
 import { mockDelay } from '@/services/mock/delay';
 import { getStoredItem, setStoredItem, storageKeys } from '@/services/secure-storage';
 import type { Bank, EmailSignUpInput, SignInResponse } from '@/types/auth';
+import { currentLanguage } from '@/utils/format';
 
 // Backend: server/src/modules/auth. Its bank provider is simulated: every bank
 // signs in a test person straight away. Uses mock data when no API URL is set.
@@ -47,7 +48,8 @@ export const signInWithBank = async (bankId: string): Promise<SignInResponse> =>
   }
   return apiFetch<SignInResponse>('/auth/bank', {
     method: 'POST',
-    body: { bankId, deviceName: deviceName() },
+    // The language lets a new demo account get its example history in the app's language.
+    body: { bankId, deviceName: deviceName(), language: currentLanguage() },
   });
 };
 

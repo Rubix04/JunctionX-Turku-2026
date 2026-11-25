@@ -224,7 +224,7 @@ const HomeScreen = () => {
                     <View style={styles.flex}>
                       <AppText variant="label">{reminderLabel(reminderPet?.name, reminder.title)}</AppText>
                       <AppText variant="caption" color={colors.muted}>
-                        {`${reminder.detail} · ${formatTime(reminder.dueAt)}`}
+                        {[reminder.detail, formatTime(reminder.dueAt)].filter(Boolean).join(' · ')}
                       </AppText>
                     </View>
                     {reminder.kind === 'medication' && (

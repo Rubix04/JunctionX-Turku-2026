@@ -16,7 +16,7 @@ const tabIcon = (name: IconName) => {
 };
 
 // Home is the only index route now, so "/" always opens it; this also makes it the first tab in history.
-export const unstable_settings = { initialRouteName: '(home)' };
+export const unstable_settings = { anchor: '(home)' };
 
 const TabLayout = () => {
   const { t } = useTranslation();

@@ -172,3 +172,25 @@ describe("insight calls", () => {
     expect(writer).toHaveBeenCalledTimes(2);
   });
 });
+
+describe("demo history language", () => {
+  let app: TestApp;
+  afterEach(async () => app.close());
+
+  it("writes the example history in the language the app signs in with", async () => {
+    app = await createTestApp({ DEMO_MODE: "true" });
+    const response = await app.inject({
+      method: "POST",
+      url: "/auth/bank",
+      payload: { bankId: "op", deviceName: "Test", language: "en" },
+    });
+    const headers = { authorization: `Bearer ${response.json().accessToken}` };
+    const pets = (await app.inject({ method: "GET", url: "/pets", headers })).json().pets as { id: string; name: string }[];
+    const mirri = pets.find((p) => p.name === "Mirri")!;
+
+    const plan = (await app.inject({ method: "GET", url: `/pets/${mirri.id}/care-plan`, headers })).json().carePlan;
+    expect(plan.diagnosis).toBe("Urinary tract infection");
+    const { course } = (await app.inject({ method: "GET", url: `/pets/${mirri.id}/medication-course`, headers })).json();
+    expect(course.name).toBe("Antibiotic");
+  });
+});
