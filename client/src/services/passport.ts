@@ -2,12 +2,11 @@ import { useMockData } from '@/constants/config';
 import { apiFetch } from '@/services/api-client';
 import { mockDelay } from '@/services/mock/delay';
 import { mockPassports, mockShares } from '@/services/mock/passport';
-import type { Allergy, Passport, PassportSection, PassportShare } from '@/types/passport';
+import type { Allergy, LabReportKind, Passport, PassportSection, PassportShare } from '@/types/passport';
 import { currentLanguage, todayIso } from '@/utils/format';
 
-// Health passport (spec 4). Backend: server/src/modules/passport. The backend keeps vaccinations,
-// medicines, allergies and surgeries; the identity fields (microchip, sex, owner…) and lab reports
-// exist only in the mock data so far, so they are empty with the backend.
+// Health passport (spec 4). Backend: server/src/modules/passport. Besides the records it returns
+// the pet's identity (microchip, markings, sex, owner), the diagnoses and the lab results.
 
 type ApiPassport = {
   pet: { id: string };
@@ -22,17 +21,35 @@ type ApiPassport = {
   }[];
   allergies: { id: string; allergen: string; severity: Allergy['severity']; notedOn: string | null }[];
   surgeries: { id: string; name: string; performedOn: string }[];
+  profile: {
+    microchip: string | null;
+    markings: string | null;
+    registration: string | null;
+    sex: 'female' | 'male' | null;
+    neutered: boolean | null;
+    ownerName: string | null;
+    conditions: { id: string; name: string; diagnosedOn: string; resolved: boolean }[];
+  };
+  labs: {
+    id: string;
+    kind: LabReportKind | 'other';
+    takenOn: string;
+    title: string;
+    summary: string | null;
+    clinic: string | null;
+  }[];
 };
 
 const toPassport = (api: ApiPassport): Passport => ({
   petId: api.pet.id,
-  microchip: null,
-  markings: null,
-  registration: null,
-  ownerName: null,
+  microchip: api.profile.microchip,
+  markings: api.profile.markings,
+  registration: api.profile.registration,
+  ownerName: api.profile.ownerName,
+  // Insurance is mock only, so the backend has no policy number.
   policyNumber: null,
-  sex: null,
-  neutered: false,
+  sex: api.profile.sex,
+  neutered: api.profile.neutered ?? false,
   vaccinations: api.vaccinations.map((v) => ({
     id: v.id,
     name: v.name,
@@ -56,8 +73,16 @@ const toPassport = (api: ApiPassport): Passport => ({
       .sort()
       .at(-1) ?? null,
   surgeries: api.surgeries.map((s) => ({ id: s.id, name: s.name, year: Number(s.performedOn.slice(0, 4)) })),
-  conditions: [],
-  labReports: [],
+  conditions: api.profile.conditions,
+  labReports: api.labs.map((l) => ({
+    id: l.id,
+    // The app has no "other" kind yet; it shows those like a blood test.
+    kind: l.kind === 'other' ? 'blood' : l.kind,
+    date: l.takenOn,
+    title: l.title,
+    summary: l.summary ?? '',
+    clinicName: l.clinic ?? '',
+  })),
 });
 
 export const getPassport = async (petId: string): Promise<Passport | null> => {

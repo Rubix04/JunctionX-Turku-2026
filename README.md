@@ -189,11 +189,12 @@ Add `ANTHROPIC_API_KEY=` to `server/.env` and restart the server. Then Claude re
 | With `EXPO_PUBLIC_API_URL` set | Always mock data for now |
 |---|---|
 | Sign-in (online banking), pets and photos | Email sign-in |
-| Visits, care plans, scanning vet documents | Health passport |
-| Daily logs, traffic light, watch lists | Diet, weight and water trends |
-| Reminders and the medication course | Clinics and stores |
-| Seasonal alerts, "Is it safe?" | Insurance and remote vet services |
-| AI analysis | |
+| Visits, care plans, scanning vet documents | Water intake chart (logs record less / usual / more, not millilitres) |
+| Daily logs, traffic light, watch lists, trends | Clinics and stores |
+| Reminders and the medication course | Insurance and remote vet services |
+| Health passport, lab results and sharing | |
+| Diet and weigh-ins | |
+| Seasonal alerts, "Is it safe?", AI analysis | |
 
 ## Coding Conventions
 
