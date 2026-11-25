@@ -61,13 +61,16 @@ const FindInStoreScreen = () => {
         {product && (
           <View style={styles.product}>
             <IconTile name="bowl" size={44} />
-            <View style={styles.flex}>
+            {/* The badge goes under the name, so the name gets the full width. */}
+            <View style={[styles.flex, styles.productTexts]}>
               <AppText variant="label">{product.name}</AppText>
               <AppText variant="caption" color={colors.muted}>
                 {product.brand}
               </AppText>
+              <View style={styles.badge}>
+                <Pill label={t('store.vetRecommended')} icon="shieldCheck" />
+              </View>
             </View>
-            <Pill label={t('store.vetRecommended')} icon="shieldCheck" />
           </View>
         )}
       </ScreenSection>
@@ -149,9 +152,11 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: spacing.md,
   },
+  productTexts: { gap: 2 },
+  badge: { alignSelf: 'flex-start', marginTop: spacing.xs },
   filters: { paddingHorizontal: spacing.xl, gap: spacing.sm },
   store: {
     padding: 14,
