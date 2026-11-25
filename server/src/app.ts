@@ -25,6 +25,7 @@ import { petPhotoRoutes } from "./modules/pet-photos/routes.js";
 import { petRoutes } from "./modules/pets/routes.js";
 import { symptomContentRoutes, symptomRoutes } from "./modules/symptoms/routes.js";
 import { authPlugin } from "./plugins/auth.js";
+import { rateLimitPlugin } from "./plugins/rate-limit.js";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -50,6 +51,12 @@ export const buildApp = async ({
   bankProvider = mockBankProvider,
   visitNotesReader = readerFromConfig(config),
 }: BuildAppOptions) => {
+  // The simulated bank signs everyone in as the same test person, so in production it would put
+  // every user into one shared household. Production needs a real identity provider (or DEMO_MODE).
+  if (bankProvider === mockBankProvider && config.NODE_ENV === "production" && !config.DEMO_MODE) {
+    throw new Error("The simulated bank sign-in can't run in production: pass a real bankProvider or set DEMO_MODE=true");
+  }
+
   const app = Fastify({ logger }).withTypeProvider<ZodTypeProvider>();
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
@@ -88,6 +95,10 @@ export const buildApp = async ({
   });
 
   await app.register(cors, { origin: true });
+  // Too many requests from one client get 429; off in tests, which send many requests at once.
+  if (config.NODE_ENV !== "test") {
+    await app.register(rateLimitPlugin);
+  }
   await app.register(authPlugin, { secret: config.JWT_SECRET });
 
   app.get("/health", async () => ({ status: "ok" }));
