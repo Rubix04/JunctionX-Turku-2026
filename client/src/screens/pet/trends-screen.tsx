@@ -127,18 +127,6 @@ const TrendsScreen = () => {
             </AppText>
           )}
           <View style={styles.bars} accessibilityLabel={t('trends.waterA11y', { values: water.map((w) => `${waterLabel(w.label)} ${dl(w.ml)}`).join(', ') })}>
-            {watch && (
-              <>
-                <View style={[styles.watchLine, { bottom: (watch / waterMax) * CHART_HEIGHT }]} />
-                <AppText
-                  variant="caption"
-                  color={colors.yellowText}
-                  style={[styles.watchLabel, { bottom: (watch / waterMax) * CHART_HEIGHT + 4 }]}
-                >
-                  {t('trends.watchLevel')}
-                </AppText>
-              </>
-            )}
             {water.map((w, i) => (
               <View key={`${i}-${w.label}`} style={styles.barColumn}>
                 <AppText variant="caption" color={colors.textSecondary} style={styles.barValue}>
@@ -155,6 +143,10 @@ const TrendsScreen = () => {
                 />
               </View>
             ))}
+            {/* Drawn over the bars; its label is in the legend under the chart, so nothing overlaps. */}
+            {watch && (
+              <View pointerEvents="none" style={[styles.watchLine, { bottom: (watch / waterMax) * CHART_HEIGHT }]} />
+            )}
           </View>
           <View style={styles.barLabels}>
             {water.map((w, i) => (
@@ -163,6 +155,14 @@ const TrendsScreen = () => {
               </AppText>
             ))}
           </View>
+          {watch && (
+            <View style={styles.watchLegend}>
+              <View style={styles.watchSwatch} />
+              <AppText variant="caption" color={colors.yellowText} style={styles.watchLegendText}>
+                {`${t('trends.watchLevel')} · ${dl(watch)} dl`}
+              </AppText>
+            </View>
+          )}
         </Card>
       )}
 
@@ -268,16 +268,11 @@ const styles = StyleSheet.create({
     borderTopWidth: 1.5,
     borderStyle: 'dashed',
     borderColor: colors.yellowBorder,
-  },
-  watchLabel: {
-    position: 'absolute',
-    right: 0,
-    paddingHorizontal: 4,
-    backgroundColor: colors.surface,
-    fontFamily: fonts.bodyBold,
-    fontSize: 11.5,
     zIndex: 1,
   },
+  watchLegend: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.xs },
+  watchSwatch: { width: 18, borderTopWidth: 1.5, borderStyle: 'dashed', borderColor: colors.yellowBorder },
+  watchLegendText: { fontFamily: fonts.bodyBold, fontSize: 11.5 },
   barColumn: { flex: 1, alignItems: 'center', gap: spacing.xs },
   barValue: { fontFamily: fonts.bodyBold, fontSize: 11.5 },
   bar: { width: '100%', maxWidth: 40, borderTopLeftRadius: radius.sm / 1.5, borderTopRightRadius: radius.sm / 1.5 },
