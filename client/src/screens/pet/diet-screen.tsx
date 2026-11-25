@@ -17,6 +17,7 @@ import { getDietPlan, getWeights, logWeight } from '@/services/diet';
 import { getPet, updatePet } from '@/services/pets';
 import { colors, fonts, radius, spacing, touchTarget } from '@/theme';
 import { formatNumber, parseDecimal } from '@/utils/format';
+import { alertSaveFailed } from '@/utils/notify';
 import { estimateDailyKcal, gramsPerDay } from '@/utils/portion';
 
 const loadDiet = async (petId: string) => {
@@ -68,8 +69,13 @@ const DietScreen = () => {
 
   const saveWeight = async () => {
     if (!parsedWeight || parsedWeight <= 0 || parsedWeight > 150) return;
-    await logWeight(petId, parsedWeight);
-    await updatePet(petId, { weightKg: parsedWeight });
+    try {
+      await logWeight(petId, parsedWeight);
+      await updatePet(petId, { weightKg: parsedWeight });
+    } catch {
+      alertSaveFailed();
+      return;
+    }
     setWeightInput(null);
     reload();
   };

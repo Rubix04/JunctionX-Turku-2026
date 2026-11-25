@@ -1,4 +1,3 @@
-import * as WebBrowser from 'expo-web-browser';
 import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
@@ -13,17 +12,19 @@ import SectionLabel from '@/components/ui/section-label';
 import Screen from '@/components/ui/screen';
 import { ErrorView, LoadingView } from '@/components/ui/state-views';
 import { useAsync } from '@/hooks/use-async';
+import { useBookingLabel } from '@/hooks/use-booking-label';
 import { getClinic } from '@/services/clinics';
 import { colors, fonts, spacing } from '@/theme';
-import { formatPhone } from '@/utils/links';
+import { formatPhone, openWebPage } from '@/utils/links';
 
 const weekdayKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
 // Clinic card: hours, phone, booking, directions and direct payment (spec 7).
 const ClinicScreen = () => {
   const { t } = useTranslation();
-  // `for` is set when coming from a reminder's Book button, e.g. "Rekku · yearly vaccination".
-  const { id, for: bookingFor } = useLocalSearchParams<{ id: string; for?: string }>();
+  // `reminder` is set when coming from a reminder's Book button; the text comes from the reminder itself.
+  const { id, reminder } = useLocalSearchParams<{ id: string; reminder?: string }>();
+  const bookingFor = useBookingLabel(reminder);
   const { data: clinic, error, reload } = useAsync(() => getClinic(id), [id]);
 
   const header = <ScreenHeader title={clinic?.name ?? t('screens.clinic')} />;
@@ -48,7 +49,7 @@ const ClinicScreen = () => {
           label={t('clinic.book')}
           icon="calendar"
           variant="tealOutline"
-          onPress={() => WebBrowser.openBrowserAsync(clinic.bookingUrl!)}
+          onPress={() => openWebPage(clinic.bookingUrl!)}
         />
       )}
 

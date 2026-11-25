@@ -28,6 +28,7 @@ import type { HealthStatus } from '@/types/health';
 import type { Policy } from '@/types/insurance';
 import type { Pet } from '@/types/pet';
 import { formatEuros, formatTime, todayIso } from '@/utils/format';
+import { alertSaveFailed } from '@/utils/notify';
 
 const loadHome = async () => {
   const pets = await getPets();
@@ -168,7 +169,11 @@ const HomeScreen = () => {
   const alert = pet ? alerts[index][0] : undefined;
 
   const toggleDone = async (reminderId: string, done: boolean) => {
-    await setReminderDone(reminderId, done, displayName);
+    try {
+      await setReminderDone(reminderId, done, displayName);
+    } catch {
+      alertSaveFailed();
+    }
     reload();
   };
 

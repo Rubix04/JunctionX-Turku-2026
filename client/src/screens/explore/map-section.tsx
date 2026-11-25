@@ -13,6 +13,7 @@ import Pill from '@/components/ui/pill';
 import { ScreenSection } from '@/components/ui/screen';
 import { EmptyView, ErrorView, LoadingView } from '@/components/ui/state-views';
 import { useAsync } from '@/hooks/use-async';
+import { useBookingLabel } from '@/hooks/use-booking-label';
 import { getClinics } from '@/services/clinics';
 import { colors, fonts, spacing } from '@/theme';
 import type { Clinic } from '@/types/clinic';
@@ -32,7 +33,7 @@ const defaultFilters: Filters = { openNow: false, emergency: false, contractedOn
 const emergencyFilters: Filters = { ...defaultFilters, emergency: true };
 const speciesValues: Species[] = ['dog', 'cat', 'smallAnimal'];
 
-type MapParams = { mode?: string; species?: string; for?: string };
+type MapParams = { mode?: string; species?: string; reminder?: string };
 
 /** Filters a link asks for: 24 h clinics in emergency mode, contracted clinics for the pet's species when booking */
 const filtersFor = ({ mode, species }: MapParams): Filters => {
@@ -60,15 +61,17 @@ const MapSection = () => {
   const { data: clinics, error, reload } = useAsync(getClinics, []);
   const [filters, setFilters] = useState<Filters>(() => filtersFor(params));
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const linkKey = [params.mode, params.species, params.for].join('|');
+  const linkKey = [params.mode, params.species, params.reminder].join('|');
   const [appliedLink, setAppliedLink] = useState(linkKey);
-  const [bookingFor, setBookingFor] = useState(params.mode === 'book' ? (params.for ?? null) : null);
+  // The reminder a Book button came from; its text is looked up, never taken from the link.
+  const [bookingReminder, setBookingReminder] = useState(params.mode === 'book' ? (params.reminder ?? null) : null);
+  const bookingFor = useBookingLabel(bookingReminder);
 
   // Opened again from a link while the tab was already open: apply that link's filters.
   if (linkKey !== appliedLink) {
     setAppliedLink(linkKey);
     if (params.mode) setFilters(filtersFor(params));
-    setBookingFor(params.mode === 'book' ? (params.for ?? null) : null);
+    setBookingReminder(params.mode === 'book' ? (params.reminder ?? null) : null);
   }
 
   const toggle = (key: 'openNow' | 'emergency' | 'contractedOnly') => setFilters({ ...filters, [key]: !filters[key] });
@@ -92,7 +95,7 @@ const MapSection = () => {
                 color={colors.accentDark}
                 style={styles.bold}
                 accessibilityRole="button"
-                onPress={() => setBookingFor(null)}
+                onPress={() => setBookingReminder(null)}
               >
                 {t('common.close')}
               </AppText>
@@ -179,8 +182,8 @@ const MapSection = () => {
                   trailing={c.directPayment ? <Pill label={t('clinic.directPaymentShort')} /> : undefined}
                   onPress={() =>
                     router.push(
-                      bookingFor
-                        ? { pathname: '/clinic/[id]', params: { id: c.id, for: bookingFor } }
+                      bookingReminder
+                        ? { pathname: '/clinic/[id]', params: { id: c.id, reminder: bookingReminder } }
                         : `/clinic/${c.id}`,
                     )
                   }

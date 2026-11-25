@@ -9,7 +9,9 @@
     "errorTitle": "Something went wrong",
     "errorBody": "Check your connection and try again.",
     "tryAgain": "Try again",
-    "language": "Language"
+    "language": "Language",
+    "saveFailedTitle": "Couldn't save",
+    "saveFailedBody": "Check your connection and try again. Nothing was changed."
   },
   "tabs": {
     "home": "Home",
@@ -165,7 +167,7 @@
     "safeTitle": "Did {{name}} eat something?",
     "safeSubtitle": "Check if it is safe",
     "trendsHint": "Weight, water",
-    "addVisit": "+ Add visit",
+    "addVisit": "Add visit",
     "noVisits": "No visits yet",
     "tabs": {
       "overview": "Overview",
@@ -187,7 +189,8 @@
       "severity": {
         "mild": "Mild reaction",
         "moderate": "Moderate reaction",
-        "severe": "Severe reaction"
+        "severe": "Severe reaction",
+        "unknown": "Reaction not known"
       },
       "resolved": "Resolved",
       "ongoing": "Ongoing",
@@ -350,7 +353,8 @@
     "vaccine": {
       "valid": "Valid",
       "dueSoon": "Due soon",
-      "expired": "Expired"
+      "expired": "Expired",
+      "noExpiry": "No expiry"
     },
     "medication": "Medication",
     "ongoing": "ongoing",
@@ -711,7 +715,7 @@
     "hoursValue": "Mon–Fri 8–18 · Sat 10–15",
     "call": "Call us",
     "sendEmail": "Send an email",
-    "emergencyNote": "Is your pet acutely ill? Find the nearest emergency clinic in Explore.",
+    "emergencyNote": "Is your pet acutely ill? Find the nearest emergency clinic under Clinics.",
     "accessibilityBody": [
       "We want everyone to be able to use TassuVahti. The app aims to meet the WCAG 2.1 AA guidelines.",
       "Health status is always shown with a colour, an icon and a word, so it can be read without colour vision. Text follows the size set on your phone, and every button works with screen readers such as VoiceOver and TalkBack.",
@@ -785,5 +789,13 @@
     "vetSummary": {
       "logs": "{{count}} daily logs in {{days}} days."
     }
+  },
+  "links": {
+    "cantCall": "Can't make calls on this device",
+    "callManually": "Call {{number}} from a phone.",
+    "cantOpenMaps": "Can't open maps",
+    "cantEmail": "No email app found",
+    "emailManually": "Send your message to {{address}}.",
+    "cantOpenPage": "Can't open this page"
   }
 }

@@ -16,6 +16,7 @@ import { createPet, updatePetPhoto } from '@/services/pets';
 import { colors, fonts, spacing } from '@/theme';
 import type { Species } from '@/types/pet';
 import { parseDecimal, parseFinnishDate, todayIso } from '@/utils/format';
+import { alertSaveFailed } from '@/utils/notify';
 import { pickMedia } from '@/utils/pick-media';
 
 // Adding a pet creates its own page (spec 11).
@@ -59,6 +60,8 @@ const AddPetScreen = () => {
       });
       if (photo) await updatePetPhoto(pet.id, photo);
       router.dismissTo(`/pet/${pet.id}`);
+    } catch {
+      alertSaveFailed();
     } finally {
       setSaving(false);
     }

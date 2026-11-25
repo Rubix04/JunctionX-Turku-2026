@@ -9,7 +9,9 @@
     "errorTitle": "Något gick fel",
     "errorBody": "Kontrollera anslutningen och försök igen.",
     "tryAgain": "Försök igen",
-    "language": "Språk"
+    "language": "Språk",
+    "saveFailedTitle": "Det gick inte att spara",
+    "saveFailedBody": "Kontrollera anslutningen och försök igen. Inget ändrades."
   },
   "tabs": {
     "home": "Hem",
@@ -165,7 +167,7 @@
     "safeTitle": "Har {{name}} ätit något?",
     "safeSubtitle": "Kolla om det är farligt",
     "trendsHint": "Vikt, vatten",
-    "addVisit": "+ Lägg till besök",
+    "addVisit": "Lägg till besök",
     "noVisits": "Inga besök än",
     "tabs": {
       "overview": "Översikt",
@@ -187,7 +189,8 @@
       "severity": {
         "mild": "Lindrig reaktion",
         "moderate": "Måttlig reaktion",
-        "severe": "Allvarlig reaktion"
+        "severe": "Allvarlig reaktion",
+        "unknown": "Reaktion okänd"
       },
       "resolved": "Läkt",
       "ongoing": "Pågående",
@@ -350,7 +353,8 @@
     "vaccine": {
       "valid": "Giltig",
       "dueSoon": "Snart dags",
-      "expired": "Utgången"
+      "expired": "Utgången",
+      "noExpiry": "Utgår inte"
     },
     "medication": "Medicinering",
     "ongoing": "pågår",
@@ -711,7 +715,7 @@
     "hoursValue": "mån–fre 8–18 · lör 10–15",
     "call": "Ring oss",
     "sendEmail": "Skicka e-post",
-    "emergencyNote": "Är ditt djur akut sjukt? Hitta närmaste jourklinik under Utforska.",
+    "emergencyNote": "Är ditt djur akut sjukt? Hitta närmaste jourklinik under Kliniker.",
     "accessibilityBody": [
       "Vi vill att alla ska kunna använda TassuVahti. Appen strävar efter att uppfylla WCAG 2.1 AA.",
       "Hälsoläget visas alltid med färg, ikon och ord, så det går att läsa utan färgseende. Texten följer storleken du valt i telefonen, och alla knappar fungerar med skärmläsare som VoiceOver och TalkBack.",
@@ -785,5 +789,13 @@
     "vetSummary": {
       "logs": "{{count}} dagsloggar på {{days}} dagar."
     }
+  },
+  "links": {
+    "cantCall": "Det går inte att ringa från den här enheten",
+    "callManually": "Ring {{number}} från en telefon.",
+    "cantOpenMaps": "Kartan kan inte öppnas",
+    "cantEmail": "Ingen e-postapp hittades",
+    "emailManually": "Skicka ditt meddelande till {{address}}.",
+    "cantOpenPage": "Sidan kan inte öppnas"
   }
 }

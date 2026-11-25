@@ -22,6 +22,7 @@ import type { ReminderKind, Visit } from '@/types/care';
 import type { Clinic } from '@/types/clinic';
 import type { Pet } from '@/types/pet';
 import { daysBetween, formatShortWeekdayDate, formatTime, todayIso } from '@/utils/format';
+import { alertSaveFailed } from '@/utils/notify';
 
 const loadReminders = async (petId: string) => {
   const [pets, reminders, course, clinics, members] = await Promise.all([
@@ -45,7 +46,7 @@ const bookingHref = (
   pet: Pet | undefined,
   clinics: Clinic[],
   visits: Visit[],
-  what: string,
+  reminderId: string,
 ): Href => {
   const usual = pet
     ? visits
@@ -53,9 +54,9 @@ const bookingHref = (
         .find((c) => c && c.bookingUrl && c.species.includes(pet.species))
     : undefined;
   if (usual) {
-    return { pathname: '/clinic/[id]', params: { id: usual.id, for: what } };
+    return { pathname: '/clinic/[id]', params: { id: usual.id, reminder: reminderId } };
   }
-  return { pathname: '/explore', params: { mode: 'book', for: what, ...(pet ? { species: pet.species } : {}) } };
+  return { pathname: '/explore', params: { mode: 'book', reminder: reminderId, ...(pet ? { species: pet.species } : {}) } };
 };
 
 const kindIcons: Record<ReminderKind, 'pill' | 'calendar' | 'shieldCheck' | 'leaf'> = {
@@ -89,7 +90,11 @@ const RemindersScreen = () => {
   const coursePet = pets.find((p) => p.id === petId);
 
   const toggle = async (id: string, done: boolean) => {
-    await setReminderDone(id, done, displayName);
+    try {
+      await setReminderDone(id, done, displayName);
+    } catch {
+      alertSaveFailed();
+    }
     reload();
   };
 
@@ -175,7 +180,7 @@ const RemindersScreen = () => {
                           pets.find((p) => p.id === r.petId),
                           clinics,
                           visitsByPet[r.petId] ?? [],
-                          `${petName(r.petId)} · ${r.title.toLowerCase()}`,
+                          r.id,
                         ),
                       )
                     }
