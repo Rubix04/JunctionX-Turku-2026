@@ -1,26 +1,30 @@
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
-// Keychain (iOS) / Keystore (Android). Web has no secure storage, so values go to
-// localStorage there: fine for the demo build, not for real credentials.
+// Keychain (iOS) / Keystore (Android). Web has no secure storage: the session (auth.*) goes to
+// sessionStorage, so it is gone when the tab closes and isn't left behind on a shared computer;
+// settings such as the language stay in localStorage. Both can still be read by scripts on the
+// page, so a public web version needs an httpOnly cookie from the backend instead.
+const webStore = (key: string) => (key.startsWith('auth.') ? globalThis.sessionStorage : globalThis.localStorage);
+
 const webStorage = {
   get: (key: string) => {
     try {
-      return globalThis.localStorage?.getItem(key) ?? null;
+      return webStore(key)?.getItem(key) ?? null;
     } catch {
       return null;
     }
   },
   set: (key: string, value: string) => {
     try {
-      globalThis.localStorage?.setItem(key, value);
+      webStore(key)?.setItem(key, value);
     } catch {
       // Private mode or blocked storage: the value only lasts until reload.
     }
   },
   delete: (key: string) => {
     try {
-      globalThis.localStorage?.removeItem(key);
+      webStore(key)?.removeItem(key);
     } catch {
       // Nothing to remove.
     }
