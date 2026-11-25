@@ -1,4 +1,5 @@
 import { type DependencyList, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type AsyncState<T> = {
   data: T | null;
@@ -18,8 +19,11 @@ const sameDeps = (a: DependencyList, b: DependencyList) =>
   a.length === b.length && a.every((value, index) => Object.is(value, b[index]));
 
 // Loads data from a service function, e.g. `useAsync(() => getPet(petId), [petId])`.
-// The previous data stays on screen while a new request runs.
-export const useAsync = <T>(load: () => Promise<T>, deps: DependencyList): AsyncState<T> => {
+// The previous data stays on screen while a new request runs. Data comes back in the app language,
+// so a language change loads it again, also on screens that are already open.
+export const useAsync = <T>(load: () => Promise<T>, callerDeps: DependencyList): AsyncState<T> => {
+  const { i18n } = useTranslation();
+  const deps = [...callerDeps, i18n.language];
   const [request, setRequest] = useState<Request>(() => ({ deps }));
   const [data, setData] = useState<T | null>(null);
   const [settled, setSettled] = useState<Settled | null>(null);
